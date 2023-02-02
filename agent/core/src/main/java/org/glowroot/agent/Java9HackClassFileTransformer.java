@@ -38,8 +38,8 @@ class Java9HackClassFileTransformer implements ClassFileTransformer {
             LoggerFactory.getLogger(Java9HackClassFileTransformer.class);
 
     @Override
-    public byte /*@Nullable*/ [] transform(@Nullable ClassLoader loader, @Nullable String className,
-            @Nullable Class<?> classBeingRedefined, @Nullable ProtectionDomain protectionDomain,
+    public byte /*@Nullable*/ [] transform(ClassLoader loader, String className,
+            Class<?> classBeingRedefined, ProtectionDomain protectionDomain,
             byte[] bytes) {
         try {
             if ("org/glowroot/agent/weaving/WeavingClassFileTransformer".equals(className)) {
@@ -66,7 +66,7 @@ class Java9HackClassFileTransformer implements ClassFileTransformer {
 
         @Override
         public MethodVisitor visitMethod(int access, String name, String descriptor,
-                @Nullable String signature, String /*@Nullable*/ [] exceptions) {
+                String signature, String /*@Nullable*/ [] exceptions) {
             if (name.equals("transform") && descriptor.equals("(Ljava/lang/ClassLoader;"
                     + "Ljava/lang/String;Ljava/lang/Class;Ljava/security/ProtectionDomain;[B)[B")) {
                 MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "transform",

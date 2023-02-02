@@ -63,7 +63,6 @@ class PluginClassRenamer {
         bootstrapSafePackageName = rootPackageName + "/_/";
     }
 
-    @Nullable
     Advice buildNonBootstrapLoaderAdvice(Advice advice) {
         if (rootPackageName.isEmpty()) {
             logger.warn("advice needs to be in a named package in order to collocate the advice in"
@@ -89,7 +88,6 @@ class PluginClassRenamer {
         }
     }
 
-    @Nullable
     LazyDefinedClass buildNonBootstrapLoaderAdviceClass() throws IOException {
         if (rootPackageName.isEmpty()) {
             logger.warn("advice needs to be in a named package in order to co-locate the advice in"
@@ -122,7 +120,7 @@ class PluginClassRenamer {
                 PluginDetailBuilder.getBytes(internalName, adviceClass.pluginJar()));
     }
 
-    private @Nullable Method hack(@Nullable Method method) {
+    private Method hack(Method method) {
         if (method == null) {
             return null;
         }
@@ -145,7 +143,7 @@ class PluginClassRenamer {
         return hackedParameters;
     }
 
-    private @PolyNull Type hack(@PolyNull Type type) {
+    private Type hack(Type type) {
         if (type == null) {
             return null;
         }

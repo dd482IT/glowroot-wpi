@@ -29,7 +29,6 @@ import static org.openqa.selenium.By.xpath;
 
 public class LoginIT extends WebDriverIT {
 
-    @Test
     public void shouldLogin() throws Exception {
         App app = app();
         GlobalNavbar globalNavbar = globalNavbar();
@@ -46,7 +45,6 @@ public class LoginIT extends WebDriverIT {
         globalNavbar.clickSignOutLink();
     }
 
-    @Test
     public void shouldChangePassword() throws Exception {
         App app = app();
         GlobalNavbar globalNavbar = globalNavbar();

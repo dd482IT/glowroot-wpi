@@ -78,7 +78,7 @@ class TracePointQueryBuilder {
         return builder.build();
     }
 
-    private @Nullable ParameterizedSql getAttributeCriteria() {
+    private ParameterizedSql getAttributeCriteria() {
         String sql = "";
         List<Object> args = Lists.newArrayList();
         String attributeName = filter.attributeName();
@@ -174,8 +174,6 @@ class TracePointQueryBuilder {
         }
     }
 
-    @Value.Immutable
-    @Styles.AllParameters
     abstract static class ParameterizedSql {
 
         abstract @Untainted String sql();

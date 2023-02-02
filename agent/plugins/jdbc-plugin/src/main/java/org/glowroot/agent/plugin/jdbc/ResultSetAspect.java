@@ -38,27 +38,21 @@ public class ResultSetAspect {
     private static final Logger logger = Logger.getLogger(ResultSetAspect.class);
     private static final ConfigService configService = Agent.getConfigService("jdbc");
 
-    @Shim("java.sql.ResultSet")
     public interface ResultSet {
         int getRow();
     }
 
-    @Pointcut(className = "java.sql.ResultSet", methodName = "next", methodParameterTypes = {},
-            nestingGroup = "jdbc")
     public static class NextAdvice {
         private static final BooleanProperty timerEnabled =
                 configService.getBooleanProperty("captureResultSetNavigate");
-        @IsEnabled
-        public static boolean isEnabled(@BindReceiver HasStatementMirrorMixin resultSet) {
+        public static boolean isEnabled(HasStatementMirrorMixin resultSet) {
             return timerEnabled.value() && isEnabledCommon(resultSet);
         }
-        @OnBefore
-        public static Timer onBefore(@BindReceiver HasStatementMirrorMixin resultSet) {
+        public static Timer onBefore(HasStatementMirrorMixin resultSet) {
             return onBeforeCommon(resultSet);
         }
-        @OnReturn
-        public static void onReturn(@BindReturn boolean currentRowValid,
-                @BindReceiver HasStatementMirrorMixin resultSet) {
+        public static void onReturn(boolean currentRowValid,
+                HasStatementMirrorMixin resultSet) {
             StatementMirror mirror = resultSet.glowroot$getStatementMirror();
             if (mirror == null) {
                 // this shouldn't happen since just checked above in isEnabled(), unless some
@@ -78,28 +72,21 @@ public class ResultSetAspect {
                 lastQueryEntry.rowNavigationAttempted();
             }
         }
-        @OnAfter
-        public static void onAfter(@BindTraveler Timer timer) {
+        public static void onAfter(Timer timer) {
             timer.stop();
         }
     }
 
-    @Pointcut(className = "java.sql.ResultSet",
-            methodName = "previous|relative|absolute|first|last", methodParameterTypes = "..",
-            nestingGroup = "jdbc")
     public static class NavigateAdvice {
         private static final BooleanProperty timerEnabled =
                 configService.getBooleanProperty("captureResultSetNavigate");
-        @IsEnabled
-        public static boolean isEnabled(@BindReceiver HasStatementMirrorMixin resultSet) {
+        public static boolean isEnabled(HasStatementMirrorMixin resultSet) {
             return timerEnabled.value() && isEnabledCommon(resultSet);
         }
-        @OnBefore
-        public static Timer onBefore(@BindReceiver HasStatementMirrorMixin resultSet) {
+        public static Timer onBefore(HasStatementMirrorMixin resultSet) {
             return onBeforeCommon(resultSet);
         }
-        @OnReturn
-        public static void onReturn(@BindReceiver HasStatementMirrorMixin resultSet) {
+        public static void onReturn(HasStatementMirrorMixin resultSet) {
             try {
                 StatementMirror mirror = resultSet.glowroot$getStatementMirror();
                 if (mirror == null) {
@@ -117,46 +104,35 @@ public class ResultSetAspect {
                 logger.warn(e.getMessage(), e);
             }
         }
-        @OnAfter
-        public static void onAfter(@BindTraveler Timer timer) {
+        public static void onAfter(Timer timer) {
             timer.stop();
         }
     }
 
-    @Pointcut(className = "java.sql.ResultSet", methodName = "get*",
-            methodParameterTypes = {"int", ".."}, nestingGroup = "jdbc")
     public static class ValueAdvice {
         private static final BooleanProperty timerEnabled =
                 configService.getBooleanProperty("captureResultSetGet");
-        @IsEnabled
-        public static boolean isEnabled(@BindReceiver HasStatementMirrorMixin resultSet) {
+        public static boolean isEnabled(HasStatementMirrorMixin resultSet) {
             return timerEnabled.value() && isEnabledCommon(resultSet);
         }
-        @OnBefore
-        public static Timer onBefore(@BindReceiver HasStatementMirrorMixin resultSet) {
+        public static Timer onBefore(HasStatementMirrorMixin resultSet) {
             return onBeforeCommon(resultSet);
         }
-        @OnAfter
-        public static void onAfter(@BindTraveler Timer timer) {
+        public static void onAfter(Timer timer) {
             timer.stop();
         }
     }
 
-    @Pointcut(className = "java.sql.ResultSet", methodName = "get*",
-            methodParameterTypes = {"java.lang.String", ".."}, nestingGroup = "jdbc")
     public static class ValueAdvice2 {
         private static final BooleanProperty timerEnabled =
                 configService.getBooleanProperty("captureResultSetGet");
-        @IsEnabled
-        public static boolean isEnabled(@BindReceiver HasStatementMirrorMixin resultSet) {
+        public static boolean isEnabled(HasStatementMirrorMixin resultSet) {
             return timerEnabled.value() && isEnabledCommon(resultSet);
         }
-        @OnBefore
-        public static Timer onBefore(@BindReceiver HasStatementMirrorMixin resultSet) {
+        public static Timer onBefore(HasStatementMirrorMixin resultSet) {
             return onBeforeCommon(resultSet);
         }
-        @OnAfter
-        public static void onAfter(@BindTraveler Timer timer) {
+        public static void onAfter(Timer timer) {
             timer.stop();
         }
     }

@@ -21,7 +21,6 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public interface LazySecretKey {
 
-    @Nullable
     SecretKey getExisting() throws Exception;
 
     SecretKey getOrCreate() throws Exception;

@@ -23,13 +23,13 @@ import org.glowroot.agent.plugin.api.TraceEntry;
 
 public interface BytecodeService {
 
-    void enteringMainMethod(String mainClass, @Nullable String /*@Nullable*/ [] mainArgs);
+    void enteringMainMethod(String mainClass, String /*@Nullable*/ [] mainArgs);
 
     void enteringApacheCommonsDaemonLoadMethod(String mainClass,
-            @Nullable String /*@Nullable*/ [] mainArgs);
+            String /*@Nullable*/ [] mainArgs);
 
     void enteringPossibleProcrunStartMethod(String className, String methodName,
-            @Nullable String /*@Nullable*/ [] methodArgs);
+            String /*@Nullable*/ [] methodArgs);
 
     void exitingGetPlatformMBeanServer();
 
@@ -46,14 +46,14 @@ public interface BytecodeService {
     MessageTemplate createMessageTemplate(String template, MethodInfo methodInfo);
 
     MessageSupplier createMessageSupplier(MessageTemplate template, Object receiver,
-            String methodName, @Nullable Object... args);
+            String methodName, Object... args);
 
     String getMessageText(MessageTemplate template, Object receiver, String methodName,
-            @Nullable Object... args);
+            Object... args);
 
-    void updateWithReturnValue(TraceEntry traceEntry, @Nullable Object returnValue);
+    void updateWithReturnValue(TraceEntry traceEntry, Object returnValue);
 
     void logThrowable(Throwable throwable);
 
-    void preloadSomeSuperTypes(ClassLoader loader, @Nullable String className);
+    void preloadSomeSuperTypes(ClassLoader loader, String className);
 }

@@ -28,12 +28,11 @@ class NestedTimerMap {
 
     // capacity must always be a power of 2, see comments in get() and put()
     private int capacity = 4;
-    private @Nullable Object[] table = new Object[capacity << 1];
+    private Object[] table = new Object[capacity << 1];
 
     private int size = 0;
     private int threshold = 3; // 0.75 * capacity
 
-    @Nullable
     TimerImpl get(TimerNameImpl key) {
         // this mask requires capacity to be a power of 2
         int bucket = (key.specialHashCode() & (capacity - 1)) << 1;
@@ -57,7 +56,7 @@ class NestedTimerMap {
         putWithoutRehashCheck(key, value);
     }
 
-    private void putWithoutRehashCheck(TimerNameImpl key, @Nullable Object value) {
+    private void putWithoutRehashCheck(TimerNameImpl key, Object value) {
         // this mask requires capacity to be a power of 2
         int bucket = (key.specialHashCode() & (capacity - 1)) << 1;
         Object keyAtBucket = table[bucket];
@@ -69,10 +68,9 @@ class NestedTimerMap {
         putChained(key, value, bucket, keyAtBucket);
     }
 
-    private void putChained(TimerNameImpl key, @Nullable Object value, int bucket,
+    private void putChained(TimerNameImpl key, Object value, int bucket,
             Object keyAtBucket) {
         if (keyAtBucket == CHAINED_KEY) {
-            @Nullable
             Object[] chain = (/*@Nullable*/ Object[]) checkNotNull(table[bucket + 1]);
             int chainLength = chain.length;
             for (int i = 0; i < chainLength; i += 2) {
@@ -82,7 +80,6 @@ class NestedTimerMap {
                     return;
                 }
             }
-            @Nullable
             Object[] newChain = new Object[chainLength << 1];
             System.arraycopy(chain, 0, newChain, 0, chainLength);
             newChain[chainLength] = key;
@@ -90,7 +87,6 @@ class NestedTimerMap {
             table[bucket + 1] = newChain;
             return;
         }
-        @Nullable
         Object[] chain = new Object[4];
         chain[0] = keyAtBucket;
         chain[1] = table[bucket + 1];
@@ -101,7 +97,6 @@ class NestedTimerMap {
     }
 
     private void rehash() {
-        @Nullable
         Object[] existingTable = table;
         capacity <<= 1;
         threshold <<= 1;
@@ -113,7 +108,6 @@ class NestedTimerMap {
                 continue;
             }
             if (key == CHAINED_KEY) {
-                @Nullable
                 Object[] values = (/*@Nullable*/ Object[]) checkNotNull(existingTable[i + 1]);
                 putChainedValues(values);
             } else {
@@ -132,8 +126,7 @@ class NestedTimerMap {
         }
     }
 
-    private static @Nullable TimerImpl getChained(TimerNameImpl key, Object value) {
-        @Nullable
+    private static TimerImpl getChained(TimerNameImpl key, Object value) {
         Object[] chainedTable = (/*@Nullable*/ Object[]) value;
         for (int i = 0; i < chainedTable.length; i += 2) {
             // ok to use "==" because TimerNameImpl instances are always unique

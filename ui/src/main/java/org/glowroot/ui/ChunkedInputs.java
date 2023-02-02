@@ -54,12 +54,12 @@ class ChunkedInputs {
         private boolean hasSentTerminatingChunk;
 
         @Override
-        public @Nullable HttpContent readChunk(ChannelHandlerContext ctx) throws Exception {
+        public HttpContent readChunk(ChannelHandlerContext ctx) throws Exception {
             return readChunk(ctx.alloc());
         }
 
         @Override
-        public @Nullable HttpContent readChunk(ByteBufAllocator allocator) throws Exception {
+        public HttpContent readChunk(ByteBufAllocator allocator) throws Exception {
             if (hasSentTerminatingChunk) {
                 return null;
             }
@@ -91,7 +91,7 @@ class ChunkedInputs {
             return -1;
         }
 
-        protected abstract @Nullable ByteBuf readNextChunk() throws IOException;
+        protected abstract ByteBuf readNextChunk() throws IOException;
     }
 
     private static class ChunkSourceChunkedInput extends BaseChunkedInput {
@@ -109,7 +109,7 @@ class ChunkedInputs {
         }
 
         @Override
-        public @Nullable ByteBuf readNextChunk() throws IOException {
+        public ByteBuf readNextChunk() throws IOException {
             if (closed) {
                 return null;
             }
@@ -154,7 +154,7 @@ class ChunkedInputs {
         }
 
         @Override
-        protected @Nullable ByteBuf readNextChunk() throws IOException {
+        protected ByteBuf readNextChunk() throws IOException {
             if (closed) {
                 return null;
             }

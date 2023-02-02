@@ -30,22 +30,22 @@ public class FwdGlowrootService implements GlowrootService {
     }
 
     @Override
-    public void setTransactionType(@Nullable String transactionType) {
+    public void setTransactionType(String transactionType) {
         impl.setTransactionType(transactionType);
     }
 
     @Override
-    public void setTransactionName(@Nullable String transactionName) {
+    public void setTransactionName(String transactionName) {
         impl.setTransactionName(transactionName);
     }
 
     @Override
-    public void setTransactionUser(@Nullable String user) {
+    public void setTransactionUser(String user) {
         impl.setTransactionUser(user);
     }
 
     @Override
-    public void addTransactionAttribute(String name, @Nullable String value) {
+    public void addTransactionAttribute(String name, String value) {
         impl.addTransactionAttribute(name, value);
     }
 

@@ -29,6 +29,5 @@ public interface MethodInfo {
 
     String getDeclaringClassName();
 
-    @Nullable
     ClassLoader getLoader();
 }

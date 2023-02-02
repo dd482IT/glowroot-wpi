@@ -53,16 +53,16 @@ class NopTransactionService {
         public void endWithError(Throwable t) {}
 
         @Override
-        public void endWithError(@Nullable String message) {}
+        public void endWithError(String message) {}
 
         @Override
-        public void endWithError(@Nullable String message, Throwable t) {}
+        public void endWithError(String message, Throwable t) {}
 
         @Override
         public void endWithInfo(Throwable t) {}
 
         @Override
-        public @Nullable MessageSupplier getMessageSupplier() {
+        public MessageSupplier getMessageSupplier() {
             return null;
         }
 

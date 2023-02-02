@@ -44,7 +44,6 @@ import org.glowroot.common2.repo.ConfigRepository.DuplicateRoleNameException;
 import static io.netty.handler.codec.http.HttpResponseStatus.CONFLICT;
 import static java.util.concurrent.TimeUnit.DAYS;
 
-@JsonService
 class RoleConfigJsonService {
 
     private static final Logger logger = LoggerFactory.getLogger(RoleConfigJsonService.class);
@@ -68,8 +67,7 @@ class RoleConfigJsonService {
         this.activeAgentRepository = activeAgentRepository;
     }
 
-    @GET(path = "/backend/admin/roles", permission = "admin:view:role")
-    String getRoleConfig(@BindRequest RoleConfigRequest request) throws Exception {
+    String getRoleConfig(RoleConfigRequest request) throws Exception {
         Optional<String> name = request.name();
         if (name.isPresent()) {
             return getRoleConfigInternal(name.get());
@@ -84,13 +82,11 @@ class RoleConfigJsonService {
         }
     }
 
-    @GET(path = "/backend/admin/all-active-agent-rollups", permission = "admin:edit:role")
     String getAllAgentRollups() throws Exception {
         return mapper.writeValueAsString(getFlattenedAgentRollups());
     }
 
-    @POST(path = "/backend/admin/roles/add", permission = "admin:edit:role")
-    String addRole(@BindRequest RoleConfigDto roleConfigDto) throws Exception {
+    String addRole(RoleConfigDto roleConfigDto) throws Exception {
         RoleConfig roleConfig = roleConfigDto.convert(central);
         try {
             configRepository.insertRoleConfig(roleConfig);
@@ -102,8 +98,7 @@ class RoleConfigJsonService {
         return getRoleConfigInternal(roleConfig.name());
     }
 
-    @POST(path = "/backend/admin/roles/update", permission = "admin:edit:role")
-    String updateRole(@BindRequest RoleConfigDto roleConfigDto) throws Exception {
+    String updateRole(RoleConfigDto roleConfigDto) throws Exception {
         RoleConfig roleConfig = roleConfigDto.convert(central);
         String version = roleConfigDto.version().get();
         try {
@@ -116,8 +111,7 @@ class RoleConfigJsonService {
         return getRoleConfigInternal(roleConfig.name());
     }
 
-    @POST(path = "/backend/admin/roles/remove", permission = "admin:edit:role")
-    String removeRole(@BindRequest RoleConfigRequest request) throws Exception {
+    String removeRole(RoleConfigRequest request) throws Exception {
         try {
             configRepository.deleteRoleConfig(request.name().get());
         } catch (CannotDeleteLastRoleException e) {
@@ -165,18 +159,15 @@ class RoleConfigJsonService {
         return flattenedAgentRollups;
     }
 
-    @Value.Immutable
     interface RoleConfigRequest {
         Optional<String> name();
     }
 
-    @Value.Immutable
     interface RoleConfigResponse {
         RoleConfigDto config();
         ImmutableList<FlattenedAgentRollup> allActiveAgentRollups();
     }
 
-    @Value.Immutable
     interface FlattenedAgentRollup {
         int depth();
         String id();
@@ -184,7 +175,6 @@ class RoleConfigJsonService {
         String lastDisplayPart();
     }
 
-    @Value.Immutable
     abstract static class RoleConfigListDto {
 
         abstract String name();
@@ -198,7 +188,6 @@ class RoleConfigJsonService {
         }
     }
 
-    @Value.Immutable
     abstract static class RoleConfigDto {
 
         abstract String name();
@@ -270,7 +259,6 @@ class RoleConfigJsonService {
         }
     }
 
-    @Value.Immutable
     interface RolePermissionBlock {
         ImmutableList<String> agentRollupIds();
         ImmutableList<String> permissions();

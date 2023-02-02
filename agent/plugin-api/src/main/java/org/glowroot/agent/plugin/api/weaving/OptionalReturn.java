@@ -31,6 +31,5 @@ public interface OptionalReturn {
     /**
      * Returns the return value. Returns null if this instance represents a void return.
      */
-    @Nullable
     Object getValue();
 }

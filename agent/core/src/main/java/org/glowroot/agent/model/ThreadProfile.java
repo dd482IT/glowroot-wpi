@@ -31,16 +31,11 @@ public class ThreadProfile {
 
     private final int maxSamples;
     private final Object lock = new Object();
-    @GuardedBy("lock")
     private final List<List<StackTraceElement>> unmergedStackTraces = Lists.newArrayList();
-    @GuardedBy("lock")
     private final List<Thread.State> unmergedStackTraceThreadStates = Lists.newArrayList();
-    @GuardedBy("lock")
-    private @MonotonicNonNull MutableProfile profile;
-    @GuardedBy("lock")
+    private MutableProfile profile;
     private long sampleCount;
 
-    @VisibleForTesting
     public ThreadProfile(int maxSamples) {
         this.maxSamples = maxSamples;
     }
@@ -106,7 +101,6 @@ public class ThreadProfile {
         }
     }
 
-    @GuardedBy("lock")
     private void mergeTheUnmergedInto(MutableProfile profile) {
         for (int i = 0; i < unmergedStackTraces.size(); i++) {
             List<StackTraceElement> stackTrace = unmergedStackTraces.get(i);

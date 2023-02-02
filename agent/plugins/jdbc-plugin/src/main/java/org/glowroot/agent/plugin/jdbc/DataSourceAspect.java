@@ -53,20 +53,15 @@ public class DataSourceAspect {
     private static final BooleanProperty captureTransactionLifecycleTraceEntries =
             configService.getBooleanProperty("captureTransactionLifecycleTraceEntries");
 
-    @Shim("java.sql.Connection")
     public interface Connection {
         boolean getAutoCommit();
     }
 
-    @Pointcut(className = "javax.sql.DataSource", methodName = "getConnection",
-            methodParameterTypes = {".."}, nestingGroup = "jdbc", timerName = "jdbc get connection")
     public static class GetConnectionAdvice {
         private static final TimerName timerName = Agent.getTimerName(GetConnectionAdvice.class);
-        @IsEnabled
         public static boolean isEnabled() {
             return captureGetConnection.value() || captureConnectionLifecycleTraceEntries.value();
         }
-        @OnBefore
         public static Object onBefore(ThreadContext context) {
             if (captureConnectionLifecycleTraceEntries.value()) {
                 return context.startTraceEntry(new GetConnectionMessageSupplier(), timerName);
@@ -74,17 +69,15 @@ public class DataSourceAspect {
                 return context.startTimer(timerName);
             }
         }
-        @OnReturn
-        public static void onReturn(@BindReturn @Nullable Connection connection,
-                @BindTraveler Object entryOrTimer) {
+        public static void onReturn(Connection connection,
+                Object entryOrTimer) {
             if (entryOrTimer instanceof TraceEntry) {
                 onReturnTraceEntry(connection, (TraceEntry) entryOrTimer);
             } else {
                 ((Timer) entryOrTimer).stop();
             }
         }
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t, @BindTraveler Object entryOrTimer) {
+        public static void onThrow(Throwable t, Object entryOrTimer) {
             if (entryOrTimer instanceof TraceEntry) {
                 ((TraceEntry) entryOrTimer).endWithError(t);
             } else {
@@ -92,7 +85,7 @@ public class DataSourceAspect {
             }
         }
         // split out to separate method so it doesn't affect inlining budget of common case
-        private static void onReturnTraceEntry(@Nullable Connection connection,
+        private static void onReturnTraceEntry(Connection connection,
                 TraceEntry traceEntry) {
             if (captureTransactionLifecycleTraceEntries.value() && connection != null) {
                 GetConnectionMessageSupplier messageSupplier =
@@ -118,7 +111,7 @@ public class DataSourceAspect {
 
     private static class GetConnectionMessageSupplier extends MessageSupplier {
 
-        private volatile @MonotonicNonNull String autoCommit;
+        private volatile String autoCommit;
 
         @Override
         public Message get() {

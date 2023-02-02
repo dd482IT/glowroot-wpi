@@ -24,26 +24,21 @@ import org.immutables.value.Value;
 import org.glowroot.agent.plugin.api.TimerName;
 import org.glowroot.common.util.Styles;
 
-@Value.Immutable
-@Styles.AllParameters
 public abstract class TimerNameImpl implements TimerName {
 
     private static final AtomicInteger nextSpecialHashCode = new AtomicInteger();
 
-    @VisibleForTesting
     public abstract String name();
 
     public abstract boolean extended();
 
-    @Value.Derived
-    public @Nullable TimerNameImpl extendedTimer() {
+    public TimerNameImpl extendedTimer() {
         if (extended()) {
             return null;
         }
         return ImmutableTimerNameImpl.of(name(), true);
     }
 
-    @Value.Derived
     public int specialHashCode() {
         return nextSpecialHashCode.getAndIncrement();
     }

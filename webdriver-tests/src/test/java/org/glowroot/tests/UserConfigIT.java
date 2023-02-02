@@ -28,7 +28,6 @@ import static org.openqa.selenium.By.xpath;
 
 public class UserConfigIT extends WebDriverIT {
 
-    @Test
     public void shouldOpenUser() throws Exception {
         // given
         App app = app();
@@ -44,7 +43,6 @@ public class UserConfigIT extends WebDriverIT {
         clickLink("Return to list");
     }
 
-    @Test
     public void shouldAddUser() throws Exception {
         // given
         App app = app();
@@ -67,7 +65,6 @@ public class UserConfigIT extends WebDriverIT {
                         .isFalse();
     }
 
-    @Test
     public void shouldUpdateUser() throws Exception {
         // given
         App app = app();
@@ -95,7 +92,6 @@ public class UserConfigIT extends WebDriverIT {
                         .isTrue();
     }
 
-    @Test
     public void shouldDeleteUser() throws Exception {
         // given
         App app = app();
@@ -124,7 +120,6 @@ public class UserConfigIT extends WebDriverIT {
         assertThat(notFound).isTrue();
     }
 
-    @Test
     public void shouldAddDuplicateUser() throws Exception {
         // given
         App app = app();

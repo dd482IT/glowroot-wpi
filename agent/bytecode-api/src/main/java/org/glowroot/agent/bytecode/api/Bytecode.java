@@ -28,19 +28,19 @@ public class Bytecode {
     private Bytecode() {}
 
     public static void enteringMainMethod(String mainClass,
-            @Nullable String /*@Nullable*/ [] mainArgs) {
+            String /*@Nullable*/ [] mainArgs) {
         service.enteringMainMethod(mainClass, mainArgs);
     }
 
     // this can bypass "main" method
     public static void enteringApacheCommonsDaemonLoadMethod(String mainClass,
-            @Nullable String /*@Nullable*/ [] mainArgs) {
+            String /*@Nullable*/ [] mainArgs) {
         service.enteringApacheCommonsDaemonLoadMethod(mainClass, mainArgs);
     }
 
     // this can bypass "main" method
     public static void enteringPossibleProcrunStartMethod(String className, String methodName,
-            @Nullable String /*@Nullable*/ [] methodArgs) {
+            String /*@Nullable*/ [] methodArgs) {
         service.enteringPossibleProcrunStartMethod(className, methodName, methodArgs);
     }
 
@@ -68,16 +68,16 @@ public class Bytecode {
     }
 
     public static MessageSupplier createMessageSupplier(MessageTemplate template,
-            Object receiver, String methodName, @Nullable Object... args) {
+            Object receiver, String methodName, Object... args) {
         return service.createMessageSupplier(template, receiver, methodName, args);
     }
 
     public static String getMessageText(MessageTemplate template, Object receiver,
-            String methodName, @Nullable Object... args) {
+            String methodName, Object... args) {
         return service.getMessageText(template, receiver, methodName, args);
     }
 
-    public static void updateWithReturnValue(TraceEntry traceEntry, @Nullable Object returnValue) {
+    public static void updateWithReturnValue(TraceEntry traceEntry, Object returnValue) {
         service.updateWithReturnValue(traceEntry, returnValue);
     }
 
@@ -85,7 +85,7 @@ public class Bytecode {
         service.logThrowable(throwable);
     }
 
-    public static void preloadSomeSuperTypes(ClassLoader loader, @Nullable String className) {
+    public static void preloadSomeSuperTypes(ClassLoader loader, String className) {
         service.preloadSomeSuperTypes(loader, className);
     }
 }

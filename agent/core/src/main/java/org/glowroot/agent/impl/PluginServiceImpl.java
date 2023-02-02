@@ -94,7 +94,7 @@ public class PluginServiceImpl implements PluginService {
     }
 
     @Override
-    public @Nullable Object getBeanValue(@Nullable Object obj, List<String> path) throws Exception {
+    public Object getBeanValue(Object obj, List<String> path) throws Exception {
         return Beans.value(obj, path);
     }
 
@@ -103,7 +103,6 @@ public class PluginServiceImpl implements PluginService {
         return Beans2.propertiesAsText(obj);
     }
 
-    @VisibleForTesting
     static class Beans2 {
 
         // all getters for an individual class are only needed to handle wildcards at the end of a
@@ -113,7 +112,6 @@ public class PluginServiceImpl implements PluginService {
 
         private Beans2() {}
 
-        @VisibleForTesting
         static Map<String, String> propertiesAsText(Object obj) {
             Map<String, String> properties = Maps.newHashMap();
             Map<String, Method> allGettersForObj = wildcardGetters.getUnchecked(obj.getClass());
@@ -157,7 +155,7 @@ public class PluginServiceImpl implements PluginService {
                 return ImmutableMap.copyOf(propertyNames);
             }
 
-            private static @Nullable String getPropertyName(Method method) {
+            private static String getPropertyName(Method method) {
                 if (method.getParameterTypes().length > 0) {
                     return null;
                 }

@@ -32,7 +32,7 @@ class MultiErrorIntervalCollector {
 
     private long currErrorFrom;
     private long currErrorTo;
-    private @Nullable List<ErrorInterval> currErrorIntervals;
+    private List<ErrorInterval> currErrorIntervals;
 
     public void addErrorIntervals(List<ErrorInterval> errorIntervals) {
         for (ErrorInterval errorInterval : errorIntervals) {
@@ -84,7 +84,6 @@ class MultiErrorIntervalCollector {
                 .build();
     }
 
-    @Value.Immutable
     public interface MultiErrorInterval {
 
         long from();

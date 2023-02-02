@@ -82,7 +82,7 @@ public class ResourceMethodMeta {
         return hasClassPathAnnotation;
     }
 
-    private static @Nullable String getPath(@Nullable Class<?> clazz) {
+    private static String getPath(Class<?> clazz) {
         if (clazz == null) {
             return null;
         }
@@ -99,8 +99,8 @@ public class ResourceMethodMeta {
         return null;
     }
 
-    private static @Nullable MethodAnnotations getMethodAnnotations(MethodInfo methodInfo,
-            @Nullable Class<?> clazz) {
+    private static MethodAnnotations getMethodAnnotations(MethodInfo methodInfo,
+            Class<?> clazz) {
         if (clazz == null) {
             return null;
         }
@@ -124,7 +124,7 @@ public class ResourceMethodMeta {
         return null;
     }
 
-    private static @Nullable MethodAnnotations getMethodAnnotations(@Nullable Method method) {
+    private static MethodAnnotations getMethodAnnotations(Method method) {
         if (method == null) {
             return null;
         }
@@ -158,18 +158,18 @@ public class ResourceMethodMeta {
         return false;
     }
 
-    private static @Nullable String getPathAttribute(Class<?> pathClass, Object path,
+    private static String getPathAttribute(Class<?> pathClass, Object path,
             String attributeName) throws Exception {
         Method method = pathClass.getMethod(attributeName);
         return (String) method.invoke(path);
     }
 
-    private static @Nullable Class<?> getClass(MethodInfo methodInfo) {
+    private static Class<?> getClass(MethodInfo methodInfo) {
         return Reflection.getClass(methodInfo.getDeclaringClassName(), methodInfo.getLoader());
     }
 
-    private static @Nullable Method getMethod(MethodInfo methodInfo,
-            @Nullable Class<?> declaringClass) {
+    private static Method getMethod(MethodInfo methodInfo,
+            Class<?> declaringClass) {
         if (declaringClass == null) {
             // declaring class is probably a lambda class
             return null;
@@ -185,7 +185,7 @@ public class ResourceMethodMeta {
     }
 
     // VisibleForTesting
-    static String combine(@Nullable String classPath, @Nullable String methodPath) {
+    static String combine(String classPath, String methodPath) {
         if (classPath == null || classPath.isEmpty() || classPath.equals("/")) {
             return normalize(methodPath);
         }
@@ -195,7 +195,7 @@ public class ResourceMethodMeta {
         return normalize(classPath) + normalize(methodPath);
     }
 
-    private static String normalize(@Nullable String path) {
+    private static String normalize(String path) {
         if (path == null || path.isEmpty() || path.equals("/")) {
             return "/";
         }
@@ -226,10 +226,10 @@ public class ResourceMethodMeta {
 
     private static class MethodAnnotations {
 
-        private final @Nullable String pathAnnotation;
+        private final String pathAnnotation;
         private final boolean hasHttpMethodAnnotation;
 
-        private MethodAnnotations(@Nullable String pathAnnotation,
+        private MethodAnnotations(String pathAnnotation,
                 boolean hasHttpMethodAnnotation) {
             this.pathAnnotation = pathAnnotation;
             this.hasHttpMethodAnnotation = hasHttpMethodAnnotation;

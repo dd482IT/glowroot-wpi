@@ -24,7 +24,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 class ConditionalHttpContentCompressor extends HttpContentCompressor {
 
     @Override
-    protected @Nullable Result beginEncode(HttpResponse response, String acceptEncoding)
+    protected Result beginEncode(HttpResponse response, String acceptEncoding)
             throws Exception {
         String contentType = response.headers().getAsString(HttpHeaderNames.CONTENT_TYPE);
         if (contentType != null && contentType.equals(MediaType.ZIP.toString())) {

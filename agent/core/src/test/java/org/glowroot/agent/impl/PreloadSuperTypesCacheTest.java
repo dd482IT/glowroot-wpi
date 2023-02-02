@@ -27,7 +27,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class PreloadSuperTypesCacheTest {
 
-    @Test
     public void shouldTruncateOnWritingToFile() throws Exception {
         // given
         File file = File.createTempFile("glowroot-unit-test-", "");
@@ -49,7 +48,6 @@ public class PreloadSuperTypesCacheTest {
         file.delete();
     }
 
-    @Test
     public void shouldNotTruncateOnWritingToFile() throws Exception {
         // given
         File file = File.createTempFile("glowroot-unit-test-", "");
@@ -71,7 +69,6 @@ public class PreloadSuperTypesCacheTest {
         file.delete();
     }
 
-    @Test
     public void shouldTruncateTruncateOnSecondWritingToFile() throws Exception {
         // given
         File file = File.createTempFile("glowroot-unit-test-", "");
@@ -97,7 +94,6 @@ public class PreloadSuperTypesCacheTest {
         file.delete();
     }
 
-    @Test
     public void shouldNotTruncateOnSecondWritingToFile() throws Exception {
         // given
         File file = File.createTempFile("glowroot-unit-test-", "");

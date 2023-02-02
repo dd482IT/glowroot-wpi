@@ -25,7 +25,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 class ResultSetCloser {
 
     private final ResultSet resultSet;
-    private @Nullable Throwable thrown;
+    private Throwable thrown;
 
     ResultSetCloser(ResultSet resultSet) {
         this.resultSet = resultSet;

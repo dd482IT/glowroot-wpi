@@ -49,7 +49,7 @@ class ResponseHeaderComponent {
     }
 
     // map key is uppercase for case-insensitivity
-    private @MonotonicNonNull ConcurrentMap<String, ResponseHeader> responseHeaders;
+    private ConcurrentMap<String, ResponseHeader> responseHeaders;
 
     synchronized Map<String, Object> getMapOfStrings() {
         if (responseHeaders == null) {
@@ -124,7 +124,7 @@ class ResponseHeaderComponent {
 
         private final String name;
         private volatile Object value;
-        private volatile @MonotonicNonNull CopyOnWriteArrayList<Object> values;
+        private volatile CopyOnWriteArrayList<Object> values;
 
         private ResponseHeader(String name, Object value) {
             this.name = name;
@@ -139,7 +139,7 @@ class ResponseHeaderComponent {
             return value;
         }
 
-        private @Nullable List<Object> getValues() {
+        private List<Object> getValues() {
             return values;
         }
 

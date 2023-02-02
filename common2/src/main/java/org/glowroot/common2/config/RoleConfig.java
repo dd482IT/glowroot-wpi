@@ -27,20 +27,15 @@ import org.immutables.value.Value;
 
 import org.glowroot.common.util.Versions;
 
-@Value.Immutable
 public abstract class RoleConfig {
 
     public abstract String name();
     public abstract ImmutableSet<String> permissions();
 
-    @JsonIgnore
-    @Value.Default
     public boolean central() {
         return false;
     }
 
-    @Value.Derived
-    @JsonIgnore
     public ImmutableSet<SimplePermission> simplePermissions() {
         Set<SimplePermission> simplePermissions = Sets.newHashSet();
         for (String permission : permissions()) {
@@ -94,8 +89,6 @@ public abstract class RoleConfig {
         return onlyInChild ? HasAnyPermission.ONLY_IN_CHILD : HasAnyPermission.NO;
     }
 
-    @Value.Derived
-    @JsonIgnore
     public String version() {
         return Versions.getJsonVersion(this);
     }
@@ -104,7 +97,6 @@ public abstract class RoleConfig {
         YES, NO, ONLY_IN_CHILD // "only in child" means that this rollup needs to be visible in menu
     }
 
-    @Value.Immutable
     public abstract static class SimplePermission {
 
         public static SimplePermission create(String permission) {
@@ -126,7 +118,6 @@ public abstract class RoleConfig {
         public abstract List<String> agentRollupIds();
         public abstract List<String> parts();
 
-        @VisibleForTesting
         boolean implies(SimplePermission other) {
             if (!agentListImplies(other.agentRollupIds())) {
                 return false;

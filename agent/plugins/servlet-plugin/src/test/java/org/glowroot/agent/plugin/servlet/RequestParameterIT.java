@@ -50,22 +50,18 @@ public class RequestParameterIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = JavaagentContainer.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void testRequestParameters() throws Exception {
         // when
         Trace trace = container.execute(GetParameter.class, "Web");
@@ -83,7 +79,6 @@ public class RequestParameterIT {
         assertThat(queryString).isEqualTo("xYz=aBc&jpassword1=****&multi=m1&multi=m2");
     }
 
-    @Test
     public void testRequestParametersWithoutMaskedQueryString() throws Exception {
         // when
         Trace trace = container.execute(GetParameterWithoutMaskedQueryString.class, "Web");
@@ -101,7 +96,6 @@ public class RequestParameterIT {
         assertThat(queryString).isEqualTo("xYz=aBc&multi=m1&multi=m2");
     }
 
-    @Test
     public void testWithoutCaptureRequestParameters() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureRequestParameters",
@@ -118,14 +112,12 @@ public class RequestParameterIT {
                 .isEqualTo("Response code");
     }
 
-    @Test
     public void testRequestParameterMap() throws Exception {
         // when
         container.execute(GetParameterMap.class, "Web");
         // then don't throw IllegalStateException (see MockCatalinaHttpServletRequest)
     }
 
-    @Test
     public void testBadRequestParameterMap() throws Exception {
         // when
         Trace trace = container.execute(GetBadParameterMap.class, "Web");
@@ -137,7 +129,6 @@ public class RequestParameterIT {
         assertThat(requestParameters.get("n")).isEqualTo("x");
     }
 
-    @Test
     public void testExtraBadRequestParameterMap() throws Exception {
         // when
         Trace trace = container.execute(GetExtraBadParameterMap.class, "Web");
@@ -149,7 +140,6 @@ public class RequestParameterIT {
         assertThat(requestParameters.get("n")).isEqualTo("x");
     }
 
-    @Test
     public void testAnotherBadRequestParameterMap() throws Exception {
         // when
         Trace trace = container.execute(GetAnotherBadParameterMap.class, "Web");
@@ -161,7 +151,6 @@ public class RequestParameterIT {
         assertThat(requestParameters.get("n")).isEqualTo("x");
     }
 
-    @Test
     public void testLargeRequestParameters() throws Exception {
         // when
         Trace trace = container.execute(GetLargeParameter.class, "Web");
@@ -174,7 +163,6 @@ public class RequestParameterIT {
                 Strings.repeat("0123456789", 1000) + " [truncated to 10000 characters]");
     }
 
-    @Test
     public void testOutsideServlet() throws Exception {
         // when
         container.executeNoExpectedTrace(GetParameterOutsideServlet.class);

@@ -85,24 +85,20 @@ public class JavaVersion {
         return OSX;
     }
 
-    @VisibleForTesting
-    static boolean parseIsJava6(@Nullable String javaVersion) {
+    static boolean parseIsJava6(String javaVersion) {
         return javaVersion != null && javaVersion.startsWith("1.6");
     }
 
-    @VisibleForTesting
-    static boolean parseIsGreaterThanOrEqualToJava8(@Nullable String javaVersion) {
+    static boolean parseIsGreaterThanOrEqualToJava8(String javaVersion) {
         return javaVersion != null && !javaVersion.startsWith("1.6")
                 && !javaVersion.startsWith("1.7");
     }
 
-    @VisibleForTesting
-    static boolean parseIsGreaterThanOrEqualToJava9(@Nullable String javaVersion) {
+    static boolean parseIsGreaterThanOrEqualToJava9(String javaVersion) {
         return javaVersion != null && !javaVersion.startsWith("1.");
     }
 
-    @VisibleForTesting
-    static boolean parseIsGreaterThanOrEqualToJava10(@Nullable String javaVersion) {
+    static boolean parseIsGreaterThanOrEqualToJava10(String javaVersion) {
         return javaVersion != null && !javaVersion.startsWith("1.")
                 && !javaVersion.startsWith("9.");
     }

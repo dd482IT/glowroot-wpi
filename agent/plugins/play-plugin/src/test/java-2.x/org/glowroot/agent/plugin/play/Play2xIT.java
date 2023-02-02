@@ -47,7 +47,6 @@ public class Play2xIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         Assumptions.assumeFalse(StandardSystemProperty.JAVA_VERSION.value().startsWith("17"));
 
@@ -60,19 +59,16 @@ public class Play2xIT {
         container.execute(GetIndex.class);
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         if (container != null) {
             container.close();
         }
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldCaptureIndexRoute() throws Exception {
         // when
         Trace trace = container.execute(GetIndex.class);
@@ -109,7 +105,6 @@ public class Play2xIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureIndexRouteUsingAltTransactionNaming() throws Exception {
         // given
         container.getConfigService().setPluginProperty("play", "useAltTransactionNaming", true);
@@ -145,7 +140,6 @@ public class Play2xIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureAsyncRoute() throws Exception {
         // when
         Trace trace = container.execute(GetAsync.class);
@@ -178,7 +172,6 @@ public class Play2xIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureStreamRoute() throws Exception {
         // when
         Trace trace = container.execute(GetStream.class);
@@ -206,7 +199,6 @@ public class Play2xIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureAssetRoute() throws Exception {
         // when
         Trace trace = container.execute(GetAsset.class);
@@ -222,7 +214,6 @@ public class Play2xIT {
         assertThat(trace.getHeader().hasError()).isFalse();
     }
 
-    @Test
     public void shouldCaptureError() throws Exception {
         // when
         Trace trace = container.execute(GetBad.class);

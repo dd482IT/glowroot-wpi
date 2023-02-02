@@ -23,19 +23,19 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 @SuppressWarnings("serial")
 public class SQLException extends Exception implements Iterable<Throwable> {
 
-    private final @Nullable String sqlState;
+    private final String sqlState;
 
     private final int errorCode;
 
-    private volatile @Nullable SQLException next;
+    private volatile SQLException next;
 
-    public SQLException(String message, @Nullable String sqlState, int errorCode) {
+    public SQLException(String message, String sqlState, int errorCode) {
         super(message);
         this.sqlState = sqlState;
         this.errorCode = errorCode;
     }
 
-    public SQLException(String message, @Nullable String sqlState) {
+    public SQLException(String message, String sqlState) {
         super(message);
         this.sqlState = sqlState;
         this.errorCode = 0;
@@ -53,32 +53,32 @@ public class SQLException extends Exception implements Iterable<Throwable> {
         this.errorCode = 0;
     }
 
-    public SQLException(@Nullable Throwable cause) {
+    public SQLException(Throwable cause) {
         super(cause);
         this.sqlState = null;
         this.errorCode = 0;
     }
 
-    public SQLException(String message, @Nullable Throwable cause) {
+    public SQLException(String message, Throwable cause) {
         super(message, cause);
         this.sqlState = null;
         this.errorCode = 0;
     }
 
-    public SQLException(String message, @Nullable String sqlState, @Nullable Throwable cause) {
+    public SQLException(String message, String sqlState, Throwable cause) {
         super(message, cause);
         this.sqlState = sqlState;
         this.errorCode = 0;
     }
 
-    public SQLException(String message, @Nullable String sqlState, int errorCode,
-            @Nullable Throwable cause) {
+    public SQLException(String message, String sqlState, int errorCode,
+            Throwable cause) {
         super(message, cause);
         this.sqlState = sqlState;
         this.errorCode = errorCode;
     }
 
-    public @Nullable String getSQLState() {
+    public String getSQLState() {
         return sqlState;
     }
 
@@ -86,7 +86,7 @@ public class SQLException extends Exception implements Iterable<Throwable> {
         return errorCode;
     }
 
-    public @Nullable SQLException getNextException() {
+    public SQLException getNextException() {
         return next;
     }
 
@@ -110,8 +110,8 @@ public class SQLException extends Exception implements Iterable<Throwable> {
 
     private static class SQLExceptionIterator implements Iterator<Throwable> {
 
-        private @Nullable Throwable nextCause; // if non-null return this instead
-        private @Nullable SQLException nextSqlException;
+        private Throwable nextCause; // if non-null return this instead
+        private SQLException nextSqlException;
 
         private SQLExceptionIterator(SQLException head) {
             nextCause = null;

@@ -133,7 +133,7 @@ public class BootstrapMetaHolders {
 
         private final Type classMetaType;
         private final Type type;
-        private volatile @MonotonicNonNull Object classMeta;
+        private volatile Object classMeta;
 
         private ClassMetaHolder(Type classMetaType, Type type) {
             this.classMetaType = classMetaType;
@@ -163,7 +163,7 @@ public class BootstrapMetaHolders {
         private final String methodName;
         private final Type methodReturnType;
         private final List<Type> methodParameterTypes;
-        private volatile @MonotonicNonNull Object methodMeta;
+        private volatile Object methodMeta;
 
         private MethodMetaHolder(Type methodMetaType, Type methodOwnerType, String methodName,
                 Type methodReturnType, List<Type> methodParameterTypes) {

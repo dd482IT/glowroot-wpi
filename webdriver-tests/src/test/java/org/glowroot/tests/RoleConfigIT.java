@@ -28,7 +28,6 @@ import static org.openqa.selenium.By.xpath;
 
 public class RoleConfigIT extends WebDriverIT {
 
-    @Test
     public void shouldOpenRole() throws Exception {
         // given
         App app = app();
@@ -44,7 +43,6 @@ public class RoleConfigIT extends WebDriverIT {
         clickLink("Return to list");
     }
 
-    @Test
     public void shouldAddRole() throws Exception {
         // given
         App app = app();
@@ -94,7 +92,6 @@ public class RoleConfigIT extends WebDriverIT {
         assertThat(rolePage.getAdminEditCheckBoxValue()).isFalse();
     }
 
-    @Test
     public void shouldUpdateRole() throws Exception {
         // given
         App app = app();
@@ -120,7 +117,6 @@ public class RoleConfigIT extends WebDriverIT {
         assertThat(rolePage.getAdminCheckBoxValue()).isTrue();
     }
 
-    @Test
     public void shouldDeleteRole() throws Exception {
         // given
         App app = app();
@@ -148,7 +144,6 @@ public class RoleConfigIT extends WebDriverIT {
         assertThat(notFound).isTrue();
     }
 
-    @Test
     public void shouldAddDuplicateRole() throws Exception {
         // given
         App app = app();

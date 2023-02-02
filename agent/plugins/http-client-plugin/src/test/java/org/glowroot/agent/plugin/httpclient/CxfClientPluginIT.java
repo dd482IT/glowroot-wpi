@@ -42,24 +42,20 @@ public class CxfClientPluginIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         // this is just testing HttpURLConnection instrumentation, so need to use javaagent
         // container since HttpURLConnection is in the bootstrap class loader
         container = JavaagentContainer.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldCaptureHttpGet() throws Exception {
         // when
         Trace trace = container.execute(ExecuteSoapRequest.class);
@@ -104,15 +100,10 @@ public class CxfClientPluginIT {
         }
     }
 
-    @WebService
-    @SOAPBinding(style = SOAPBinding.Style.RPC)
     public interface HelloWorld {
-        @WebMethod
-        String hello(@WebParam(name = "text") String text);
+        String hello(String text);
     }
 
-    @WebService(
-            endpointInterface = "org.glowroot.agent.plugin.httpclient.CxfClientPluginIT$HelloWorld")
     public static class HelloWorldImpl implements HelloWorld {
         @Override
         public String hello(String text) {

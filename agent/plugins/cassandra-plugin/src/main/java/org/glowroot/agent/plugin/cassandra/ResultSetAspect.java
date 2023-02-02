@@ -30,7 +30,6 @@ import org.glowroot.agent.plugin.api.weaving.Pointcut;
 public class ResultSetAspect {
 
     // the field and method names are verbose since they will be mixed in to existing classes
-    @Mixin("com.datastax.driver.core.ResultSet")
     public static class ResultSetImpl implements ResultSetMixin {
 
         // this may be async or non-async query entry
@@ -38,15 +37,15 @@ public class ResultSetAspect {
         // needs to be volatile, since ResultSets are thread safe, and therefore app/framework does
         // *not* need to provide visibility when used across threads and so this cannot piggyback
         // (unlike with jdbc ResultSets)
-        private transient volatile @Nullable QueryEntry glowroot$queryEntry;
+        private transient volatile QueryEntry glowroot$queryEntry;
 
         @Override
-        public @Nullable QueryEntry glowroot$getQueryEntry() {
+        public QueryEntry glowroot$getQueryEntry() {
             return glowroot$queryEntry;
         }
 
         @Override
-        public void glowroot$setQueryEntry(@Nullable QueryEntry queryEntry) {
+        public void glowroot$setQueryEntry(QueryEntry queryEntry) {
             glowroot$queryEntry = queryEntry;
         }
     }
@@ -54,25 +53,20 @@ public class ResultSetAspect {
     // the method names are verbose since they will be mixed in to existing classes
     public interface ResultSetMixin {
 
-        @Nullable
         QueryEntry glowroot$getQueryEntry();
 
-        void glowroot$setQueryEntry(@Nullable QueryEntry queryEntry);
+        void glowroot$setQueryEntry(QueryEntry queryEntry);
     }
 
-    @Pointcut(className = "com.datastax.driver.core.ResultSet", methodName = "one",
-            methodParameterTypes = {})
     public static class OneAdvice {
 
-        @OnBefore
-        public static @Nullable Timer onBefore(@BindReceiver ResultSetMixin resultSet) {
+        public static Timer onBefore(ResultSetMixin resultSet) {
             QueryEntry queryEntry = resultSet.glowroot$getQueryEntry();
             return queryEntry == null ? null : queryEntry.extend();
         }
 
-        @OnReturn
-        public static void onReturn(@BindReturn @Nullable Object row,
-                @BindReceiver ResultSetMixin resultSet) {
+        public static void onReturn(Object row,
+                ResultSetMixin resultSet) {
             QueryEntry queryEntry = resultSet.glowroot$getQueryEntry();
             if (queryEntry == null) {
                 return;
@@ -84,21 +78,16 @@ public class ResultSetAspect {
             }
         }
 
-        @OnAfter
-        public static void onAfter(@BindTraveler @Nullable Timer timer) {
+        public static void onAfter(Timer timer) {
             if (timer != null) {
                 timer.stop();
             }
         }
     }
 
-    @Pointcut(className = "java.lang.Iterable",
-            subTypeRestriction = "com.datastax.driver.core.ResultSet",
-            methodName = "iterator", methodParameterTypes = {})
     public static class IteratorAdvice {
 
-        @OnReturn
-        public static void onReturn(@BindReceiver ResultSetMixin resultSet) {
+        public static void onReturn(ResultSetMixin resultSet) {
             QueryEntry queryEntry = resultSet.glowroot$getQueryEntry();
             if (queryEntry == null) {
                 // tracing must be disabled (e.g. exceeded trace entry limit)
@@ -108,20 +97,14 @@ public class ResultSetAspect {
         }
     }
 
-    @Pointcut(className = "com.datastax.driver.core.PagingIterable"
-            + "|com.datastax.driver.core.ResultSet",
-            subTypeRestriction = "com.datastax.driver.core.ResultSet",
-            methodName = "isExhausted", methodParameterTypes = {})
     public static class IsExhaustedAdvice {
 
-        @OnBefore
-        public static @Nullable Timer onBefore(@BindReceiver ResultSetMixin resultSet) {
+        public static Timer onBefore(ResultSetMixin resultSet) {
             QueryEntry queryEntry = resultSet.glowroot$getQueryEntry();
             return queryEntry == null ? null : queryEntry.extend();
         }
 
-        @OnReturn
-        public static void onReturn(@BindReceiver ResultSetMixin resultSet) {
+        public static void onReturn(ResultSetMixin resultSet) {
             QueryEntry queryEntry = resultSet.glowroot$getQueryEntry();
             if (queryEntry == null) {
                 // tracing must be disabled (e.g. exceeded trace entry limit)
@@ -130,8 +113,7 @@ public class ResultSetAspect {
             queryEntry.rowNavigationAttempted();
         }
 
-        @OnAfter
-        public static void onAfter(@BindTraveler @Nullable Timer timer) {
+        public static void onAfter(Timer timer) {
             if (timer != null) {
                 timer.stop();
             }

@@ -30,24 +30,20 @@ public class MixinProxyIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         // this test only works under javaagent because Proxy classes don't get loaded normally
         // through class loader and so IsolatedWeavingClassLoader cannot weave them
         container = JavaagentContainer.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void testCausedBy() throws Exception {
         // given
         // when

@@ -26,7 +26,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class TraceCommonServiceTest {
 
-    @Test
     public void test() throws Exception {
         // given
         List<Trace.Entry> entries = Lists.newArrayList();

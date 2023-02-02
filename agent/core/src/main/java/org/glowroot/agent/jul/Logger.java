@@ -34,7 +34,7 @@ public class Logger {
 
     private final org.slf4j.Logger slf4jLogger;
 
-    private @Nullable ResourceBundle resourceBundle;
+    private ResourceBundle resourceBundle;
 
     public static Logger getLogger(String name) {
         return new Logger(name);
@@ -49,12 +49,10 @@ public class Logger {
         this(org.slf4j.LoggerFactory.getLogger(name));
     }
 
-    @VisibleForTesting
     Logger(org.slf4j.Logger logger) {
         this.slf4jLogger = logger;
     }
 
-    @VisibleForTesting
     org.slf4j.Logger getSlf4jLogger() {
         return slf4jLogger;
     }
@@ -130,7 +128,7 @@ public class Logger {
         }
     }
 
-    public void log(Level level, String msg, @Nullable Object param1) {
+    public void log(Level level, String msg, Object param1) {
         if (level.intValue() >= Level.SEVERE.intValue()) {
             if (slf4jLogger.isErrorEnabled()) {
                 slf4jLogger.error(MessageFormat.format(msg, param1));
@@ -154,7 +152,7 @@ public class Logger {
         }
     }
 
-    public void log(Level level, String msg, @Nullable Object[] params) {
+    public void log(Level level, String msg, Object[] params) {
         if (level.intValue() >= Level.SEVERE.intValue()) {
             if (slf4jLogger.isErrorEnabled()) {
                 slf4jLogger.error(MessageFormat.format(msg, params));
@@ -309,7 +307,7 @@ public class Logger {
     @SuppressWarnings("unused")
     public void throwing(String sourceClass, String sourceMethod, Throwable thrown) {}
 
-    public @Nullable ResourceBundle getResourceBundle() {
+    public ResourceBundle getResourceBundle() {
         return resourceBundle;
     }
 
@@ -317,7 +315,7 @@ public class Logger {
         this.resourceBundle = resourceBundle;
     }
 
-    public @Nullable String getResourceBundleName() {
+    public String getResourceBundleName() {
         return null;
     }
 
@@ -341,9 +339,8 @@ public class Logger {
         return global;
     }
 
-    private static @Nullable String getMessage(LogRecord record) {
+    private static String getMessage(LogRecord record) {
         String msg = record.getMessage();
-        @Nullable
         Object[] params = record.getParameters();
         if (params == null) {
             return msg;

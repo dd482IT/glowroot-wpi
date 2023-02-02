@@ -1024,7 +1024,7 @@ public class TraceDaoImpl implements TraceDao {
     }
 
     @Override
-    public @Nullable HeaderPlus readHeaderPlus(String agentId, String traceId) throws Exception {
+    public HeaderPlus readHeaderPlus(String agentId, String traceId) throws Exception {
         Trace.Header header = readHeader(agentId, traceId);
         if (header == null) {
             return null;
@@ -1090,7 +1090,7 @@ public class TraceDaoImpl implements TraceDao {
     }
 
     @Override
-    public @Nullable Profile readMainThreadProfile(String agentId, String traceId)
+    public Profile readMainThreadProfile(String agentId, String traceId)
             throws Exception {
         Profile profile = readMainThreadProfileUsingPS(agentId, traceId, readMainThreadProfileV2);
         if (profile != null) {
@@ -1099,7 +1099,7 @@ public class TraceDaoImpl implements TraceDao {
         return readMainThreadProfileUsingPS(agentId, traceId, readMainThreadProfileV1);
     }
 
-    public @Nullable Profile readMainThreadProfileUsingPS(String agentId, String traceId,
+    public Profile readMainThreadProfileUsingPS(String agentId, String traceId,
             PreparedStatement readPS) throws Exception {
         BoundStatement boundStatement = readPS.bind();
         boundStatement.setString(0, agentId);
@@ -1113,7 +1113,7 @@ public class TraceDaoImpl implements TraceDao {
     }
 
     @Override
-    public @Nullable Profile readAuxThreadProfile(String agentId, String traceId) throws Exception {
+    public Profile readAuxThreadProfile(String agentId, String traceId) throws Exception {
         Profile profile = readAuxThreadProfileUsingPS(agentId, traceId, readAuxThreadProfileV2);
         if (profile != null) {
             return profile;
@@ -1121,7 +1121,7 @@ public class TraceDaoImpl implements TraceDao {
         return readAuxThreadProfileUsingPS(agentId, traceId, readAuxThreadProfileV1);
     }
 
-    public @Nullable Profile readAuxThreadProfileUsingPS(String agentId, String traceId,
+    public Profile readAuxThreadProfileUsingPS(String agentId, String traceId,
             PreparedStatement readPS) throws Exception {
         BoundStatement boundStatement = readPS.bind();
         boundStatement.setString(0, agentId);
@@ -1275,7 +1275,6 @@ public class TraceDaoImpl implements TraceDao {
     }
 
     @Override
-    @OnlyUsedByTests
     public void truncateAll() throws Exception {
         session.updateSchemaWithRetry("truncate table trace_tt_slow_count");
         session.updateSchemaWithRetry("truncate table trace_tn_slow_count");
@@ -1554,7 +1553,6 @@ public class TraceDaoImpl implements TraceDao {
         return true;
     }
 
-    @Value.Immutable
     abstract static class TraceKey {
 
         abstract String agentId();

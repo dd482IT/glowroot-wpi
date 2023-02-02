@@ -98,13 +98,13 @@ class GaugeCollector extends ScheduledRunnable {
 
     // since gauges have their own dedicated thread, don't need to worry about thread safety of
     // priorRawCounterValues (except can't initialize here outside of the dedicated thread)
-    private @MonotonicNonNull Map<String, RawCounterValue> priorRawCounterValues;
+    private Map<String, RawCounterValue> priorRawCounterValues;
 
     private volatile boolean closed;
 
     GaugeCollector(ConfigService configService, Collector collector,
             LazyPlatformMBeanServer lazyPlatformMBeanServer,
-            final @Nullable Instrumentation instrumentation, Clock clock, Ticker ticker) {
+            final Instrumentation instrumentation, Clock clock, Ticker ticker) {
         this.configService = configService;
         this.collector = collector;
         this.lazyPlatformMBeanServer = lazyPlatformMBeanServer;
@@ -171,8 +171,6 @@ class GaugeCollector extends ScheduledRunnable {
         }
     }
 
-    @VisibleForTesting
-    @RequiresNonNull("priorRawCounterValues")
     List<GaugeValue> collectGaugeValues(GaugeConfig gaugeConfig, List<MBeanServer> mbeanServers)
             throws Exception {
         String mbeanObjectName = gaugeConfig.mbeanObjectName();
@@ -207,7 +205,6 @@ class GaugeCollector extends ScheduledRunnable {
         return gaugeValues;
     }
 
-    @RequiresNonNull("priorRawCounterValues")
     private List<GaugeValue> collectGaugeValues(ObjectName objectName,
             List<ImmutableMBeanAttribute> mbeanAttributes, String mbeanObjectName,
             List<MBeanServer> mbeanServers) throws Exception {
@@ -357,8 +354,6 @@ class GaugeCollector extends ScheduledRunnable {
         GaugeCollector.logger = logger;
     }
 
-    @Value.Immutable
-    @Styles.AllParameters
     interface RawCounterValue {
         double value();
         long captureTick();

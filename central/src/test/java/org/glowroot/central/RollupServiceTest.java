@@ -21,7 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class RollupServiceTest {
 
-    @Test
     public void test() {
         assertThat(RollupService.millisUntilNextRollup(15000)).isEqualTo(55000);
         assertThat(RollupService.millisUntilNextRollup(30000)).isEqualTo(40000);

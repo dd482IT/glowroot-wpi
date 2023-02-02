@@ -44,10 +44,10 @@ public class BytecodeServiceImpl implements BytecodeService {
     private final TransactionRegistry transactionRegistry;
     private final TransactionService transactionService;
 
-    private volatile @MonotonicNonNull OnEnteringMain onEnteringMain;
+    private volatile OnEnteringMain onEnteringMain;
     private final AtomicBoolean hasRunOnEnteringMain = new AtomicBoolean();
 
-    private volatile @MonotonicNonNull Runnable onExitingGetPlatformMBeanServer;
+    private volatile Runnable onExitingGetPlatformMBeanServer;
     private final AtomicBoolean hasRunOnExitingGetPlatformMBeanServer = new AtomicBoolean();
 
     private final PreloadSomeSuperTypesCache preloadSomeSuperTypesCache;
@@ -73,20 +73,20 @@ public class BytecodeServiceImpl implements BytecodeService {
     }
 
     @Override
-    public void enteringMainMethod(String mainClass, @Nullable String /*@Nullable*/ [] mainArgs) {
+    public void enteringMainMethod(String mainClass, String /*@Nullable*/ [] mainArgs) {
         enteringMainMethod(mainClass, mainArgs, mainClass, "main");
     }
 
     @Override
     public void enteringApacheCommonsDaemonLoadMethod(String mainClass,
-            @Nullable String /*@Nullable*/ [] mainArgs) {
+            String /*@Nullable*/ [] mainArgs) {
         enteringMainMethod(mainClass, mainArgs, "org.apache.commons.daemon.support.DaemonLoader",
                 "load");
     }
 
     @Override
     public void enteringPossibleProcrunStartMethod(String className, String methodName,
-            @Nullable String /*@Nullable*/ [] methodArgs) {
+            String /*@Nullable*/ [] methodArgs) {
         enteringMainMethod(className, methodArgs, className, methodName);
     }
 
@@ -135,21 +135,21 @@ public class BytecodeServiceImpl implements BytecodeService {
 
     @Override
     public MessageSupplier createMessageSupplier(MessageTemplate template, Object receiver,
-            String methodName, @Nullable Object... args) {
+            String methodName, Object... args) {
         return GenericMessageSupplier.create((MessageTemplateImpl) template, receiver, methodName,
                 args);
     }
 
     @Override
     public String getMessageText(MessageTemplate template, Object receiver, String methodName,
-            @Nullable Object... args) {
+            Object... args) {
         return GenericMessageSupplier
                 .create((MessageTemplateImpl) template, receiver, methodName, args)
                 .getMessageText();
     }
 
     @Override
-    public void updateWithReturnValue(TraceEntry traceEntry, @Nullable Object returnValue) {
+    public void updateWithReturnValue(TraceEntry traceEntry, Object returnValue) {
         GenericMessageSupplier.updateWithReturnValue(traceEntry, returnValue);
     }
 
@@ -159,7 +159,7 @@ public class BytecodeServiceImpl implements BytecodeService {
     }
 
     @Override
-    public void preloadSomeSuperTypes(ClassLoader loader, @Nullable String className) {
+    public void preloadSomeSuperTypes(ClassLoader loader, String className) {
         if (className == null) {
             return;
         }
@@ -213,7 +213,7 @@ public class BytecodeServiceImpl implements BytecodeService {
         }
     }
 
-    public void enteringMainMethod(String className, @Nullable String /*@Nullable*/ [] methodArgs,
+    public void enteringMainMethod(String className, String /*@Nullable*/ [] methodArgs,
             String expectedTopLevelClassName, String expectedTopLevelMethodName) {
         if (onEnteringMain == null) {
             if (DEBUG_MAIN_CLASS) {
@@ -269,7 +269,7 @@ public class BytecodeServiceImpl implements BytecodeService {
     }
 
     public interface OnEnteringMain {
-        void run(@Nullable String mainClass) throws Exception;
+        void run(String mainClass) throws Exception;
     }
 
     @SuppressWarnings("serial")

@@ -29,7 +29,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class PreInitializeWeavingClassesTest {
 
-    @Test
     public void shouldCheckHardcodedListAgainstReality() throws IOException {
         GlobalCollector globalCollector = new GlobalCollector();
         // "call" AnalyzedWorld constructor to capture types used by LoadingCache

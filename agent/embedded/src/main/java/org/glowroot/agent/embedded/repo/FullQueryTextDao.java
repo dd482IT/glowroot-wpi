@@ -87,7 +87,6 @@ class FullQueryTextDao {
         return fullTextSha1;
     }
 
-    @Nullable
     String getFullText(final String fullTextSha1) throws SQLException {
         return dataSource.queryAtMostOne(new JdbcRowQuery<String>() {
             @Override

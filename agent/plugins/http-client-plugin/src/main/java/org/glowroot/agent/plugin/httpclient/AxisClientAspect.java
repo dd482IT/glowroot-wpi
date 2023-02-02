@@ -30,21 +30,17 @@ import org.glowroot.agent.plugin.api.weaving.Pointcut;
 
 public class AxisClientAspect {
 
-    @Pointcut(className = "org.apache.axis.client.Call", methodName = "invoke",
-            methodParameterTypes = {}, nestingGroup = "http-client", timerName = "axis service")
     public static class ResourceAdvice {
 
         private static final TimerName timerName = Agent.getTimerName(ResourceAdvice.class);
 
-        @OnBefore
-        public static TraceEntry onBefore(ThreadContext context, @BindReceiver Call call) {
+        public static TraceEntry onBefore(ThreadContext context, Call call) {
             String url = call.getTargetEndpointAddress();
             return context.startServiceCallEntry("HTTP", "POST " + url,
                     MessageSupplier.create("http client request: POST {}", url), timerName);
         }
 
-        @OnAfter
-        public static void onAfter(@BindTraveler TraceEntry traceEntry) {
+        public static void onAfter(TraceEntry traceEntry) {
             traceEntry.end();
         }
     }

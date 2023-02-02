@@ -70,33 +70,27 @@ public abstract class WebDriverIT {
 
     private static CloseableHttpClient httpClient;
 
-    @Rule
     public TestName testName = new TestName();
 
-    @Rule
     public ScreenshotOnExceptionRule screenshotOnExceptionRule = new ScreenshotOnExceptionRule();
 
-    @BeforeAll
     public static void setUpBase() throws Exception {
         setup = WebDriverSetup.create();
         container = setup.getContainer();
         httpClient = HttpClients.createDefault();
     }
 
-    @AfterAll
     public static void tearDownBase() throws Exception {
         httpClient.close();
         setup.close();
     }
 
-    @BeforeEach
     public void beforeEachBaseTest() throws Exception {
         setup.beforeEachTest(getClass().getName() + '.' + testName.getMethodName(),
                 screenshotOnExceptionRule);
         driver = setup.getDriver();
     }
 
-    @AfterEach
     public void afterEachBaseTest() throws Exception {
         setup.afterEachTest();
         if (WebDriverSetup.useCentral) {
@@ -104,7 +98,6 @@ public abstract class WebDriverIT {
         }
     }
 
-    @Rule
     public TestWatcher getSauceLabsTestWatcher() {
         return setup.getSauceLabsTestWatcher();
     }

@@ -78,7 +78,6 @@ class PropertiesFiles {
         }
     }
 
-    @VisibleForTesting
     static List<String> upgradeToCollectorAddressIfNeeded(List<String> lines) {
         List<String> newLines = Lists.newArrayList();
         String host = null;

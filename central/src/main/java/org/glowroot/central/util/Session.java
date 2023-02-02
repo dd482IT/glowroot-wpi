@@ -76,7 +76,7 @@ public class Session {
 
     private final com.datastax.driver.core.Session wrappedSession;
     private final String keyspaceName;
-    private final @Nullable ConsistencyLevel writeConsistencyLevel;
+    private final ConsistencyLevel writeConsistencyLevel;
     private final int gcGraceSeonds;
 
     private final Queue<String> allTableNames = new ConcurrentLinkedQueue<>();
@@ -84,7 +84,7 @@ public class Session {
     private final CassandraWriteMetrics cassandraWriteMetrics;
 
     public Session(com.datastax.driver.core.Session wrappedSession, String keyspaceName,
-            @Nullable ConsistencyLevel writeConsistencyLevel, int maxConcurrentQueries, int gcGraceSeconds)
+            ConsistencyLevel writeConsistencyLevel, int maxConcurrentQueries, int gcGraceSeconds)
             throws Exception {
         this.wrappedSession = wrappedSession;
         this.keyspaceName = keyspaceName;
@@ -237,7 +237,7 @@ public class Session {
         return keyspaceName;
     }
 
-    public @Nullable TableMetadata getTable(String name) {
+    public TableMetadata getTable(String name) {
         KeyspaceMetadata keyspace = getKeyspace();
         if (keyspace == null) {
             return null;
@@ -259,7 +259,7 @@ public class Session {
         return allTableNames;
     }
 
-    private @Nullable KeyspaceMetadata getKeyspace() {
+    private KeyspaceMetadata getKeyspace() {
         return wrappedSession.getCluster().getMetadata().getKeyspace(keyspaceName);
     }
 
@@ -420,7 +420,7 @@ public class Session {
         return outerFuture;
     }
 
-    private static @Nullable String getTableName(String createTableQuery, String prefix) {
+    private static String getTableName(String createTableQuery, String prefix) {
         if (createTableQuery.startsWith(prefix)) {
             String suffix = createTableQuery.substring(prefix.length());
             int index = suffix.indexOf(' ');

@@ -84,7 +84,6 @@ class UserDao {
         return allUserConfigsCache.get(ALL_USERS_SINGLE_CACHE_KEY);
     }
 
-    @Nullable
     UserConfig read(String username) throws Exception {
         for (UserConfig userConfig : read()) {
             if (userConfig.username().equals(username)) {
@@ -94,7 +93,6 @@ class UserDao {
         return null;
     }
 
-    @Nullable
     UserConfig readCaseInsensitive(String username) throws Exception {
         for (UserConfig userConfig : read()) {
             if (userConfig.username().equalsIgnoreCase(username)) {

@@ -31,13 +31,10 @@ import org.glowroot.agent.plugin.api.weaving.Pointcut;
 // test this unusual situation
 public class ExternalJvmMainAspect {
 
-    @Pointcut(className = "org.glowroot.agent.it.harness.impl.JavaagentMain", methodName = "main",
-            methodParameterTypes = {"java.lang.String[]"}, timerName = "external jvm main")
     public static class MainAdvice {
 
         private static final TimerName timerName = Agent.getTimerName(MainAdvice.class);
 
-        @OnBefore
         public static TraceEntry onBefore(OptionalThreadContext context) {
             return context.startTransaction("Sandbox", "javaagent container main",
                     MessageSupplier
@@ -45,42 +42,33 @@ public class ExternalJvmMainAspect {
                     timerName);
         }
 
-        @OnAfter
-        public static void onAfter(@BindTraveler TraceEntry traceEntry) {
+        public static void onAfter(TraceEntry traceEntry) {
             traceEntry.end();
         }
     }
 
-    @Pointcut(className = "org.glowroot.agent.it.harness.impl.JavaagentMain",
-            methodName = "timerMarkerOne", methodParameterTypes = {}, timerName = "timer one")
     public static class TimerMarkerOneAdvice {
 
         private static final TimerName timerName = Agent.getTimerName(TimerMarkerOneAdvice.class);
 
-        @OnBefore
         public static Timer onBefore(ThreadContext context) {
             return context.startTimer(timerName);
         }
 
-        @OnAfter
-        public static void onAfter(@BindTraveler Timer timer) {
+        public static void onAfter(Timer timer) {
             timer.stop();
         }
     }
 
-    @Pointcut(className = "org.glowroot.agent.it.harness.impl.JavaagentMain",
-            methodName = "timerMarkerTwo", methodParameterTypes = {}, timerName = "timer two")
     public static class TimerMarkerTwoAdvice {
 
         private static final TimerName timerName = Agent.getTimerName(TimerMarkerTwoAdvice.class);
 
-        @OnBefore
         public static Timer onBefore(ThreadContext context) {
             return context.startTimer(timerName);
         }
 
-        @OnAfter
-        public static void onAfter(@BindTraveler Timer timer) {
+        public static void onAfter(Timer timer) {
             timer.stop();
         }
     }

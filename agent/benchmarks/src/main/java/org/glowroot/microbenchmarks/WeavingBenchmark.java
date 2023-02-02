@@ -39,16 +39,10 @@ import org.openjdk.jmh.annotations.Warmup;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
-@BenchmarkMode(Mode.SingleShotTime)
-@Warmup(iterations = 0)
-@Measurement(iterations = 1)
-@OutputTimeUnit(TimeUnit.MILLISECONDS)
-@State(Scope.Thread)
 public class WeavingBenchmark {
 
     private Set<String> classNames;
 
-    @Setup
     public void setup() throws IOException {
         classNames = new HashSet<String>();
         for (String path : getClassPath()) {
@@ -73,12 +67,10 @@ public class WeavingBenchmark {
         }
     }
 
-    @TearDown
     public void tearDown() throws InterruptedException {
         MILLISECONDS.sleep(100);
     }
 
-    @Benchmark
     public void execute() throws ClassNotFoundException {
         for (String className : classNames) {
             try {

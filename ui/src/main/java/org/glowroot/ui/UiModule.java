@@ -67,29 +67,28 @@ public class UiModule {
     private static final Logger logger = LoggerFactory.getLogger(UiModule.class);
 
     // non-null when using netty
-    private final @Nullable HttpServer httpServer;
+    private final HttpServer httpServer;
 
     // CommonHandler is non-null when using servlet container (applies to central only)
-    private final @Nullable CommonHandler commonHandler;
+    private final CommonHandler commonHandler;
 
     private final ExecutorService reportingExecutor;
 
-    @Builder.Factory
     public static UiModule createUiModule(
             boolean central,
             boolean servlet,
             boolean offlineViewer,
             boolean webPortReadOnly, // only used for embedded
-            @Nullable String bindAddress, // only used for central
-            @Nullable Integer port, // only used for central
-            @Nullable Boolean https, // only used for central
-            @Nullable String contextPath, // only used for central
+            String bindAddress, // only used for central
+            Integer port, // only used for central
+            Boolean https, // only used for central
+            String contextPath, // only used for central
             List<File> confDirs,
             File logDir,
             Pattern logFileNamePattern,
-            @Nullable Ticker ticker, // @Nullable to deal with shading from glowroot server
+            Ticker ticker, // @Nullable to deal with shading from glowroot server
             Clock clock,
-            @Nullable LiveJvmService liveJvmService,
+            LiveJvmService liveJvmService,
             AgentDisplayRepository agentDisplayRepository,
             final ConfigRepository configRepository,
             AlertingDisabledRepository alertingDisabledRepository,
@@ -100,13 +99,13 @@ public class UiModule {
             TraceAttributeNameRepository traceAttributeNameRepository,
             TraceRepository traceRepository,
             GaugeValueRepository gaugeValueRepository,
-            @Nullable SyntheticResultRepository syntheticResultRepository, // null for embedded
+            SyntheticResultRepository syntheticResultRepository, // null for embedded
             IncidentRepository incidentRepository,
             RepoAdmin repoAdmin,
             RollupLevelService rollupLevelService,
             LiveTraceRepository liveTraceRepository,
             LiveAggregateRepository liveAggregateRepository,
-            @Nullable LiveWeavingService liveWeavingService,
+            LiveWeavingService liveWeavingService,
             SessionMapFactory sessionMapFactory,
             HttpClient httpClient,
             int numWorkerThreads,

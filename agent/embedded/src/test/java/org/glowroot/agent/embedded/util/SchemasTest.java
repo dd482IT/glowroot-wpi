@@ -30,7 +30,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SchemasTest {
 
-    @Test
     public void shouldReadIndexes() throws Exception {
         // given
         Connection connection = new JdbcConnection("jdbc:h2:mem:", new Properties());

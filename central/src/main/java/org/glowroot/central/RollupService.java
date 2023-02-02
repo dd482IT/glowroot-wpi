@@ -146,9 +146,6 @@ class RollupService implements Runnable {
         }
     }
 
-    @Instrumentation.Transaction(transactionType = "Background",
-            transactionName = "Outer rollup loop", traceHeadline = "Outer rollup loop",
-            timer = "outer rollup loop")
     private void runInternal(List<AgentRollup> agentRollups,
             ListeningExecutorService workerExecutor) throws Exception {
         List<Future<?>> futures = new ArrayList<>();
@@ -285,7 +282,6 @@ class RollupService implements Runnable {
         return count;
     }
 
-    @VisibleForTesting
     static long millisUntilNextRollup(long currentTimeMillis) {
         return 60000 - (currentTimeMillis - 10000) % 60000;
     }

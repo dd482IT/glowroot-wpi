@@ -20,10 +20,9 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 public interface AlertingDisabledRepository {
 
     // central supports alert configs on rollups
-    @Nullable
     Long getAlertingDisabledUntilTime(String agentRollupId) throws Exception;
 
     // central supports alert configs on rollups
-    void setAlertingDisabledUntilTime(String agentRollupId, @Nullable Long disabledUntilTime)
+    void setAlertingDisabledUntilTime(String agentRollupId, Long disabledUntilTime)
             throws Exception;
 }

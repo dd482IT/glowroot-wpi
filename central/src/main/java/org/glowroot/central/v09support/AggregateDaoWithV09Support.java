@@ -173,7 +173,7 @@ public class AggregateDaoWithV09Support implements AggregateDao {
     }
 
     @Override
-    public @Nullable String readFullQueryText(String agentRollupId, String fullQueryTextSha1)
+    public String readFullQueryText(String agentRollupId, String fullQueryTextSha1)
             throws Exception {
         String value = delegate.readFullQueryText(agentRollupId, fullQueryTextSha1);
         if (value == null && clock.currentTimeMillis() < v09FqtLastExpirationTime
@@ -343,24 +343,17 @@ public class AggregateDaoWithV09Support implements AggregateDao {
     }
 
     @Override
-    @OnlyUsedByTests
     public void truncateAll() throws Exception {
         delegate.truncateAll();
     }
 
-    @Value.Immutable
     interface SummaryQueryPlan {
-        @Nullable
         SummaryQuery queryV09();
-        @Nullable
         SummaryQuery queryPostV09();
     }
 
-    @Value.Immutable
     interface AggregateQueryPlan {
-        @Nullable
         AggregateQuery queryV09();
-        @Nullable
         AggregateQuery queryPostV09();
     }
 

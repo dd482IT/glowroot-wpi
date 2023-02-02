@@ -86,14 +86,12 @@ class ImmediateTraceStoreWatcher extends ScheduledRunnable {
         }
     }
 
-    @VisibleForTesting
     static class ImmediateTraceStoreRunnable extends ScheduledRunnable {
 
         private final Transaction transaction;
         private final TraceCollector traceCollector;
         private volatile boolean transactionPreviouslyCompleted;
 
-        @VisibleForTesting
         ImmediateTraceStoreRunnable(Transaction transaction, TraceCollector traceCollector) {
             this.transaction = transaction;
             this.traceCollector = traceCollector;

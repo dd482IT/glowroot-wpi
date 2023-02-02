@@ -28,7 +28,7 @@ public class CaptureTimes {
     }
 
     public static long getRollup(long captureTime, long intervalMillis,
-            @Nullable TimeZone timeZone) {
+            TimeZone timeZone) {
         int timeZoneOffset = timeZone == null ? 0 : timeZone.getOffset(captureTime);
         // cast to long at the very end to avoid long rollover (e.g. when captureTime = Long.MAX)
         return (long) (Math.ceil((captureTime + timeZoneOffset) / (double) intervalMillis)

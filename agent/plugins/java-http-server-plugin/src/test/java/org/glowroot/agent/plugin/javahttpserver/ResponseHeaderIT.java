@@ -42,24 +42,20 @@ public class ResponseHeaderIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         // tests only work with javaagent container because they need to weave bootstrap classes
         // that implement com.sun.net.httpserver.HttpExchange
         container = JavaagentContainer.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void testStandardResponseHeadersUsingSetHeader() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureResponseHeaders",
@@ -76,7 +72,6 @@ public class ResponseHeaderIT {
         assertThat(responseHeaders.get("Extra")).isNull();
     }
 
-    @Test
     public void testStandardResponseHeadersUsingAddHeader() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureResponseHeaders",
@@ -93,7 +88,6 @@ public class ResponseHeaderIT {
         assertThat(responseHeaders.get("Extra")).isNull();
     }
 
-    @Test
     public void testStandardResponseHeadersLowercase() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureResponseHeaders",
@@ -109,7 +103,6 @@ public class ResponseHeaderIT {
         assertThat(responseHeaders.get("Extra")).isNull();
     }
 
-    @Test
     public void testWithoutAnyHeaderCaptureUsingSetHeader() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureResponseHeaders",
@@ -120,7 +113,6 @@ public class ResponseHeaderIT {
         assertThat(getResponseHeaders(trace)).isNull();
     }
 
-    @Test
     public void testWithoutAnyHeaderCaptureUsingAddHeader() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureResponseHeaders",
@@ -131,7 +123,6 @@ public class ResponseHeaderIT {
         assertThat(getResponseHeaders(trace)).isNull();
     }
 
-    @Test
     public void testLotsOfResponseHeaders() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureResponseHeaders",
@@ -156,7 +147,6 @@ public class ResponseHeaderIT {
         assertThat(responseHeaders.get("Int-three")).isNull();
     }
 
-    @Test
     public void testOutsideHttpServer() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureResponseHeaders",
@@ -167,7 +157,6 @@ public class ResponseHeaderIT {
         // basically just testing that it should not generate any errors
     }
 
-    @Test
     public void testDontMaskResponseHeaders() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureResponseHeaders",

@@ -70,9 +70,7 @@ public class TransactionProcessor {
     // all structural changes to the transaction queue are made under queueLock for simplicity
     // TODO implement lock free structure
     private final PendingTransaction head = new PendingTransaction(null);
-    @GuardedBy("queueLock")
     private PendingTransaction tail = head;
-    @GuardedBy("queueLock")
     private int queueLength;
     private final Object queueLock = new Object();
 
@@ -170,7 +168,6 @@ public class TransactionProcessor {
         }
     }
 
-    @OnlyUsedByTests
     public void close() throws InterruptedException {
         closed = true;
         processingExecutor.shutdown();
@@ -309,11 +306,11 @@ public class TransactionProcessor {
 
     private static class PendingTransaction {
 
-        private final @Nullable Transaction transaction; // only null for head
+        private final Transaction transaction; // only null for head
         private volatile long captureTime;
-        private volatile @Nullable PendingTransaction next;
+        private volatile PendingTransaction next;
 
-        private PendingTransaction(@Nullable Transaction transaction) {
+        private PendingTransaction(Transaction transaction) {
             this.transaction = transaction;
         }
     }

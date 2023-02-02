@@ -59,7 +59,7 @@ class JavaagentMain {
                 .start();
         javaagentService.setServerCloseable(new Callable</*@Nullable*/ Void>() {
             @Override
-            public @Nullable Void call() throws Exception {
+            public Void call() throws Exception {
                 server.shutdown();
                 if (!server.awaitTermination(10, SECONDS)) {
                     throw new IllegalStateException("Could not terminate channel");

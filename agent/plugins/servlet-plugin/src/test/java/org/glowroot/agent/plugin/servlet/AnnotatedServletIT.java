@@ -39,22 +39,18 @@ public class AnnotatedServletIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void testServlet() throws Exception {
         // when
         Trace trace = container.execute(InvokeServlet.class, "Web");
@@ -69,7 +65,6 @@ public class AnnotatedServletIT {
         assertThat(header.getTransactionName()).isEqualTo("/hello/5");
     }
 
-    @Test
     public void testServletWithContextPath() throws Exception {
         // when
         Trace trace = container.execute(InvokeServletWithContextPath.class, "Web");
@@ -120,7 +115,6 @@ public class AnnotatedServletIT {
         }
     }
 
-    @WebServlet(value = "/hello/*", loadOnStartup = 0)
     @SuppressWarnings("serial")
     public static class AnnotatedServlet extends HttpServlet {
         @Override

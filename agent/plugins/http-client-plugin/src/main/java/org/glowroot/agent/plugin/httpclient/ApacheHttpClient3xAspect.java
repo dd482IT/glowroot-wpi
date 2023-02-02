@@ -37,17 +37,11 @@ import org.glowroot.agent.plugin.httpclient._.Uris;
 
 public class ApacheHttpClient3xAspect {
 
-    @Pointcut(className = "org.apache.commons.httpclient.HttpClient", methodName = "executeMethod",
-            methodParameterTypes = {"org.apache.commons.httpclient.HostConfiguration",
-                    "org.apache.commons.httpclient.HttpMethod",
-                    "org.apache.commons.httpclient.HttpState"},
-            nestingGroup = "http-client", timerName = "http client request")
     public static class ExecuteMethodAdvice {
         private static final TimerName timerName = Agent.getTimerName(ExecuteMethodAdvice.class);
-        @OnBefore
-        public static @Nullable TraceEntry onBefore(ThreadContext context,
-                @SuppressWarnings("unused") @BindParameter @Nullable HostConfiguration hostConfiguration,
-                @BindParameter @Nullable HttpMethod methodObj) {
+        public static TraceEntry onBefore(ThreadContext context,
+                @SuppressWarnings("unused") HostConfiguration hostConfiguration,
+                HttpMethod methodObj) {
             if (methodObj == null) {
                 return null;
             }
@@ -75,15 +69,13 @@ public class ApacheHttpClient3xAspect {
                     MessageSupplier.create("http client request: {}{}", method, uri),
                     timerName);
         }
-        @OnReturn
-        public static void onReturn(@BindTraveler @Nullable TraceEntry traceEntry) {
+        public static void onReturn(TraceEntry traceEntry) {
             if (traceEntry != null) {
                 traceEntry.end();
             }
         }
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler TraceEntry traceEntry) {
+        public static void onThrow(Throwable t,
+                TraceEntry traceEntry) {
             traceEntry.endWithError(t);
         }
     }

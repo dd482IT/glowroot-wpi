@@ -36,22 +36,18 @@ public class DetailMapIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldReadDetailMap() throws Exception {
         // when
         Trace trace = container.execute(ShouldGenerateTraceWithNestedEntries.class);
@@ -141,7 +137,6 @@ public class DetailMapIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldReadDetailMapWithBooleans() throws Exception {
         // when
         Trace trace = container.execute(ShouldGenerateTraceWithBooleans.class);
@@ -183,7 +178,6 @@ public class DetailMapIT {
         assertThat(nestedDetails.get(1).getValueList().get(0).getBoolean()).isEqualTo(true);
     }
 
-    @Test
     public void shouldReadDetailMapWithNumbers() throws Exception {
         // when
         Trace trace = container.execute(ShouldGenerateTraceWithNumbers.class);
@@ -225,7 +219,6 @@ public class DetailMapIT {
         assertThat(nestedDetails.get(1).getValueList().get(0).getDouble()).isEqualTo(5.5);
     }
 
-    @Test
     public void shouldReadDetailMapWithBadType() throws Exception {
         // given
         for (int i = 0; i < 4; i++) {
@@ -272,7 +265,6 @@ public class DetailMapIT {
         assertThat(nestedDetails.get(1).getValueList().get(0).getString()).isEqualTo("x");
     }
 
-    @Test
     public void shouldReadDetailMapWithNullKey() throws Exception {
         // given
         container.addExpectedLogMessage("org.glowroot.agent.model.DetailMapWriter",

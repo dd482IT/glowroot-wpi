@@ -24,7 +24,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class PropertiesFilesTest {
 
-    @Test
     public void testUpgradeToCollectorAddress() {
         List<String> lines = ImmutableList.of("before=test", "collector.host=localhost",
                 "collector.port=8181", "after=test");
@@ -33,7 +32,6 @@ public class PropertiesFilesTest {
                 "after=test");
     }
 
-    @Test
     public void testUpgradeToCollectorAddressBothEmpty() {
         List<String> lines =
                 ImmutableList.of("before=test", "collector.host=", "collector.port=", "after=test");
@@ -41,14 +39,12 @@ public class PropertiesFilesTest {
         assertThat(newLines).containsExactly("before=test", "collector.address=", "after=test");
     }
 
-    @Test
     public void testUpgradeToCollectorAddressBothMissing() {
         List<String> lines = ImmutableList.of("before=test", "after=test");
         List<String> newLines = PropertiesFiles.upgradeToCollectorAddressIfNeeded(lines);
         assertThat(newLines).containsExactly("before=test", "after=test");
     }
 
-    @Test
     public void testUpgradeToCollectorAddressOnlyHostEmpty() {
         List<String> lines = ImmutableList.of("before=test", "collector.host=",
                 "collector.port=8181", "after=test");
@@ -56,7 +52,6 @@ public class PropertiesFilesTest {
         assertThat(newLines).containsExactly("before=test", "collector.address=", "after=test");
     }
 
-    @Test
     public void testUpgradeToCollectorAddressOnlyPortEmpty() {
         List<String> lines = ImmutableList.of("before=test", "collector.host=localhost",
                 "collector.port=", "after=test");
@@ -65,7 +60,6 @@ public class PropertiesFilesTest {
                 "after=test");
     }
 
-    @Test
     public void testUpgradeToCollectorAddressOnlyHostMissing() {
         List<String> lines =
                 ImmutableList.of("before=test", "collector.port=8181", "after=test");
@@ -73,7 +67,6 @@ public class PropertiesFilesTest {
         assertThat(newLines).containsExactly("before=test", "after=test");
     }
 
-    @Test
     public void testUpgradeToCollectorAddressOnlyPortMissing() {
         List<String> lines =
                 ImmutableList.of("before=test", "collector.host=localhost", "after=test");
@@ -82,7 +75,6 @@ public class PropertiesFilesTest {
                 "after=test");
     }
 
-    @Test
     public void testUpgradeToCollectorAddressNotNeeded() {
         List<String> lines =
                 ImmutableList.of("before=test", "collector.address=xyz:1234", "after=test");

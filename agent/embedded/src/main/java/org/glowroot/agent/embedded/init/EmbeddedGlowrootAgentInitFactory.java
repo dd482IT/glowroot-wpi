@@ -27,7 +27,7 @@ public class EmbeddedGlowrootAgentInitFactory implements GlowrootAgentInitFactor
 
     @Override
     public GlowrootAgentInit newGlowrootAgentInit(File dataDir, boolean offlineViewer,
-            @Nullable Class<? extends Collector> collectorProxyClass) {
+            Class<? extends Collector> collectorProxyClass) {
         return new EmbeddedGlowrootAgentInit(dataDir, offlineViewer, collectorProxyClass);
     }
 }

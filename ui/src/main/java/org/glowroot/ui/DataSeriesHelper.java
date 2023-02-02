@@ -32,7 +32,7 @@ class DataSeriesHelper {
     }
 
     void addInitialUpslopeIfNeeded(long requestFrom, long captureTime,
-            List<DataSeries> dataSeriesList, @Nullable DataSeries otherDataSeries) {
+            List<DataSeries> dataSeriesList, DataSeries otherDataSeries) {
         if (captureTime == requestFrom) {
             return;
         }
@@ -47,7 +47,7 @@ class DataSeriesHelper {
     }
 
     void addGapIfNeeded(long lastCaptureTime, long captureTime, List<DataSeries> dataSeriesList,
-            @Nullable DataSeries otherDataSeries) {
+            DataSeries otherDataSeries) {
         long millisecondsSinceLastPoint = captureTime - lastCaptureTime;
         if (millisecondsSinceLastPoint <= dataPointIntervalMillis) {
             return;
@@ -62,7 +62,7 @@ class DataSeriesHelper {
     }
 
     void addFinalDownslopeIfNeeded(List<DataSeries> dataSeriesList,
-            @Nullable DataSeries otherDataSeries, long lastCaptureTime) {
+            DataSeries otherDataSeries, long lastCaptureTime) {
         long downslopeCaptureTime = finalDownslopeCaptureTime(lastCaptureTime);
         if (downslopeCaptureTime != 0) {
             // bring down to zero

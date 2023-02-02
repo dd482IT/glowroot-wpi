@@ -77,7 +77,6 @@ import org.glowroot.wire.api.model.DownstreamServiceOuterClass.ThreadDump.Transa
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-@JsonService
 class JvmJsonService {
 
     private static final Logger logger = LoggerFactory.getLogger(JvmJsonService.class);
@@ -92,17 +91,16 @@ class JvmJsonService {
 
     private final EnvironmentRepository environmentRepository;
     private final ConfigRepository configRepository;
-    private final @Nullable LiveJvmService liveJvmService;
+    private final LiveJvmService liveJvmService;
 
     JvmJsonService(EnvironmentRepository environmentRepository, ConfigRepository configRepository,
-            @Nullable LiveJvmService liveJvmService) {
+            LiveJvmService liveJvmService) {
         this.environmentRepository = environmentRepository;
         this.configRepository = configRepository;
         this.liveJvmService = liveJvmService;
     }
 
-    @GET(path = "/backend/jvm/environment", permission = "agent:jvm:environment")
-    String getEnvironment(@BindAgentId String agentId) throws Exception {
+    String getEnvironment(String agentId) throws Exception {
         Environment environment = environmentRepository.read(agentId);
         if (environment == null) {
             return "{}";
@@ -166,8 +164,7 @@ class JvmJsonService {
         return sb.toString();
     }
 
-    @GET(path = "/backend/jvm/thread-dump", permission = "agent:jvm:threadDump")
-    String getThreadDump(@BindAgentId String agentId) throws Exception {
+    String getThreadDump(String agentId) throws Exception {
         checkNotNull(liveJvmService);
         ThreadDump threadDump;
         try {
@@ -230,8 +227,7 @@ class JvmJsonService {
         return sb.toString();
     }
 
-    @GET(path = "/backend/jvm/jstack", permission = "agent:jvm:threadDump")
-    String getJstack(@BindAgentId String agentId) throws Exception {
+    String getJstack(String agentId) throws Exception {
         checkNotNull(liveJvmService);
         String jstack;
         try {
@@ -262,8 +258,7 @@ class JvmJsonService {
         return sb.toString();
     }
 
-    @GET(path = "/backend/jvm/heap-dump-default-dir", permission = "agent:jvm:heapDump")
-    String getHeapDumpDefaultDir(@BindAgentId String agentId) throws Exception {
+    String getHeapDumpDefaultDir(String agentId) throws Exception {
         checkNotNull(liveJvmService);
         if (!liveJvmService.isAvailable(agentId)) {
             return "{\"agentNotConnected\":true}";
@@ -282,8 +277,7 @@ class JvmJsonService {
         return sb.toString();
     }
 
-    @POST(path = "/backend/jvm/available-disk-space", permission = "agent:jvm:heapDump")
-    String getAvailableDiskSpace(@BindAgentId String agentId, @BindRequest HeapDumpRequest request)
+    String getAvailableDiskSpace(String agentId, HeapDumpRequest request)
             throws Exception {
         checkNotNull(liveJvmService);
         try {
@@ -295,8 +289,7 @@ class JvmJsonService {
         }
     }
 
-    @POST(path = "/backend/jvm/heap-dump", permission = "agent:jvm:heapDump")
-    String heapDump(@BindAgentId String agentId, @BindRequest HeapDumpRequest request)
+    String heapDump(String agentId, HeapDumpRequest request)
             throws Exception {
         checkNotNull(liveJvmService);
         HeapDumpFileInfo heapDumpFileInfo;
@@ -319,8 +312,7 @@ class JvmJsonService {
         return sb.toString();
     }
 
-    @POST(path = "/backend/jvm/heap-histogram", permission = "agent:jvm:heapHistogram")
-    String heapHistogram(@BindAgentId String agentId) throws Exception {
+    String heapHistogram(String agentId) throws Exception {
         checkNotNull(liveJvmService);
         HeapHistogram heapHistogram;
         try {
@@ -368,8 +360,7 @@ class JvmJsonService {
         return sb.toString();
     }
 
-    @GET(path = "/backend/jvm/explicit-gc-disabled", permission = "agent:jvm:forceGC")
-    String explicitGcDisabled(@BindAgentId String agentId) throws Exception {
+    String explicitGcDisabled(String agentId) throws Exception {
         checkNotNull(liveJvmService);
         try {
             boolean explicitGcDisabled = liveJvmService.isExplicitGcDisabled(agentId);
@@ -380,14 +371,12 @@ class JvmJsonService {
         }
     }
 
-    @POST(path = "/backend/jvm/force-gc", permission = "agent:jvm:forceGC")
-    void performGC(@BindAgentId String agentId) throws Exception {
+    void performGC(String agentId) throws Exception {
         checkNotNull(liveJvmService);
         liveJvmService.forceGC(agentId);
     }
 
-    @GET(path = "/backend/jvm/mbean-tree", permission = "agent:jvm:mbeanTree")
-    String getMBeanTree(@BindAgentId String agentId, @BindRequest MBeanTreeRequest request)
+    String getMBeanTree(String agentId, MBeanTreeRequest request)
             throws Exception {
         checkNotNull(liveJvmService);
         MBeanDump mbeanDump;
@@ -423,9 +412,8 @@ class JvmJsonService {
         return mapper.writeValueAsString(sortedRootNodes);
     }
 
-    @GET(path = "/backend/jvm/mbean-attribute-map", permission = "agent:jvm:mbeanTree")
-    String getMBeanAttributeMap(@BindAgentId String agentId,
-            @BindRequest MBeanAttributeMapRequest request) throws Exception {
+    String getMBeanAttributeMap(String agentId,
+            MBeanAttributeMapRequest request) throws Exception {
         checkNotNull(liveJvmService);
         MBeanDump mbeanDump =
                 liveJvmService.getMBeanDump(agentId, MBeanDumpKind.SOME_MBEANS_INCLUDE_ATTRIBUTES,
@@ -442,8 +430,7 @@ class JvmJsonService {
         return mapper.writeValueAsString(getSortedAttributeMap(mbeanInfo.getAttributeList()));
     }
 
-    @GET(path = "/backend/jvm/system-properties", permission = "agent:jvm:systemProperties")
-    String getSystemProperties(@BindAgentId String agentId) throws Exception {
+    String getSystemProperties(String agentId) throws Exception {
         checkNotNull(liveJvmService);
         Map<String, String> properties;
         try {
@@ -490,8 +477,7 @@ class JvmJsonService {
         return sb.toString();
     }
 
-    @GET(path = "/backend/jvm/capabilities", permission = "agent:jvm:capabilities")
-    String getCapabilities(@BindAgentId String agentId) throws Exception {
+    String getCapabilities(String agentId) throws Exception {
         checkNotNull(liveJvmService);
         Capabilities capabilities;
         try {
@@ -715,7 +701,7 @@ class JvmJsonService {
         return sortedAttributeMap;
     }
 
-    private static @Nullable Object getAttributeValue(MBeanDump.MBeanValue value) {
+    private static Object getAttributeValue(MBeanDump.MBeanValue value) {
         if (value.getNull()) {
             return null;
         }
@@ -746,17 +732,14 @@ class JvmJsonService {
         }
     }
 
-    @Value.Immutable
     interface HeapDumpRequest {
         String directory();
     }
 
-    @Value.Immutable
     interface MBeanTreeRequest {
         List<String> expanded();
     }
 
-    @Value.Immutable
     interface MBeanAttributeMapRequest {
         String objectName();
     }
@@ -788,12 +771,10 @@ class JvmJsonService {
         }
 
         @Override
-        @UsedByJsonSerialization
         public String getNodeName() {
             return name;
         }
 
-        @UsedByJsonSerialization
         public List<MBeanTreeNode> getChildNodes() {
             return ordering.sortedCopy(childNodes);
         }
@@ -819,10 +800,10 @@ class JvmJsonService {
         private final String nodeName;
         private final String objectName;
         private final boolean expanded;
-        private final @Nullable Map<String, /*@Nullable*/ Object> attributeMap;
+        private final Map<String, /*@Nullable*/ Object> attributeMap;
 
         private MBeanTreeLeafNode(String nodeName, String objectName, boolean expanded,
-                @Nullable Map<String, /*@Nullable*/ Object> attributeMap) {
+                Map<String, /*@Nullable*/ Object> attributeMap) {
             this.nodeName = nodeName;
             this.objectName = objectName;
             this.expanded = expanded;
@@ -830,23 +811,19 @@ class JvmJsonService {
         }
 
         @Override
-        @UsedByJsonSerialization
         public String getNodeName() {
             return nodeName;
         }
 
-        @UsedByJsonSerialization
         public String getObjectName() {
             return objectName;
         }
 
-        @UsedByJsonSerialization
         public boolean isExpanded() {
             return expanded;
         }
 
-        @UsedByJsonSerialization
-        public @Nullable Map<String, /*@Nullable*/ Object> getAttributeMap() {
+        public Map<String, /*@Nullable*/ Object> getAttributeMap() {
             return attributeMap;
         }
     }

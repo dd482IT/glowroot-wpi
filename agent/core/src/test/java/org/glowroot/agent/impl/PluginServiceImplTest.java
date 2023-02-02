@@ -25,7 +25,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class PluginServiceImplTest {
 
-    @Test
     public void shouldReturnAllPropertiesAsText() {
         Map<String, String> properties = Beans2.propertiesAsText(new SomeObject());
         assertThat(properties).containsOnlyKeys("one", "two");

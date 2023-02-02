@@ -41,12 +41,9 @@ public class NestableCallAspect {
 
     private static final AtomicInteger counter = new AtomicInteger();
 
-    @Pointcut(className = "org.glowroot.agent.ui.sandbox.NestableCall", methodName = "execute",
-            methodParameterTypes = {}, nestingGroup = "ui-sandbox-nestable", timerName = "nestable")
     public static class NestableCallAdvice {
         private static final TimerName timerName = Agent.getTimerName(NestableCallAdvice.class);
         private static final Random random = new Random();
-        @OnBefore
         public static TraceEntry onBefore(OptionalThreadContext context) {
             int count = counter.getAndIncrement();
             String transactionName;
@@ -98,8 +95,7 @@ public class NestableCallAspect {
             }
             return traceEntry;
         }
-        @OnAfter
-        public static void onAfter(@BindTraveler TraceEntry traceEntry) {
+        public static void onAfter(TraceEntry traceEntry) {
             double value = random.nextDouble();
             if (value < 0.8) {
                 traceEntry.end();

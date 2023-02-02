@@ -24,11 +24,11 @@ import org.glowroot.agent.plugin.api.util.Reflection;
 public class ResponseInvoker {
 
     // ServletResponse.getContentType() was introduced in Servlet 2.4
-    private final @Nullable Method getContentTypeMethod;
+    private final Method getContentTypeMethod;
     // HttpServletResponse.getHeader() was introduced in Servlet 3.0
-    private final @Nullable Method getHeaderMethod;
+    private final Method getHeaderMethod;
     // HttpServletResponse.getStatus() was introduced in Servlet 3.0
-    private final @Nullable Method getStatusMethod;
+    private final Method getStatusMethod;
 
     public ResponseInvoker(ClassInfo classInfo) {
         Class<?> servletResponseClass = Reflection

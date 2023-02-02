@@ -34,37 +34,30 @@ import org.glowroot.wire.api.model.TraceOuterClass.Trace;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Disabled("this test is no longer passing after updating from tomcat 7.0 to tomcat 8.5")
 public class WebSocketIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldCaptureTransactionNameHittingWebSocket() throws Exception {
         shouldCaptureTransactionNameHittingAbc("", HittingWebSocket.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithContextPathHittingWebSocket() throws Exception {
         shouldCaptureTransactionNameHittingAbc("/zzz", WithContextPathHittingAbc.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameHittingWebSocketWithPropertyController()
             throws Exception {
         // property based mapping is not supported until Spring 4.2.x
@@ -74,7 +67,6 @@ public class WebSocketIT {
         shouldCaptureTransactionNameHittingXyz("", HittingWebSocketWithPropertyController.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithContextPathHittingWebSocketWithPropertyController()
             throws Exception {
         // property based mapping is not supported until Spring 4.2.x
@@ -160,21 +152,15 @@ public class WebSocketIT {
         }
     }
 
-    @Controller
     public static class TestWebSocketController {
 
-        @MessageMapping("/abc")
-        @SendTo("/destination/abc")
         public String echo(String message) {
             return message + " world";
         }
     }
 
-    @Controller
     public static class TestWebSocketWithPropertyController {
 
-        @MessageMapping("${xyz.path:/xyz}")
-        @SendTo("/destination/xyz")
         public String abc(String message) {
             return message + " world";
         }

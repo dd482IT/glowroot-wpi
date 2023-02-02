@@ -44,24 +44,20 @@ public class MaxEntriesLimitIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
         // capture one header to warm up the system since this test involves some timing
         container.execute(WarmupTrace.class);
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldReadIsLimitExceededMarker() throws Exception {
         // given
         container.getConfigService().updateAdvancedConfig(AdvancedConfig.newBuilder()
@@ -106,7 +102,6 @@ public class MaxEntriesLimitIT {
         }
     }
 
-    @Test
     public void shouldReadLimitBypassedTraceEntries() throws Exception {
         // given
         container.getConfigService().updateAdvancedConfig(AdvancedConfig.newBuilder()

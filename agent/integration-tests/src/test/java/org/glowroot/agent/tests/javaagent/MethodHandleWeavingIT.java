@@ -36,13 +36,11 @@ public class MethodHandleWeavingIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         assumeJdk7();
         container = JavaagentContainer.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         // need null check in case assumption is false in setUp()
         if (container != null) {
@@ -50,12 +48,10 @@ public class MethodHandleWeavingIT {
         }
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldReadTraces() throws Exception {
         // given
         // when

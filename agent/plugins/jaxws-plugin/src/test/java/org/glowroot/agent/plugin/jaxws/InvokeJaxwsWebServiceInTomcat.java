@@ -101,8 +101,7 @@ abstract class InvokeJaxwsWebServiceInTomcat implements AppUnderTest {
         return port;
     }
 
-    @WebService
     public interface ForBothHelloAndRootService {
-        String echo(@WebParam(name = "param") String msg);
+        String echo(String msg);
     }
 }

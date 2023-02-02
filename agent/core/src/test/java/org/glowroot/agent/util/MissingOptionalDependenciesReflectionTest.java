@@ -24,41 +24,34 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class MissingOptionalDependenciesReflectionTest {
 
-    @BeforeAll
     public static void setUp() {
         // IBM J9 VM and Eclipse OpenJ9 JM load classes with missing optional dependencies just fine
         Assumptions.assumeFalse(JavaVersion.isJ9Jvm());
     }
 
-    @Test
     public void testGetMethod() {
         assertThrows(NoClassDefFoundError.class, () ->
                 DefaultContextCache.class.getMethod("size"));
     }
 
-    @Test
     public void testGetDeclaredMethod() {
         assertThrows(NoClassDefFoundError.class, () ->
                 DefaultContextCache.class.getDeclaredMethod("size"));
     }
 
-    @Test
     public void testGetConstructor() throws Exception {
         DefaultContextCache.class.getConstructor();
     }
 
-    @Test
     public void testGetField() throws Exception {
         DefaultContextCache.class.getDeclaredField("hitCount");
     }
 
-    @Test
     public void testReflectionsGetAnyMethod() throws Exception {
         assertThrows(NoSuchMethodException.class, () ->
                 Reflections.getAnyMethod(DefaultContextCache.class, "size"));
     }
 
-    @Test
     public void testNormal() {
         DefaultContextCache cache = new DefaultContextCache();
         cache.size();

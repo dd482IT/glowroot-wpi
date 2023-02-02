@@ -78,7 +78,7 @@ class GrpcServerWrapper {
 
     private final DownstreamServiceImpl downstreamService;
 
-    private volatile @MonotonicNonNull AgentConfig agentConfig;
+    private volatile AgentConfig agentConfig;
 
     GrpcServerWrapper(TraceCollector collector, int port) throws IOException {
         executor = Executors.newCachedThreadPool(
@@ -187,12 +187,12 @@ class GrpcServerWrapper {
                 final StreamObserver<EmptyMessage> responseObserver) {
             return new StreamObserver<TraceStreamMessage>() {
 
-                private @MonotonicNonNull String traceId;
+                private String traceId;
                 private List<Trace.SharedQueryText> sharedQueryTexts = Lists.newArrayList();
                 private List<Trace.Entry> entries = Lists.newArrayList();
                 private List<Aggregate.Query> queries = Lists.newArrayList();
-                private @MonotonicNonNull Profile mainThreadProfile;
-                private @MonotonicNonNull Profile auxThreadProfile;
+                private Profile mainThreadProfile;
+                private Profile auxThreadProfile;
                 private Trace. /*@MonotonicNonNull*/ Header header;
 
                 @Override
@@ -363,7 +363,7 @@ class GrpcServerWrapper {
                     }
                 };
 
-        private volatile @MonotonicNonNull StreamObserver<CentralRequest> requestObserver;
+        private volatile StreamObserver<CentralRequest> requestObserver;
 
         private volatile boolean closedByAgent;
 

@@ -40,7 +40,6 @@ public final class MoreConfigDefaults {
         return unescapeForDisplay(getLastPartForDisplay(agentRollupId));
     }
 
-    @VisibleForTesting
     static String getLastPartForDisplay(String agentRollupId) {
         if (agentRollupId.endsWith("::")) {
             int index = agentRollupId.lastIndexOf("::", agentRollupId.length() - 3);

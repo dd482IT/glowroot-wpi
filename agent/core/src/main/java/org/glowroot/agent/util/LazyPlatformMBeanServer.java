@@ -64,7 +64,6 @@ public class LazyPlatformMBeanServer {
 
     private static final Logger logger = LoggerFactory.getLogger(LazyPlatformMBeanServer.class);
 
-    @GuardedBy("initListeners")
     private final List<InitListener> initListeners = Lists.newArrayList();
 
     private final boolean waitForContainerToCreatePlatformMBeanServer;
@@ -73,10 +72,9 @@ public class LazyPlatformMBeanServer {
     private final List<ObjectNamePair> toBeRegistered = Lists.newCopyOnWriteArrayList();
     private final List<ObjectName> toBeUnregistered = Lists.newCopyOnWriteArrayList();
 
-    private volatile @MonotonicNonNull MBeanServer platformMBeanServer;
+    private volatile MBeanServer platformMBeanServer;
 
     private final Object platformMBeanServerAvailability = new Object();
-    @GuardedBy("platformMBeanServerAvailability")
     private boolean platformMBeanServerAvailable;
 
     private final LoadingCache<MBeanServer, MBeanServer> webSphereUnwrappedMBeanServers =
@@ -96,7 +94,7 @@ public class LazyPlatformMBeanServer {
                         }
                     });
 
-    public static LazyPlatformMBeanServer create(@Nullable String mainClass) throws Exception {
+    public static LazyPlatformMBeanServer create(String mainClass) throws Exception {
         LazyPlatformMBeanServer lazyPlatformMBeanServer = new LazyPlatformMBeanServer(mainClass);
         if (!lazyPlatformMBeanServer.waitForContainerToCreatePlatformMBeanServer) {
             // it is useful to init right away in this case in order to avoid condition where really
@@ -107,7 +105,7 @@ public class LazyPlatformMBeanServer {
         return lazyPlatformMBeanServer;
     }
 
-    private LazyPlatformMBeanServer(@Nullable String mainClass) {
+    private LazyPlatformMBeanServer(String mainClass) {
         boolean jbossModules = "org.jboss.modules.Main".equals(mainClass);
         boolean wildflyBootable = "org.wildfly.core.jar.boot.Main".equals(mainClass);
         boolean wildflySwarm = "org.wildfly.swarm.bootstrap.Main".equals(mainClass);
@@ -144,13 +142,13 @@ public class LazyPlatformMBeanServer {
         }
     }
 
-    public Object invoke(ObjectName name, String operationName, @Nullable Object[] params,
+    public Object invoke(ObjectName name, String operationName, Object[] params,
             String[] signature) throws Exception {
         ensureInit();
         return platformMBeanServer.invoke(name, operationName, params, signature);
     }
 
-    public Set<ObjectName> queryNames(@Nullable ObjectName name, @Nullable QueryExp query,
+    public Set<ObjectName> queryNames(ObjectName name, QueryExp query,
             List<MBeanServer> mbeanServers) throws Exception {
         ensureInit();
         if (needsManualPatternMatching && name != null && name.isPattern()) {
@@ -193,7 +191,6 @@ public class LazyPlatformMBeanServer {
         }
     }
 
-    @EnsuresNonNull("platformMBeanServer")
     private void ensureInit() throws Exception {
         if (platformMBeanServer != null) {
             return;
@@ -250,7 +247,6 @@ public class LazyPlatformMBeanServer {
         return platformMBeanServer;
     }
 
-    @OnlyUsedByTests
     public void close() throws Exception {
         ensureInit();
         for (ObjectName name : toBeUnregistered) {
@@ -296,8 +292,8 @@ public class LazyPlatformMBeanServer {
         }
     }
 
-    private static Set<ObjectName> queryNamesAcrossAll(@Nullable ObjectName name,
-            @Nullable QueryExp query, List<MBeanServer> mbeanServers) {
+    private static Set<ObjectName> queryNamesAcrossAll(ObjectName name,
+            QueryExp query, List<MBeanServer> mbeanServers) {
         Set<ObjectName> objects = Sets.newHashSet();
         for (MBeanServer mbeanServer : mbeanServers) {
             objects.addAll(mbeanServer.queryNames(name, query));
@@ -341,8 +337,6 @@ public class LazyPlatformMBeanServer {
         void postInit(MBeanServer mbeanServer) throws Exception;
     }
 
-    @Value.Immutable
-    @Styles.AllParameters
     interface ObjectNamePair {
         Object object();
         ObjectName name();

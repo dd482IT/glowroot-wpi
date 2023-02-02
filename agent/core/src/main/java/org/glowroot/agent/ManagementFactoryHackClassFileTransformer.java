@@ -38,8 +38,8 @@ class ManagementFactoryHackClassFileTransformer implements ClassFileTransformer 
             LoggerFactory.getLogger(ManagementFactoryHackClassFileTransformer.class);
 
     @Override
-    public byte /*@Nullable*/ [] transform(@Nullable ClassLoader loader, @Nullable String className,
-            @Nullable Class<?> classBeingRedefined, @Nullable ProtectionDomain protectionDomain,
+    public byte /*@Nullable*/ [] transform(ClassLoader loader, String className,
+            Class<?> classBeingRedefined, ProtectionDomain protectionDomain,
             byte[] bytes) {
         try {
             if ("java/lang/management/ManagementFactory".equals(className)) {
@@ -65,8 +65,8 @@ class ManagementFactoryHackClassFileTransformer implements ClassFileTransformer 
         }
 
         @Override
-        public @Nullable MethodVisitor visitMethod(int access, String name, String descriptor,
-                @Nullable String signature, String /*@Nullable*/ [] exceptions) {
+        public MethodVisitor visitMethod(int access, String name, String descriptor,
+                String signature, String /*@Nullable*/ [] exceptions) {
             MethodVisitor mv = cw.visitMethod(access, name, descriptor, signature, exceptions);
             if (name.equals("getPlatformMBeanServer")
                     && descriptor.equals("()Ljavax/management/MBeanServer;")) {

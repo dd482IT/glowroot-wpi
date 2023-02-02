@@ -80,7 +80,7 @@ public class CommonHandler {
     private static final String RESOURCE_BASE = "org/glowroot/ui/app-dist";
 
     // only null when running tests with glowroot.ui.skip=true (e.g. travis "deploy" build)
-    private static final @Nullable String RESOURCE_BASE_URL_PREFIX;
+    private static final String RESOURCE_BASE_URL_PREFIX;
 
     private static final ImmutableMap<String, MediaType> mediaTypes =
             ImmutableMap.<String, MediaType>builder()
@@ -175,7 +175,7 @@ public class CommonHandler {
         return response;
     }
 
-    private @Nullable CommonResponse handleIfLoginOrLogoutRequest(CommonRequest request)
+    private CommonResponse handleIfLoginOrLogoutRequest(CommonRequest request)
             throws Exception {
         String path = request.getPath();
         if (path.equals("/backend/login")) {
@@ -237,7 +237,7 @@ public class CommonHandler {
         return handleStaticResource(path, request);
     }
 
-    private @Nullable HttpService getHttpService(String path) {
+    private HttpService getHttpService(String path) {
         for (Map.Entry<Pattern, HttpService> entry : httpServices.entrySet()) {
             Matcher matcher = entry.getKey().matcher(path);
             if (matcher.matches()) {
@@ -262,7 +262,7 @@ public class CommonHandler {
         return httpService.handleRequest(request, authentication);
     }
 
-    private @Nullable JsonServiceMapping getJsonServiceMapping(CommonRequest request,
+    private JsonServiceMapping getJsonServiceMapping(CommonRequest request,
             String path) {
         for (JsonServiceMapping jsonServiceMapping : jsonServiceMappings) {
             if (!jsonServiceMapping.httpMethod().name().equals(request.getMethod())) {
@@ -407,7 +407,7 @@ public class CommonHandler {
         return response;
     }
 
-    private @Nullable Date getExpiresForPath(String path) {
+    private Date getExpiresForPath(String path) {
         if (path.startsWith("org/glowroot/ui/app-dist/favicon.")) {
             return new Date(clock.currentTimeMillis() + ONE_DAY);
         } else if (path.endsWith(".js.map") || path.startsWith("/sources/")) {
@@ -418,7 +418,7 @@ public class CommonHandler {
         }
     }
 
-    private static @Nullable String getAgentRollupIdFromRequest(CommonRequest request) {
+    private static String getAgentRollupIdFromRequest(CommonRequest request) {
         List<String> agentIds = request.getParameters("agent-id");
         if (agentIds != null && agentIds.size() == 1) {
             return agentIds.get(0);
@@ -430,7 +430,7 @@ public class CommonHandler {
         return null;
     }
 
-    private static CommonResponse buildJsonResponse(@Nullable Object responseObject) {
+    private static CommonResponse buildJsonResponse(Object responseObject) {
         if (responseObject == null) {
             return new CommonResponse(OK, MediaType.JSON_UTF_8, "");
         } else if (responseObject instanceof CommonResponse) {
@@ -481,7 +481,7 @@ public class CommonHandler {
                 .build();
     }
 
-    private static @Nullable URL getSecureUrlForPath(String path) {
+    private static URL getSecureUrlForPath(String path) {
         URL url = getUrlForPath(path);
         if (url != null && RESOURCE_BASE_URL_PREFIX != null
                 && url.toExternalForm().startsWith(RESOURCE_BASE_URL_PREFIX)) {
@@ -490,7 +490,7 @@ public class CommonHandler {
         return null;
     }
 
-    private static @Nullable URL getUrlForPath(String path) {
+    private static URL getUrlForPath(String path) {
         ClassLoader classLoader = HttpServerHandler.class.getClassLoader();
         if (classLoader == null) {
             return ClassLoader.getSystemResource(path);
@@ -500,7 +500,7 @@ public class CommonHandler {
     }
 
     private static CommonResponse newHttpResponseWithMessage(HttpResponseStatus status,
-            @Nullable String message) throws IOException {
+            String message) throws IOException {
         // this is an "expected" exception, no need to send back stack trace
         StringBuilder sb = new StringBuilder();
         JsonGenerator jg = mapper.getFactory().createGenerator(CharStreams.asWriter(sb));
@@ -515,13 +515,13 @@ public class CommonHandler {
     }
 
     static CommonResponse newHttpResponseWithStackTrace(Exception e,
-            HttpResponseStatus status, @Nullable String simplifiedMessage) throws IOException {
+            HttpResponseStatus status, String simplifiedMessage) throws IOException {
         return new CommonResponse(status, MediaType.JSON_UTF_8,
                 getHttpResponseWithStackTrace(e, simplifiedMessage));
     }
 
     private static String getHttpResponseWithStackTrace(Exception e,
-            @Nullable String simplifiedMessage) throws IOException {
+            String simplifiedMessage) throws IOException {
         StringBuilder stackTrace = new StringBuilder();
         e.printStackTrace(new PrintWriter(CharStreams.asWriter(stackTrace)));
         StringBuilder sb = new StringBuilder();
@@ -543,7 +543,7 @@ public class CommonHandler {
         return sb.toString();
     }
 
-    private static @Nullable Object callMethod(JsonServiceMapping jsonServiceMapping,
+    private static Object callMethod(JsonServiceMapping jsonServiceMapping,
             List<Class<?>> parameterTypes, List<Object> parameters,
             Map<String, List<String>> queryParameters, Authentication authentication,
             CommonRequest request) throws Exception {
@@ -586,18 +586,16 @@ public class CommonHandler {
                 parameters.toArray(new Object[parameters.size()]));
     }
 
-    private static boolean isAutoRefresh(@Nullable List<String> autoRefreshParams) {
+    private static boolean isAutoRefresh(List<String> autoRefreshParams) {
         return autoRefreshParams != null && autoRefreshParams.size() == 1
                 && Boolean.valueOf(autoRefreshParams.get(0));
     }
 
-    @Value.Immutable
     interface Credentials {
         String username();
         String password();
     }
 
-    @Value.Immutable
     interface JsonServiceMapping {
         HttpMethod httpMethod();
         String path();
@@ -606,7 +604,6 @@ public class CommonHandler {
         Method method();
         boolean bindAgentId();
         boolean bindAgentRollup();
-        @Nullable
         Class<?> bindRequest();
         boolean bindAutoRefresh();
         boolean bindAuthentication();
@@ -628,7 +625,6 @@ public class CommonHandler {
         // does not include context path
         String getPath();
 
-        @Nullable
         String getHeader(CharSequence name);
 
         Map<String, List<String>> getParameters();
@@ -644,7 +640,7 @@ public class CommonHandler {
         private final HttpHeaders headers = new DefaultHttpHeaders();
         private final Object content;
 
-        private @Nullable String zipFileName;
+        private String zipFileName;
         private boolean closeConnectionAfterPortChange;
 
         CommonResponse(HttpResponseStatus status, MediaType mediaType, String content) {
@@ -664,7 +660,7 @@ public class CommonHandler {
             this(status, mediaType, Unpooled.copiedBuffer(Resources.toByteArray(url)), false);
         }
 
-        private CommonResponse(HttpResponseStatus status, @Nullable MediaType mediaType,
+        private CommonResponse(HttpResponseStatus status, MediaType mediaType,
                 Object content, boolean preventCaching) {
             this.status = status;
             this.content = content;
@@ -704,7 +700,7 @@ public class CommonHandler {
             return content;
         }
 
-        public @Nullable String getZipFileName() {
+        public String getZipFileName() {
             return zipFileName;
         }
 

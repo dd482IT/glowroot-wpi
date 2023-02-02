@@ -375,20 +375,17 @@ public class Tools {
 
     }
 
-    @Value.Immutable
     interface TtPartitionKey {
         String agentRollupId();
         String transactionType();
     }
 
-    @Value.Immutable
     interface TnPartitionKey {
         String agentRollupId();
         String transactionType();
         String transactionName();
     }
 
-    @Value.Immutable
     interface GaugeValuePartitionKey {
         String agentRollupId();
         String gaugeName();

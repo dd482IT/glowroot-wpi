@@ -131,8 +131,6 @@ class CollectorServiceImpl extends CollectorServiceGrpc.CollectorServiceImplBase
         this.version = version;
     }
 
-    @Instrumentation.Transaction(transactionType = "gRPC", transactionName = "Init",
-            traceHeadline = "Collect init: {{0.agentId}}", timer = "init")
     @Override
     public void collectInit(InitMessage request, StreamObserver<InitResponse> responseObserver) {
         String agentId = request.getAgentId();
@@ -178,8 +176,6 @@ class CollectorServiceImpl extends CollectorServiceGrpc.CollectorServiceImplBase
         return new AggregateStreamObserver(responseObserver);
     }
 
-    @Instrumentation.Transaction(transactionType = "gRPC", transactionName = "Aggregates",
-            traceHeadline = "Collect aggregates: {{0.agentId}}", timer = "aggregates")
     @Override
     public void collectAggregates(OldAggregateMessage request,
             StreamObserver<AggregateResponseMessage> responseObserver) {
@@ -201,8 +197,6 @@ class CollectorServiceImpl extends CollectorServiceGrpc.CollectorServiceImplBase
                 sharedQueryTexts, request.getAggregatesByTypeList(), responseObserver);
     }
 
-    @Instrumentation.Transaction(transactionType = "gRPC", transactionName = "Gauges",
-            traceHeadline = "Collect gauge values: {{0.agentId}}", timer = "gauges")
     @Override
     public void collectGaugeValues(GaugeValueMessage request,
             StreamObserver<GaugeValueResponseMessage> responseObserver) {
@@ -215,16 +209,12 @@ class CollectorServiceImpl extends CollectorServiceGrpc.CollectorServiceImplBase
         return new TraceStreamObserver(responseObserver);
     }
 
-    @Instrumentation.Transaction(transactionType = "gRPC", transactionName = "Trace",
-            traceHeadline = "Collect trace: {{0.agentId}}", timer = "trace")
     @Override
     public void collectTrace(OldTraceMessage request,
             StreamObserver<EmptyMessage> responseObserver) {
         throttledCollectTrace(request.getAgentId(), false, request.getTrace(), responseObserver);
     }
 
-    @Instrumentation.Transaction(transactionType = "gRPC", transactionName = "Log",
-            traceHeadline = "Log: {{0.agentId}}", timer = "log")
     @Override
     public void log(LogMessage request, StreamObserver<EmptyMessage> responseObserver) {
         String agentId;
@@ -552,7 +542,7 @@ class CollectorServiceImpl extends CollectorServiceGrpc.CollectorServiceImplBase
     private final class AggregateStreamObserver implements StreamObserver<AggregateStreamMessage> {
 
         private final StreamObserver<AggregateResponseMessage> responseObserver;
-        private @MonotonicNonNull AggregateStreamHeader streamHeader;
+        private AggregateStreamHeader streamHeader;
         private List<Aggregate.SharedQueryText> sharedQueryTexts = new ArrayList<>();
         private Map<String, OldAggregatesByType.Builder> aggregatesByTypeMap = new HashMap<>();
 
@@ -570,9 +560,6 @@ class CollectorServiceImpl extends CollectorServiceGrpc.CollectorServiceImplBase
             }
         }
 
-        @Instrumentation.Transaction(transactionType = "gRPC", transactionName = "Aggregates",
-                traceHeadline = "Collect aggregates: {{this.streamHeader.agentId}}",
-                timer = "aggregates")
         @Override
         public void onCompleted() {
             try {
@@ -642,15 +629,15 @@ class CollectorServiceImpl extends CollectorServiceGrpc.CollectorServiceImplBase
     private final class TraceStreamObserver implements StreamObserver<TraceStreamMessage> {
 
         private final StreamObserver<EmptyMessage> responseObserver;
-        private @MonotonicNonNull TraceStreamHeader streamHeader;
+        private TraceStreamHeader streamHeader;
         private List<Trace.SharedQueryText> sharedQueryTexts = new ArrayList<>();
-        private @MonotonicNonNull Trace trace;
+        private Trace trace;
         private List<Trace.Entry> entries = new ArrayList<>();
         private List<Aggregate.Query> queries = new ArrayList<>();
-        private @MonotonicNonNull Profile mainThreadProfile;
-        private @MonotonicNonNull Profile auxThreadProfile;
+        private Profile mainThreadProfile;
+        private Profile auxThreadProfile;
         private Trace. /*@MonotonicNonNull*/ Header header;
-        private @MonotonicNonNull TraceStreamCounts streamCounts;
+        private TraceStreamCounts streamCounts;
 
         private TraceStreamObserver(StreamObserver<EmptyMessage> responseObserver) {
             this.responseObserver = responseObserver;
@@ -666,8 +653,6 @@ class CollectorServiceImpl extends CollectorServiceGrpc.CollectorServiceImplBase
             }
         }
 
-        @Instrumentation.Transaction(transactionType = "gRPC", transactionName = "Trace",
-                traceHeadline = "Collect trace: {{this.streamHeader.agentId}}", timer = "trace")
         @Override
         public void onCompleted() {
             try {
@@ -753,7 +738,6 @@ class CollectorServiceImpl extends CollectorServiceGrpc.CollectorServiceImplBase
                     responseObserver);
         }
 
-        @RequiresNonNull({"streamHeader", "streamCounts"})
         private boolean isEverythingReceived() {
             // validate that all data was received, may not receive everything due to gRPC
             // maxMessageSize limit exceeded: "Compressed frame exceeds maximum frame size"
@@ -788,7 +772,6 @@ class CollectorServiceImpl extends CollectorServiceGrpc.CollectorServiceImplBase
             }
         }
 
-        @RequiresNonNull("streamHeader")
         private String getAgentIdForLogging() {
             return grpcCommon.getAgentIdForLogging(streamHeader.getAgentId(),
                     streamHeader.getPostV09());

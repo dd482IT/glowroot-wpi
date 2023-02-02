@@ -32,16 +32,12 @@ import org.glowroot.agent.plugin.api.weaving.Pointcut;
 
 public class LevelTwoAspect {
 
-    @Pointcut(className = "org.glowroot.agent.tests.app.LevelTwo", methodName = "call",
-            methodParameterTypes = {"java.lang.String", "java.lang.String"},
-            timerName = "level two")
     public static class LevelTwoAdvice {
 
         private static final TimerName timerName = Agent.getTimerName(LevelTwoAdvice.class);
 
-        @OnBefore
-        public static TraceEntry onBefore(ThreadContext context, @BindParameter final String arg1,
-                @BindParameter final String arg2) {
+        public static TraceEntry onBefore(ThreadContext context, final String arg1,
+                final String arg2) {
             return context.startTraceEntry(new MessageSupplier() {
                 @Override
                 public Message get() {
@@ -53,8 +49,7 @@ public class LevelTwoAspect {
             }, timerName);
         }
 
-        @OnAfter
-        public static void onAfter(@BindTraveler TraceEntry traceEntry) {
+        public static void onAfter(TraceEntry traceEntry) {
             traceEntry.end();
         }
     }

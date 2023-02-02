@@ -161,7 +161,6 @@ public class PreloadSomeSuperTypesCache extends ScheduledRunnable {
         }
     }
 
-    @VisibleForTesting
     void writeToFile() throws FileNotFoundException, IOException {
         if (linesInFile + needsToBeWritten.size() > maxSize) {
             if (cache.size() > maxSize) {
@@ -269,7 +268,6 @@ public class PreloadSomeSuperTypesCache extends ScheduledRunnable {
                 .build();
     }
 
-    @Value.Immutable
     interface LoadFromFileResult {
         ConcurrentMap<String, CacheValue> cache();
         int linesInFile();
@@ -310,7 +308,7 @@ public class PreloadSomeSuperTypesCache extends ScheduledRunnable {
         private final ConcurrentMap<String, CacheValue> cache = Maps.newConcurrentMap();
 
         private int linesInFile;
-        private @Nullable Boolean hasAccessTimes;
+        private Boolean hasAccessTimes;
 
         private final Splitter splitter = Splitter.on(',').trimResults().omitEmptyStrings();
 

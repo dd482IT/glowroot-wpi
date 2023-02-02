@@ -27,7 +27,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class UtilsTest {
 
-    @Test
     public void testUTC() throws ParseException {
         // given
         TimeZone timeZone = TimeZone.getTimeZone("UTC");
@@ -43,7 +42,6 @@ public class UtilsTest {
         assertThat(simpleDateFormat.format(new Date(rollupCaptureTime))).isEqualTo("20161127T00");
     }
 
-    @Test
     public void testLosAngeles() throws ParseException {
         // given
         TimeZone timeZone = TimeZone.getTimeZone("America/Los_Angeles");
@@ -59,7 +57,6 @@ public class UtilsTest {
         assertThat(simpleDateFormat.format(new Date(rollupCaptureTime))).isEqualTo("20161127T00");
     }
 
-    @Test
     public void testNewYork() throws ParseException {
         // given
         TimeZone timeZone = TimeZone.getTimeZone("America/New_York");

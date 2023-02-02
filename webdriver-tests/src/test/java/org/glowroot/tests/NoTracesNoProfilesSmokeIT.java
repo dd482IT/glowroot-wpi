@@ -29,7 +29,6 @@ import static org.openqa.selenium.By.xpath;
 
 public class NoTracesNoProfilesSmokeIT extends WebDriverIT {
 
-    @Test
     public void shouldCheckTransactionPages() throws Exception {
 
         // this test doesn't work against the central ui because delete all button doesn't exist

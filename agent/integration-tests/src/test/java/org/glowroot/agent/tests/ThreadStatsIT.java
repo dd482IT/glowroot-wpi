@@ -38,22 +38,18 @@ public class ThreadStatsIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldReadTraceThreadStatsConfigEnabled() throws Exception {
         // when
         Trace trace = container.execute(Normal.class);
@@ -68,7 +64,6 @@ public class ThreadStatsIT {
         }
     }
 
-    @Test
     public void shouldReadTraceThreadStatsConfigDisabled() throws Exception {
         // given
         disableCaptureThreadStats();
@@ -81,7 +76,6 @@ public class ThreadStatsIT {
         assertThat(trace.getHeader().getMainThreadStats().getAllocatedBytes()).isEqualTo(-1);
     }
 
-    @Test
     public void shouldReadTraceCpuTimeDisabled() throws Exception {
         // when
         Trace trace = container.execute(ThreadCpuTimeDisabled.class);
@@ -96,7 +90,6 @@ public class ThreadStatsIT {
         }
     }
 
-    @Test
     public void shouldReadTraceCpuTimeDisabledMid() throws Exception {
         // when
         Trace trace = container.execute(ThreadCpuTimeDisabledMid.class);
@@ -111,7 +104,6 @@ public class ThreadStatsIT {
         }
     }
 
-    @Test
     public void shouldReadTraceCpuTimeEnabledMid() throws Exception {
         // when
         Trace trace = container.execute(ThreadCpuTimeEnabledMid.class);
@@ -126,7 +118,6 @@ public class ThreadStatsIT {
         }
     }
 
-    @Test
     public void shouldReadTraceContentionMonitoringDisabled() throws Exception {
         // when
         Trace trace = container.execute(ThreadContentionMonitoringDisabled.class);
@@ -141,7 +132,6 @@ public class ThreadStatsIT {
         }
     }
 
-    @Test
     public void shouldReadTraceContentionMonitoringDisabledMid() throws Exception {
         // when
         Trace trace = container.execute(ThreadContentionMonitoringDisabledMid.class);
@@ -156,7 +146,6 @@ public class ThreadStatsIT {
         }
     }
 
-    @Test
     public void shouldReadTraceContentionMonitoringEnabledMid() throws Exception {
         // when
         Trace trace = container.execute(ThreadContentionMonitoringEnabledMid.class);
@@ -171,7 +160,6 @@ public class ThreadStatsIT {
         }
     }
 
-    @Test
     public void shouldReadTraceBothDisabled() throws Exception {
         // given
         disableCaptureThreadStats();

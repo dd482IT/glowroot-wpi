@@ -24,16 +24,16 @@ public class NopGlowrootService implements GlowrootService {
     public static final GlowrootService INSTANCE = new NopGlowrootService();
 
     @Override
-    public void setTransactionType(@Nullable String transactionType) {}
+    public void setTransactionType(String transactionType) {}
 
     @Override
-    public void setTransactionName(@Nullable String transactionName) {}
+    public void setTransactionName(String transactionName) {}
 
     @Override
-    public void setTransactionUser(@Nullable String user) {}
+    public void setTransactionUser(String user) {}
 
     @Override
-    public void addTransactionAttribute(String name, @Nullable String value) {}
+    public void addTransactionAttribute(String name, String value) {}
 
     @Override
     public void setTransactionSlowThreshold(long threshold, TimeUnit unit) {}

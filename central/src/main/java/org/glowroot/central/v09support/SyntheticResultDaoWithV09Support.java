@@ -52,7 +52,7 @@ public class SyntheticResultDaoWithV09Support implements SyntheticResultDao {
     @Override
     public void store(String agentRollupId, String syntheticMonitorId,
             String syntheticMonitorDisplay, long captureTime, long durationNanos,
-            @Nullable String errorMessage) throws Exception {
+            String errorMessage) throws Exception {
         if (captureTime <= v09LastCaptureTime
                 && agentRollupIdsWithV09Data.contains(agentRollupId)) {
             delegate.store(V09Support.convertToV09(agentRollupId), syntheticMonitorId,

@@ -52,27 +52,27 @@ public class LoggerFactoryImpl implements LoggerFactory {
         }
 
         @Override
-        public void trace(@Nullable String msg) {
+        public void trace(String msg) {
             logger.trace(msg);
         }
 
         @Override
-        public void trace(@Nullable String format, @Nullable Object arg) {
+        public void trace(String format, Object arg) {
             logger.trace(format, arg);
         }
 
         @Override
-        public void trace(@Nullable String format, @Nullable Object arg1, @Nullable Object arg2) {
+        public void trace(String format, Object arg1, Object arg2) {
             logger.trace(format, arg1, arg2);
         }
 
         @Override
-        public void trace(@Nullable String format, @Nullable Object... arguments) {
+        public void trace(String format, Object... arguments) {
             logger.trace(format, arguments);
         }
 
         @Override
-        public void trace(@Nullable String msg, @Nullable Throwable t) {
+        public void trace(String msg, Throwable t) {
             logger.trace(msg, t);
         }
 
@@ -82,27 +82,27 @@ public class LoggerFactoryImpl implements LoggerFactory {
         }
 
         @Override
-        public void debug(@Nullable String msg) {
+        public void debug(String msg) {
             logger.debug(msg);
         }
 
         @Override
-        public void debug(@Nullable String format, @Nullable Object arg) {
+        public void debug(String format, Object arg) {
             logger.debug(format, arg);
         }
 
         @Override
-        public void debug(@Nullable String format, @Nullable Object arg1, @Nullable Object arg2) {
+        public void debug(String format, Object arg1, Object arg2) {
             logger.debug(format, arg1, arg2);
         }
 
         @Override
-        public void debug(@Nullable String format, @Nullable Object... arguments) {
+        public void debug(String format, Object... arguments) {
             logger.debug(format, arguments);
         }
 
         @Override
-        public void debug(@Nullable String msg, @Nullable Throwable t) {
+        public void debug(String msg, Throwable t) {
             logger.debug(msg, t);
         }
 
@@ -112,27 +112,27 @@ public class LoggerFactoryImpl implements LoggerFactory {
         }
 
         @Override
-        public void info(@Nullable String msg) {
+        public void info(String msg) {
             logger.info(msg);
         }
 
         @Override
-        public void info(@Nullable String format, @Nullable Object arg) {
+        public void info(String format, Object arg) {
             logger.info(format, arg);
         }
 
         @Override
-        public void info(@Nullable String format, @Nullable Object arg1, @Nullable Object arg2) {
+        public void info(String format, Object arg1, Object arg2) {
             logger.info(format, arg1, arg2);
         }
 
         @Override
-        public void info(@Nullable String format, @Nullable Object... arguments) {
+        public void info(String format, Object... arguments) {
             logger.info(format, arguments);
         }
 
         @Override
-        public void info(@Nullable String msg, @Nullable Throwable t) {
+        public void info(String msg, Throwable t) {
             logger.info(msg, t);
         }
 
@@ -142,27 +142,27 @@ public class LoggerFactoryImpl implements LoggerFactory {
         }
 
         @Override
-        public void warn(@Nullable String msg) {
+        public void warn(String msg) {
             logger.warn(msg);
         }
 
         @Override
-        public void warn(@Nullable String format, @Nullable Object arg) {
+        public void warn(String format, Object arg) {
             logger.warn(format, arg);
         }
 
         @Override
-        public void warn(@Nullable String format, @Nullable Object... arguments) {
+        public void warn(String format, Object... arguments) {
             logger.warn(format, arguments);
         }
 
         @Override
-        public void warn(@Nullable String format, @Nullable Object arg1, @Nullable Object arg2) {
+        public void warn(String format, Object arg1, Object arg2) {
             logger.warn(format, arg1, arg2);
         }
 
         @Override
-        public void warn(@Nullable String msg, @Nullable Throwable t) {
+        public void warn(String msg, Throwable t) {
             logger.warn(msg, t);
         }
 
@@ -172,27 +172,27 @@ public class LoggerFactoryImpl implements LoggerFactory {
         }
 
         @Override
-        public void error(@Nullable String msg) {
+        public void error(String msg) {
             logger.error(msg);
         }
 
         @Override
-        public void error(@Nullable String format, @Nullable Object arg) {
+        public void error(String format, Object arg) {
             logger.error(format, arg);
         }
 
         @Override
-        public void error(@Nullable String format, @Nullable Object arg1, @Nullable Object arg2) {
+        public void error(String format, Object arg1, Object arg2) {
             logger.error(format, arg1, arg2);
         }
 
         @Override
-        public void error(@Nullable String format, @Nullable Object... arguments) {
+        public void error(String format, Object... arguments) {
             logger.error(format, arguments);
         }
 
         @Override
-        public void error(@Nullable String msg, @Nullable Throwable t) {
+        public void error(String msg, Throwable t) {
             logger.error(msg, t);
         }
     }

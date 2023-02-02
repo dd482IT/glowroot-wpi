@@ -50,25 +50,21 @@ public class GrailsIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         Assumptions.assumeFalse(StandardSystemProperty.JAVA_VERSION.value().startsWith("17"));
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         if (container != null) {
             container.close();
         }
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldCaptureNonDefaultAction() throws Exception {
         // when
         Trace trace = container.execute(GetHelloAbc.class, "Web");
@@ -86,7 +82,6 @@ public class GrailsIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureDefaultAction() throws Exception {
         // when
         Trace trace = container.execute(GetHello.class, "Web");
@@ -114,9 +109,6 @@ public class GrailsIT {
         }
     }
 
-    @Artefact("Application")
-    @EnableWebMvc
-    @EnableAutoConfiguration
     public static class Application extends GrailsAutoConfiguration {
 
         @Override

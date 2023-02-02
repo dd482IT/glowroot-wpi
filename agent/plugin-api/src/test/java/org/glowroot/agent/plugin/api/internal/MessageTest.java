@@ -31,38 +31,32 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class MessageTest {
 
-    @Test
     public void shouldFormatConstant() {
         ReadableMessage message = (ReadableMessage) Message.create("constant");
         assertThat(message.getText()).isEqualTo("constant");
     }
 
-    @Test
     public void shouldFormatSingle() {
         ReadableMessage message = (ReadableMessage) Message.create("{}", "test");
         assertThat(message.getText()).isEqualTo("test");
     }
 
-    @Test
     public void shouldFormatSinglePlus() {
         ReadableMessage message = (ReadableMessage) Message.create("one {} two", "test");
         assertThat(message.getText()).isEqualTo("one test two");
     }
 
-    @Test
     public void shouldFormatMultiple() {
         ReadableMessage message =
                 (ReadableMessage) Message.create("one {} two {}{}", "test", "2", "3");
         assertThat(message.getText()).isEqualTo("one test two 23");
     }
 
-    @Test
     public void shouldFormatConstantWithEmptyMethodBody() {
         ReadableMessage message = (ReadableMessage) Message.create("public void run() {}");
         assertThat(message.getText()).isEqualTo("public void run() {}");
     }
 
-    @Test
     public void shouldTruncateMessage() {
         final String suffix = " [truncated to 100000 characters]";
         String longString = Strings.repeat("a", 100000);
@@ -70,14 +64,12 @@ public class MessageTest {
         assertThat(message.getText()).isEqualTo(longString + suffix);
     }
 
-    @Test
     public void shouldNotTruncateMessage() {
         String longString = Strings.repeat("a", 100000);
         ReadableMessage message = (ReadableMessage) Message.create("{}", longString);
         assertThat(message.getText()).isEqualTo(longString);
     }
 
-    @Test
     public void shouldTruncateDetail() {
         final String suffix = " [truncated to 10000 characters]";
         String longString = Strings.repeat("a", 10000);
@@ -110,14 +102,12 @@ public class MessageTest {
                 .isEqualTo(longString + suffix);
     }
 
-    @Test
     public void shouldTestNotEnoughArgsForTemplate() {
         ReadableMessage message = (ReadableMessage) Message.create("{}, {} xyz {}", "test");
         assertThat(message.getText()).isEqualTo("test, <not enough args provided for template> xyz"
                 + " <not enough args provided for template>");
     }
 
-    @Test
     public void shouldTestNullTemplate() {
         ReadableMessage message = (ReadableMessage) Message.create(null);
         assertThat(message.getText()).isEqualTo("");

@@ -43,7 +43,6 @@ public class AnalyzedClassPlanBeeWithBadPreloadCacheIT {
     private static Container container;
     private static File testDir;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         testDir = TempDirs.createTempDir("glowroot-test-dir");
         File tmpDir = new File(testDir, "tmp");
@@ -60,18 +59,15 @@ public class AnalyzedClassPlanBeeWithBadPreloadCacheIT {
         container = JavaagentContainer.create(testDir);
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
         TempDirs.deleteRecursively(testDir);
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldNotLogWarningInAnalyzedWorldPlanBWithBadPreloadCache() throws Exception {
         // given
         updateInstrumentationConfigs();

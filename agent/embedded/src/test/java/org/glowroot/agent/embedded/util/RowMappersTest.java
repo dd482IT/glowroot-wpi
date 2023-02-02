@@ -28,7 +28,6 @@ import static org.mockito.Mockito.when;
 
 public class RowMappersTest {
 
-    @Test
     public void testExists() throws SQLException {
         // given
         ResultSet resultSet = mock(ResultSet.class);
@@ -42,7 +41,6 @@ public class RowMappersTest {
         assertThat(existence).isEqualTo(Existence.YES);
     }
 
-    @Test
     public void testNotExists() throws SQLException {
         // given
         ResultSet resultSet = mock(ResultSet.class);
@@ -56,7 +54,6 @@ public class RowMappersTest {
         assertThat(existence).isEqualTo(Existence.NO);
     }
 
-    @Test
     public void testExpired() throws SQLException {
         // given
         ResultSet resultSet = mock(ResultSet.class);

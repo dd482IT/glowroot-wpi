@@ -43,53 +43,38 @@ import org.glowroot.agent.plugin.api.weaving.Shim;
 
 public class HttpHandlerAspect {
 
-    @Shim("com.sun.net.httpserver.HttpExchange")
     public interface HttpExchange {
 
-        @Nullable
         URI getRequestURI();
 
-        @Nullable
         String getRequestMethod();
 
-        @Shim("com.sun.net.httpserver.Headers getRequestHeaders()")
-        @Nullable
         Headers glowroot$getRequestHeaders();
 
-        @Shim("com.sun.net.httpserver.Headers getResponseHeaders()")
-        @Nullable
         Headers glowroot$getResponseHeaders();
 
-        @Nullable
         InetSocketAddress getRemoteAddress();
     }
 
-    @Shim("com.sun.net.httpserver.Headers")
     public interface Headers extends Map<String, List<String>> {
 
-        @Nullable
         String getFirst(String key);
     }
 
     private static final FastThreadLocal</*@Nullable*/ String> sendError =
             new FastThreadLocal</*@Nullable*/ String>();
 
-    @Pointcut(className = "com.sun.net.httpserver.HttpHandler", methodName = "handle",
-            methodParameterTypes = {"com.sun.net.httpserver.HttpExchange"},
-            nestingGroup = "outer-handler-or-filter", timerName = "http request")
     public static class HandleAdvice {
 
         private static final TimerName timerName = Agent.getTimerName(HandleAdvice.class);
 
-        @OnBefore
-        public static @Nullable TraceEntry onBefore(OptionalThreadContext context,
-                @BindParameter @Nullable HttpExchange exchange) {
+        public static TraceEntry onBefore(OptionalThreadContext context,
+                HttpExchange exchange) {
             return onBeforeCommon(context, exchange);
         }
 
-        @OnReturn
-        public static void onReturn(@BindTraveler @Nullable TraceEntry traceEntry,
-                @BindParameter @Nullable HttpExchange exchange) {
+        public static void onReturn(TraceEntry traceEntry,
+                HttpExchange exchange) {
             if (traceEntry == null) {
                 return;
             }
@@ -104,10 +89,9 @@ public class HttpHandlerAspect {
             }
         }
 
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler @Nullable TraceEntry traceEntry,
-                @BindParameter @Nullable HttpExchange exchange) {
+        public static void onThrow(Throwable t,
+                TraceEntry traceEntry,
+                HttpExchange exchange) {
             if (traceEntry == null) {
                 return;
             }
@@ -117,16 +101,16 @@ public class HttpHandlerAspect {
             traceEntry.endWithError(t);
         }
 
-        private static void setResponseHeaders(@Nullable HttpExchange exchange,
-                @Nullable Object messageSupplier) {
+        private static void setResponseHeaders(HttpExchange exchange,
+                Object messageSupplier) {
             if (exchange != null && messageSupplier instanceof HttpHandlerMessageSupplier) {
                 ((HttpHandlerMessageSupplier) messageSupplier)
                         .setResponseHeaders(DetailCapture.captureResponseHeaders(exchange));
             }
         }
 
-        private static @Nullable TraceEntry onBeforeCommon(OptionalThreadContext context,
-                @Nullable HttpExchange exchange) {
+        private static TraceEntry onBeforeCommon(OptionalThreadContext context,
+                HttpExchange exchange) {
             if (exchange == null) {
                 // seems nothing sensible to do here other than ignore
                 return null;
@@ -168,7 +152,7 @@ public class HttpHandlerAspect {
             return traceEntry;
         }
 
-        private static String getRequestURI(@Nullable URI uri) {
+        private static String getRequestURI(URI uri) {
             if (uri != null) {
                 return Strings.nullToEmpty(uri.getPath());
             } else {
@@ -176,7 +160,7 @@ public class HttpHandlerAspect {
             }
         }
 
-        private static @Nullable String getRequestQueryString(@Nullable URI uri) {
+        private static String getRequestQueryString(URI uri) {
             if (uri != null) {
                 return uri.getQuery();
             } else {
@@ -185,45 +169,34 @@ public class HttpHandlerAspect {
         }
     }
 
-    @Pointcut(className = "com.sun.net.httpserver.Filter", methodName = "doFilter",
-            methodParameterTypes = {"com.sun.net.httpserver.HttpExchange",
-                    "com.sun.net.httpserver.Filter$Chain"},
-            nestingGroup = "outer-handler-or-filter", timerName = "http request")
     public static class DoFilterAdvice {
 
-        @OnBefore
-        public static @Nullable TraceEntry onBefore(OptionalThreadContext context,
-                @BindParameter @Nullable HttpExchange exchange) {
+        public static TraceEntry onBefore(OptionalThreadContext context,
+                HttpExchange exchange) {
             return HandleAdvice.onBeforeCommon(context, exchange);
         }
 
-        @OnReturn
-        public static void onReturn(@BindTraveler @Nullable TraceEntry traceEntry,
-                @BindParameter @Nullable HttpExchange exchange) {
+        public static void onReturn(TraceEntry traceEntry,
+                HttpExchange exchange) {
             HandleAdvice.onReturn(traceEntry, exchange);
         }
 
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler @Nullable TraceEntry traceEntry,
-                @BindParameter @Nullable HttpExchange exchange) {
+        public static void onThrow(Throwable t,
+                TraceEntry traceEntry,
+                HttpExchange exchange) {
             HandleAdvice.onThrow(t, traceEntry, exchange);
         }
     }
 
-    @Pointcut(className = "com.sun.net.httpserver.HttpExchange", methodName = "sendResponseHeaders",
-            methodParameterTypes = {"int", "long"}, nestingGroup = "handler-inner-call")
     public static class SendResponseHeadersAdvice {
 
         // using @IsEnabled like this avoids ThreadContext lookup for common case
-        @IsEnabled
-        public static boolean isEnabled(@BindParameter Integer statusCode) {
+        public static boolean isEnabled(Integer statusCode) {
             return statusCode >= 500 || JavaHttpServerPluginProperties.traceErrorOn4xxResponseCode()
                     && statusCode >= 400;
         }
 
-        @OnAfter
-        public static void onAfter(ThreadContext context, @BindParameter Integer statusCode) {
+        public static void onAfter(ThreadContext context, Integer statusCode) {
             FastThreadLocal.Holder</*@Nullable*/ String> errorMessageHolder = sendError.getHolder();
             if (errorMessageHolder.get() == null) {
                 context.addErrorEntry("sendResponseHeaders, HTTP status code " + statusCode);
@@ -232,13 +205,9 @@ public class HttpHandlerAspect {
         }
     }
 
-    @Pointcut(className = "com.sun.net.httpserver.HttpExchange", methodName = "getPrincipal",
-            methodParameterTypes = {}, methodReturnType = "com.sun.net.httpserver.HttpPrincipal",
-            nestingGroup = "handler-inner-call")
     public static class GetPrincipalAdvice {
 
-        @OnReturn
-        public static void onReturn(@BindReturn @Nullable Principal principal,
+        public static void onReturn(Principal principal,
                 ThreadContext context) {
             if (principal != null) {
                 context.setTransactionUser(principal.getName(), Priority.CORE_PLUGIN);

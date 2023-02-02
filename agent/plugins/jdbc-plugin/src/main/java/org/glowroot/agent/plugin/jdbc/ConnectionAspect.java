@@ -54,22 +54,17 @@ public class ConnectionAspect {
     // ===================== Statement Preparation =====================
 
     // capture the sql used to create the PreparedStatement
-    @Pointcut(className = "java.sql.Connection", methodName = "prepare*",
-            methodParameterTypes = {"java.lang.String", ".."},
-            timerName = "jdbc prepare")
     public static class PrepareAdvice {
         private static final TimerName timerName = Agent.getTimerName(PrepareAdvice.class);
-        @OnBefore
-        public static @Nullable Timer onBefore(ThreadContext context) {
+        public static Timer onBefore(ThreadContext context) {
             if (capturePreparedStatementCreation.value()) {
                 return context.startTimer(timerName);
             } else {
                 return null;
             }
         }
-        @OnReturn
-        public static void onReturn(@BindReturn @Nullable Object preparedStatement,
-                @BindParameter @Nullable String sql) {
+        public static void onReturn(Object preparedStatement,
+                String sql) {
             if (sql == null) {
                 // seems nothing sensible to do here other than ignore
                 return;
@@ -78,74 +73,56 @@ public class ConnectionAspect {
                 ((HasStatementMirrorMixin) preparedStatement).glowroot$setStatementMirror(new PreparedStatementMirror(sql));
             }
         }
-        @OnAfter
-        public static void onAfter(@BindTraveler @Nullable Timer timer) {
+        public static void onAfter(Timer timer) {
             if (timer != null) {
                 timer.stop();
             }
         }
     }
 
-    @Pointcut(className = "java.sql.Connection", methodName = "createStatement",
-            methodParameterTypes = {".."})
     public static class CreateStatementAdvice {
-        @OnReturn
-        public static void onReturn(@BindReturn @Nullable Object statement) {
+        public static void onReturn(Object statement) {
             if (statement instanceof HasStatementMirrorMixin) {
                 ((HasStatementMirrorMixin) statement).glowroot$setStatementMirror(new StatementMirror());
             }
         }
     }
 
-    @Pointcut(className = "java.sql.Connection", methodName = "commit", methodParameterTypes = {},
-            nestingGroup = "jdbc", timerName = "jdbc commit")
     public static class CommitAdvice {
         private static final TimerName timerName = Agent.getTimerName(CommitAdvice.class);
-        @OnBefore
         public static TraceEntry onBefore(ThreadContext context) {
             return context.startTraceEntry(MessageSupplier.create("jdbc commit"), timerName);
         }
-        @OnReturn
-        public static void onReturn(@BindTraveler TraceEntry traceEntry) {
+        public static void onReturn(TraceEntry traceEntry) {
             traceEntry.endWithLocationStackTrace(JdbcPluginProperties.stackTraceThresholdMillis(),
                     MILLISECONDS);
         }
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler TraceEntry traceEntry) {
+        public static void onThrow(Throwable t,
+                TraceEntry traceEntry) {
             traceEntry.endWithError(t);
         }
     }
 
-    @Pointcut(className = "java.sql.Connection", methodName = "rollback", methodParameterTypes = {},
-            nestingGroup = "jdbc", timerName = "jdbc rollback")
     public static class RollbackAdvice {
         private static final TimerName timerName = Agent.getTimerName(RollbackAdvice.class);
-        @OnBefore
         public static TraceEntry onBefore(ThreadContext context) {
             return context.startTraceEntry(MessageSupplier.create("jdbc rollback"), timerName);
         }
-        @OnReturn
-        public static void onReturn(@BindTraveler TraceEntry traceEntry) {
+        public static void onReturn(TraceEntry traceEntry) {
             traceEntry.endWithLocationStackTrace(JdbcPluginProperties.stackTraceThresholdMillis(),
                     MILLISECONDS);
         }
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler TraceEntry traceEntry) {
+        public static void onThrow(Throwable t,
+                TraceEntry traceEntry) {
             traceEntry.endWithError(t);
         }
     }
 
-    @Pointcut(className = "java.sql.Connection", methodName = "close", methodParameterTypes = {},
-            nestingGroup = "jdbc", timerName = "jdbc connection close")
     public static class CloseAdvice {
         private static final TimerName timerName = Agent.getTimerName(CloseAdvice.class);
-        @IsEnabled
         public static boolean isEnabled() {
             return captureConnectionClose.value() || captureConnectionLifecycleTraceEntries.value();
         }
-        @OnBefore
         public static Object onBefore(ThreadContext context) {
             if (captureConnectionLifecycleTraceEntries.value()) {
                 return context.startTraceEntry(MessageSupplier.create("jdbc connection close"),
@@ -154,8 +131,7 @@ public class ConnectionAspect {
                 return context.startTimer(timerName);
             }
         }
-        @OnReturn
-        public static void onReturn(@BindTraveler Object entryOrTimer) {
+        public static void onReturn(Object entryOrTimer) {
             if (entryOrTimer instanceof TraceEntry) {
                 ((TraceEntry) entryOrTimer).endWithLocationStackTrace(
                         JdbcPluginProperties.stackTraceThresholdMillis(), MILLISECONDS);
@@ -163,8 +139,7 @@ public class ConnectionAspect {
                 ((Timer) entryOrTimer).stop();
             }
         }
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t, @BindTraveler Object entryOrTimer) {
+        public static void onThrow(Throwable t, Object entryOrTimer) {
             if (entryOrTimer instanceof TraceEntry) {
                 ((TraceEntry) entryOrTimer).endWithError(t);
             } else {
@@ -173,30 +148,23 @@ public class ConnectionAspect {
         }
     }
 
-    @Pointcut(className = "java.sql.Connection", methodName = "setAutoCommit",
-            methodParameterTypes = {"boolean"}, nestingGroup = "jdbc",
-            timerName = "jdbc set autocommit")
     public static class SetAutoCommitAdvice {
         private static final TimerName timerName = Agent.getTimerName(SetAutoCommitAdvice.class);
-        @IsEnabled
         public static boolean isEnabled() {
             return captureTransactionLifecycleTraceEntries.value();
         }
-        @OnBefore
         public static TraceEntry onBefore(ThreadContext context,
-                @BindParameter boolean autoCommit) {
+                boolean autoCommit) {
             return context.startTraceEntry(
                     MessageSupplier.create("jdbc set autocommit: {}", Boolean.toString(autoCommit)),
                     timerName);
         }
-        @OnReturn
-        public static void onReturn(@BindTraveler TraceEntry traceEntry) {
+        public static void onReturn(TraceEntry traceEntry) {
             traceEntry.endWithLocationStackTrace(JdbcPluginProperties.stackTraceThresholdMillis(),
                     MILLISECONDS);
         }
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler TraceEntry traceEntry) {
+        public static void onThrow(Throwable t,
+                TraceEntry traceEntry) {
             traceEntry.endWithError(t);
         }
     }

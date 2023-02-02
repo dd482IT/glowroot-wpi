@@ -18,7 +18,6 @@ package org.glowroot.agent.weaving;
 import com.google.common.collect.ImmutableList;
 import org.immutables.value.Value;
 
-@Value.Immutable
 abstract class PublicFinalMethod {
 
     abstract String name();

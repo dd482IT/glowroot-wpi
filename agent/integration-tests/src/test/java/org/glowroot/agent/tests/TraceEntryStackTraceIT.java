@@ -39,22 +39,18 @@ public class TraceEntryStackTraceIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldReadTraceEntryStackTrace() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureTraceEntryStackTraces",

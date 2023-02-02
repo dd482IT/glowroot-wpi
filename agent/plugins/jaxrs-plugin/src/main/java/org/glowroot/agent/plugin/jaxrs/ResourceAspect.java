@@ -39,16 +39,12 @@ public class ResourceAspect {
     private static final BooleanProperty useAltTransactionNaming =
             Agent.getConfigService("jaxrs").getBooleanProperty("useAltTransactionNaming");
 
-    @Pointcut(methodAnnotation = "javax.ws.rs.Path|javax.ws.rs.DELETE|javax.ws.rs.GET"
-            + "|javax.ws.rs.HEAD|javax.ws.rs.OPTIONS|javax.ws.rs.POST|javax.ws.rs.PUT",
-            methodParameterTypes = {".."}, timerName = "jaxrs resource", nestingGroup = "jaxrs")
     public static class ResourceAdvice {
 
         private static final TimerName timerName = Agent.getTimerName(ResourceAdvice.class);
 
-        @OnBefore
-        public static @Nullable TraceEntry onBefore(ThreadContext context,
-                @BindMethodMeta ResourceMethodMeta resourceMethodMeta) {
+        public static TraceEntry onBefore(ThreadContext context,
+                ResourceMethodMeta resourceMethodMeta) {
 
             if (resourceMethodMeta.hasHttpMethodAnnotation()) {
                 if (useAltTransactionNaming.value()) {
@@ -85,23 +81,21 @@ public class ResourceAspect {
             }
         }
 
-        @OnReturn
-        public static void onReturn(@BindTraveler @Nullable TraceEntry traceEntry) {
+        public static void onReturn(TraceEntry traceEntry) {
             if (traceEntry != null) {
                 traceEntry.end();
             }
         }
 
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler @Nullable TraceEntry traceEntry) {
+        public static void onThrow(Throwable t,
+                TraceEntry traceEntry) {
             if (traceEntry != null) {
                 traceEntry.endWithError(t);
             }
         }
 
         private static String getTransactionName(String path,
-                @Nullable ServletRequestInfo servletRequestInfo) {
+                ServletRequestInfo servletRequestInfo) {
             if (servletRequestInfo == null) {
                 return path;
             }

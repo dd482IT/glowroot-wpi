@@ -42,22 +42,18 @@ public class StatementIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void testStatement() throws Exception {
         // when
         Trace trace = container.execute(ExecuteStatementAndIterateOverResults.class);
@@ -88,7 +84,6 @@ public class StatementIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void testStatementQuery() throws Exception {
         // when
         Trace trace = container.execute(ExecuteStatementQueryAndIterateOverResults.class);
@@ -119,7 +114,6 @@ public class StatementIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void testStatementUpdate() throws Exception {
         // when
         Trace trace = container.execute(ExecuteStatementUpdate.class);
@@ -150,7 +144,6 @@ public class StatementIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void testNullStatement() throws Exception {
         // when
         Trace trace = container.execute(ExecuteNullStatement.class);
@@ -161,7 +154,6 @@ public class StatementIT {
         assertThat(trace.getQueryCount()).isZero();
     }
 
-    @Test
     public void testStatementThrowing() throws Exception {
         // when
         Trace trace = container.execute(ExecuteStatementThrowing.class);
@@ -202,7 +194,6 @@ public class StatementIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void testStatementUsingPrevious() throws Exception {
         // when
         Trace trace = container.execute(ExecuteStatementAndUsePrevious.class);
@@ -233,7 +224,6 @@ public class StatementIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void testStatementUsingRelativeForward() throws Exception {
         // when
         Trace trace = container.execute(ExecuteStatementAndUseRelativeForward.class);
@@ -264,7 +254,6 @@ public class StatementIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void testStatementUsingRelativeBackward() throws Exception {
         // when
         Trace trace = container.execute(ExecuteStatementAndUseRelativeBackward.class);
@@ -295,7 +284,6 @@ public class StatementIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void testStatementUsingAbsolute() throws Exception {
         // when
         Trace trace = container.execute(ExecuteStatementAndUseAbsolute.class);
@@ -326,7 +314,6 @@ public class StatementIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void testStatementUsingFirst() throws Exception {
         // when
         Trace trace = container.execute(ExecuteStatementAndUseFirst.class);
@@ -357,7 +344,6 @@ public class StatementIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void testStatementUsingLast() throws Exception {
         // when
         Trace trace = container.execute(ExecuteStatementAndUseLast.class);
@@ -388,7 +374,6 @@ public class StatementIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void testIteratingOverResultsInAnotherThread() throws Exception {
         // when
         Trace trace =

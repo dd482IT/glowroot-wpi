@@ -19,10 +19,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class PluginConfig {
 
-    private @Nullable String id;
+    private String id;
     private PropertyConfig[] properties = new PropertyConfig[0];
 
-    public @Nullable String getId() {
+    public String getId() {
         return id;
     }
 
@@ -40,11 +40,11 @@ public class PluginConfig {
 
     public static class PropertyConfig {
 
-        private @Nullable String name;
-        private @Nullable String defaultValue;
-        private @Nullable String description;
+        private String name;
+        private String defaultValue;
+        private String description;
 
-        public @Nullable String getName() {
+        public String getName() {
             return name;
         }
 
@@ -52,7 +52,7 @@ public class PluginConfig {
             this.name = name;
         }
 
-        public @Nullable String getDefault() {
+        public String getDefault() {
             return defaultValue;
         }
 
@@ -60,7 +60,7 @@ public class PluginConfig {
             this.defaultValue = defaultValue;
         }
 
-        public @Nullable String getDescription() {
+        public String getDescription() {
             return description;
         }
 

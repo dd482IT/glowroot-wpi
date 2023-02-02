@@ -37,99 +37,83 @@ public class WebServiceIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithNormalServletMapping() throws Exception {
         shouldCaptureTransactionNameWithNormalServletMapping("", WithNormalServletMapping.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithNormalServletMappingWithContextPath()
             throws Exception {
         shouldCaptureTransactionNameWithNormalServletMapping("/zzz",
                 WithNormalServletMappingWithContextPath.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithNormalServletMappingHittingRoot() throws Exception {
         shouldCaptureTransactionNameWithNormalServletMappingHittingRoot("",
                 WithNormalServletMappingHittingRoot.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithNormalServletMappingHittingRootWithContextPath()
             throws Exception {
         shouldCaptureTransactionNameWithNormalServletMappingHittingRoot("/zzz",
                 WithNormalServletMappingHittingRootWithContextPath.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithNestedServletMapping() throws Exception {
         shouldCaptureTransactionNameWithNestedServletMapping("", WithNestedServletMapping.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithNestedServletMappingWithContextPath()
             throws Exception {
         shouldCaptureTransactionNameWithNestedServletMapping("/zzz",
                 WithNestedServletMappingWithContextPath.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithNestedServletMappingHittingRoot() throws Exception {
         shouldCaptureTransactionNameWithNestedServletMappingHittingRoot("",
                 WithNestedServletMappingHittingRoot.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithNestedServletMappingHittingRootWithContextPath()
             throws Exception {
         shouldCaptureTransactionNameWithNestedServletMappingHittingRoot("/zzz",
                 WithNestedServletMappingHittingRootWithContextPath.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithLessNormalServletMapping() throws Exception {
         shouldCaptureTransactionNameWithLessNormalServletMapping("",
                 WithLessNormalServletMapping.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithLessNormalServletMappingWithContextPath()
             throws Exception {
         shouldCaptureTransactionNameWithLessNormalServletMapping("/zzz",
                 WithLessNormalServletMappingWithContextPath.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithLessNormalServletMappingHittingRoot()
             throws Exception {
         shouldCaptureTransactionNameWithLessNormalServletMappingHittingRoot("",
                 WithLessNormalServletMappingHittingRoot.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithLessNormalServletMappingHittingRootWithContextPath()
             throws Exception {
         shouldCaptureTransactionNameWithLessNormalServletMappingHittingRoot("/zzz",
                 WithLessNormalServletMappingHittingRootWithContextPath.class);
     }
 
-    @Test
     public void shouldCaptureAltTransactionName() throws Exception {
         // given
         container.getConfigService().setPluginProperty("jaxws", "useAltTransactionNaming", true);
@@ -371,18 +355,14 @@ public class WebServiceIT {
         }
     }
 
-    @WebService
     public static class HelloService {
-        @WebMethod
-        public String echo(@WebParam(name = "param") String msg) {
+        public String echo(String msg) {
             return msg;
         }
     }
 
-    @WebService
     public static class RootService {
-        @WebMethod
-        public String echo(@WebParam(name = "param") String msg) {
+        public String echo(String msg) {
             return msg;
         }
     }

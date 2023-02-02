@@ -27,10 +27,10 @@ public class MethodInfoImpl implements MethodInfo {
     private final Class<?> returnType;
     private final List<Class<?>> parameterTypes;
     private final String declaringClassName;
-    private final @Nullable ClassLoader loader;
+    private final ClassLoader loader;
 
     public MethodInfoImpl(String name, Class<?> returnType, List<Class<?>> parameterTypes,
-            String declaringClassName, @Nullable ClassLoader loader) {
+            String declaringClassName, ClassLoader loader) {
         this.name = name;
         this.returnType = returnType;
         this.parameterTypes = parameterTypes;
@@ -59,7 +59,7 @@ public class MethodInfoImpl implements MethodInfo {
     }
 
     @Override
-    public @Nullable ClassLoader getLoader() {
+    public ClassLoader getLoader() {
         return loader;
     }
 }

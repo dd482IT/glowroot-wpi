@@ -80,19 +80,19 @@ public class ThreadContextImpl implements ThreadContextPlus {
 
     private final Transaction transaction;
     // this is null for main thread, and non-null for auxiliary threads
-    private final @Nullable TraceEntryImpl parentTraceEntry;
+    private final TraceEntryImpl parentTraceEntry;
     // this is null for main thread, and non-null for auxiliary threads
     // it is used to help place aux thread context in the correct place inside parent
-    private final @Nullable TraceEntryImpl parentThreadContextPriorEntry;
+    private final TraceEntryImpl parentThreadContextPriorEntry;
 
     private final TimerImpl rootTimer;
     // only accessed by the thread context's thread
-    private @Nullable TimerImpl currentTimer;
+    private TimerImpl currentTimer;
 
     private int currentNestingGroupId;
     private int currentSuppressionKeyId;
 
-    private final @Nullable ThreadStatsComponent threadStatsComponent;
+    private final ThreadStatsComponent threadStatsComponent;
 
     // root entry for this trace
     private final TraceEntryComponent traceEntryComponent;
@@ -101,13 +101,13 @@ public class ThreadContextImpl implements ThreadContextPlus {
     private boolean transactionAsyncComplete;
 
     // linked lists of SyncQueryData instances for safe concurrent access
-    private @MonotonicNonNull SyncQueryData headQueryData;
-    private @MonotonicNonNull SyncQueryData headServiceCallData;
+    private SyncQueryData headQueryData;
+    private SyncQueryData headServiceCallData;
     // these maps are only accessed by the thread context's thread
-    private @MonotonicNonNull QueryDataMap queriesForFirstType;
-    private @MonotonicNonNull Map<String, QueryDataMap> allQueryTypesMap;
-    private @MonotonicNonNull QueryDataMap serviceCallsForFirstType;
-    private @MonotonicNonNull Map<String, QueryDataMap> allServiceCallTypesMap;
+    private QueryDataMap queriesForFirstType;
+    private Map<String, QueryDataMap> allQueryTypesMap;
+    private QueryDataMap serviceCallsForFirstType;
+    private Map<String, QueryDataMap> allServiceCallTypesMap;
 
     private int queryAggregateCounter;
     private int serviceCallAggregateCounter;
@@ -123,28 +123,28 @@ public class ThreadContextImpl implements ThreadContextPlus {
 
     private final ThreadContextThreadLocal.Holder threadContextHolder;
 
-    private @Nullable ServletRequestInfo servletRequestInfo;
+    private ServletRequestInfo servletRequestInfo;
 
     private volatile boolean mayHaveChildAuxThreadContext;
 
     private volatile boolean detached;
 
     // only ever non-null for main thread context
-    private final @Nullable ThreadContextImpl outerTransactionThreadContext;
+    private final ThreadContextImpl outerTransactionThreadContext;
 
     // this is needed in for pointcuts that startTransaction() on an outer transaction thread
     // context, and then proceed to immediately call setTransaction...() on that same outer
     // transaction thread context
-    private @Nullable ThreadContextImpl innerTransactionThreadContext;
+    private ThreadContextImpl innerTransactionThreadContext;
 
-    ThreadContextImpl(Transaction transaction, @Nullable TraceEntryImpl parentTraceEntry,
-            @Nullable TraceEntryImpl parentThreadContextPriorEntry, MessageSupplier messageSupplier,
+    ThreadContextImpl(Transaction transaction, TraceEntryImpl parentTraceEntry,
+            TraceEntryImpl parentThreadContextPriorEntry, MessageSupplier messageSupplier,
             TimerName rootTimerName, long startTick, boolean captureThreadStats,
             int maxQueryAggregates, int maxServiceCallAggregates,
-            @Nullable ThreadAllocatedBytes threadAllocatedBytes,
+            ThreadAllocatedBytes threadAllocatedBytes,
             boolean limitExceededAuxThreadContext, Ticker ticker,
             ThreadContextThreadLocal.Holder threadContextHolder,
-            @Nullable ServletRequestInfo servletRequestInfo, int rootNestingGroupId,
+            ServletRequestInfo servletRequestInfo, int rootNestingGroupId,
             int rootSuppressionKeyId) {
         this.transaction = transaction;
         this.parentTraceEntry = parentTraceEntry;
@@ -171,7 +171,6 @@ public class ThreadContextImpl implements ThreadContextPlus {
         return transaction;
     }
 
-    @Nullable
     TraceEntryImpl getParentThreadContextPriorEntry() {
         return parentThreadContextPriorEntry;
     }
@@ -216,11 +215,11 @@ public class ThreadContextImpl implements ThreadContextPlus {
         return !traceEntryComponent.isCompleted() && threadContextHolder.get() == this;
     }
 
-    public @Nullable TimerImpl getCurrentTimer() {
+    public TimerImpl getCurrentTimer() {
         return currentTimer;
     }
 
-    void setCurrentTimer(@Nullable TimerImpl currentTimer) {
+    void setCurrentTimer(TimerImpl currentTimer) {
         this.currentTimer = currentTimer;
     }
 
@@ -379,8 +378,8 @@ public class ThreadContextImpl implements ThreadContextPlus {
                 || bypassLimit;
     }
 
-    TraceEntryImpl addErrorEntry(long startTick, long endTick, @Nullable Object messageSupplier,
-            @Nullable QueryData queryData, ErrorMessage errorMessage) {
+    TraceEntryImpl addErrorEntry(long startTick, long endTick, Object messageSupplier,
+            QueryData queryData, ErrorMessage errorMessage) {
         TraceEntryImpl entry = traceEntryComponent.addErrorEntry(startTick, endTick,
                 messageSupplier, queryData, errorMessage);
         // memory barrier write ensures partial trace capture will see data collected up to now
@@ -401,7 +400,7 @@ public class ThreadContextImpl implements ThreadContextPlus {
 
     private TraceEntryImpl startAsyncQueryEntry(long startTick,
             QueryMessageSupplier queryMessageSupplier, TimerImpl syncTimer,
-            AsyncTimer asyncTimer, @Nullable QueryData queryData, long queryExecutionCount) {
+            AsyncTimer asyncTimer, QueryData queryData, long queryExecutionCount) {
         TraceEntryImpl entry =
                 traceEntryComponent.pushEntry(startTick, queryMessageSupplier, syncTimer,
                         asyncTimer, queryData, queryExecutionCount);
@@ -413,7 +412,7 @@ public class ThreadContextImpl implements ThreadContextPlus {
 
     private TraceEntryImpl startAsyncServiceCallEntry(long startTick,
             MessageSupplier messageSupplier, TimerImpl syncTimer, AsyncTimer asyncTimer,
-            @Nullable QueryData queryData) {
+            QueryData queryData) {
         TraceEntryImpl entry = traceEntryComponent.pushEntry(startTick, messageSupplier,
                 syncTimer, asyncTimer, queryData, 1);
         // memory barrier write ensures partial trace capture will see data collected up to now
@@ -870,7 +869,7 @@ public class ThreadContextImpl implements ThreadContextPlus {
     }
 
     @Override
-    public void setTransactionType(@Nullable String transactionType, int priority) {
+    public void setTransactionType(String transactionType, int priority) {
         if (Strings.isNullOrEmpty(transactionType)) {
             return;
         }
@@ -882,7 +881,7 @@ public class ThreadContextImpl implements ThreadContextPlus {
     }
 
     @Override
-    public void setTransactionName(@Nullable String transactionName, int priority) {
+    public void setTransactionName(String transactionName, int priority) {
         if (Strings.isNullOrEmpty(transactionName)) {
             return;
         }
@@ -894,7 +893,7 @@ public class ThreadContextImpl implements ThreadContextPlus {
     }
 
     @Override
-    public void setTransactionUser(@Nullable String user, int priority) {
+    public void setTransactionUser(String user, int priority) {
         if (Strings.isNullOrEmpty(user)) {
             return;
         }
@@ -906,7 +905,7 @@ public class ThreadContextImpl implements ThreadContextPlus {
     }
 
     @Override
-    public void addTransactionAttribute(String name, @Nullable String value) {
+    public void addTransactionAttribute(String name, String value) {
         if (name == null) {
             logger.error("addTransactionAttribute(): argument 'name' must be non-null");
             return;
@@ -947,7 +946,7 @@ public class ThreadContextImpl implements ThreadContextPlus {
     }
 
     @Override
-    public void setTransactionError(@Nullable String message) {
+    public void setTransactionError(String message) {
         if (Strings.isNullOrEmpty(message)) {
             return;
         }
@@ -959,7 +958,7 @@ public class ThreadContextImpl implements ThreadContextPlus {
     }
 
     @Override
-    public void setTransactionError(@Nullable String message, @Nullable Throwable t) {
+    public void setTransactionError(String message, Throwable t) {
         if (innerTransactionThreadContext == null) {
             transaction.setError(message, t);
         } else {
@@ -973,12 +972,12 @@ public class ThreadContextImpl implements ThreadContextPlus {
     }
 
     @Override
-    public void addErrorEntry(@Nullable String message) {
+    public void addErrorEntry(String message) {
         addErrorEntryInternal(message, null);
     }
 
     @Override
-    public void addErrorEntry(@Nullable String message, Throwable t) {
+    public void addErrorEntry(String message, Throwable t) {
         addErrorEntryInternal(message, t);
     }
 
@@ -993,12 +992,12 @@ public class ThreadContextImpl implements ThreadContextPlus {
     }
 
     @Override
-    public @Nullable ServletRequestInfo getServletRequestInfo() {
+    public ServletRequestInfo getServletRequestInfo() {
         return servletRequestInfo;
     }
 
     @Override
-    public void setServletRequestInfo(@Nullable ServletRequestInfo servletRequestInfo) {
+    public void setServletRequestInfo(ServletRequestInfo servletRequestInfo) {
         this.servletRequestInfo = servletRequestInfo;
     }
 
@@ -1054,7 +1053,7 @@ public class ThreadContextImpl implements ThreadContextPlus {
         return parentTraceEntry != null;
     }
 
-    private void addErrorEntryInternal(@Nullable String message, @Nullable Throwable t) {
+    private void addErrorEntryInternal(String message, Throwable t) {
         // use higher entry limit when adding errors, but still need some kind of cap
         if (transaction.allowAnotherErrorEntry()) {
             long currTick = ticker.read();
@@ -1073,7 +1072,7 @@ public class ThreadContextImpl implements ThreadContextPlus {
         return currentTimer.startNestedTimer(timerName, startTick);
     }
 
-    private @Nullable Object getParentThreadContextDisplay() {
+    private Object getParentThreadContextDisplay() {
         if (parentTraceEntry == null) {
             return null;
         } else {
@@ -1102,19 +1101,19 @@ public class ThreadContextImpl implements ThreadContextPlus {
     private class DummyTraceEntryOrQuery extends QueryEntryBase implements AsyncQueryEntry, Timer {
 
         private final TimerImpl syncTimer;
-        private final @Nullable AsyncTimer asyncTimer;
+        private final AsyncTimer asyncTimer;
         private final long startTick;
         private final Object messageSupplier;
 
         // not volatile, so depends on memory barrier in Transaction for visibility
         private int selfNestingLevel;
         // only used by transaction thread
-        private @Nullable TimerImpl extendedTimer;
+        private TimerImpl extendedTimer;
 
         private boolean initialComplete;
 
-        public DummyTraceEntryOrQuery(TimerImpl syncTimer, @Nullable AsyncTimer asyncTimer,
-                long startTick, Object messageSupplier, @Nullable QueryData queryData,
+        public DummyTraceEntryOrQuery(TimerImpl syncTimer, AsyncTimer asyncTimer,
+                long startTick, Object messageSupplier, QueryData queryData,
                 long queryExecutionCount) {
             super(queryData, startTick, queryExecutionCount);
             this.syncTimer = syncTimer;
@@ -1143,12 +1142,12 @@ public class ThreadContextImpl implements ThreadContextPlus {
         }
 
         @Override
-        public void endWithError(@Nullable String message) {
+        public void endWithError(String message) {
             endWithErrorInternal(message, null);
         }
 
         @Override
-        public void endWithError(@Nullable String message, Throwable t) {
+        public void endWithError(String message, Throwable t) {
             endWithErrorInternal(message, t);
         }
 
@@ -1157,7 +1156,7 @@ public class ThreadContextImpl implements ThreadContextPlus {
             endInternal(ticker.read());
         }
 
-        private void endWithErrorInternal(@Nullable String message, @Nullable Throwable t) {
+        private void endWithErrorInternal(String message, Throwable t) {
             if (initialComplete) {
                 // this guards against end*() being called multiple times on async trace entries
                 return;
@@ -1210,7 +1209,6 @@ public class ThreadContextImpl implements ThreadContextPlus {
             extendQueryData(currTick);
         }
 
-        @RequiresNonNull("asyncTimer")
         private void extendAsync() {
             ThreadContextThreadLocal.Holder holder =
                     BytecodeServiceHolder.get().getCurrentThreadContextHolder();
@@ -1247,7 +1245,6 @@ public class ThreadContextImpl implements ThreadContextPlus {
             endQueryData(endTick);
         }
 
-        @RequiresNonNull("asyncTimer")
         private void stopAsync() {
             long endTick = ticker.read();
             if (extendedTimer == null) {
@@ -1281,7 +1278,6 @@ public class ThreadContextImpl implements ThreadContextPlus {
             return syncTimer.extend(checkNotNull(getCurrentTimer()));
         }
 
-        @EnsuresNonNullIf(expression = "asyncTimer", result = true)
         private boolean isAsync() {
             return asyncTimer != null;
         }

@@ -24,7 +24,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SQLExceptionTest {
 
-    @Test
     public void testNextException() {
         Throwable t1 = new Throwable();
         Throwable t2 = new Throwable();
@@ -36,7 +35,6 @@ public class SQLExceptionTest {
         assertThat((Exception) e2.getNextException()).isNull();
     }
 
-    @Test
     public void testIterator() {
         Throwable t1 = new Throwable();
         Throwable t2 = new Throwable();
@@ -51,7 +49,6 @@ public class SQLExceptionTest {
         assertThat(list.get(3)).isEqualTo(t2);
     }
 
-    @Test
     public void testIteratorWithCauseOnlyOnFirst() {
         Throwable t1 = new Throwable();
         SQLException e1 = new SQLException(t1);
@@ -64,7 +61,6 @@ public class SQLExceptionTest {
         assertThat(list.get(2)).isEqualTo(e2);
     }
 
-    @Test
     public void testIteratorWithCauseOnlyOnSecond() {
         Throwable t2 = new Throwable();
         SQLException e1 = new SQLException();
@@ -77,7 +73,6 @@ public class SQLExceptionTest {
         assertThat(list.get(2)).isEqualTo(t2);
     }
 
-    @Test
     public void testIteratorWithNoCause() {
         SQLException e1 = new SQLException();
         SQLException e2 = new SQLException();
@@ -88,7 +83,6 @@ public class SQLExceptionTest {
         assertThat(list.get(1)).isEqualTo(e2);
     }
 
-    @Test
     public void testCallSetNextExceptionMultipleTimesOnSameSQLException() {
         Throwable t1 = new Throwable();
         Throwable t2 = new Throwable();

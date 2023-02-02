@@ -43,23 +43,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(KafkaExtension.class)
 public class KafkaPluginIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() {
         container = KafkaExtension.getContainer();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Disabled("TODO: not passing on CI, not sure why")
-    @Test
     public void shouldSend() throws Exception {
         Trace trace = container.execute(SendRecord.class);
         List<Trace.Timer> nestedTimers =
@@ -68,8 +63,6 @@ public class KafkaPluginIT {
         assertThat(nestedTimers.get(0).getName()).isEqualTo("kafka send");
     }
 
-    @Disabled("TODO: not passing on CI, not sure why")
-    @Test
     public void shouldPoll() throws Exception {
         Trace trace = container.execute(PollRecord.class);
         List<Trace.Timer> nestedTimers =

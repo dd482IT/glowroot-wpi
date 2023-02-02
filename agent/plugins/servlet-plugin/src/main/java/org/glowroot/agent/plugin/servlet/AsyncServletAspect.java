@@ -31,11 +31,8 @@ public class AsyncServletAspect {
 
     static final String GLOWROOT_AUX_CONTEXT_REQUEST_ATTRIBUTE = "glowroot$auxContext";
 
-    @Pointcut(className = "javax.servlet.ServletRequest", methodName = "startAsync",
-            methodParameterTypes = {".."})
     public static class StartAsyncAdvice {
-        @OnReturn
-        public static void onReturn(@BindReturn AsyncContext asyncContext,
+        public static void onReturn(AsyncContext asyncContext,
                 final ThreadContext context) {
             context.setTransactionAsync();
             asyncContext.addListener(new AsyncListener() {
@@ -75,23 +72,17 @@ public class AsyncServletAspect {
     // setTransactinAsyncComplete() first from the auxiliary thread, the transaction will wait to
     // complete until the auxiliary thread completes, and won't leave behind "this auxiliary thread
     // was still running when the transaction ended" trace entry
-    @Pointcut(className = "javax.servlet.AsyncContext", methodName = "complete",
-            methodParameterTypes = {})
     public static class CompleteAdvice {
         // using @OnBefore instead of @OnReturn since it is during complete() that AsyncEvent is
         // fired, and want the setTransactionAsyncComplete() in this (auxiliary) thread to win
-        @OnBefore
         public static void onBefore(ThreadContext context) {
             context.setTransactionAsyncComplete();
         }
     }
 
-    @Pointcut(className = "javax.servlet.AsyncContext", methodName = "dispatch",
-            methodParameterTypes = {".."}, nestingGroup = "servlet-dispatch")
     public static class DispatchAdvice {
-        @OnBefore
         public static void onBefore(ThreadContext context,
-                @BindReceiver AsyncContext asyncContext) {
+                AsyncContext asyncContext) {
             ServletRequest request = asyncContext.getRequest();
             if (request == null) {
                 return;

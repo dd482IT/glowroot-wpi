@@ -55,7 +55,7 @@ class LdapAuthentication {
     // AdminJsonService.testLdapConnection() without possibility of throwing
     // org.glowroot.common.repo.util.LazySecretKey.SymmetricEncryptionKeyMissingException
     static Set<String> authenticateAndGetLdapGroupDns(String username, String password,
-            LdapConfig ldapConfig, @Nullable String passwordOverride, LazySecretKey lazySecretKey)
+            LdapConfig ldapConfig, String passwordOverride, LazySecretKey lazySecretKey)
             throws Exception {
         String systemUsername = ldapConfig.username();
         String systemPassword = getPassword(ldapConfig, passwordOverride, lazySecretKey);
@@ -82,7 +82,6 @@ class LdapAuthentication {
         }
     }
 
-    @Instrumentation.TraceEntry(message = "create ldap context", timer = "ldap")
     private static LdapContext createLdapContext(String username, String password,
             LdapConfig ldapConfig) throws NamingException {
         Hashtable<String, Object> env = new Hashtable<String, Object>();
@@ -94,7 +93,7 @@ class LdapAuthentication {
         return new InitialLdapContext(env, null);
     }
 
-    private static String getPassword(LdapConfig ldapConfig, @Nullable String passwordOverride,
+    private static String getPassword(LdapConfig ldapConfig, String passwordOverride,
             LazySecretKey lazySecretKey) throws Exception {
         if (passwordOverride != null) {
             return passwordOverride;
@@ -106,8 +105,7 @@ class LdapAuthentication {
         return Encryption.decrypt(password, lazySecretKey);
     }
 
-    @Instrumentation.TraceEntry(message = "get ldap user DN for username: {{1}}", timer = "ldap")
-    private static @Nullable String getUserDn(LdapContext ldapContext, String username,
+    private static String getUserDn(LdapContext ldapContext, String username,
             LdapConfig ldapConfig) throws NamingException {
         SearchControls searchCtls = new SearchControls();
         searchCtls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -128,7 +126,6 @@ class LdapAuthentication {
         }
     }
 
-    @Instrumentation.TraceEntry(message = "get ldap group DNs for user DN: {{1}}", timer = "ldap")
     private static Set<String> getGroupDnsForUserDn(LdapContext ldapContext, String userDn,
             LdapConfig ldapConfig) throws NamingException {
         SearchControls searchCtls = new SearchControls();
@@ -147,7 +144,6 @@ class LdapAuthentication {
         }
     }
 
-    @Value.Immutable
     interface AuthenticationResult {
         String userDn();
         Set<String> ldapGroupDns();
@@ -164,7 +160,7 @@ class LdapAuthentication {
             super(cause);
         }
 
-        private AuthenticationException(String message, @Nullable Throwable cause) {
+        private AuthenticationException(String message, Throwable cause) {
             super(message, cause);
         }
     }

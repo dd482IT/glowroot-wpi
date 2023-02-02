@@ -39,22 +39,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(CassandraExtension.class)
 public class CassandraSyncIT {
 
     private static Container container;
 
-    @BeforeAll
     static void setUp() throws Exception {
         container = CassandraExtension.getContainer();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldExecuteStatement() throws Exception {
         // when
         Trace trace = container.execute(ExecuteStatement.class);
@@ -85,7 +81,6 @@ public class CassandraSyncIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldExecuteStatementReturningNoRecords() throws Exception {
         // when
         Trace trace = container.execute(ExecuteStatementReturningNoRecords.class);
@@ -117,7 +112,6 @@ public class CassandraSyncIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldExecuteStatementReturningNoRecordsCheckIsExhausted() throws Exception {
         // when
         Trace trace = container.execute(ExecuteStatementReturningNoRecordsCheckIsExhausted.class);
@@ -149,7 +143,6 @@ public class CassandraSyncIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldIterateUsingOneAndAll() throws Exception {
         // when
         Trace trace = container.execute(IterateUsingOneAndAll.class);
@@ -180,7 +173,6 @@ public class CassandraSyncIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldExecuteBoundStatement() throws Exception {
         // when
         Trace trace = container.execute(ExecuteBoundStatement.class);
@@ -212,7 +204,6 @@ public class CassandraSyncIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldExecuteBatchStatement() throws Exception {
         // when
         Trace trace = container.execute(ExecuteBatchStatement.class);

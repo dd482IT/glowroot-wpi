@@ -23,7 +23,6 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public interface LockSet<K extends /*@NonNull*/ Serializable> {
 
-    @Nullable
     UUID lock(K key);
 
     void unlock(K key, UUID lockToken);
@@ -37,7 +36,7 @@ public interface LockSet<K extends /*@NonNull*/ Serializable> {
         }
 
         @Override
-        public @Nullable UUID lock(K key) {
+        public UUID lock(K key) {
             UUID lockToken = UUID.randomUUID();
             if (map.putIfAbsent(key, lockToken) == null) {
                 return lockToken;

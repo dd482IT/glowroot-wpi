@@ -22,7 +22,6 @@ import org.immutables.value.Value;
 import org.glowroot.wire.api.model.AgentConfigOuterClass.AgentConfig;
 import org.glowroot.wire.api.model.AgentConfigOuterClass.AgentConfig.SyntheticMonitorConfig.SyntheticMonitorKind;
 
-@Value.Immutable
 public abstract class SyntheticMonitorConfig {
 
     public abstract String id();
@@ -30,24 +29,18 @@ public abstract class SyntheticMonitorConfig {
     public abstract SyntheticMonitorKind kind();
 
     // optional for type ping, required for type java
-    @Value.Default
-    @JsonInclude(Include.NON_EMPTY)
     public String display() {
         return "";
     }
 
     // === ping synthetic monitors ===
 
-    @Value.Default
-    @JsonInclude(Include.NON_EMPTY)
     public String pingUrl() {
         return "";
     }
 
     // === java synthetic monitors ===
 
-    @Value.Default
-    @JsonInclude(Include.NON_EMPTY)
     public String javaSource() {
         return "";
     }

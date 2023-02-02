@@ -65,10 +65,9 @@ public class DataSource {
             Integer.getInteger("glowroot.internal.h2.queryTimeout", 60);
 
     // null means use memDb
-    private final @Nullable File dbFile;
+    private final File dbFile;
     private final Thread shutdownHookThread;
     private final Object lock = new Object();
-    @GuardedBy("lock")
     private JdbcConnection connection;
     private volatile boolean closed;
 
@@ -232,7 +231,7 @@ public class DataSource {
         }
     }
 
-    public @Nullable Long queryForOptionalLong(final @Untainted String sql, Object... args)
+    public Long queryForOptionalLong(final @Untainted String sql, Object... args)
             throws SQLException {
         debug(sql, args);
         synchronized (lock) {
@@ -242,7 +241,7 @@ public class DataSource {
             checkConnectionUnderLock();
             return queryUnderLock(sql, args, new ResultSetExtractor</*@Nullable*/ Long>() {
                 @Override
-                public @Nullable Long extractData(ResultSet resultSet) throws SQLException {
+                public Long extractData(ResultSet resultSet) throws SQLException {
                     if (!resultSet.next()) {
                         return null;
                     }
@@ -333,7 +332,7 @@ public class DataSource {
         }
     }
 
-    public int update(final @Untainted String sql, final @Nullable Object... args)
+    public int update(final @Untainted String sql, final Object... args)
             throws SQLException {
         return update(new JdbcUpdate() {
             @Override
@@ -505,7 +504,6 @@ public class DataSource {
         }
     }
 
-    @OnlyUsedByTests
     public void close() throws SQLException {
         synchronized (lock) {
             if (closed) {
@@ -517,7 +515,6 @@ public class DataSource {
         Runtime.getRuntime().removeShutdownHook(shutdownHookThread);
     }
 
-    @GuardedBy("lock")
     private void checkConnectionUnderLock() throws SQLException {
         if (connection.getPowerOffCount() == -1) {
             // connection was closed internally due to OutOfMemoryError
@@ -526,7 +523,6 @@ public class DataSource {
         }
     }
 
-    @GuardedBy("lock")
     private PreparedStatement prepareStatementUnderLock(@Untainted String sql,
             int queryTimeoutSeconds) throws SQLException {
         try {
@@ -548,7 +544,6 @@ public class DataSource {
         }
     }
 
-    @GuardedBy("lock")
     private <T extends /*@Nullable*/ Object> T queryUnderLock(@Untainted String sql, Object[] args,
             ResultSetExtractor<T> rse) throws SQLException {
         PreparedStatement preparedStatement = prepareStatementUnderLock(sql, QUERY_TIMEOUT_SECONDS);
@@ -580,7 +575,6 @@ public class DataSource {
         return tables;
     }
 
-    @GuardedBy("lock")
     private List</*@Untainted*/ String> getAllTableNames() throws SQLException {
         synchronized (lock) {
             if (closed) {
@@ -607,7 +601,7 @@ public class DataSource {
         }
     }
 
-    private static JdbcConnection createConnection(@Nullable File dbFile) throws SQLException {
+    private static JdbcConnection createConnection(File dbFile) throws SQLException {
         if (dbFile == null) {
             // db_close_on_exit=false since jvm shutdown hook is handled by DataSource
             return new JdbcConnection("jdbc:h2:mem:;compress=true;db_close_on_exit=false",
@@ -637,12 +631,11 @@ public class DataSource {
         }
     }
 
-    private static void debug(String sql, @Nullable Object... args) {
+    private static void debug(String sql, Object... args) {
         debug(logger, sql, args);
     }
 
-    @VisibleForTesting
-    static void debug(Logger logger, String sql, @Nullable Object... args) {
+    static void debug(Logger logger, String sql, Object... args) {
         if (!logger.isDebugEnabled()) {
             return;
         }

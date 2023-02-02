@@ -25,19 +25,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-@Entity
 @SuppressWarnings("serial")
 public class Employee implements Serializable {
 
-    @Id
-    @Column
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column
     private String name;
 
-    @ManyToOne(cascade = CascadeType.ALL)
     private Email email;
 
     public Employee(String name) {

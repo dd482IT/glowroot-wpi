@@ -24,7 +24,6 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.immutables.value.Value;
 import org.objectweb.asm.Type;
 
-@Value.Immutable
 abstract class AnalyzedMethod {
 
     abstract String name();
@@ -34,7 +33,7 @@ abstract class AnalyzedMethod {
     abstract int modifiers();
 
     // this is only used for the rare case of WeavingClassVisitor.overrideAndWeaveInheritedMethod()
-    abstract @Nullable String signature();
+    abstract String signature();
     // this is only used for the rare case of WeavingClassVisitor.overrideAndWeaveInheritedMethod()
     abstract ImmutableList<String> exceptions();
 
@@ -78,7 +77,6 @@ abstract class AnalyzedMethod {
     }
 
     // this is only used for the rare case of WeavingClassVisitor.overrideAndWeaveInheritedMethod()
-    @VisibleForTesting
     static Type getType(String type) {
         if (type.equals(Void.TYPE.getName())) {
             return Type.VOID_TYPE;

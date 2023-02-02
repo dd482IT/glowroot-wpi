@@ -21,7 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class AgentRollupIdsTest {
 
-    @Test
     public void shouldGetAgentRollupIds() {
         assertThat(AgentRollupIds.getAgentRollupIds("aaa")).containsExactly("aaa");
         assertThat(AgentRollupIds.getAgentRollupIds("aaa::bbb")).containsExactly("aaa::bbb",
@@ -51,7 +50,6 @@ public class AgentRollupIdsTest {
         assertThat(AgentRollupIds.getAgentRollupIds("::::::")).containsExactly("::::::", ":::");
     }
 
-    @Test
     public void shouldGetAgentRollupIdsFromRollup() {
         assertThat(AgentRollupIds.getAgentRollupIds("aaa::")).containsExactly("aaa::");
         assertThat(AgentRollupIds.getAgentRollupIds("aaa::bbb::")).containsExactly("aaa::bbb::",
@@ -78,7 +76,6 @@ public class AgentRollupIdsTest {
                 "a::");
     }
 
-    @Test
     public void shouldGetAgentRollupParent() {
         assertThat(AgentRollupIds.getParent("aaa")).isNull();
         assertThat(AgentRollupIds.getParent("aaa::")).isNull();

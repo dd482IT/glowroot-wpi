@@ -45,22 +45,18 @@ public class ResponseHeaderIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void testStandardResponseHeaders() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureResponseHeaders",
@@ -77,7 +73,6 @@ public class ResponseHeaderIT {
         assertThat(responseHeaders.get("Extra")).isNull();
     }
 
-    @Test
     public void testStandardResponseHeadersUsingSetHeader() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureResponseHeaders",
@@ -94,7 +89,6 @@ public class ResponseHeaderIT {
         assertThat(responseHeaders.get("Extra")).isNull();
     }
 
-    @Test
     public void testStandardResponseHeadersUsingAddHeader() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureResponseHeaders",
@@ -111,7 +105,6 @@ public class ResponseHeaderIT {
         assertThat(responseHeaders.get("Extra")).isNull();
     }
 
-    @Test
     public void testStandardResponseHeadersLowercase() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureResponseHeaders",
@@ -127,7 +120,6 @@ public class ResponseHeaderIT {
         assertThat(responseHeaders.get("extra")).isNull();
     }
 
-    @Test
     public void testWithoutAnyHeaderCapture() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureResponseHeaders",
@@ -138,7 +130,6 @@ public class ResponseHeaderIT {
         assertThat(getResponseHeaders(trace)).isNull();
     }
 
-    @Test
     public void testWithoutAnyInterestingHeaderCapture() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureResponseHeaders",
@@ -149,7 +140,6 @@ public class ResponseHeaderIT {
         assertThat(getResponseHeaders(trace)).isNull();
     }
 
-    @Test
     public void testWithoutAnyHeaderCaptureUsingSetHeader() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureResponseHeaders",
@@ -160,7 +150,6 @@ public class ResponseHeaderIT {
         assertThat(getResponseHeaders(trace)).isNull();
     }
 
-    @Test
     public void testWithoutAnyHeaderCaptureUsingAddHeader() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureResponseHeaders",
@@ -171,7 +160,6 @@ public class ResponseHeaderIT {
         assertThat(getResponseHeaders(trace)).isNull();
     }
 
-    @Test
     public void testLotsOfResponseHeaders() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureResponseHeaders",
@@ -204,7 +192,6 @@ public class ResponseHeaderIT {
         assertThat(xOne).containsExactly("xy", "Fri, 28 Feb 2014 02:06:56 GMT", "6");
     }
 
-    @Test
     public void testOutsideServlet() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureResponseHeaders",

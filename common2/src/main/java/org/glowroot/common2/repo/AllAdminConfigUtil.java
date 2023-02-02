@@ -52,7 +52,7 @@ public class AllAdminConfigUtil {
         ((ObjectNode) checkNotNull(rootNode.get("ldap"))).remove("encryptedPassword");
     }
 
-    private static void updateEncryptedPassword(@Nullable ObjectNode objectNode,
+    private static void updateEncryptedPassword(ObjectNode objectNode,
             String existingEncryptedPassword, LazySecretKey lazySecretKey) throws Exception {
         if (objectNode == null) {
             return;

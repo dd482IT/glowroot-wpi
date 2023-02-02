@@ -45,45 +45,35 @@ import org.glowroot.common.util.Versions;
 import org.glowroot.wire.api.model.AgentConfigOuterClass.AgentConfig;
 import org.glowroot.wire.api.model.AgentConfigOuterClass.AgentConfig.PluginProperty;
 
-@Value.Immutable
 abstract class AllConfigDto {
 
-    @Value.Default
     ImmutableTransactionConfig transactions() {
         return ImmutableTransactionConfig.builder().build();
     }
 
-    @Value.Default
     ImmutableJvmConfig jvm() {
         return ImmutableJvmConfig.builder().build();
     }
 
-    @Value.Default
     ImmutableUiDefaultsConfig uiDefaults() {
         return ImmutableUiDefaultsConfig.builder().build();
     }
 
-    @Value.Default
     ImmutableAdvancedConfig advanced() {
         return ImmutableAdvancedConfig.builder().build();
     }
 
-    @JsonInclude(Include.NON_EMPTY)
     abstract List<ImmutableGaugeConfig> gauges();
 
-    @JsonInclude(Include.NON_EMPTY)
     abstract List<ImmutableSyntheticMonitorConfig> syntheticMonitors();
 
-    @JsonInclude(Include.NON_EMPTY)
     abstract List<ImmutableAlertConfig> alerts();
 
-    @JsonInclude(Include.NON_EMPTY)
     abstract List<ImmutablePluginConfig> plugins();
 
-    @JsonInclude(Include.NON_EMPTY)
     abstract List<ImmutableInstrumentationConfig> instrumentation();
 
-    abstract @Nullable String version();
+    abstract String version();
 
     AgentConfig toProto() {
         AgentConfig.Builder builder = AgentConfig.newBuilder()
@@ -138,7 +128,6 @@ abstract class AllConfigDto {
                 .build();
     }
 
-    @Value.Immutable
     abstract static class PluginConfig {
 
         abstract String id();

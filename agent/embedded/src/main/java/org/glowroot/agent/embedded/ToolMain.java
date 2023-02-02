@@ -44,7 +44,7 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 public class ToolMain {
 
     // need to wait to init logger until
-    private static volatile @MonotonicNonNull Logger startupLogger;
+    private static volatile Logger startupLogger;
 
     private ToolMain() {}
 
@@ -102,8 +102,7 @@ public class ToolMain {
         startupLogger.error("unexpected args: \"{}\"", Joiner.on("\", \"").join(args));
     }
 
-    @VisibleForTesting
-    static @Nullable File getGlowrootJarFile(@Nullable CodeSource codeSource)
+    static File getGlowrootJarFile(CodeSource codeSource)
             throws URISyntaxException {
         if (codeSource == null) {
             return null;
@@ -132,7 +131,6 @@ public class ToolMain {
                 "sa", "-sql", sql);
     }
 
-    @RequiresNonNull("startupLogger")
     private static void recreate(File dataDir) throws Exception {
         File backupFile = new File(dataDir, "backup.sql");
         if (backupFile.exists() && !backupFile.delete()) {
@@ -164,7 +162,6 @@ public class ToolMain {
         }
     }
 
-    @RequiresNonNull("startupLogger")
     private static void recover(File dataDir) throws Exception {
         File recoverFile = new File(dataDir, "data.h2.sql");
         if (recoverFile.exists() && !recoverFile.delete()) {
@@ -195,7 +192,6 @@ public class ToolMain {
         }
     }
 
-    @RequiresNonNull("startupLogger")
     private static void maskCentralData(File dataDir) throws Exception {
         File maskScriptFile = File.createTempFile("mask-central-data", ".sql");
         PrintWriter out = new PrintWriter(Files.newWriter(maskScriptFile, UTF_8));

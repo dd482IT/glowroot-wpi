@@ -58,7 +58,7 @@ public class EnvironmentDao implements EnvironmentRepository {
     }
 
     @Override
-    public @Nullable Environment read(String agentId) throws Exception {
+    public Environment read(String agentId) throws Exception {
         return dataSource.queryAtMostOne(new EnvironmentRowMapper());
     }
 

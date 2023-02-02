@@ -38,15 +38,14 @@ class LazySecretKeyImpl implements LazySecretKey {
 
     private final Object lock = new Object();
 
-    @GuardedBy("lock")
-    private @MonotonicNonNull SecretKey secretKey;
+    private SecretKey secretKey;
 
     LazySecretKeyImpl(List<File> confDirs) {
         this.confDirs = confDirs;
     }
 
     @Override
-    public @Nullable SecretKey getExisting() throws Exception {
+    public SecretKey getExisting() throws Exception {
         synchronized (lock) {
             if (secretKey == null) {
                 File secretFile = getSecretFile(confDirs);
@@ -75,7 +74,7 @@ class LazySecretKeyImpl implements LazySecretKey {
         }
     }
 
-    private static @Nullable File getSecretFile(List<File> confDirs) {
+    private static File getSecretFile(List<File> confDirs) {
         for (File confDir : confDirs) {
             File secretFile = new File(confDir, SECRET_FILE_NAME);
             if (secretFile.exists()) {

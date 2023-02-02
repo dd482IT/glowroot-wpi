@@ -40,23 +40,18 @@ public class Http2IT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Disabled
-    @Test
     public void shouldCaptureHttp2Get() throws Exception {
         // when
         Trace trace = container.execute(ExecuteHttp2Get.class);

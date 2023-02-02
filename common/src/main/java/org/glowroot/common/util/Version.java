@@ -46,7 +46,7 @@ public class Version {
         return getVersion(manifest);
     }
 
-    public static String getVersion(@Nullable URL manifestURL) {
+    public static String getVersion(URL manifestURL) {
         Manifest manifest;
         try {
             manifest = getManifest(manifestURL);
@@ -57,8 +57,7 @@ public class Version {
         return getVersion(manifest);
     }
 
-    @VisibleForTesting
-    static @Nullable Manifest getManifest(Class<?> clazz) throws IOException {
+    static Manifest getManifest(Class<?> clazz) throws IOException {
         URL classURL = clazz.getResource(clazz.getSimpleName() + ".class");
         if (classURL == null) {
             logger.warn("url for class is unexpectedly null: {}", clazz);
@@ -73,7 +72,7 @@ public class Version {
         return getManifest(manifestURL);
     }
 
-    private static @Nullable Manifest getManifest(@Nullable URL url) throws IOException {
+    private static Manifest getManifest(URL url) throws IOException {
         if (url == null) {
             return null;
         }
@@ -89,8 +88,7 @@ public class Version {
         }
     }
 
-    @VisibleForTesting
-    static String getVersion(@Nullable Manifest manifest) {
+    static String getVersion(Manifest manifest) {
         if (manifest == null) {
             // manifest is missing when running ui testing and integration tests from inside IDE
             // so only log this at debug level

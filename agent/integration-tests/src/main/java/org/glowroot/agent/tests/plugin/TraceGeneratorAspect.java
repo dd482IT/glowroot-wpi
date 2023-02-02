@@ -31,16 +31,13 @@ import org.glowroot.agent.plugin.api.weaving.Pointcut;
 
 public class TraceGeneratorAspect {
 
-    @Pointcut(className = "org.glowroot.agent.tests.app.TraceGenerator", methodName = "call",
-            methodParameterTypes = {"boolean"}, timerName = "trace generator")
     public static class LevelOneAdvice {
 
         private static final TimerName timerName = Agent.getTimerName(LevelOneAdvice.class);
 
-        @OnBefore
         public static TraceEntry onBefore(OptionalThreadContext context,
-                @BindReceiver Object traceGenerator,
-                @BindClassMeta TraceGeneratorInvoker traceGeneratorInvoker) {
+                Object traceGenerator,
+                TraceGeneratorInvoker traceGeneratorInvoker) {
             String transactionType = traceGeneratorInvoker.transactionType(traceGenerator);
             String transactionName = traceGeneratorInvoker.transactionName(traceGenerator);
             String headline = traceGeneratorInvoker.headline(traceGenerator);
@@ -60,8 +57,7 @@ public class TraceGeneratorAspect {
             return traceEntry;
         }
 
-        @OnAfter
-        public static void onAfter(@BindTraveler TraceEntry traceEntry) {
+        public static void onAfter(TraceEntry traceEntry) {
             traceEntry.end();
         }
     }

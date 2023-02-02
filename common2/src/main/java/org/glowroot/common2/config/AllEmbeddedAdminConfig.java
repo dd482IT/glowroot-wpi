@@ -22,7 +22,6 @@ import org.immutables.value.Value;
 
 import org.glowroot.common.util.Versions;
 
-@Value.Immutable
 public abstract class AllEmbeddedAdminConfig {
 
     public abstract EmbeddedAdminGeneralConfig general();
@@ -37,8 +36,6 @@ public abstract class AllEmbeddedAdminConfig {
     public abstract SlackConfig slack();
     public abstract HealthchecksIoConfig healthchecksIo();
 
-    @Value.Derived
-    @JsonIgnore
     public String version() {
         return Versions.getJsonVersion(this);
     }

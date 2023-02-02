@@ -32,33 +32,25 @@ import org.glowroot.agent.plugin.api.weaving.Shim;
 // this covers Tomcat, TomEE, Glassfish, JBoss EAP
 public class CatalinaAppStartupAspect {
 
-    @Shim("org.apache.catalina.core.StandardContext")
     public interface StandardContextShim {
-        @Nullable
         String getPath();
     }
 
     // startInternal is needed for Tomcat 7+ which moved the start() method up into a new super
     // class, org.apache.catalina.util.LifecycleBase, but this new start() method delegates to
     // abstract method startInternal() which does all of the real work
-    @Pointcut(className = "org.apache.catalina.core.StandardContext",
-            methodName = "start|startInternal", methodParameterTypes = {},
-            nestingGroup = "servlet-startup", timerName = "startup")
     public static class StartAdvice {
         private static final TimerName timerName = Agent.getTimerName(StartAdvice.class);
-        @OnBefore
         public static TraceEntry onBefore(OptionalThreadContext context,
-                @BindReceiver StandardContextShim standardContext) {
+                StandardContextShim standardContext) {
             String path = standardContext.getPath();
             return ContainerStartup.onBeforeCommon(context, path, timerName);
         }
-        @OnReturn
-        public static void onReturn(@BindTraveler TraceEntry traceEntry) {
+        public static void onReturn(TraceEntry traceEntry) {
             traceEntry.end();
         }
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler TraceEntry traceEntry) {
+        public static void onThrow(Throwable t,
+                TraceEntry traceEntry) {
             traceEntry.endWithError(t);
         }
     }

@@ -42,7 +42,6 @@ import org.glowroot.wire.api.model.AgentConfigOuterClass.AgentConfig.AlertConfig
 
 import static java.util.concurrent.TimeUnit.DAYS;
 
-@JsonService
 class IncidentJsonService {
 
     private static final String EMBEDDED_AGENT_ID = "";
@@ -53,12 +52,12 @@ class IncidentJsonService {
     private final IncidentRepository incidentRepository;
     private final AgentDisplayRepository agentDisplayRepository;
     private final ConfigRepository configRepository;
-    private final @Nullable SyntheticResultRepository syntheticResultRepository;
+    private final SyntheticResultRepository syntheticResultRepository;
     private final Clock clock;
 
     IncidentJsonService(boolean central, IncidentRepository incidentRepository,
             AgentDisplayRepository agentDisplayRepository, ConfigRepository configRepository,
-            @Nullable SyntheticResultRepository syntheticResultRepository, Clock clock) {
+            SyntheticResultRepository syntheticResultRepository, Clock clock) {
         this.central = central;
         this.incidentRepository = incidentRepository;
         this.agentDisplayRepository = agentDisplayRepository;
@@ -67,8 +66,7 @@ class IncidentJsonService {
         this.clock = clock;
     }
 
-    @GET(path = "/backend/incidents", permission = "")
-    String getIncidents(@BindAuthentication Authentication authentication) throws Exception {
+    String getIncidents(Authentication authentication) throws Exception {
         if (!central && !authentication.isPermitted(EMBEDDED_AGENT_ID, "agent:incident")) {
             throw new JsonServiceException(HttpResponseStatus.FORBIDDEN);
         }
@@ -173,12 +171,10 @@ class IncidentJsonService {
         }
     }
 
-    @Value.Immutable
     interface DisplayedIncident {
         String agentRollupDisplay();
         long openTime();
         long durationMillis();
-        @Nullable
         Long resolveTime();
         String severity();
         String display();
@@ -186,25 +182,17 @@ class IncidentJsonService {
         String agentRollupId();
         String conditionType();
         // metric fields
-        @Nullable
         String metric();
-        @Nullable
         String transactionType();
-        @Nullable
         String transactionName();
-        @Nullable
         Double percentile();
         // synthetic monitor fields
-        @Nullable
         String syntheticMonitorId();
-        @Nullable
         Integer thresholdMillis();
         // common to metric and heartbeat
-        @Nullable
         Integer timePeriodSeconds();
     }
 
-    @Value.Immutable
     interface IncidentResponse {
         List<DisplayedIncident> openIncidents();
         List<DisplayedIncident> resolvedIncidents();

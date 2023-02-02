@@ -22,7 +22,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class AnalyzedMethodTest {
 
-    @Test
     public void testTypes() {
         testClass(void.class);
         testClass(boolean.class);

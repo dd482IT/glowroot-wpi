@@ -65,7 +65,7 @@ public class LiveWeavingServiceImpl implements LiveWeavingService {
     private static final Splitter splitter = Splitter.on(' ').omitEmptyStrings();
 
     private final AnalyzedWorld analyzedWorld;
-    private final @Nullable Instrumentation instrumentation;
+    private final Instrumentation instrumentation;
     private final ConfigService configService;
     private final AdviceCache adviceCache;
     private final boolean jvmRetransformClassesSupported;
@@ -82,7 +82,7 @@ public class LiveWeavingServiceImpl implements LiveWeavingService {
             });
 
     public LiveWeavingServiceImpl(AnalyzedWorld analyzedWorld,
-            @Nullable Instrumentation instrumentation, ConfigService configService,
+            Instrumentation instrumentation, ConfigService configService,
             AdviceCache adviceCache, boolean jvmRetransformClassesSupported) {
         this.analyzedWorld = analyzedWorld;
         this.instrumentation = instrumentation;
@@ -200,7 +200,6 @@ public class LiveWeavingServiceImpl implements LiveWeavingService {
         return classpathCache.getUnchecked(THE_SINGLE_KEY);
     }
 
-    @RequiresNonNull("instrumentation")
     private int reweaveInternal() throws Exception {
         List<InstrumentationConfig> configs = configService.getInstrumentationConfigs();
         adviceCache.updateAdvisors(configs);
@@ -306,7 +305,6 @@ public class LiveWeavingServiceImpl implements LiveWeavingService {
         }
     }
 
-    @VisibleForTesting
     static class UiAnalyzedMethodOrdering extends Ordering<UiAnalyzedMethod> {
 
         @Override
@@ -333,16 +331,15 @@ public class LiveWeavingServiceImpl implements LiveWeavingService {
         }
     }
 
-    @Value.Immutable
     public abstract static class PointcutClassName {
 
-        abstract @Nullable Pattern pattern();
-        abstract @Nullable String nonPattern();
-        abstract @Nullable PointcutClassName subTypeRestriction();
+        abstract Pattern pattern();
+        abstract String nonPattern();
+        abstract PointcutClassName subTypeRestriction();
         abstract boolean doNotMatchSubClasses();
 
         public static PointcutClassName fromMaybePattern(String maybePattern,
-                @Nullable PointcutClassName subTypeRestriction, boolean doNotMatchSubClasses) {
+                PointcutClassName subTypeRestriction, boolean doNotMatchSubClasses) {
             Pattern pattern = MaybePatterns.buildPattern(maybePattern);
             if (pattern == null) {
                 return fromNonPattern(maybePattern, subTypeRestriction, doNotMatchSubClasses);
@@ -352,7 +349,7 @@ public class LiveWeavingServiceImpl implements LiveWeavingService {
         }
 
         public static PointcutClassName fromPattern(Pattern pattern,
-                @Nullable PointcutClassName subTypeRestrictionPointcutClassName,
+                PointcutClassName subTypeRestrictionPointcutClassName,
                 boolean doNotMatchSubClasses) {
             return ImmutablePointcutClassName.builder()
                     .pattern(pattern)
@@ -363,7 +360,7 @@ public class LiveWeavingServiceImpl implements LiveWeavingService {
         }
 
         public static PointcutClassName fromNonPattern(String nonPattern,
-                @Nullable PointcutClassName subTypeRestrictionPointcutClassName,
+                PointcutClassName subTypeRestrictionPointcutClassName,
                 boolean doNotMatchSubClasses) {
             return ImmutablePointcutClassName.builder()
                     .pattern(null)

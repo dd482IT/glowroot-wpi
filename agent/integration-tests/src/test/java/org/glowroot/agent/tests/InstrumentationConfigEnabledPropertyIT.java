@@ -36,22 +36,18 @@ public class InstrumentationConfigEnabledPropertyIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldReadTracesWithEnabledFifthTimer() throws Exception {
         // given
         container.getConfigService().setPluginProperty("glowroot-integration-tests",
@@ -94,7 +90,6 @@ public class InstrumentationConfigEnabledPropertyIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldReadTracesWithEnabledFifthEntry() throws Exception {
         // given
         container.getConfigService().setPluginProperty("glowroot-integration-tests",

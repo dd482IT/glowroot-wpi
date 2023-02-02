@@ -31,7 +31,6 @@ public class TransactionRegistry {
     private final ThreadContextThreadLocal currentThreadContext =
             new ThreadContextThreadLocal();
 
-    @Nullable
     Transaction getCurrentTransaction() {
         ThreadContextImpl threadContext = (ThreadContextImpl) currentThreadContext.get();
         if (threadContext == null) {

@@ -25,7 +25,6 @@ import org.glowroot.central.Main;
 
 public class MiscToolIT {
 
-    @BeforeAll
     public static void setUp() throws Exception {
         SharedSetupRunListener.startCassandra();
         Cluster cluster = Clusters.newCluster();
@@ -37,24 +36,19 @@ public class MiscToolIT {
         Main.main(new String[] {"create-schema"});
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         System.clearProperty("glowroot.cassandra.keyspace");
         SharedSetupRunListener.stopCassandra();
     }
 
-    @Test
     public void runSetupAdminUser() throws Exception {
         Main.main(new String[] {"setup-admin-user", "me", "pw"});
     }
 
-    @Test
     public void runTruncateAllData() throws Exception {
         Main.main(new String[] {"truncate-all-data"});
     }
 
-    @Disabled("this requires range deletes which are only supported in Cassandra 3.x")
-    @Test
     public void runExecuteRangeDeletes() throws Exception {
 
         Main.main(new String[] {"execute-range-deletes", "query", "3"});

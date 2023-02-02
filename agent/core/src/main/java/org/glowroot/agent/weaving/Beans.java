@@ -69,11 +69,11 @@ public class Beans {
 
     private Beans() {}
 
-    public static @Nullable Object value(@Nullable Object obj, List<String> path) throws Exception {
+    public static Object value(Object obj, List<String> path) throws Exception {
         return value(obj, path, 0);
     }
 
-    private static @Nullable Object value(@Nullable Object obj, List<String> path, int currIndex)
+    private static Object value(Object obj, List<String> path, int currIndex)
             throws Exception {
         if (obj == null) {
             return null;
@@ -125,7 +125,7 @@ public class Beans {
         return accessor;
     }
 
-    static @Nullable Accessor loadPossiblyArrayBasedAccessor(Class<?> clazz, String name) {
+    static Accessor loadPossiblyArrayBasedAccessor(Class<?> clazz, String name) {
         if (clazz.getComponentType() != null && name.equals("length")) {
             return Accessor.arrayLength();
         }
@@ -136,7 +136,7 @@ public class Beans {
         return loadAccessor(componentType, name);
     }
 
-    private static @Nullable Accessor loadAccessor(Class<?> clazz, String name) {
+    private static Accessor loadAccessor(Class<?> clazz, String name) {
         String capitalizedName = Character.toUpperCase(name.charAt(0)) + name.substring(1);
         try {
             Method method = Reflections.getAnyMethod(clazz, "get" + capitalizedName);

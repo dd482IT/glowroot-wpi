@@ -64,9 +64,9 @@ public class WeavingClassFileTransformer implements ClassFileTransformer {
 
     // this method is called by the Java 9 transform method that passes in a Module
     // see Java9HackClassFileTransformer
-    public byte /*@Nullable*/ [] transformJava9(Object module, @Nullable ClassLoader loader,
-            @Nullable String className, @Nullable Class<?> classBeingRedefined,
-            @Nullable ProtectionDomain protectionDomain, byte[] bytes) {
+    public byte /*@Nullable*/ [] transformJava9(Object module, ClassLoader loader,
+            String className, Class<?> classBeingRedefined,
+            ProtectionDomain protectionDomain, byte[] bytes) {
         if (redefinedModules.add(module)) {
             try {
                 Java9.grantAccessToGlowroot(instrumentation, module);
@@ -82,8 +82,8 @@ public class WeavingClassFileTransformer implements ClassFileTransformer {
     //
     // so all exceptions must be caught and logged here or they will be lost
     @Override
-    public byte /*@Nullable*/ [] transform(@Nullable ClassLoader loader, @Nullable String className,
-            @Nullable Class<?> classBeingRedefined, @Nullable ProtectionDomain protectionDomain,
+    public byte /*@Nullable*/ [] transform(ClassLoader loader, String className,
+            Class<?> classBeingRedefined, ProtectionDomain protectionDomain,
             byte[] bytes) {
         // internal subclasses of MethodHandle are passed in with null className
         // (see integration test MethodHandleWeavingTest for more detail)
@@ -100,8 +100,8 @@ public class WeavingClassFileTransformer implements ClassFileTransformer {
         }
     }
 
-    private byte /*@Nullable*/ [] transformInternal(@Nullable ClassLoader loader, String className,
-            @Nullable Class<?> classBeingRedefined, @Nullable ProtectionDomain protectionDomain,
+    private byte /*@Nullable*/ [] transformInternal(ClassLoader loader, String className,
+            Class<?> classBeingRedefined, ProtectionDomain protectionDomain,
             byte[] bytes) {
         if (ignoreClass(className, loader)) {
             return null;
@@ -117,7 +117,7 @@ public class WeavingClassFileTransformer implements ClassFileTransformer {
         return weaver.weave(bytes, className, classBeingRedefined, codeSource, loader);
     }
 
-    private static boolean ignoreClass(String className, @Nullable ClassLoader loader) {
+    private static boolean ignoreClass(String className, ClassLoader loader) {
         if (!ALLOW_WEAVING_AGENT_CLASSES && isGlowrootAgentClass(className)) {
             // don't weave glowroot core classes, including shaded classes like h2 jdbc driver
             return true;

@@ -30,7 +30,7 @@ class AgentDirsLocking {
 
     private AgentDirsLocking() {}
 
-    static @Nullable Closeable tryLockAgentDirs(File tmpDir, boolean wait) throws Exception {
+    static Closeable tryLockAgentDirs(File tmpDir, boolean wait) throws Exception {
         NotGuava.mkdirs(tmpDir);
         File lockFile = new File(tmpDir, ".lock");
         touchLockFile(lockFile);

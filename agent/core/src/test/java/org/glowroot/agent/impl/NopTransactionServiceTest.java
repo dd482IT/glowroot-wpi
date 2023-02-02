@@ -25,7 +25,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class NopTransactionServiceTest {
 
-    @Test
     public void testNopTraceEntry() {
         NopTransactionService.TRACE_ENTRY.end();
         NopTransactionService.TRACE_ENTRY.endWithLocationStackTrace(0, MILLISECONDS);
@@ -36,7 +35,6 @@ public class NopTransactionServiceTest {
         assertThat(NopTransactionService.TRACE_ENTRY.getMessageSupplier()).isNull();
     }
 
-    @Test
     public void testNopQueryEntry() {
         assertThat(NopTransactionService.QUERY_ENTRY.extend()).isEqualTo(NopTimer.INSTANCE);
         NopTransactionService.QUERY_ENTRY.rowNavigationAttempted();
@@ -44,21 +42,18 @@ public class NopTransactionServiceTest {
         NopTransactionService.QUERY_ENTRY.setCurrRow(0);
     }
 
-    @Test
     public void testNopAsyncTraceEntry() {
         NopTransactionService.ASYNC_TRACE_ENTRY.stopSyncTimer();
         assertThat(NopTransactionService.ASYNC_TRACE_ENTRY.extendSyncTimer(null))
                 .isEqualTo(NopTimer.INSTANCE);
     }
 
-    @Test
     public void testNopAsyncQueryEntry() {
         NopTransactionService.ASYNC_QUERY_ENTRY.stopSyncTimer();
         assertThat(NopTransactionService.ASYNC_QUERY_ENTRY.extendSyncTimer(null))
                 .isEqualTo(NopTimer.INSTANCE);
     }
 
-    @Test
     public void testNopAuxThreadContext() {
         assertThat(NopAuxThreadContext.INSTANCE.start())
                 .isEqualTo(NopTransactionService.TRACE_ENTRY);

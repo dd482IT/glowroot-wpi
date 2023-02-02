@@ -32,8 +32,8 @@ public class DriverManager {
     private static final Driver driver = new org.h2.Driver();
 
     private static volatile int loginTimeout;
-    private static volatile @Nullable PrintWriter logWriter;
-    private static volatile @Nullable PrintStream logStream;
+    private static volatile PrintWriter logWriter;
+    private static volatile PrintStream logStream;
 
     private DriverManager() {}
 
@@ -74,19 +74,19 @@ public class DriverManager {
         DriverManager.loginTimeout = loginTimeout;
     }
 
-    public static @Nullable PrintWriter getLogWriter() {
+    public static PrintWriter getLogWriter() {
         return logWriter;
     }
 
-    public static void setLogWriter(@Nullable PrintWriter logWriter) {
+    public static void setLogWriter(PrintWriter logWriter) {
         DriverManager.logWriter = logWriter;
     }
 
-    public static void setLogStream(@Nullable PrintStream logStream) {
+    public static void setLogStream(PrintStream logStream) {
         DriverManager.logStream = logStream;
     }
 
-    public static @Nullable PrintStream getLogStream() {
+    public static PrintStream getLogStream() {
         return logStream;
     }
 

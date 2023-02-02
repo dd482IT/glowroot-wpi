@@ -78,7 +78,7 @@ public class QueryCollector {
         return allQueries;
     }
 
-    public void mergeQuery(String queryType, String truncatedText, @Nullable String fullTextSha1,
+    public void mergeQuery(String queryType, String truncatedText, String fullTextSha1,
             double totalDurationNanos, long executionCount, boolean hasRows, long totalRows) {
         MutableQuery aggregateQuery;
         if (truncatedText.equals(LIMIT_EXCEEDED_BUCKET)) {

@@ -42,22 +42,18 @@ public class ApacheHttpAsyncClientPluginIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldCaptureAsyncHttpGet() throws Exception {
         // when
         Trace trace = container.execute(ExecuteAsyncHttpGet.class);
@@ -83,7 +79,6 @@ public class ApacheHttpAsyncClientPluginIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureAsyncHttpGetUsingHttpHostArg() throws Exception {
         // when
         Trace trace = container.execute(ExecuteAsyncHttpGetUsingHttpHostArg.class);
@@ -109,7 +104,6 @@ public class ApacheHttpAsyncClientPluginIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureAsyncHttpPost() throws Exception {
         // when
         Trace trace = container.execute(ExecuteAsyncHttpPost.class);
@@ -135,7 +129,6 @@ public class ApacheHttpAsyncClientPluginIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureAsyncHttpPostUsingHttpHostArg() throws Exception {
         // when
         Trace trace = container.execute(ExecuteAsyncHttpPostUsingHttpHostArg.class);

@@ -51,7 +51,6 @@ import org.glowroot.wire.api.model.AgentConfigOuterClass.AgentConfig.SyntheticMo
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-@JsonService
 class SyntheticResultJsonService {
 
     private static final double NANOSECONDS_PER_MILLISECOND = 1000000.0;
@@ -71,9 +70,8 @@ class SyntheticResultJsonService {
         this.clock = clock;
     }
 
-    @GET(path = "/backend/synthetic-monitor/results", permission = "agent:syntheticMonitor")
-    String getSyntheticResults(@BindAgentRollupId String agentRollupId,
-            @BindRequest SyntheticResultRequest request) throws Exception {
+    String getSyntheticResults(String agentRollupId,
+            SyntheticResultRequest request) throws Exception {
         int rollupLevel = rollupLevelService.getRollupLevelForView(request.from(), request.to(),
                 DataKind.GENERAL);
         long dataPointIntervalMillis =
@@ -363,11 +361,9 @@ class SyntheticResultJsonService {
         return chartMarkingIntervals;
     }
 
-    @Value.Immutable
     abstract static class SyntheticResultRequest {
         abstract long from();
         abstract long to();
-        @Value.Default
         boolean all() {
             return false;
         }
@@ -396,8 +392,6 @@ class SyntheticResultJsonService {
         }
     }
 
-    @Value.Immutable
-    @Styles.AllParameters
     interface SyntheticMonitor {
         String id();
         String display();

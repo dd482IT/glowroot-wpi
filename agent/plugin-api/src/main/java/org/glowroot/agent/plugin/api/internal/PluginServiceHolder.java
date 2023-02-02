@@ -19,7 +19,7 @@ import org.glowroot.agent.plugin.api.checker.Nullable;
 
 public class PluginServiceHolder {
 
-    private static volatile @Nullable PluginService service;
+    private static volatile PluginService service;
 
     private PluginServiceHolder() {}
 

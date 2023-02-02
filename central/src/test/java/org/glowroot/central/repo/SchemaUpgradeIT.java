@@ -41,7 +41,6 @@ public class SchemaUpgradeIT {
     private static Cluster cluster;
     private static Session session;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         SharedSetupRunListener.startCassandra();
         cluster = Clusters.newCluster();
@@ -63,14 +62,12 @@ public class SchemaUpgradeIT {
         restore("glowroot_upgrade_test");
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         session.close();
         cluster.close();
         SharedSetupRunListener.stopCassandra();
     }
 
-    @Test
     public void shouldRead() throws Exception {
         // given
         SchemaUpgrade schemaUpgrade = new SchemaUpgrade(session, 0, Clock.systemClock(), false);

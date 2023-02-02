@@ -41,7 +41,6 @@ public class OverallErrorSummaryCollector {
         lastCaptureTime = Math.max(lastCaptureTime, captureTime);
     }
 
-    @Value.Immutable
     public interface OverallErrorSummary {
         long errorCount();
         long transactionCount();

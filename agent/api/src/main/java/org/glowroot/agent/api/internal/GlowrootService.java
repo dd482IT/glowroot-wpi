@@ -21,13 +21,13 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public interface GlowrootService {
 
-    void setTransactionType(@Nullable String transactionType);
+    void setTransactionType(String transactionType);
 
-    void setTransactionName(@Nullable String transactionName);
+    void setTransactionName(String transactionName);
 
-    void setTransactionUser(@Nullable String user);
+    void setTransactionUser(String user);
 
-    void addTransactionAttribute(String name, @Nullable String value);
+    void addTransactionAttribute(String name, String value);
 
     void setTransactionSlowThreshold(long threshold, TimeUnit unit);
 

@@ -29,12 +29,7 @@ public interface AggregateDao extends AggregateRepository {
     void store(String agentId, long captureTime, List<OldAggregatesByType> aggregatesByTypeList,
             List<Aggregate.SharedQueryText> initialSharedQueryTexts) throws Exception;
 
-    @Instrumentation.Transaction(transactionType = "Background",
-            transactionName = "Rollup aggregates", traceHeadline = "Rollup aggregates: {{0}}",
-            timer = "rollup aggregates",
-            alreadyInTransactionBehavior = AlreadyInTransactionBehavior.CAPTURE_NEW_TRANSACTION)
     void rollup(String agentRollupId) throws Exception;
 
-    @OnlyUsedByTests
     void truncateAll() throws Exception;
 }

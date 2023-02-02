@@ -28,21 +28,17 @@ import org.glowroot.common.util.OnlyUsedByTests;
 
 public interface GlowrootAgentInit {
 
-    void init(@Nullable File pluginsDir, List<File> confDirs, File logDir, File tmpDir,
-            @Nullable File glowrootJarFile, Map<String, String> properties,
-            @Nullable Instrumentation instrumentation,
-            @Nullable PreCheckClassFileTransformer preCheckClassFileTransformer,
+    void init(File pluginsDir, List<File> confDirs, File logDir, File tmpDir,
+            File glowrootJarFile, Map<String, String> properties,
+            Instrumentation instrumentation,
+            PreCheckClassFileTransformer preCheckClassFileTransformer,
             String glowrootVersion, Closeable agentDirLockCloseable) throws Exception;
 
-    @OnlyUsedByTests
     void initConfigForTests() throws Exception;
 
-    @OnlyUsedByTests
     void resetConfigForTests() throws Exception;
 
-    @OnlyUsedByTests
     void close() throws Exception;
 
-    @OnlyUsedByTests
     void awaitClose() throws Exception;
 }

@@ -31,7 +31,7 @@ public abstract class OptionalService<T> {
 
     public abstract Availability getAvailability();
 
-    public abstract @Nullable T getService();
+    public abstract T getService();
 
     private static class PresentOptionalService<T> extends OptionalService<T> {
 
@@ -71,7 +71,7 @@ public abstract class OptionalService<T> {
         }
 
         @Override
-        public @Nullable T getService() {
+        public T getService() {
             return null;
         }
     }

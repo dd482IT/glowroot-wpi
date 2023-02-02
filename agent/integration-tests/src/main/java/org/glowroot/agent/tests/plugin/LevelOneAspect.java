@@ -46,16 +46,12 @@ public class LevelOneAspect {
     private static final BooleanProperty starredHeadline =
             configService.getBooleanProperty("starredHeadline");
 
-    @Pointcut(className = "org.glowroot.agent.tests.app.LevelOne", methodName = "call",
-            methodParameterTypes = {"java.lang.Object", "java.lang.Object"},
-            timerName = "level one")
     public static class LevelOneAdvice {
 
         private static final TimerName timerName = Agent.getTimerName(LevelOneAdvice.class);
 
-        @OnBefore
         public static TraceEntry onBefore(OptionalThreadContext context,
-                @BindParameter final Object arg1, @BindParameter final Object arg2) {
+                final Object arg1, final Object arg2) {
             String headline = alternateHeadline.value();
             if (headline.isEmpty()) {
                 headline = "Level One";
@@ -111,14 +107,12 @@ public class LevelOneAspect {
             return traceEntry;
         }
 
-        @OnReturn
-        public static void onReturn(@BindTraveler TraceEntry traceEntry) {
+        public static void onReturn(TraceEntry traceEntry) {
             traceEntry.end();
         }
 
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler TraceEntry traceEntry) {
+        public static void onThrow(Throwable t,
+                TraceEntry traceEntry) {
             traceEntry.endWithError(t);
         }
     }

@@ -26,22 +26,18 @@ public class MutableThreadStats {
     private double totalWaitedNanos;
     private double totalAllocatedBytes;
 
-    @UsedByJsonSerialization
     public double getTotalCpuNanos() {
         return totalCpuNanos;
     }
 
-    @UsedByJsonSerialization
     public double getTotalBlockedNanos() {
         return totalBlockedNanos;
     }
 
-    @UsedByJsonSerialization
     public double getTotalWaitedNanos() {
         return totalWaitedNanos;
     }
 
-    @UsedByJsonSerialization
     public double getTotalAllocatedBytes() {
         return totalAllocatedBytes;
     }

@@ -158,9 +158,6 @@ class CentralAlertingService {
         }
     }
 
-    @Instrumentation.Transaction(transactionType = "Background", transactionName = "Check alert",
-            traceHeadline = "Check alerts: {{0}}", timer = "check alerts",
-            alreadyInTransactionBehavior = AlreadyInTransactionBehavior.CAPTURE_NEW_TRANSACTION)
     void checkAggregateAndGaugeAndHeartbeatAlertsAsync(String agentRollupId,
             String agentRollupDisplay, long endTime) throws InterruptedException {
         List<AlertConfig> alertConfigs;

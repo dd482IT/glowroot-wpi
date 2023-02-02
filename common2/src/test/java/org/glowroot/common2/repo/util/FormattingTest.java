@@ -23,23 +23,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class FormattingTest {
 
-    @Test
     public void testFormattingInEnglishLocale() {
         testFormattingInLocale(new Locale("en"), ',', '.');
     }
 
-    @Test
     public void testFormattingInUkraineLocale() {
         // unicode 160 is non-breaking space
         testFormattingInLocale(new Locale("uk"), (char) 160, ',');
     }
 
-    @Test
     public void testFormattingBytesInEnglishLocale() {
         testFormattingBytesInLocale(new Locale("en"), '.');
     }
 
-    @Test
     public void testFormattingBytesInUkraineLocale() {
         testFormattingBytesInLocale(new Locale("uk"), ',');
     }

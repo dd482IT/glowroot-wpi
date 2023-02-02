@@ -83,7 +83,6 @@ public class AggregateDaoIT {
     private static FullQueryTextDao fullQueryTextDao;
     private static AggregateDao aggregateDao;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         SharedSetupRunListener.startCassandra();
         clusterManager = ClusterManager.create();
@@ -111,7 +110,6 @@ public class AggregateDaoIT {
                         configRepository, asyncExecutor, 0, Clock.systemClock()));
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         fullQueryTextDao.close();
         asyncExecutor.shutdown();
@@ -121,12 +119,10 @@ public class AggregateDaoIT {
         SharedSetupRunListener.stopCassandra();
     }
 
-    @BeforeEach
     public void before() throws Exception {
         session.updateSchemaWithRetry("truncate agent_config");
     }
 
-    @Test
     public void shouldRollup() throws Exception {
 
         agentConfigDao.store("one", AgentConfig.newBuilder()
@@ -300,7 +296,6 @@ public class AggregateDaoIT {
         assertThat(query.getExecutionCount()).isEqualTo(4);
     }
 
-    @Test
     public void shouldRollupFromChildren() throws Exception {
 
         agentConfigDao.store("the parent::one", AgentConfig.newBuilder()
@@ -478,7 +473,6 @@ public class AggregateDaoIT {
         assertThat(query.getExecutionCount()).isEqualTo(4);
     }
 
-    @Test
     public void shouldRollupFromGrandChildren() throws Exception {
 
         agentConfigDao.store("the gp::the parent::one", AgentConfig.newBuilder()

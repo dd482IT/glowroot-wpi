@@ -49,24 +49,20 @@ public class ExecutorIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         // tests only work with javaagent container because they need to weave bootstrap classes
         // that implement Executor and ExecutorService
         container = JavaagentContainer.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldCaptureExecute() throws Exception {
         // when
         Trace trace = container.execute(DoExecuteRunnable.class);
@@ -74,7 +70,6 @@ public class ExecutorIT {
         checkTrace(trace, false, false);
     }
 
-    @Test
     public void shouldCaptureExecuteFutureTask() throws Exception {
         // when
         Trace trace = container.execute(DoExecuteFutureTask.class);
@@ -82,7 +77,6 @@ public class ExecutorIT {
         checkTrace(trace, false, false);
     }
 
-    @Test
     public void shouldCaptureSubmitCallable() throws Exception {
         // when
         Trace trace = container.execute(DoSubmitCallable.class);
@@ -90,7 +84,6 @@ public class ExecutorIT {
         checkTrace(trace, false, true);
     }
 
-    @Test
     public void shouldCaptureSubmitRunnableAndCallable() throws Exception {
         // when
         Trace trace = container.execute(DoSubmitRunnableAndCallable.class);
@@ -98,7 +91,6 @@ public class ExecutorIT {
         checkTrace(trace, false, true);
     }
 
-    @Test
     public void shouldNotCaptureTraceEntryForEmptyAuxThread() throws Exception {
         // when
         Trace trace = container.execute(DoSimpleSubmitRunnableWork.class);
@@ -115,7 +107,6 @@ public class ExecutorIT {
         assertThat(header.getEntryCount()).isZero();
     }
 
-    @Test
     public void shouldNotCaptureAlreadyCompletedFutureGet() throws Exception {
         // when
         Trace trace = container.execute(CallFutureGetOnAlreadyCompletedFuture.class);
@@ -125,7 +116,6 @@ public class ExecutorIT {
         assertThat(header.getMainThreadRootTimer().getChildTimerCount()).isZero();
     }
 
-    @Test
     public void shouldCaptureNestedFutureGet() throws Exception {
         // when
         Trace trace = container.execute(CallFutureGetOnNestedFuture.class);
@@ -152,7 +142,6 @@ public class ExecutorIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureInvokeAll() throws Exception {
         // given
         container.getConfigService().updateTransactionConfig(
@@ -166,7 +155,6 @@ public class ExecutorIT {
         checkTrace(trace, false, true);
     }
 
-    @Test
     public void shouldCaptureInvokeAllWithTimeout() throws Exception {
         // given
         container.getConfigService().updateTransactionConfig(
@@ -180,7 +168,6 @@ public class ExecutorIT {
         checkTrace(trace, false, true);
     }
 
-    @Test
     public void shouldCaptureInvokeAny() throws Exception {
         // given
         container.getConfigService().updateTransactionConfig(
@@ -194,7 +181,6 @@ public class ExecutorIT {
         checkTrace(trace, true, false);
     }
 
-    @Test
     public void shouldCaptureInvokeAnyWithTimeout() throws Exception {
         // given
         container.getConfigService().updateTransactionConfig(
@@ -208,7 +194,6 @@ public class ExecutorIT {
         checkTrace(trace, true, false);
     }
 
-    @Test
     public void shouldCaptureNestedExecute() throws Exception {
         // when
         Trace trace = container.execute(DoNestedExecuteRunnable.class);
@@ -216,7 +201,6 @@ public class ExecutorIT {
         checkTrace(trace, false, false);
     }
 
-    @Test
     public void shouldCaptureNestedSubmit() throws Exception {
         // when
         Trace trace = container.execute(DoNestedSubmitCallable.class);
@@ -224,7 +208,6 @@ public class ExecutorIT {
         checkTrace(trace, false, false);
     }
 
-    @Test
     public void shouldCaptureDelegatingExecutor() throws Exception {
         // when
         Trace trace = container.execute(DoDelegatingExecutor.class);

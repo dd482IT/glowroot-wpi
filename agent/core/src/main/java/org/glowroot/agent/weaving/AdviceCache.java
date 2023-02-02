@@ -59,7 +59,7 @@ public class AdviceCache {
     private final ImmutableList<Advice> pluginAdvisors;
     private final ImmutableList<ShimType> shimTypes;
     private final ImmutableList<MixinType> mixinTypes;
-    private final @Nullable Instrumentation instrumentation;
+    private final Instrumentation instrumentation;
     private final File tmpDir;
 
     private volatile ImmutableList<Advice> reweavableAdvisors;
@@ -69,7 +69,7 @@ public class AdviceCache {
 
     public AdviceCache(List<PluginDescriptor> pluginDescriptors,
             List<InstrumentationConfig> reweavableConfigs,
-            @Nullable Instrumentation instrumentation, File tmpDir) throws Exception {
+            Instrumentation instrumentation, File tmpDir) throws Exception {
 
         List<Advice> pluginAdvisors = Lists.newArrayList();
         List<ShimType> shimTypes = Lists.newArrayList();
@@ -129,12 +129,10 @@ public class AdviceCache {
         };
     }
 
-    @VisibleForTesting
     public List<ShimType> getShimTypes() {
         return shimTypes;
     }
 
-    @VisibleForTesting
     public List<MixinType> getMixinTypes() {
         return mixinTypes;
     }
@@ -210,7 +208,7 @@ public class AdviceCache {
 
     private static ImmutableList<Advice> createReweavableAdvisors(
             List<InstrumentationConfig> reweavableConfigs,
-            @Nullable Instrumentation instrumentation, File tmpDir, boolean cleanTmpDir)
+            Instrumentation instrumentation, File tmpDir, boolean cleanTmpDir)
             throws Exception {
         ImmutableMap<Advice, LazyDefinedClass> advisors =
                 AdviceGenerator.createAdvisors(reweavableConfigs, null, false, true);
@@ -248,7 +246,7 @@ public class AdviceCache {
         return ImmutableSet.copyOf(versions);
     }
 
-    private static @Nullable PointcutClassName getPointcutClassName(Advice advice) {
+    private static PointcutClassName getPointcutClassName(Advice advice) {
         PointcutClassName subTypeRestrictionPointcutClassName = null;
         Pattern subTypeRestrictionPattern = advice.pointcutSubTypeRestrictionPattern();
         if (subTypeRestrictionPattern != null) {
@@ -276,7 +274,6 @@ public class AdviceCache {
     }
 
     // this method exists because tests cannot use (sometimes) shaded guava Supplier
-    @OnlyUsedByTests
     public List<Advice> getAdvisors() {
         return getAdvisorsSupplier().get();
     }

@@ -32,26 +32,25 @@ import org.objectweb.asm.commons.Method;
 import org.glowroot.agent.plugin.api.weaving.Pointcut;
 import org.glowroot.agent.weaving.ClassLoaders.LazyDefinedClass;
 
-@Value.Immutable
 abstract class Advice {
 
     static final Ordering<Advice> ordering = new AdviceOrdering();
 
     abstract Pointcut pointcut();
     abstract Type adviceType();
-    abstract @Nullable Pattern pointcutClassNamePattern();
-    abstract @Nullable Pattern pointcutClassAnnotationPattern();
-    abstract @Nullable Pattern pointcutSubTypeRestrictionPattern();
-    abstract @Nullable Pattern pointcutSuperTypeRestrictionPattern();
-    abstract @Nullable Pattern pointcutMethodNamePattern();
-    abstract @Nullable Pattern pointcutMethodAnnotationPattern();
+    abstract Pattern pointcutClassNamePattern();
+    abstract Pattern pointcutClassAnnotationPattern();
+    abstract Pattern pointcutSubTypeRestrictionPattern();
+    abstract Pattern pointcutSuperTypeRestrictionPattern();
+    abstract Pattern pointcutMethodNamePattern();
+    abstract Pattern pointcutMethodAnnotationPattern();
     abstract List<Object> pointcutMethodParameterTypes(); // items can be either String or Pattern
-    abstract @Nullable Type travelerType();
-    abstract @Nullable Method isEnabledAdvice();
-    abstract @Nullable Method onBeforeAdvice();
-    abstract @Nullable Method onReturnAdvice();
-    abstract @Nullable Method onThrowAdvice();
-    abstract @Nullable Method onAfterAdvice();
+    abstract Type travelerType();
+    abstract Method isEnabledAdvice();
+    abstract Method onBeforeAdvice();
+    abstract Method onReturnAdvice();
+    abstract Method onThrowAdvice();
+    abstract Method onAfterAdvice();
     abstract ImmutableList<AdviceParameter> isEnabledParameters();
     abstract ImmutableList<AdviceParameter> onBeforeParameters();
     abstract ImmutableList<AdviceParameter> onReturnParameters();
@@ -61,10 +60,9 @@ abstract class Advice {
     abstract boolean hasBindOptionalThreadContext();
     abstract boolean reweavable();
 
-    abstract @Nullable Advice nonBootstrapLoaderAdvice();
-    abstract @Nullable LazyDefinedClass nonBootstrapLoaderAdviceClass();
+    abstract Advice nonBootstrapLoaderAdvice();
+    abstract LazyDefinedClass nonBootstrapLoaderAdviceClass();
 
-    @Value.Derived
     ImmutableSet<Type> classMetaTypes() {
         Set<Type> metaTypes = Sets.newHashSet();
         metaTypes.addAll(getClassMetaTypes(isEnabledParameters()));
@@ -75,7 +73,6 @@ abstract class Advice {
         return ImmutableSet.copyOf(metaTypes);
     }
 
-    @Value.Derived
     ImmutableSet<Type> methodMetaTypes() {
         Set<Type> metaTypes = Sets.newHashSet();
         metaTypes.addAll(getMethodMetaTypes(isEnabledParameters()));
@@ -136,7 +133,6 @@ abstract class Advice {
         }
     }
 
-    @Value.Immutable
     interface AdviceParameter {
         ParameterKind kind();
         Type type();

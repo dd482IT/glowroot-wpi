@@ -62,47 +62,32 @@ public class SessionAspect {
         });
     }
 
-    @Shim("com.datastax.driver.core.Statement")
     public interface Statement {}
 
-    @Shim("com.datastax.driver.core.RegularStatement")
     public interface RegularStatement extends Statement {
 
-        @Nullable
         String getQueryString();
     }
 
-    @Shim("com.datastax.driver.core.BoundStatement")
     public interface BoundStatement extends Statement {
 
-        @Shim("com.datastax.driver.core.PreparedStatement preparedStatement()")
-        @Nullable
         PreparedStatement glowroot$preparedStatement();
     }
 
-    @Shim("com.datastax.driver.core.BatchStatement")
     public interface BatchStatement extends Statement {
 
-        @Nullable
         Collection<Statement> getStatements();
     }
 
-    @Shim("com.datastax.driver.core.PreparedStatement")
     public interface PreparedStatement {
 
-        @Nullable
         String getQueryString();
     }
 
-    @Pointcut(className = "com.datastax.driver.core.Session", methodName = "execute",
-            methodParameterTypes = {"com.datastax.driver.core.Statement"},
-            nestingGroup = "cassandra", timerName = "cassandra query",
-            suppressionKey = "wait-on-future")
     public static class ExecuteAdvice {
         private static final TimerName timerName = Agent.getTimerName(ExecuteAdvice.class);
-        @OnBefore
-        public static @Nullable QueryEntry onBefore(ThreadContext context,
-                @BindParameter @Nullable Object arg) {
+        public static QueryEntry onBefore(ThreadContext context,
+                Object arg) {
             QueryEntryInfo queryEntryInfo = getQueryEntryInfo(arg);
             if (queryEntryInfo == null) {
                 return null;
@@ -110,9 +95,8 @@ public class SessionAspect {
             return context.startQueryEntry(QUERY_TYPE, queryEntryInfo.queryText,
                     queryEntryInfo.queryMessageSupplier, timerName);
         }
-        @OnReturn
-        public static void onReturn(@BindReturn @Nullable ResultSetMixin resultSet,
-                @BindTraveler @Nullable QueryEntry queryEntry) {
+        public static void onReturn(ResultSetMixin resultSet,
+                QueryEntry queryEntry) {
             if (queryEntry != null) {
                 if (resultSet != null) {
                     resultSet.glowroot$setQueryEntry(queryEntry);
@@ -120,38 +104,28 @@ public class SessionAspect {
                 queryEntry.endWithLocationStackTrace(stackTraceThresholdMillis, MILLISECONDS);
             }
         }
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler @Nullable QueryEntry queryEntry) {
+        public static void onThrow(Throwable t,
+                QueryEntry queryEntry) {
             if (queryEntry != null) {
                 queryEntry.endWithError(t);
             }
         }
     }
 
-    @Pointcut(className = "com.datastax.driver.core.Session", methodName = "prepare",
-            methodParameterTypes = {"*"}, timerName = "cql prepare",
-            suppressionKey = "wait-on-future")
     public static class PrepareAdvice {
         private static final TimerName timerName = Agent.getTimerName(PrepareAdvice.class);
-        @OnBefore
         public static Timer onBefore(ThreadContext context) {
             return context.startTimer(timerName);
         }
-        @OnAfter
-        public static void onAfter(@BindTraveler Timer timer) {
+        public static void onAfter(Timer timer) {
             timer.stop();
         }
     }
 
-    @Pointcut(className = "com.datastax.driver.core.Session", methodName = "executeAsync",
-            methodParameterTypes = {"com.datastax.driver.core.Statement"},
-            nestingGroup = "cassandra", timerName = "cassandra query")
     public static class ExecuteAsyncAdvice {
         private static final TimerName timerName = Agent.getTimerName(ExecuteAsyncAdvice.class);
-        @OnBefore
-        public static @Nullable AsyncQueryEntry onBefore(ThreadContext context,
-                @BindParameter @Nullable Object arg) {
+        public static AsyncQueryEntry onBefore(ThreadContext context,
+                Object arg) {
             QueryEntryInfo queryEntryInfo = getQueryEntryInfo(arg);
             if (queryEntryInfo == null) {
                 return null;
@@ -159,9 +133,8 @@ public class SessionAspect {
             return context.startAsyncQueryEntry(QUERY_TYPE, queryEntryInfo.queryText,
                     queryEntryInfo.queryMessageSupplier, timerName);
         }
-        @OnReturn
-        public static void onReturn(@BindReturn @Nullable ResultSetFutureMixin future,
-                @BindTraveler @Nullable AsyncQueryEntry asyncQueryEntry) {
+        public static void onReturn(ResultSetFutureMixin future,
+                AsyncQueryEntry asyncQueryEntry) {
             if (asyncQueryEntry == null) {
                 return;
             }
@@ -185,9 +158,8 @@ public class SessionAspect {
                 return;
             }
         }
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler @Nullable AsyncQueryEntry asyncQueryEntry) {
+        public static void onThrow(Throwable t,
+                AsyncQueryEntry asyncQueryEntry) {
             if (asyncQueryEntry != null) {
                 asyncQueryEntry.stopSyncTimer();
                 asyncQueryEntry.endWithError(t);
@@ -195,7 +167,7 @@ public class SessionAspect {
         }
     }
 
-    private static @Nullable QueryEntryInfo getQueryEntryInfo(@Nullable Object arg) {
+    private static QueryEntryInfo getQueryEntryInfo(Object arg) {
         if (arg == null) {
             // seems nothing sensible to do here other than ignore
             return null;
@@ -280,7 +252,7 @@ public class SessionAspect {
         }
     }
 
-    private static String nullToEmpty(@Nullable String string) {
+    private static String nullToEmpty(String string) {
         return string == null ? "" : string;
     }
 

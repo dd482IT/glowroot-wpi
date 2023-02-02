@@ -68,7 +68,7 @@ class CappedDatabaseOutputStream extends OutputStream {
     private final FsyncRunnable fsyncScheduledRunnable;
 
     static CappedDatabaseOutputStream create(File file, int requestedSizeKb,
-            @Nullable ScheduledExecutorService scheduledExecutor, Ticker ticker)
+            ScheduledExecutorService scheduledExecutor, Ticker ticker)
             throws IOException {
         CappedDatabaseOutputStream out =
                 new CappedDatabaseOutputStream(file, requestedSizeKb, ticker);

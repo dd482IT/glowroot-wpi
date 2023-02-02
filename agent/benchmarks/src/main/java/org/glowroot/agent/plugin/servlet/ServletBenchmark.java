@@ -33,23 +33,18 @@ import org.glowroot.agent.plugin.servlet.support.MockHttpRequest;
 import org.glowroot.agent.plugin.servlet.support.MockHttpResponse;
 import org.glowroot.agent.plugin.servlet.support.MockHttpServlet;
 
-@BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.MICROSECONDS)
-@State(Scope.Thread)
 public class ServletBenchmark {
 
     private HttpServlet servlet;
     private HttpServletRequest request;
     private HttpServletResponse response;
 
-    @Setup
     public void setup() {
         servlet = new MockHttpServlet();
         request = new MockHttpRequest();
         response = new MockHttpResponse();
     }
 
-    @Benchmark
     public void service() throws Exception {
         servlet.service(request, response);
     }

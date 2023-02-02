@@ -37,24 +37,20 @@ public class JavaHttpServerPluginIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         // tests only work with javaagent container because they need to weave bootstrap classes
         // that implement com.sun.net.httpserver.HttpExchange
         container = JavaagentContainer.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void testHandler() throws Exception {
         // when
         Trace trace = container.execute(ExecuteHandler.class, "Web");
@@ -67,7 +63,6 @@ public class JavaHttpServerPluginIT {
         assertThat(header.getEntryCount()).isZero();
     }
 
-    @Test
     public void testFilter() throws Exception {
         // when
         Trace trace = container.execute(ExecuteFilter.class, "Web");
@@ -80,7 +75,6 @@ public class JavaHttpServerPluginIT {
         assertThat(header.getEntryCount()).isZero();
     }
 
-    @Test
     public void testCombination() throws Exception {
         // when
         Trace trace = container.execute(ExecuteFilterWithNestedHandler.class, "Web");
@@ -93,7 +87,6 @@ public class JavaHttpServerPluginIT {
         assertThat(header.getEntryCount()).isZero();
     }
 
-    @Test
     public void testNoQueryString() throws Exception {
         // when
         Trace trace = container.execute(TestNoQueryString.class, "Web");
@@ -102,7 +95,6 @@ public class JavaHttpServerPluginIT {
         assertThat(trace.getHeader().getEntryCount()).isZero();
     }
 
-    @Test
     public void testEmptyQueryString() throws Exception {
         // when
         Trace trace = container.execute(TestEmptyQueryString.class, "Web");
@@ -111,7 +103,6 @@ public class JavaHttpServerPluginIT {
         assertThat(trace.getHeader().getEntryCount()).isZero();
     }
 
-    @Test
     public void testNonEmptyQueryString() throws Exception {
         // when
         Trace trace = container.execute(TestNonEmptyQueryString.class, "Web");
@@ -120,7 +111,6 @@ public class JavaHttpServerPluginIT {
         assertThat(trace.getHeader().getEntryCount()).isZero();
     }
 
-    @Test
     public void testHandlerThrowsException() throws Exception {
         // when
         Trace trace = container.execute(HandlerThrowsException.class, "Web");
@@ -132,7 +122,6 @@ public class JavaHttpServerPluginIT {
         assertThat(header.getEntryCount()).isZero();
     }
 
-    @Test
     public void testFilterThrowsException() throws Exception {
         // when
         Trace trace = container.execute(FilterThrowsException.class, "Web");
@@ -144,7 +133,6 @@ public class JavaHttpServerPluginIT {
         assertThat(header.getEntryCount()).isZero();
     }
 
-    @Test
     public void testSend500Error() throws Exception {
         // when
         Trace trace = container.execute(Send500Error.class, "Web");
@@ -164,7 +152,6 @@ public class JavaHttpServerPluginIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testSend400Error() throws Exception {
         // when
         Trace trace = container.execute(Send400Error.class, "Web");
@@ -174,7 +161,6 @@ public class JavaHttpServerPluginIT {
         assertThat(trace.getEntryList()).isEmpty();
     }
 
-    @Test
     public void testSend400ErrorWithCaptureOn() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "traceErrorOn4xxResponseCode",

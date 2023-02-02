@@ -53,7 +53,6 @@ class ThreadDumpService {
     ThreadDump getThreadDump() {
         ThreadMXBean threadBean = ManagementFactory.getThreadMXBean();
         List<ThreadContextImpl> activeThreadContexts = getActiveThreadContexts();
-        @Nullable
         ThreadInfo[] threadInfos = threadBean.getThreadInfo(threadBean.getAllThreadIds(),
                 threadBean.isObjectMonitorUsageSupported(), false);
         long currentThreadId = Thread.currentThread().getId();

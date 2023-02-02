@@ -136,7 +136,6 @@ public class AlertingServiceTest {
     private MockMailService mailService;
     private HttpClient httpClient;
 
-    @BeforeEach
     public void beforeEachTest() throws Exception {
         configRepository = mock(ConfigRepository.class);
         incidentRepository = mock(IncidentRepository.class);
@@ -151,7 +150,6 @@ public class AlertingServiceTest {
         when(configRepository.getHttpProxyConfig()).thenReturn(HTTP_PROXY_CONFIG);
     }
 
-    @Test
     public void shouldSendMailForTransactionAlert() throws Exception {
         // given
         setupForTransaction(1000000);
@@ -170,7 +168,6 @@ public class AlertingServiceTest {
                         + " alert threshold of 1 millisecond.");
     }
 
-    @Test
     public void shouldNotSendMailForTransactionAlert() throws Exception {
         // given
         setupForTransaction(999999);
@@ -186,7 +183,6 @@ public class AlertingServiceTest {
         assertThat(mailService.getMessage()).isNull();
     }
 
-    @Test
     public void shouldSendMailForGaugeAlert() throws Exception {
         // given
         setupForGauge(500);
@@ -205,7 +201,6 @@ public class AlertingServiceTest {
                         + " threshold of 500 milliseconds per second.");
     }
 
-    @Test
     public void shouldNotSendMailForGaugeAlert() throws Exception {
         // given
         setupForGauge(499);
@@ -221,7 +216,6 @@ public class AlertingServiceTest {
         assertThat(mailService.getMessage()).isNull();
     }
 
-    @Test
     public void shouldSendMailForLowerBoundGaugeAlert() throws Exception {
         // given
         setupForGauge(500);
@@ -240,7 +234,6 @@ public class AlertingServiceTest {
                         + " threshold of 500 milliseconds per second.");
     }
 
-    @Test
     public void shouldNotSendMailForLowerBoundGaugeAlert() throws Exception {
         // given
         setupForGauge(501);
@@ -256,7 +249,6 @@ public class AlertingServiceTest {
         assertThat(mailService.getMessage()).isNull();
     }
 
-    @Test
     public void shouldReturnCorrectPercentileName() {
         shouldReturnCorrectPercentileName(0, "th");
         shouldReturnCorrectPercentileName(1, "st");

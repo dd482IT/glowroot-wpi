@@ -24,18 +24,14 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 class DataSeries {
 
     // null is used for 'Other' data series
-    @JsonProperty
-    private final @Nullable String name;
-    @JsonProperty
+    private final String name;
     private final List<Number /*@Nullable*/ []> data = Lists.newArrayList();
-    @JsonProperty
-    private @Nullable Double overall;
+    private Double overall;
 
-    DataSeries(@Nullable String name) {
+    DataSeries(String name) {
         this.name = name;
     }
 
-    @Nullable
     String getName() {
         return name;
     }

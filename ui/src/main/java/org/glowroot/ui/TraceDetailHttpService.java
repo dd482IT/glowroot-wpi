@@ -73,7 +73,7 @@ class TraceDetailHttpService implements HttpService {
         return new CommonResponse(OK, MediaType.JSON_UTF_8, detail);
     }
 
-    private @Nullable ChunkSource getDetailChunkSource(String traceComponent, String agentId,
+    private ChunkSource getDetailChunkSource(String traceComponent, String agentId,
             String traceId, boolean checkLiveTraces) throws Exception {
         if (traceComponent.equals("entries")) {
             String entriesJson =

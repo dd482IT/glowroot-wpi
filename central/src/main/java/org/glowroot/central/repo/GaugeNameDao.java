@@ -97,8 +97,6 @@ class GaugeNameDao {
         return ImmutableList.of(session.writeAsync(boundStatement));
     }
 
-    @Value.Immutable
-    @Styles.AllParameters
     interface GaugeKey {
         String agentRollupId();
         long captureTime();

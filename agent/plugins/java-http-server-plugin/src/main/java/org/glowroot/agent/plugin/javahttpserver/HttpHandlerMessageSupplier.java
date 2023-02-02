@@ -26,17 +26,17 @@ class HttpHandlerMessageSupplier extends MessageSupplier {
 
     private final String requestMethod;
     private final String requestUri;
-    private final @Nullable String requestQueryString;
+    private final String requestQueryString;
 
     private final Map<String, Object> requestHeaders;
-    private @Nullable Map<String, Object> responseHeaders;
+    private Map<String, Object> responseHeaders;
 
-    private final @Nullable String requestRemoteAddr;
-    private final @Nullable String requestRemoteHost;
+    private final String requestRemoteAddr;
+    private final String requestRemoteHost;
 
     HttpHandlerMessageSupplier(String requestMethod, String requestUri,
-            @Nullable String requestQueryString, Map<String, Object> requestHeaders,
-            @Nullable String requestRemoteAddr, @Nullable String requestRemoteHost) {
+            String requestQueryString, Map<String, Object> requestHeaders,
+            String requestRemoteAddr, String requestRemoteHost) {
         this.requestMethod = requestMethod;
         this.requestUri = requestUri;
         this.requestQueryString = requestQueryString;

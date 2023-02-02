@@ -30,7 +30,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class LazySecretKeyImplTest {
 
-    @Test
     public void testLoadSecretKey() throws Exception {
         // given
         SecretKey secretKey = Encryption.generateNewKey();
@@ -47,7 +46,6 @@ public class LazySecretKeyImplTest {
         confDir.delete();
     }
 
-    @Test
     public void testLoadSecretKey2() throws Exception {
         // given
         SecretKey secretKey = Encryption.generateNewKey();

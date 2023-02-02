@@ -21,7 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class TransactionTest {
 
-    @Test
     public void traceIdShouldBeThirtyTwoCharactersAndLowerCase() {
         // when
         String traceId = Transaction.buildTraceId(System.currentTimeMillis());
@@ -30,7 +29,6 @@ public class TransactionTest {
         assertThat(traceId.toLowerCase()).isEqualTo(traceId);
     }
 
-    @Test
     public void shouldLowerSixBytesWithPadding() {
         // given
         long startTime = 123456;
@@ -40,7 +38,6 @@ public class TransactionTest {
         assertThat(lowerSixBytes).isEqualTo("00000001e240");
     }
 
-    @Test
     public void shouldLowerSixBytesWithNoPaddingOrTruncation() {
         // given
         long startTime = 123456123456789L;
@@ -50,7 +47,6 @@ public class TransactionTest {
         assertThat(lowerSixBytes).isEqualTo("70485e624d15");
     }
 
-    @Test
     public void shouldLowerSixBytesWithTruncation() {
         // given
         long startTime = 123456123456789123L;

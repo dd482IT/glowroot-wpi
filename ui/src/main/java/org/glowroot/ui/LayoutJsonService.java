@@ -43,9 +43,8 @@ class LayoutJsonService {
         this.layoutService = layoutService;
     }
 
-    @GET(path = "/backend/top-level-agent-rollups", permission = "")
-    String getTopLevelAgentRollups(@BindRequest TopLevelAgentRollupsRequest request,
-            @BindAuthentication Authentication authentication) throws Exception {
+    String getTopLevelAgentRollups(TopLevelAgentRollupsRequest request,
+            Authentication authentication) throws Exception {
         List<TopLevelAgentRollup> topLevelAgentRollups =
                 activeAgentRepository.readActiveTopLevelAgentRollups(request.from(), request.to());
         List<FilteredTopLevelAgentRollup> filtered = Lists.newArrayList();
@@ -63,9 +62,8 @@ class LayoutJsonService {
         return mapper.writeValueAsString(filtered);
     }
 
-    @GET(path = "/backend/child-agent-rollups", permission = "")
-    String getChildAgentRollups(@BindRequest ChildAgentRollupsRequest request,
-            @BindAuthentication Authentication authentication) throws Exception {
+    String getChildAgentRollups(ChildAgentRollupsRequest request,
+            Authentication authentication) throws Exception {
         List<FilteredChildAgentRollup> childAgentRollups =
                 filterChildAgentRollups(
                         activeAgentRepository.readActiveChildAgentRollups(
@@ -78,9 +76,8 @@ class LayoutJsonService {
         return mapper.writeValueAsString(dropdown);
     }
 
-    @GET(path = "/backend/agent-rollup", permission = "")
-    String getAgentRollup(@BindRequest AgentRollupRequest request,
-            @BindAuthentication Authentication authentication) throws Exception {
+    String getAgentRollup(AgentRollupRequest request,
+            Authentication authentication) throws Exception {
         AgentRollupLayout agentRollupLayout =
                 layoutService.buildAgentRollupLayout(authentication, request.id());
         if (agentRollupLayout == null) {
@@ -130,7 +127,6 @@ class LayoutJsonService {
         }
     }
 
-    @Value.Immutable
     interface AgentRollupSmall {
         String id();
         String display(); // when this is used for child dropdown, this is the child display (not
@@ -140,20 +136,17 @@ class LayoutJsonService {
         int depth();
     }
 
-    @Value.Immutable
     interface TopLevelAgentRollupsRequest {
         long from();
         long to();
     }
 
-    @Value.Immutable
     interface ChildAgentRollupsRequest {
         String topLevelId();
         long from();
         long to();
     }
 
-    @Value.Immutable
     interface AgentRollupRequest {
         String id();
     }

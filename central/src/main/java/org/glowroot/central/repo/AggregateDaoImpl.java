@@ -749,7 +749,7 @@ public class AggregateDaoImpl implements AggregateDao {
     }
 
     @Override
-    public @Nullable String readFullQueryText(String agentRollupId, String fullQueryTextSha1)
+    public String readFullQueryText(String agentRollupId, String fullQueryTextSha1)
             throws Exception {
         return fullQueryTextDao.getFullText(agentRollupId, fullQueryTextSha1);
     }
@@ -813,7 +813,7 @@ public class AggregateDaoImpl implements AggregateDao {
     }
 
     public void rollup(String agentRollupId, String agentRollupIdForMeta,
-            @Nullable String parentAgentRollupId, boolean leaf) throws Exception {
+            String parentAgentRollupId, boolean leaf) throws Exception {
         List<TTL> ttls = getTTLs();
         if (!leaf) {
             rollupFromChildren(agentRollupId, agentRollupIdForMeta, parentAgentRollupId,
@@ -828,7 +828,6 @@ public class AggregateDaoImpl implements AggregateDao {
     }
 
     @Override
-    @OnlyUsedByTests
     public void truncateAll() throws Exception {
         for (Table table : allTables) {
             for (int i = 0; i < configRepository.getRollupConfigs().size(); i++) {
@@ -845,7 +844,7 @@ public class AggregateDaoImpl implements AggregateDao {
     }
 
     private void rollupFromChildren(String agentRollupId, String agentRollupIdForMeta,
-            @Nullable String parentAgentRollupId, TTL ttl) throws Exception {
+            String parentAgentRollupId, TTL ttl) throws Exception {
         final int rollupLevel = 0;
         List<NeedsRollupFromChildren> needsRollupFromChildrenList = Common
                 .getNeedsRollupFromChildrenList(agentRollupId, readNeedsRollupFromChild, session);
@@ -1820,7 +1819,7 @@ public class AggregateDaoImpl implements AggregateDao {
 
     private List<ListenableFuture<?>> insertQueries(List<Aggregate.Query> queries,
             List<Aggregate.SharedQueryText> sharedQueryTexts, int rollupLevel, String agentRollupId,
-            String transactionType, @Nullable String transactionName, long captureTime,
+            String transactionType, String transactionName, long captureTime,
             TTL adjustedTTL) throws Exception {
         List<ListenableFuture<?>> futures = new ArrayList<>();
         for (Aggregate.Query query : queries) {
@@ -1863,7 +1862,7 @@ public class AggregateDaoImpl implements AggregateDao {
     }
 
     private ListenableFuture<?> insertQueries(List<MutableQuery> queries, int rollupLevel,
-            String agentRollupId, String transactionType, @Nullable String transactionName,
+            String agentRollupId, String transactionType, String transactionName,
             long captureTime, TTL adjustedTTL) throws Exception {
         List<ListenableFuture<?>> futures = new ArrayList<>();
         for (MutableQuery query : queries) {
@@ -1900,7 +1899,7 @@ public class AggregateDaoImpl implements AggregateDao {
 
     private List<ListenableFuture<?>> insertServiceCallsProto(
             List<Aggregate.ServiceCall> serviceCalls, int rollupLevel, String agentRollupId,
-            String transactionType, @Nullable String transactionName, long captureTime,
+            String transactionType, String transactionName, long captureTime,
             TTL adjustedTTL) throws Exception {
         List<ListenableFuture<?>> futures = new ArrayList<>();
         for (Aggregate.ServiceCall serviceCall : serviceCalls) {
@@ -1929,7 +1928,7 @@ public class AggregateDaoImpl implements AggregateDao {
 
     private ListenableFuture<?> insertServiceCalls(List<MutableServiceCall> serviceCalls,
             int rollupLevel, String agentRollupId, String transactionType,
-            @Nullable String transactionName, long captureTime, TTL adjustedTTL) throws Exception {
+            String transactionName, long captureTime, TTL adjustedTTL) throws Exception {
         List<ListenableFuture<?>> futures = new ArrayList<>();
         for (MutableServiceCall serviceCall : serviceCalls) {
             BoundStatement boundStatement;
@@ -2539,7 +2538,6 @@ public class AggregateDaoImpl implements AggregateDao {
                 .build();
     }
 
-    @Value.Immutable
     interface Table {
         String partialName();
         List<Column> columns();
@@ -2548,14 +2546,11 @@ public class AggregateDaoImpl implements AggregateDao {
         boolean fromInclusive();
     }
 
-    @Value.Immutable
-    @Styles.AllParameters
     interface Column {
         String name();
         String type();
     }
 
-    @Value.Immutable
     interface RollupParams {
         String agentRollupId();
         int rollupLevel();
@@ -2564,7 +2559,6 @@ public class AggregateDaoImpl implements AggregateDao {
         int maxServiceCallAggregatesPerTransactionAggregate();
     }
 
-    @Value.Immutable
     interface TTL {
         int generalTTL();
         int queryTTL();

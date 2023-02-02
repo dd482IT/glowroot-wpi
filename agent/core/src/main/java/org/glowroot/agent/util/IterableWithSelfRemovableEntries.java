@@ -81,8 +81,8 @@ public class IterableWithSelfRemovableEntries<E> implements Iterable<E> {
 
     private class ElementIterator implements Iterator<E> {
 
-        private @Nullable Entry nextEntry;
-        private @Nullable E nextElement;
+        private Entry nextEntry;
+        private E nextElement;
 
         @SuppressWarnings("method.invocation.invalid")
         private ElementIterator() {
@@ -126,15 +126,15 @@ public class IterableWithSelfRemovableEntries<E> implements Iterable<E> {
 
     private class Entry implements SelfRemovableEntry {
 
-        private final @Nullable WeakReference<E> ref; // only null for head
+        private final WeakReference<E> ref; // only null for head
 
         // prev is non-volatile since only accessed under lock
-        private @Nullable Entry prevEntry; // only null for head and removed
+        private Entry prevEntry; // only null for head and removed
 
         // next is volatile since accessed by iterator outside of lock
-        private volatile @Nullable Entry nextEntry;
+        private volatile Entry nextEntry;
 
-        private Entry(@Nullable E e, ReferenceQueue<E> queue) {
+        private Entry(E e, ReferenceQueue<E> queue) {
             if (e == null) {
                 ref = null;
             } else {
@@ -161,7 +161,7 @@ public class IterableWithSelfRemovableEntries<E> implements Iterable<E> {
             }
         }
 
-        private @Nullable E getElement() {
+        private E getElement() {
             if (ref == null) {
                 return null;
             }

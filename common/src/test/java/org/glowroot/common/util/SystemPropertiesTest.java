@@ -23,7 +23,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SystemPropertiesTest {
 
-    @Test
     public void shouldMaskJvmArgs() {
         assertThat(Masking.maskJvmArgs(ImmutableList.of("-Xmx1g", "-Dtest=one"),
                 ImmutableList.<String>of())).containsExactly("-Xmx1g", "-Dtest=one");
@@ -43,7 +42,6 @@ public class SystemPropertiesTest {
                 ImmutableList.<String>of("teSt"))).containsExactly("-Xmx1g", "-DtEst=****");
     }
 
-    @Test
     public void shouldMaskSystemProperties() {
         assertThat(Masking
                 .maskSystemProperties(ImmutableMap.of("test", "one"), ImmutableList.<String>of())

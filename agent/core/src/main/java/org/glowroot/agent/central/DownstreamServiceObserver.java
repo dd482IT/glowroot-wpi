@@ -107,7 +107,7 @@ class DownstreamServiceObserver implements StreamObserver<CentralRequest> {
     private final LiveTraceRepositoryImpl liveTraceRepository;
     private final String agentId;
 
-    private volatile @Nullable StreamObserver<AgentResponse> currResponseObserver;
+    private volatile StreamObserver<AgentResponse> currResponseObserver;
 
     // only used by tests
     private volatile boolean closedByCentralCollector;
@@ -162,7 +162,6 @@ class DownstreamServiceObserver implements StreamObserver<CentralRequest> {
     }
 
     @Override
-    @OnlyUsedByTests
     public void onCompleted() {
         closedByCentralCollector = true;
     }
@@ -843,7 +842,6 @@ class DownstreamServiceObserver implements StreamObserver<CentralRequest> {
                 .build());
     }
 
-    @OnlyUsedByTests
     void close() throws InterruptedException {
         StreamObserver<AgentResponse> responseObserver = currResponseObserver;
         while (responseObserver == null) {

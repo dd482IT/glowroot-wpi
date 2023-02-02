@@ -28,7 +28,7 @@ public class RowMappers {
 
     private RowMappers() {}
 
-    public static @Nullable Long getLong(ResultSet resultSet, int columnIndex) throws SQLException {
+    public static Long getLong(ResultSet resultSet, int columnIndex) throws SQLException {
         long value = resultSet.getLong(columnIndex);
         if (value == 0 && resultSet.wasNull()) {
             return null;
@@ -38,7 +38,7 @@ public class RowMappers {
     }
 
     public static void setLong(PreparedStatement preparedStatement, int columnIndex,
-            @Nullable Long value) throws SQLException {
+            Long value) throws SQLException {
         if (value == null) {
             preparedStatement.setNull(columnIndex, Types.BIGINT);
         } else {

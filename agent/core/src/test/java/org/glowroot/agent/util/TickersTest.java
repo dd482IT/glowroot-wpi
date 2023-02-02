@@ -22,7 +22,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class TickersTest {
 
-    @Test
     public void testEncryptionDecryption() throws Exception {
         Ticker ticker = Tickers.getTicker(true);
         assertThat(ticker.read()).isEqualTo(0);

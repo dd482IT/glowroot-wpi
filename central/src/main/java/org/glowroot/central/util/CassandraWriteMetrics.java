@@ -85,11 +85,11 @@ public class CassandraWriteMetrics {
                 DAYS.toMillis(1), MILLISECONDS);
     }
 
-    public void setCurrTransactionType(@Nullable String transactionType) {
+    public void setCurrTransactionType(String transactionType) {
         currTransactionType.set(transactionType);
     }
 
-    public void setCurrTransactionName(@Nullable String transactionName) {
+    public void setCurrTransactionName(String transactionName) {
         currTransactionName.set(transactionName);
     }
 
@@ -258,7 +258,7 @@ public class CassandraWriteMetrics {
         }
     }
 
-    private @Nullable String getTransactionType(
+    private String getTransactionType(
             List<ColumnDefinitions.Definition> columnDefinitions, BoundStatement boundStatement) {
         if (columnDefinitions.size() < 2) {
             return currTransactionType.get();
@@ -272,7 +272,7 @@ public class CassandraWriteMetrics {
         }
     }
 
-    private @Nullable String getTransactionName(
+    private String getTransactionName(
             List<ColumnDefinitions.Definition> columnDefinitions, BoundStatement boundStatement) {
         if (columnDefinitions.size() < 3) {
             return currTransactionName.get();
@@ -306,7 +306,7 @@ public class CassandraWriteMetrics {
         return perTransactionNameMetrics;
     }
 
-    private static @Nullable String getAgentRollupId(
+    private static String getAgentRollupId(
             List<ColumnDefinitions.Definition> columnDefinitions, BoundStatement boundStatement) {
         ColumnDefinitions.Definition columnDefinition = columnDefinitions.get(0);
         String columnDefinitionName = columnDefinition.getName();

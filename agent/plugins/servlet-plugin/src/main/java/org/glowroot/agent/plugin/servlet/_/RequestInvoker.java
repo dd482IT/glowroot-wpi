@@ -24,10 +24,10 @@ import org.glowroot.agent.plugin.api.util.Reflection;
 public class RequestInvoker {
 
     // these ServletRequest methods were introduced in Servlet 3.0
-    private final @Nullable Method getRemotePortMethod;
-    private final @Nullable Method getLocalAddrMethod;
-    private final @Nullable Method getLocalNameMethod;
-    private final @Nullable Method getLocalPortMethod;
+    private final Method getRemotePortMethod;
+    private final Method getLocalAddrMethod;
+    private final Method getLocalNameMethod;
+    private final Method getLocalPortMethod;
 
     public RequestInvoker(ClassInfo classInfo) {
         Class<?> servletRequestClass = Reflection

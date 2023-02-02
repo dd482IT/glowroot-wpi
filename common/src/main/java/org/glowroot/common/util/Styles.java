@@ -29,17 +29,11 @@ public class Styles {
     private Styles() {}
 
     @Target({PACKAGE, TYPE})
-    @Value.Style(from = "copyFrom")
-    @JsonSerialize
     public @interface Standard {}
 
     @Target({PACKAGE, TYPE})
-    @Value.Style(from = "copyFrom", visibility = ImplementationVisibility.PRIVATE)
-    @JsonSerialize
     public @interface Private {}
 
     @Target({PACKAGE, TYPE})
-    @Value.Style(from = "copyFrom", allParameters = true)
-    @JsonSerialize
     public @interface AllParameters {}
 }

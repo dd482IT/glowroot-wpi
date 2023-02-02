@@ -47,11 +47,11 @@ public class ConfigServiceImpl
 
     // pluginId is either the id of a registered plugin or it is null
     // (see validation in constructor)
-    private final @Nullable String pluginId;
+    private final String pluginId;
 
     // cache for fast read access
     // visibility is provided by memoryBarrier in org.glowroot.config.ConfigService
-    private @MonotonicNonNull PluginConfig pluginConfig;
+    private PluginConfig pluginConfig;
 
     private final Map<ConfigListener, Boolean> configListeners =
             new MapMaker().weakKeys().makeMap();
@@ -206,7 +206,7 @@ public class ConfigServiceImpl
     private class DoublePropertyImpl implements DoubleProperty, ConfigListener {
         private final String name;
         // visibility is provided by memoryBarrier in outer class
-        private @Nullable Double value;
+        private Double value;
         private DoublePropertyImpl(String name) {
             this.name = name;
             if (pluginConfig != null) {
@@ -214,7 +214,7 @@ public class ConfigServiceImpl
             }
         }
         @Override
-        public @Nullable Double value() {
+        public Double value() {
             return value;
         }
         @Override

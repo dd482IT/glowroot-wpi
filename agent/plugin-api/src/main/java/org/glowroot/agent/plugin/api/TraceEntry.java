@@ -73,7 +73,7 @@ public interface TraceEntry {
      * {@code maxTraceEntriesPerTransaction * 2}) on the total number of (real) entries is applied
      * when escalating dummy entries to real entries.
      */
-    void endWithError(@Nullable String message);
+    void endWithError(String message);
 
     /**
      * End the entry and add the specified {@code errorMessage} to the entry.
@@ -88,7 +88,7 @@ public interface TraceEntry {
      * {@code maxTraceEntriesPerTransaction * 2}) on the total number of (real) entries is applied
      * when escalating dummy entries to real entries.
      */
-    void endWithError(@Nullable String message, Throwable t);
+    void endWithError(String message, Throwable t);
 
     /**
      * This method is the same as {@link #endWithError(Throwable)}, except that it won't escalate a
@@ -119,6 +119,5 @@ public interface TraceEntry {
      * 
      * Under some error conditions this can return {@code null}.
      */
-    @Nullable
     Object getMessageSupplier();
 }

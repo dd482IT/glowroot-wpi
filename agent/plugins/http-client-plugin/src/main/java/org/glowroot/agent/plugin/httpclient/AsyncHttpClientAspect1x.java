@@ -47,22 +47,21 @@ import org.glowroot.agent.plugin.httpclient._.Uris;
 public class AsyncHttpClientAspect1x {
 
     // the field and method names are verbose since they will be mixed in to existing classes
-    @Mixin("com.ning.http.client.ListenableFuture")
     public abstract static class ListenableFutureImpl implements ListenableFutureMixin {
 
         // volatile not needed, only accessed by the main thread
-        private transient @Nullable AsyncTraceEntry glowroot$asyncTraceEntry;
+        private transient AsyncTraceEntry glowroot$asyncTraceEntry;
 
         // volatile not needed, only accessed by the main thread
         private transient boolean glowroot$ignoreGet;
 
         @Override
-        public @Nullable AsyncTraceEntry glowroot$getAsyncTraceEntry() {
+        public AsyncTraceEntry glowroot$getAsyncTraceEntry() {
             return glowroot$asyncTraceEntry;
         }
 
         @Override
-        public void glowroot$setAsyncTraceEntry(@Nullable AsyncTraceEntry asyncTraceEntry) {
+        public void glowroot$setAsyncTraceEntry(AsyncTraceEntry asyncTraceEntry) {
             glowroot$asyncTraceEntry = asyncTraceEntry;
         }
 
@@ -82,27 +81,21 @@ public class AsyncHttpClientAspect1x {
     // interface after the mixin takes place
     public interface ListenableFutureMixin {
 
-        @Nullable
         AsyncTraceEntry glowroot$getAsyncTraceEntry();
 
-        void glowroot$setAsyncTraceEntry(@Nullable AsyncTraceEntry asyncTraceEntry);
+        void glowroot$setAsyncTraceEntry(AsyncTraceEntry asyncTraceEntry);
 
         boolean glowroot$getIgnoreGet();
 
         void glowroot$setIgnoreGet(boolean value);
     }
 
-    @Pointcut(className = "com.ning.http.client.AsyncHttpClient", methodName = "executeRequest",
-            methodParameterTypes = {"com.ning.http.client.Request", ".."},
-            methodReturnType = "com.ning.http.client.ListenableFuture",
-            nestingGroup = "http-client", timerName = "http client request")
     public static class OldExecuteRequestAdvice {
         private static final TimerName timerName =
                 Agent.getTimerName(OldExecuteRequestAdvice.class);
-        @OnBefore
-        public static @Nullable AsyncTraceEntry onBefore(ThreadContext context,
-                @BindParameter @Nullable Request request,
-                @BindClassMeta AsyncHttpClientRequestInvoker requestInvoker) {
+        public static AsyncTraceEntry onBefore(ThreadContext context,
+                Request request,
+                AsyncHttpClientRequestInvoker requestInvoker) {
             // need to start trace entry @OnBefore in case it is executed in a "same thread
             // executor" in which case will be over in @OnReturn
             if (request == null) {
@@ -118,10 +111,9 @@ public class AsyncHttpClientAspect1x {
             return context.startAsyncServiceCallEntry("HTTP", method + Uris.stripQueryString(url),
                     MessageSupplier.create("http client request: {}{}", method, url), timerName);
         }
-        @OnReturn
         public static <T extends ListenableFutureMixin & ListenableFuture<?>> void onReturn(
-                final @BindReturn @Nullable T future,
-                final @BindTraveler @Nullable AsyncTraceEntry asyncTraceEntry) {
+                final T future,
+                final AsyncTraceEntry asyncTraceEntry) {
             if (asyncTraceEntry == null) {
                 return;
             }
@@ -134,9 +126,8 @@ public class AsyncHttpClientAspect1x {
             future.addListener(new ExecuteRequestListener<T>(asyncTraceEntry, future),
                     DirectExecutor.INSTANCE);
         }
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler @Nullable AsyncTraceEntry asyncTraceEntry) {
+        public static void onThrow(Throwable t,
+                AsyncTraceEntry asyncTraceEntry) {
             if (asyncTraceEntry != null) {
                 asyncTraceEntry.stopSyncTimer();
                 asyncTraceEntry.endWithError(t);
@@ -144,25 +135,19 @@ public class AsyncHttpClientAspect1x {
         }
     }
 
-    @Pointcut(className = "java.util.concurrent.Future",
-            subTypeRestriction = "com.ning.http.client.ListenableFuture", methodName = "get",
-            methodParameterTypes = {".."}, suppressionKey = "wait-on-future")
     public static class FutureGetAdvice {
-        @IsEnabled
-        public static boolean isEnabled(@BindReceiver ListenableFutureMixin future) {
+        public static boolean isEnabled(ListenableFutureMixin future) {
             return !future.glowroot$getIgnoreGet();
         }
-        @OnBefore
-        public static @Nullable Timer onBefore(ThreadContext threadContext,
-                @BindReceiver ListenableFutureMixin future) {
+        public static Timer onBefore(ThreadContext threadContext,
+                ListenableFutureMixin future) {
             AsyncTraceEntry asyncTraceEntry = future.glowroot$getAsyncTraceEntry();
             if (asyncTraceEntry == null) {
                 return null;
             }
             return asyncTraceEntry.extendSyncTimer(threadContext);
         }
-        @OnAfter
-        public static void onAfter(@BindTraveler @Nullable Timer syncTimer) {
+        public static void onAfter(Timer syncTimer) {
             if (syncTimer != null) {
                 syncTimer.stop();
             }
@@ -191,7 +176,7 @@ public class AsyncHttpClientAspect1x {
         }
 
         // this is hacky way to find out if future ended with exception or not
-        private @Nullable Throwable getException() {
+        private Throwable getException() {
             future.glowroot$setIgnoreGet(true);
             try {
                 future.get();

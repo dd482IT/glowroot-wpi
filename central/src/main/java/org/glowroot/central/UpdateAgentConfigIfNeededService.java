@@ -92,9 +92,6 @@ class UpdateAgentConfigIfNeededService implements Runnable {
         }
     }
 
-    @Instrumentation.Transaction(transactionType = "Background",
-            transactionName = "Outer update agent config loop", traceHeadline = "Outer rollup loop",
-            timer = "outer rollup loop")
     private void runInternal() throws Exception {
         for (AgentRollup agentRollup : activeAgentDao
                 .readRecentlyActiveAgentRollups(DAYS.toMillis(7))) {
@@ -149,7 +146,6 @@ class UpdateAgentConfigIfNeededService implements Runnable {
         });
     }
 
-    @VisibleForTesting
     static long millisUntilNextRollup(long currentTimeMillis) {
         return 60000 - (currentTimeMillis - 10000) % 60000;
     }

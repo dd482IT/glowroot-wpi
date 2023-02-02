@@ -37,21 +37,18 @@ public class CappedDatabaseTest {
     private ScheduledExecutorService scheduledExecutor;
     private CappedDatabase cappedDatabase;
 
-    @BeforeEach
     public void onBefore() throws IOException {
         tempFile = File.createTempFile("glowroot-test-", ".capped.db");
         scheduledExecutor = Executors.newSingleThreadScheduledExecutor();
         cappedDatabase = new CappedDatabase(tempFile, 1, scheduledExecutor, Ticker.systemTicker());
     }
 
-    @AfterEach
     public void onAfter() throws IOException {
         scheduledExecutor.shutdownNow();
         cappedDatabase.close();
         tempFile.delete();
     }
 
-    @Test
     public void shouldWrite() throws Exception {
         // given
         String text = "0123456789";
@@ -62,7 +59,6 @@ public class CappedDatabaseTest {
         assertThat(text2).isEqualTo(text);
     }
 
-    @Test
     public void shouldReadOneByteAtATime() throws Exception {
         // given
         String text = "0123456789";
@@ -85,7 +81,6 @@ public class CappedDatabaseTest {
         assertThat(in.read()).isEqualTo(-1);
     }
 
-    @Test
     public void shouldWrap() throws Exception {
         // given
         // use random text so that the lzf compressed text is also large and forces wrapping
@@ -105,7 +100,6 @@ public class CappedDatabaseTest {
         assertThat(text2).isEqualTo(text);
     }
 
-    @Test
     public void shouldWrapAndKeepGoing() throws Exception {
         // given
         // use random text so that the lzf compressed text is also large and forces wrapping
@@ -126,7 +120,6 @@ public class CappedDatabaseTest {
         assertThat(text2).isEqualTo(text);
     }
 
-    @Test
     public void shouldWrapOverOldBlocks() throws Exception {
         // given
         // use random text so that the lzf compressed text is also large and forces wrapping

@@ -80,7 +80,7 @@ class EmbeddedAgentModule {
 
     // only look at system property, b/c there doesn't seem any point in setting agent.port in
     // the glowroot.properties file, since in that case better to set it in the config.json file
-    private static final @Nullable Integer WEB_PORT_OVERRIDE =
+    private static final Integer WEB_PORT_OVERRIDE =
             Integer.getInteger("glowroot.agent.port");
 
     private final File logDir;
@@ -90,22 +90,22 @@ class EmbeddedAgentModule {
 
     private final PluginCache pluginCache;
 
-    private final @Nullable AgentModule agentModule;
-    private final @Nullable OfflineViewerAgentModule offlineViewerAgentModule;
+    private final AgentModule agentModule;
+    private final OfflineViewerAgentModule offlineViewerAgentModule;
 
     private final String version;
 
-    private volatile @MonotonicNonNull ScheduledExecutorService backgroundExecutor;
-    private volatile @MonotonicNonNull SimpleRepoModule simpleRepoModule;
+    private volatile ScheduledExecutorService backgroundExecutor;
+    private volatile SimpleRepoModule simpleRepoModule;
 
-    private volatile @MonotonicNonNull UiModule uiModule;
+    private volatile UiModule uiModule;
 
     private final CountDownLatch simpleRepoModuleInit = new CountDownLatch(1);
 
-    EmbeddedAgentModule(@Nullable File pluginsDir, List<File> confDirs, boolean configReadOnly,
-            File logDir, File tmpDir, @Nullable Instrumentation instrumentation,
-            @Nullable PreCheckClassFileTransformer preCheckClassFileTransformer,
-            @Nullable File glowrootJarFile, String glowrootVersion, boolean offlineViewer)
+    EmbeddedAgentModule(File pluginsDir, List<File> confDirs, boolean configReadOnly,
+            File logDir, File tmpDir, Instrumentation instrumentation,
+            PreCheckClassFileTransformer preCheckClassFileTransformer,
+            File glowrootJarFile, String glowrootVersion, boolean offlineViewer)
             throws Exception {
 
         ticker = Ticker.systemTicker();
@@ -141,10 +141,10 @@ class EmbeddedAgentModule {
     }
 
     void onEnteringMain(final List<File> confDirs, boolean configReadOnly, final File dataDir,
-            @Nullable File glowrootJarFile, Map<String, String> properties,
-            @Nullable Instrumentation instrumentation,
-            final @Nullable Class<? extends Collector> collectorProxyClass,
-            final String glowrootVersion, @Nullable String mainClass) throws Exception {
+            File glowrootJarFile, Map<String, String> properties,
+            Instrumentation instrumentation,
+            final Class<? extends Collector> collectorProxyClass,
+            final String glowrootVersion, String mainClass) throws Exception {
 
         PreInitializeStorageShutdownClasses.preInitializeClasses();
         // mem db is only used for testing (by glowroot-agent-it-harness)
@@ -316,19 +316,16 @@ class EmbeddedAgentModule {
         simpleRepoModuleInit.await();
     }
 
-    @OnlyUsedByTests
     public SimpleRepoModule getSimpleRepoModule() throws InterruptedException {
         simpleRepoModuleInit.await();
         return checkNotNull(simpleRepoModule);
     }
 
-    @OnlyUsedByTests
     public AgentModule getAgentModule() {
         checkNotNull(agentModule);
         return agentModule;
     }
 
-    @OnlyUsedByTests
     public UiModule getUiModule() throws InterruptedException {
         Stopwatch stopwatch = Stopwatch.createStarted();
         while (stopwatch.elapsed(SECONDS) < 60) {
@@ -340,7 +337,6 @@ class EmbeddedAgentModule {
         throw new IllegalStateException("UI Module failed to start");
     }
 
-    @OnlyUsedByTests
     public void close() throws Exception {
         if (uiModule != null) {
             uiModule.close(false);

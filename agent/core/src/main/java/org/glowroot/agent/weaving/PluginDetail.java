@@ -29,14 +29,12 @@ import org.objectweb.asm.commons.Method;
 import org.glowroot.agent.plugin.api.weaving.Mixin;
 import org.glowroot.agent.plugin.api.weaving.Pointcut;
 
-@Value.Immutable
 interface PluginDetail {
 
     List<PointcutClass> pointcutClasses();
     List<MixinClass> mixinClasses();
     List<ShimClass> shimClasses();
 
-    @Value.Immutable
     abstract class PointcutClass {
 
         abstract Type type();
@@ -45,10 +43,9 @@ interface PluginDetail {
         abstract byte[] bytes();
 
         abstract boolean collocateInClassLoader();
-        abstract @Nullable File pluginJar();
+        abstract File pluginJar();
     }
 
-    @Value.Immutable
     abstract class PointcutMethod {
 
         abstract String name();
@@ -56,23 +53,20 @@ interface PluginDetail {
         abstract Set<Type> annotationTypes();
         abstract Map<Integer, List<Type>> parameterAnnotationTypes();
 
-        @Value.Derived
         Method toAsmMethod() {
             return new Method(name(), descriptor());
         }
     }
 
-    @Value.Immutable
     abstract class MixinClass {
 
         abstract Type type();
         abstract List<Type> interfaces();
         abstract Mixin mixin();
-        abstract @Nullable String initMethodName();
+        abstract String initMethodName();
         abstract byte[] bytes();
     }
 
-    @Value.Immutable
     abstract class ShimClass {
 
         abstract Type type();

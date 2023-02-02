@@ -30,20 +30,19 @@ import org.glowroot.agent.plugin.api.weaving.Pointcut;
 public class MongoCursorAspect {
 
     // the field and method names are verbose since they will be mixed in to existing classes
-    @Mixin({"com.mongodb.client.MongoCursor"})
     public static class MongoCursorImpl implements MongoCursorMixin {
 
         // does not need to be volatile, app/framework must provide visibility of MongoIterables if
         // used across threads and this can piggyback
-        private transient @Nullable QueryEntry glowroot$queryEntry;
+        private transient QueryEntry glowroot$queryEntry;
 
         @Override
-        public @Nullable QueryEntry glowroot$getQueryEntry() {
+        public QueryEntry glowroot$getQueryEntry() {
             return glowroot$queryEntry;
         }
 
         @Override
-        public void glowroot$setQueryEntry(@Nullable QueryEntry queryEntry) {
+        public void glowroot$setQueryEntry(QueryEntry queryEntry) {
             glowroot$queryEntry = queryEntry;
         }
     }
@@ -51,25 +50,20 @@ public class MongoCursorAspect {
     // the method names are verbose since they will be mixed in to existing classes
     public interface MongoCursorMixin {
 
-        @Nullable
         QueryEntry glowroot$getQueryEntry();
 
-        void glowroot$setQueryEntry(@Nullable QueryEntry queryEntry);
+        void glowroot$setQueryEntry(QueryEntry queryEntry);
     }
 
-    @Pointcut(className = "com.mongodb.client.MongoCursor", methodName = "next|tryNext",
-            methodParameterTypes = {}, nestingGroup = "mongodb")
     public static class FirstAdvice {
 
-        @OnBefore
-        public static @Nullable Timer onBefore(@BindReceiver MongoCursorMixin mongoCursor) {
+        public static Timer onBefore(MongoCursorMixin mongoCursor) {
             QueryEntry queryEntry = mongoCursor.glowroot$getQueryEntry();
             return queryEntry == null ? null : queryEntry.extend();
         }
 
-        @OnReturn
-        public static void onReturn(@BindReturn @Nullable Object document,
-                @BindReceiver MongoCursorMixin mongoIterable) {
+        public static void onReturn(Object document,
+                MongoCursorMixin mongoIterable) {
             QueryEntry queryEntry = mongoIterable.glowroot$getQueryEntry();
             if (queryEntry == null) {
                 return;
@@ -81,26 +75,21 @@ public class MongoCursorAspect {
             }
         }
 
-        @OnAfter
-        public static void onAfter(@BindTraveler @Nullable Timer timer) {
+        public static void onAfter(Timer timer) {
             if (timer != null) {
                 timer.stop();
             }
         }
     }
 
-    @Pointcut(className = "com.mongodb.client.MongoCursor", methodName = "hasNext",
-            methodParameterTypes = {}, nestingGroup = "mongodb")
     public static class IsExhaustedAdvice {
 
-        @OnBefore
-        public static @Nullable Timer onBefore(@BindReceiver MongoCursorMixin mongoCursor) {
+        public static Timer onBefore(MongoCursorMixin mongoCursor) {
             QueryEntry queryEntry = mongoCursor.glowroot$getQueryEntry();
             return queryEntry == null ? null : queryEntry.extend();
         }
 
-        @OnReturn
-        public static void onReturn(@BindReceiver MongoCursorMixin mongoCursor) {
+        public static void onReturn(MongoCursorMixin mongoCursor) {
             QueryEntry queryEntry = mongoCursor.glowroot$getQueryEntry();
             if (queryEntry == null) {
                 // tracing must be disabled (e.g. exceeded trace entry limit)
@@ -109,8 +98,7 @@ public class MongoCursorAspect {
             queryEntry.rowNavigationAttempted();
         }
 
-        @OnAfter
-        public static void onAfter(@BindTraveler @Nullable Timer timer) {
+        public static void onAfter(Timer timer) {
             if (timer != null) {
                 timer.stop();
             }

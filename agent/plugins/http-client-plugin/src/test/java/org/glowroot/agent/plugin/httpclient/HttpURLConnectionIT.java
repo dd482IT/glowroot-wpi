@@ -37,48 +37,39 @@ public class HttpURLConnectionIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         // need to use javaagent container since HttpURLConnection is in the bootstrap class loader
         container = JavaagentContainer.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldCaptureHttpGet() throws Exception {
         shouldCaptureHttpGet(ExecuteHttpGet.class, "http");
     }
 
-    @Test
     public void shouldCaptureHttpGetWithQueryString() throws Exception {
         shouldCaptureHttpGetWithQueryString(ExecuteHttpGetWithQueryString.class, "http");
     }
 
-    @Test
     public void shouldCaptureHttpPost() throws Exception {
         shouldCaptureHttpPost(ExecuteHttpPost.class, "http");
     }
 
-    @Test
     public void shouldCaptureHttpGetHTTPS() throws Exception {
         shouldCaptureHttpGet(ExecuteHttpGetHTTPS.class, "https");
     }
 
-    @Test
     public void shouldCaptureHttpGetWithQueryStringHTTPS() throws Exception {
         shouldCaptureHttpGetWithQueryString(ExecuteHttpGetWithQueryStringHTTPS.class, "https");
     }
 
-    @Test
     public void shouldCaptureHttpPostHTTPS() throws Exception {
         shouldCaptureHttpPost(ExecuteHttpPostHTTPS.class, "https");
     }

@@ -25,11 +25,11 @@ import org.glowroot.agent.plugin.api.util.Reflection;
 
 public class TraceGeneratorInvoker {
 
-    private final @Nullable Method transactionTypeMethod;
-    private final @Nullable Method transactionNameMethod;
-    private final @Nullable Method headlineMethod;
-    private final @Nullable Method attributesMethod;
-    private final @Nullable Method errorMethod;
+    private final Method transactionTypeMethod;
+    private final Method transactionNameMethod;
+    private final Method headlineMethod;
+    private final Method attributesMethod;
+    private final Method errorMethod;
 
     public TraceGeneratorInvoker(ClassInfo classInfo) {
         Class<?> clazz = Reflection.getClass("org.glowroot.agent.tests.app.TraceGenerator",
@@ -55,12 +55,10 @@ public class TraceGeneratorInvoker {
 
     // TODO report checker framework issue that occurs without this suppression
     @SuppressWarnings("return.type.incompatible")
-    @Nullable
     Map<String, String> attributes(Object request) {
         return Reflection.invoke(attributesMethod, request);
     }
 
-    @Nullable
     String error(Object request) {
         return Reflection.invoke(errorMethod, request);
     }

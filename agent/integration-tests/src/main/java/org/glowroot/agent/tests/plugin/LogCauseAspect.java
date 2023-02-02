@@ -28,20 +28,16 @@ import org.glowroot.agent.plugin.api.weaving.Pointcut;
 
 public class LogCauseAspect {
 
-    @Pointcut(className = "org.glowroot.agent.tests.app.LogCause", methodName = "log",
-            methodParameterTypes = {"java.lang.String"}, timerName = "log error")
     public static class LogCauseAdvice {
 
         private static final TimerName timerName = Agent.getTimerName(LogCauseAdvice.class);
 
-        @OnBefore
-        public static TraceEntry onBefore(ThreadContext context, @BindParameter String message) {
+        public static TraceEntry onBefore(ThreadContext context, String message) {
             return context.startTraceEntry(MessageSupplier.create("ERROR -- {}", message),
                     timerName);
         }
 
-        @OnAfter
-        public static void onAfter(@BindTraveler TraceEntry traceEntry) {
+        public static void onAfter(TraceEntry traceEntry) {
             Exception cause1 = new NullPointerException("Cause 1");
             Exception cause2 = new IllegalStateException("Cause 2", cause1);
             Exception cause3 = new IllegalArgumentException("Cause 3", cause2);

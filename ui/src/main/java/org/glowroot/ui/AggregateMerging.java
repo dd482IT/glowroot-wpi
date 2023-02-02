@@ -85,20 +85,15 @@ class AggregateMerging {
         rootTimers.add(rootTimer);
     }
 
-    @Value.Immutable
     interface MergedAggregate {
         long transactionCount();
         List<MutableTimer> mainThreadRootTimers();
         MutableThreadStats mainThreadStats();
-        @Nullable
         MutableTimer auxThreadRootTimer();
-        @Nullable
         MutableThreadStats auxThreadStats();
         List<MutableTimer> asyncTimers();
     }
 
-    @Value.Immutable
-    @Styles.AllParameters
     interface PercentileValue {
         String dataSeriesName();
         long value();

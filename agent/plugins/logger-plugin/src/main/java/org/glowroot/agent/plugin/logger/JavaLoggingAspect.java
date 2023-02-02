@@ -38,9 +38,6 @@ public class JavaLoggingAspect {
 
     private static final String TIMER_NAME = "logging";
 
-    @Pointcut(className = "java.util.logging.Logger", methodName = "log",
-            methodParameterTypes = {"java.util.logging.LogRecord"}, nestingGroup = "logging",
-            timerName = TIMER_NAME)
     public static class LogAdvice {
 
         private static final TimerName timerName = Agent.getTimerName(LogAdvice.class);
@@ -50,9 +47,8 @@ public class JavaLoggingAspect {
         // cannot use java.util.logging.Logger in the signature of this method because that triggers
         // java.util.logging.Logger to be loaded before weaving is put in place (from inside
         // org.glowroot.agent.weaving.AdviceBuilder)
-        @OnBefore
-        public static @Nullable LogAdviceTraveler onBefore(ThreadContext context,
-                @BindParameter @Nullable LogRecord record, @BindReceiver Object logger) {
+        public static LogAdviceTraveler onBefore(ThreadContext context,
+                LogRecord record, Object logger) {
             if (record == null) {
                 return null;
             }
@@ -64,8 +60,7 @@ public class JavaLoggingAspect {
             return onBeforeCommon(context, record, level);
         }
 
-        @OnAfter
-        public static void onAfter(@BindTraveler @Nullable LogAdviceTraveler traveler) {
+        public static void onAfter(LogAdviceTraveler traveler) {
             if (traveler == null) {
                 return;
             }
@@ -102,27 +97,22 @@ public class JavaLoggingAspect {
             return new LogAdviceTraveler(traceEntry, lvl, formattedMessage, t);
         }
 
-        private static String nullToEmpty(@Nullable String s) {
+        private static String nullToEmpty(String s) {
             return s == null ? "" : s;
         }
     }
 
-    @Pointcut(className = "org.jboss.logmanager.LoggerNode", methodName = "publish",
-            methodParameterTypes = {"org.jboss.logmanager.ExtLogRecord"}, nestingGroup = "logging",
-            timerName = TIMER_NAME)
     public static class JBossLogAdvice {
 
-        @OnBefore
-        public static @Nullable LogAdviceTraveler onBefore(ThreadContext context,
-                @BindParameter @Nullable LogRecord record) {
+        public static LogAdviceTraveler onBefore(ThreadContext context,
+                LogRecord record) {
             if (record == null) {
                 return null;
             }
             return LogAdvice.onBeforeCommon(context, record, record.getLevel());
         }
 
-        @OnAfter
-        public static void onAfter(@BindTraveler @Nullable LogAdviceTraveler traveler) {
+        public static void onAfter(LogAdviceTraveler traveler) {
             LogAdvice.onAfter(traveler);
         }
     }
@@ -132,10 +122,10 @@ public class JavaLoggingAspect {
         private final TraceEntry traceEntry;
         private final int level;
         private final String formattedMessage;
-        private final @Nullable Throwable throwable;
+        private final Throwable throwable;
 
         private LogAdviceTraveler(TraceEntry traceEntry, int level, String formattedMessage,
-                @Nullable Throwable throwable) {
+                Throwable throwable) {
             this.traceEntry = traceEntry;
             this.level = level;
             this.formattedMessage = formattedMessage;

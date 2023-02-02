@@ -41,39 +41,32 @@ public class AsyncRestControllerIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         // javaagent is required for Executor.execute() weaving
         container = JavaagentContainer.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldCaptureCallableAsyncController() throws Exception {
         shouldCaptureCallableAsyncController("", InvokeCallableAsyncController.class);
     }
 
-    @Test
     public void shouldCaptureDeferredResultAsyncController() throws Exception {
         shouldCaptureDeferredResultAsyncController("", InvokeDeferredResultAsyncController.class);
     }
 
-    @Test
     public void shouldCaptureCallableAsyncControllerWithContextPath() throws Exception {
         shouldCaptureCallableAsyncController("/zzz",
                 InvokeCallableAsyncControllerWithContextPath.class);
     }
 
-    @Test
     public void shouldCaptureDeferredResultAsyncControllerWithContextPath() throws Exception {
         shouldCaptureDeferredResultAsyncController("/zzz",
                 InvokeDeferredResultAsyncControllerWithContextPath.class);
@@ -220,11 +213,9 @@ public class AsyncRestControllerIT {
         }
     }
 
-    @RestController
     public static class CallableAsyncController {
 
-        @RequestMapping("rest-async")
-        public @ResponseBody Callable<String> test() throws InterruptedException {
+        public Callable<String> test() throws InterruptedException {
             new CreateTraceEntry().traceEntryMarker();
             return new Callable<String>() {
                 @Override
@@ -236,11 +227,9 @@ public class AsyncRestControllerIT {
         }
     }
 
-    @RestController
     public static class DeferredResultAsyncController {
 
-        @RequestMapping("rest-async2")
-        public @ResponseBody DeferredResult<String> test() throws InterruptedException {
+        public DeferredResult<String> test() throws InterruptedException {
             new CreateTraceEntry().traceEntryMarker();
             final DeferredResult<String> result = new DeferredResult<String>();
             final ExecutorService executor = Executors.newCachedThreadPool();

@@ -39,14 +39,10 @@ import org.glowroot.agent.plugin.httpclient._.Uris;
 
 public class WiremockApacheHttpClientAspect {
 
-    @Pointcut(className = "wiremock.org.apache.http.client.HttpClient", methodName = "execute",
-            methodParameterTypes = {"wiremock.org.apache.http.client.methods.HttpUriRequest", ".."},
-            nestingGroup = "http-client", timerName = "http client request")
     public static class ExecuteAdvice {
         private static final TimerName timerName = Agent.getTimerName(ExecuteAdvice.class);
-        @OnBefore
-        public static @Nullable TraceEntry onBefore(ThreadContext context,
-                @BindParameter @Nullable HttpUriRequest request) {
+        public static TraceEntry onBefore(ThreadContext context,
+                HttpUriRequest request) {
             if (request == null) {
                 return null;
             }
@@ -67,31 +63,24 @@ public class WiremockApacheHttpClientAspect {
                     MessageSupplier.create("http client request: {}{}", method, uri),
                     timerName);
         }
-        @OnReturn
-        public static void onReturn(@BindTraveler @Nullable TraceEntry traceEntry) {
+        public static void onReturn(TraceEntry traceEntry) {
             if (traceEntry != null) {
                 traceEntry.end();
             }
         }
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler @Nullable TraceEntry traceEntry) {
+        public static void onThrow(Throwable t,
+                TraceEntry traceEntry) {
             if (traceEntry != null) {
                 traceEntry.endWithError(t);
             }
         }
     }
 
-    @Pointcut(className = "wiremock.org.apache.http.client.HttpClient", methodName = "execute",
-            methodParameterTypes = {"wiremock.org.apache.http.HttpHost",
-                    "wiremock.org.apache.http.HttpRequest", ".."},
-            nestingGroup = "http-client", timerName = "http client request")
     public static class ExecuteWithHostAdvice {
         private static final TimerName timerName = Agent.getTimerName(ExecuteWithHostAdvice.class);
-        @OnBefore
-        public static @Nullable TraceEntry onBefore(ThreadContext context,
-                @BindParameter @Nullable HttpHost hostObj,
-                @BindParameter @Nullable HttpRequest request) {
+        public static TraceEntry onBefore(ThreadContext context,
+                HttpHost hostObj,
+                HttpRequest request) {
             if (request == null) {
                 return null;
             }
@@ -114,15 +103,13 @@ public class WiremockApacheHttpClientAspect {
                     MessageSupplier.create("http client request: {}{}{}", method, host, uri),
                     timerName);
         }
-        @OnReturn
-        public static void onReturn(@BindTraveler @Nullable TraceEntry traceEntry) {
+        public static void onReturn(TraceEntry traceEntry) {
             if (traceEntry != null) {
                 traceEntry.end();
             }
         }
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler TraceEntry traceEntry) {
+        public static void onThrow(Throwable t,
+                TraceEntry traceEntry) {
             traceEntry.endWithError(t);
         }
     }

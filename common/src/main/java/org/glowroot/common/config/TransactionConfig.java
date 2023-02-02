@@ -23,29 +23,24 @@ import org.immutables.value.Value;
 import org.glowroot.wire.api.model.AgentConfigOuterClass.AgentConfig;
 import org.glowroot.wire.api.model.Proto.OptionalInt32;
 
-@Value.Immutable
 public abstract class TransactionConfig {
 
     // 0 means mark all transactions as slow
-    @Value.Default
     public int slowThresholdMillis() {
         return 2000;
     }
 
     // 0 means profiling disabled
-    @Value.Default
     public int profilingIntervalMillis() {
         return 1000;
     }
 
-    @Value.Default
     // do not use @JsonInclude NON_EMPTY
     // need to always write this value to config.json since default value is true
     public boolean captureThreadStats() {
         return true;
     }
 
-    @JsonInclude(Include.NON_EMPTY)
     public abstract ImmutableList<ImmutableSlowThresholdOverride> slowThresholdOverrides();
 
     public AgentConfig.TransactionConfig toProto() {
@@ -89,19 +84,14 @@ public abstract class TransactionConfig {
         return OptionalInt32.newBuilder().setValue(value).build();
     }
 
-    @Value.Immutable
     public abstract static class SlowThresholdOverride {
 
         public abstract String transactionType();
 
-        @Value.Default
-        @JsonInclude(Include.NON_EMPTY)
         public String transactionName() {
             return "";
         }
 
-        @Value.Default
-        @JsonInclude(Include.NON_EMPTY)
         public String user() {
             return "";
         }

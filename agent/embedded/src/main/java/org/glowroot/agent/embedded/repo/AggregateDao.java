@@ -375,7 +375,7 @@ public class AggregateDao implements AggregateRepository {
     }
 
     @Override
-    public @Nullable String readFullQueryText(String agentRollupId, String fullQueryTextSha1)
+    public String readFullQueryText(String agentRollupId, String fullQueryTextSha1)
             throws Exception {
         return fullQueryTextDao.getFullText(fullQueryTextSha1);
     }
@@ -669,7 +669,7 @@ public class AggregateDao implements AggregateRepository {
         }
 
         @Override
-        public @Nullable Void processResultSet(ResultSet resultSet) throws Exception {
+        public Void processResultSet(ResultSet resultSet) throws Exception {
             if (!resultSet.next()) {
                 // this is an aggregate query so this should be impossible
                 throw new SQLException("Aggregate query did not return any results");
@@ -686,7 +686,7 @@ public class AggregateDao implements AggregateRepository {
         }
 
         @Override
-        public @Nullable Void valueIfDataSourceClosed() {
+        public Void valueIfDataSourceClosed() {
             return null;
         }
     }
@@ -740,7 +740,7 @@ public class AggregateDao implements AggregateRepository {
         }
 
         @Override
-        public @Nullable Void processResultSet(ResultSet resultSet) throws Exception {
+        public Void processResultSet(ResultSet resultSet) throws Exception {
             while (resultSet.next()) {
                 int i = 1;
                 String transactionName = checkNotNull(resultSet.getString(i++));
@@ -756,7 +756,7 @@ public class AggregateDao implements AggregateRepository {
         }
 
         @Override
-        public @Nullable Void valueIfDataSourceClosed() {
+        public Void valueIfDataSourceClosed() {
             return null;
         }
 
@@ -809,7 +809,7 @@ public class AggregateDao implements AggregateRepository {
         }
 
         @Override
-        public @Nullable Void processResultSet(ResultSet resultSet) throws Exception {
+        public Void processResultSet(ResultSet resultSet) throws Exception {
             if (!resultSet.next()) {
                 // this is an aggregate query so this should be impossible
                 throw new SQLException("Aggregate query did not return any results");
@@ -823,7 +823,7 @@ public class AggregateDao implements AggregateRepository {
         }
 
         @Override
-        public @Nullable Void valueIfDataSourceClosed() {
+        public Void valueIfDataSourceClosed() {
             return null;
         }
     }
@@ -871,7 +871,7 @@ public class AggregateDao implements AggregateRepository {
         }
 
         @Override
-        public @Nullable Void processResultSet(ResultSet resultSet) throws Exception {
+        public Void processResultSet(ResultSet resultSet) throws Exception {
             while (resultSet.next()) {
                 int i = 1;
                 String transactionName = checkNotNull(resultSet.getString(i++));
@@ -884,7 +884,7 @@ public class AggregateDao implements AggregateRepository {
         }
 
         @Override
-        public @Nullable Void valueIfDataSourceClosed() {
+        public Void valueIfDataSourceClosed() {
             return null;
         }
 
@@ -1079,7 +1079,7 @@ public class AggregateDao implements AggregateRepository {
         }
 
         @Override
-        public @Nullable Void processResultSet(ResultSet resultSet) throws Exception {
+        public Void processResultSet(ResultSet resultSet) throws Exception {
             int maxQueryAggregates = getMaxQueryAggregates();
             int maxServiceCallAggregates = getMaxServiceCallAggregates();
             CappedDatabase cappedDatabase = rollupCappedDatabases.get(toRollupLevel);
@@ -1106,7 +1106,7 @@ public class AggregateDao implements AggregateRepository {
         }
 
         @Override
-        public @Nullable Void valueIfDataSourceClosed() {
+        public Void valueIfDataSourceClosed() {
             return null;
         }
     }
@@ -1149,7 +1149,7 @@ public class AggregateDao implements AggregateRepository {
         }
 
         @Override
-        public @Nullable Void processResultSet(ResultSet resultSet) throws Exception {
+        public Void processResultSet(ResultSet resultSet) throws Exception {
             int maxQueryAggregates = getMaxQueryAggregates();
             int maxServiceCallAggregates = getMaxServiceCallAggregates();
             CappedDatabase cappedDatabase = rollupCappedDatabases.get(toRollupLevel);
@@ -1180,7 +1180,7 @@ public class AggregateDao implements AggregateRepository {
         }
 
         @Override
-        public @Nullable Void valueIfDataSourceClosed() {
+        public Void valueIfDataSourceClosed() {
             return null;
         }
     }
@@ -1308,33 +1308,24 @@ public class AggregateDao implements AggregateRepository {
         }
     }
 
-    @Value.Immutable
-    @Styles.AllParameters
     interface CappedId {
         long captureTime();
         long cappedId();
     }
 
-    @Value.Immutable
-    @Styles.AllParameters
     interface MutableOverallAggregate {
         String transactionType();
         MutableAggregate aggregate();
     }
 
-    @Value.Immutable
-    @Styles.AllParameters
     interface MutableTransactionAggregate {
         String transactionType();
         String transactionName();
         MutableAggregate aggregate();
     }
 
-    @Value.Immutable
-    @Styles.AllParameters
     interface TruncatedQueryText {
         String truncatedText();
-        @Nullable
         String fullTextSha1();
     }
 }

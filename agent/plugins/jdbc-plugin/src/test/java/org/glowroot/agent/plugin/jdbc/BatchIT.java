@@ -44,22 +44,18 @@ public class BatchIT {
     private static boolean driverCapturesBatchRows =
             Connections.getConnectionType() != ConnectionType.ORACLE;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void testBatchPreparedStatement() throws Exception {
         // when
         Trace trace = container.execute(ExecuteBatchPreparedStatement.class);
@@ -99,7 +95,6 @@ public class BatchIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testBatchPreparedExceedingLimitStatement() throws Exception {
         // when
         Trace trace = container.execute(ExecuteBatchExceedingLimitPreparedStatement.class);
@@ -130,7 +125,6 @@ public class BatchIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testBatchPreparedStatementWithoutCaptureBindParams() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureBindParametersIncludes",
@@ -170,7 +164,6 @@ public class BatchIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testBatchPreparedStatementWithoutClear() throws Exception {
         // when
         Trace trace = container.execute(ExecuteBatchPreparedStatementWithoutClear.class);
@@ -210,7 +203,6 @@ public class BatchIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testBatchPreparedStatementWithoutClearWithoutCaptureBindParams() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureBindParametersIncludes",
@@ -250,7 +242,6 @@ public class BatchIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testBatchStatement() throws Exception {
         // when
         Trace trace = container.execute(ExecuteBatchStatement.class);
@@ -280,7 +271,6 @@ public class BatchIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testBatchStatementNull() throws Exception {
         // when
         Trace trace = container.execute(BatchStatementNull.class);
@@ -300,7 +290,6 @@ public class BatchIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testBatchStatementWithNoBatches() throws Exception {
         // when
         Trace trace = container.execute(ExecuteBatchStatementWithNoBatches.class);
@@ -320,7 +309,6 @@ public class BatchIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testBatchPreparedStatementWithNoBatches() throws Exception {
         // hsqldb driver (and maybe some others) throw error when executing a batch with no batches
         Assumptions.assumeTrue(Connections.getConnectionType() == ConnectionType.H2);
@@ -342,7 +330,6 @@ public class BatchIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testBatchPreparedStatementWithSingleBatch() throws Exception {
         // when
         Trace trace = container.execute(ExecuteBatchPreparedStatementWithSingleBatch.class);
@@ -361,7 +348,6 @@ public class BatchIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testBatchStatementWithoutClear() throws Exception {
         // when
         Trace trace = container.execute(ExecuteBatchStatementWithoutClear.class);

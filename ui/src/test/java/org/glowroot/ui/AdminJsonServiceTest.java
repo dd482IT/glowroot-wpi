@@ -42,7 +42,6 @@ public class AdminJsonServiceTest {
     private HttpClient httpClient;
     private AdminJsonService adminJsonService;
 
-    @BeforeEach
     public void beforeEachTest() {
         mailService = new MockMailService();
         httpClient = mock(HttpClient.class);
@@ -54,7 +53,6 @@ public class AdminJsonServiceTest {
                 mailService, httpClient);
     }
 
-    @Test
     public void testWithoutDefaults() throws Exception {
         // given
         SmtpConfigDto configDto = ImmutableSmtpConfigDto.builder()
@@ -77,7 +75,6 @@ public class AdminJsonServiceTest {
         assertThat(message.getContent()).isEqualTo("");
     }
 
-    @Test
     public void testWithDefaultFrom() throws Exception {
         // given
         SmtpConfigDto configDto = ImmutableSmtpConfigDto.builder()
@@ -102,7 +99,6 @@ public class AdminJsonServiceTest {
         assertThat(message.getContent()).isEqualTo("");
     }
 
-    @Test
     public void testWithDefaultFromAndDefaultDisplayName() throws Exception {
         // given
         SmtpConfigDto configDto = ImmutableSmtpConfigDto.builder()

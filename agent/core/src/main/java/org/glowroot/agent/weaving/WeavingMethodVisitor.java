@@ -96,8 +96,8 @@ class WeavingMethodVisitor extends AdviceAdapter {
     private final ImmutableList<Advice> advisors;
     private final Type[] argumentTypes;
     private final Type returnType;
-    private final @Nullable String metaHolderInternalName;
-    private final @Nullable Integer methodMetaGroupUniqueNum;
+    private final String metaHolderInternalName;
+    private final Integer methodMetaGroupUniqueNum;
     private final boolean bootstrapClassLoader;
     private final boolean needsOnReturn;
     private final boolean needsOnThrow;
@@ -112,23 +112,23 @@ class WeavingMethodVisitor extends AdviceAdapter {
 
     // don't need map of thread context locals since all advice can share the same
     // threadContextLocal
-    private @MonotonicNonNull Integer threadContextLocal;
-    private @MonotonicNonNull Integer threadContextHolderLocal;
+    private Integer threadContextLocal;
+    private Integer threadContextHolderLocal;
 
     private final List<CatchHandler> catchHandlers = Lists.newArrayList();
 
-    private @MonotonicNonNull Integer returnOpcode;
+    private Integer returnOpcode;
 
-    private @MonotonicNonNull Label methodStartLabel;
-    private @MonotonicNonNull Label onReturnLabel;
-    private @MonotonicNonNull Label catchStartLabel;
+    private Label methodStartLabel;
+    private Label onReturnLabel;
+    private Label catchStartLabel;
     private boolean visitedLocalVariableThis;
 
     private int[] savedArgLocals = new int[0];
 
     WeavingMethodVisitor(MethodVisitor mv, boolean frames, int access, String name,
             String descriptor, Type owner, List<Advice> advisors,
-            @Nullable String metaHolderInternalName, @Nullable Integer methodMetaGroupUniqueNum,
+            String metaHolderInternalName, Integer methodMetaGroupUniqueNum,
             boolean bootstrapClassLoader) {
         super(ASM9, new FrameDeduppingMethodVisitor(mv), access, name, descriptor);
         this.frames = frames;
@@ -225,7 +225,7 @@ class WeavingMethodVisitor extends AdviceAdapter {
     }
 
     @Override
-    public void visitLocalVariable(String name, String descriptor, @Nullable String signature,
+    public void visitLocalVariable(String name, String descriptor, String signature,
             Label start, Label end, int index) {
         // the JSRInlinerAdapter writes the local variable "this" across different label ranges
         // so visitedLocalVariableThis is checked and updated to ensure this block is only executed
@@ -518,7 +518,6 @@ class WeavingMethodVisitor extends AdviceAdapter {
         }
     }
 
-    @RequiresNonNull("threadContextLocal")
     private void checkAndUpdateNestingGroupId(int prevNestingGroupIdLocal, String nestingGroup,
             Label otherEnabledFactorsDisabledEnd) {
         loadLocal(threadContextLocal);
@@ -535,7 +534,6 @@ class WeavingMethodVisitor extends AdviceAdapter {
                 "setCurrentNestingGroupId", "(I)V", true);
     }
 
-    @RequiresNonNull("threadContextLocal")
     private void checkSuppressibleUsingKey(String suppressibleUsingKey,
             Label otherEnabledFactorsDisabledEnd) {
         loadLocal(threadContextLocal);
@@ -546,7 +544,6 @@ class WeavingMethodVisitor extends AdviceAdapter {
         visitJumpInsn(IF_ICMPEQ, otherEnabledFactorsDisabledEnd);
     }
 
-    @RequiresNonNull("threadContextLocal")
     private void updateSuppressionKeyId(int prevSuppressionKeyIdLocal, String suppressionKey) {
         loadLocal(threadContextLocal);
         visitMethodInsn(INVOKEINTERFACE, threadContextPlusType.getInternalName(),
@@ -593,7 +590,7 @@ class WeavingMethodVisitor extends AdviceAdapter {
         parameterHolderLocals.put(advice, locals);
     }
 
-    private void invokeOnBefore(Advice advice, @Nullable Integer travelerLocal) {
+    private void invokeOnBefore(Advice advice, Integer travelerLocal) {
         Method onBeforeAdvice = advice.onBeforeAdvice();
         if (onBeforeAdvice == null) {
             return;
@@ -911,9 +908,9 @@ class WeavingMethodVisitor extends AdviceAdapter {
     }
 
     private void loadMethodParameters(List<AdviceParameter> parameters, int startIndex,
-            @Nullable Integer travelerLocal, Type adviceType,
+            Integer travelerLocal, Type adviceType,
             Class<? extends Annotation> annotationType, boolean useSavedArgs,
-            @Nullable Map<Integer, Integer> parameterHolderLocals, String nestingGroup,
+            Map<Integer, Integer> parameterHolderLocals, String nestingGroup,
             String suppressionKey, Object... stack) {
         int argIndex = 0;
         for (int i = startIndex; i < parameters.size(); i++) {
@@ -1027,7 +1024,7 @@ class WeavingMethodVisitor extends AdviceAdapter {
         visitLdcInsn(name);
     }
 
-    private void loadTraveler(@Nullable Integer travelerLocal, Type adviceType,
+    private void loadTraveler(Integer travelerLocal, Type adviceType,
             Class<? extends Annotation> annotationType, AdviceParameter parameter) {
         if (travelerLocal == null) {
             logger.warn("the @{} method in {} requested @{} but @{} returns void",
@@ -1039,7 +1036,6 @@ class WeavingMethodVisitor extends AdviceAdapter {
         }
     }
 
-    @RequiresNonNull("metaHolderInternalName")
     private void loadClassMeta(AdviceParameter parameter) {
         Type classMetaFieldType = parameter.type();
         String classMetaFieldName =
@@ -1057,7 +1053,6 @@ class WeavingMethodVisitor extends AdviceAdapter {
         }
     }
 
-    @RequiresNonNull({"metaHolderInternalName", "methodMetaGroupUniqueNum"})
     private void loadMethodMeta(AdviceParameter parameter) {
         Type methodMetaFieldType = parameter.type();
         String methodMetaFieldName = "glowroot$method$meta$" + methodMetaGroupUniqueNum + '$'
@@ -1075,7 +1070,6 @@ class WeavingMethodVisitor extends AdviceAdapter {
         }
     }
 
-    @RequiresNonNull({"threadContextHolderLocal", "threadContextLocal"})
     private void loadOptionalThreadContext(String nestingGroup, String suppressionKey,
             Object... stack) {
         loadMaybeNullThreadContext(stack);
@@ -1102,7 +1096,6 @@ class WeavingMethodVisitor extends AdviceAdapter {
         loadLocal(threadContextLocal);
     }
 
-    @RequiresNonNull({"threadContextHolderLocal", "threadContextLocal"})
     private void loadMaybeNullThreadContext(Object... stack) {
         loadLocal(threadContextHolderLocal);
         Label label = new Label();
@@ -1335,8 +1328,6 @@ class WeavingMethodVisitor extends AdviceAdapter {
         }
     }
 
-    @Value.Immutable
-    @Styles.AllParameters
     interface CatchHandler {
         Label catchStartLabel();
         // advisors that have successfully executed @OnBefore

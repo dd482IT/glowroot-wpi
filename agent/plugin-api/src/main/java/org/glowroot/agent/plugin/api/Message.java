@@ -56,17 +56,17 @@ public abstract class Message {
     private static final Map<String, Object> EMPTY_DETAIL = Collections.emptyMap();
 
     // accepts null message so callers don't have to check if passing it in from elsewhere
-    public static Message create(@Nullable String message) {
+    public static Message create(String message) {
         return new MessageImpl(message, EMPTY_ARGS, EMPTY_DETAIL);
     }
 
     // does not copy args
-    public static Message create(String template, @Nullable String... args) {
+    public static Message create(String template, String... args) {
         return new MessageImpl(template, args, EMPTY_DETAIL);
     }
 
     // accepts null message so callers don't have to check if passing it in from elsewhere
-    public static Message create(@Nullable String message,
+    public static Message create(String message,
             Map<String, ?> detail) {
         return new MessageImpl(message, EMPTY_ARGS, detail);
     }
@@ -79,11 +79,11 @@ public abstract class Message {
 
         private static final Logger logger = Logger.getLogger(MessageImpl.class);
 
-        private final @Nullable String template;
-        private final @Nullable String[] args;
+        private final String template;
+        private final String[] args;
         private final Map<String, ?> detail;
 
-        private MessageImpl(@Nullable String template, @Nullable String[] args,
+        private MessageImpl(String template, String[] args,
                 Map<String, ?> detail) {
             this.template = truncateMessageIfNeeded(template);
             for (int i = 0; i < args.length; i++) {
@@ -135,7 +135,7 @@ public abstract class Message {
             return detail;
         }
 
-        private static @PolyNull String truncateMessageIfNeeded(@PolyNull String s) {
+        private static String truncateMessageIfNeeded(String s) {
             if (s == null || s.length() <= MESSAGE_CHAR_LIMIT) {
                 return s;
             } else {
@@ -157,7 +157,7 @@ public abstract class Message {
             return false;
         }
 
-        private static boolean needsTruncateDetail(@Nullable Object value) {
+        private static boolean needsTruncateDetail(Object value) {
             if (value instanceof Map) {
                 return needsTruncateDetail((Map<?, ?>) value);
             } else if (value instanceof List) {
@@ -203,7 +203,7 @@ public abstract class Message {
             return truncatedDetail;
         }
 
-        private static @Nullable Object truncate(@Nullable Object value) {
+        private static Object truncate(Object value) {
             if (value instanceof Map) {
                 return truncateDetailNested((Map<?, ?>) value);
             } else if (value instanceof List) {

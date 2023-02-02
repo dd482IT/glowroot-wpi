@@ -21,7 +21,7 @@ public class Strings {
 
     private Strings() {}
 
-    public static String nullToEmpty(@Nullable String string) {
+    public static String nullToEmpty(String string) {
         return string == null ? "" : string;
     }
 }

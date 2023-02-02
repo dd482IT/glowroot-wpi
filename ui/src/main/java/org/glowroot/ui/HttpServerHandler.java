@@ -61,7 +61,6 @@ import static io.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SERVER_ERR
 import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
-@Sharable
 class HttpServerHandler extends ChannelInboundHandlerAdapter {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpServerHandler.class);
@@ -199,7 +198,6 @@ class HttpServerHandler extends ChannelInboundHandlerAdapter {
         ctx.close();
     }
 
-    @VisibleForTesting
     static String stripContextPath(String path, String contextPath) {
         if (contextPath.equals("/")) {
             return path;
@@ -245,7 +243,7 @@ class HttpServerHandler extends ChannelInboundHandlerAdapter {
         }
 
         @Override
-        public @Nullable String getHeader(CharSequence name) {
+        public String getHeader(CharSequence name) {
             return request.headers().getAsString(name);
         }
 

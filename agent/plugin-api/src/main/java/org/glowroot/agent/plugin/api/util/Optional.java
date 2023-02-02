@@ -21,9 +21,9 @@ public class Optional<T> {
 
     private static final Optional<?> ABSENT = new Optional<Object>(null);
 
-    private final @Nullable T value;
+    private final T value;
 
-    public static <T> Optional<T> fromNullable(@Nullable T value) {
+    public static <T> Optional<T> fromNullable(T value) {
         if (value == null) {
             @SuppressWarnings("unchecked")
             Optional<T> t = (Optional<T>) ABSENT;
@@ -41,7 +41,7 @@ public class Optional<T> {
         }
     }
 
-    private Optional(@Nullable T value) {
+    private Optional(T value) {
         this.value = value;
     }
 
@@ -57,12 +57,12 @@ public class Optional<T> {
         }
     }
 
-    public @Nullable T orNull() {
+    public T orNull() {
         return value;
     }
 
     @Override
-    public boolean equals(@Nullable Object obj) {
+    public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }

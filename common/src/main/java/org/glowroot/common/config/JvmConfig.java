@@ -21,15 +21,12 @@ import org.immutables.value.Value;
 import org.glowroot.common.ConfigDefaults;
 import org.glowroot.wire.api.model.AgentConfigOuterClass.AgentConfig;
 
-@Value.Immutable
 public abstract class JvmConfig {
 
-    @Value.Default
     public ImmutableList<String> maskSystemProperties() {
         return ConfigDefaults.JVM_MASK_SYSTEM_PROPERTIES;
     }
 
-    @Value.Default
     public ImmutableList<String> maskMBeanAttributes() {
         return ConfigDefaults.JVM_MASK_MBEAN_ATTRIBUTES;
     }

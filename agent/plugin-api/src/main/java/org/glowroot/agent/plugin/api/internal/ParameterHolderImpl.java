@@ -20,23 +20,23 @@ import org.glowroot.agent.plugin.api.checker.Nullable;
 
 public class ParameterHolderImpl<T> implements ParameterHolder<T> {
 
-    private @Nullable T value;
+    private T value;
 
-    public static <T> ParameterHolderImpl<T> create(@Nullable T value) {
+    public static <T> ParameterHolderImpl<T> create(T value) {
         return new ParameterHolderImpl<T>(value);
     }
 
-    private ParameterHolderImpl(@Nullable T value) {
+    private ParameterHolderImpl(T value) {
         this.value = value;
     }
 
     @Override
-    public @Nullable T get() {
+    public T get() {
         return value;
     }
 
     @Override
-    public void set(@Nullable T value) {
+    public void set(T value) {
         this.value = value;
     }
 }

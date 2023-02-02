@@ -71,7 +71,6 @@ public class StackTraceCollector {
         });
     }
 
-    @OnlyUsedByTests
     public void close() throws InterruptedException {
         runnable.closed = true;
         processingThread.interrupt();
@@ -88,7 +87,6 @@ public class StackTraceCollector {
         for (int i = 0; i < threadContexts.size(); i++) {
             threadIds[i] = threadContexts.get(i).getThreadId();
         }
-        @Nullable
         ThreadInfo[] threadInfos =
                 ManagementFactory.getThreadMXBean().getThreadInfo(threadIds, Integer.MAX_VALUE);
         for (int i = 0; i < threadContexts.size(); i++) {

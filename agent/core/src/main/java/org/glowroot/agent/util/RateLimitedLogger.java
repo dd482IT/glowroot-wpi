@@ -29,7 +29,6 @@ public class RateLimitedLogger {
 
     private final RateLimiter warningRateLimiter = RateLimiter.create(1.0 / 60);
 
-    @GuardedBy("warningRateLimiter")
     private int countSinceLastWarning;
 
     public RateLimitedLogger(Class<?> clazz) {
@@ -55,7 +54,6 @@ public class RateLimitedLogger {
                 logger.warn(format + " (this warning will be logged at most once a minute)",
                         args);
             } else {
-                @Nullable
                 Object[] argsPlus = newArgsWithCountSinceLastWarning(args, countSinceLastWarning);
                 logger.warn(format + " (this warning will be logged at most once a minute, {}"
                         + " warnings were suppressed since it was last logged)", argsPlus);
@@ -63,13 +61,11 @@ public class RateLimitedLogger {
         }
     }
 
-    @VisibleForTesting
-    static @Nullable Object[] newArgsWithCountSinceLastWarning(/*@Nullable*/ Object[] args,
+    static Object[] newArgsWithCountSinceLastWarning(/*@Nullable*/ Object[] args,
             int countSinceLastWarning) {
         if (args.length == 0) {
             return new Object[] {countSinceLastWarning};
         }
-        @Nullable
         Object[] argsPlus = new Object[args.length + 1];
         if (args[args.length - 1] instanceof Throwable) {
             System.arraycopy(args, 0, argsPlus, 0, args.length - 1);

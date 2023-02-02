@@ -196,7 +196,7 @@ public class ConfigService {
         return pluginConfigs;
     }
 
-    public @Nullable PluginConfig getPluginConfig(String pluginId) {
+    public PluginConfig getPluginConfig(String pluginId) {
         for (PluginConfig pluginConfig : pluginConfigs) {
             if (pluginId.equals(pluginConfig.id())) {
                 return pluginConfig;
@@ -353,7 +353,6 @@ public class ConfigService {
         writeMemoryBarrier();
     }
 
-    @OnlyUsedByTests
     public void initConfigForTests() throws IOException {
         transactionConfig = ImmutableTransactionConfig.copyOf(transactionConfig)
                 .withSlowThresholdMillis(0);
@@ -361,7 +360,6 @@ public class ConfigService {
         notifyConfigListeners();
     }
 
-    @OnlyUsedByTests
     public void resetConfigForTests() throws IOException {
         transactionConfig = ImmutableTransactionConfig.builder()
                 .slowThresholdMillis(0) // default for tests
@@ -434,7 +432,7 @@ public class ConfigService {
     }
 
     public static ImmutableList<PluginConfig> fixPluginConfigs(
-            @Nullable List<ImmutablePluginConfigTemp> filePluginConfigs,
+            List<ImmutablePluginConfigTemp> filePluginConfigs,
             List<PluginDescriptor> pluginDescriptors) {
 
         Map<String, PluginConfigTemp> filePluginConfigMap = Maps.newHashMap();
@@ -458,7 +456,7 @@ public class ConfigService {
         return ImmutableList.copyOf(accuratePluginConfigs);
     }
 
-    private static PropertyValue getPropertyValue(@Nullable PluginConfigTemp pluginConfig,
+    private static PropertyValue getPropertyValue(PluginConfigTemp pluginConfig,
             PropertyDescriptor propertyDescriptor) {
         if (pluginConfig == null) {
             return propertyDescriptor.getValidatedNonNullDefaultValue();
@@ -471,7 +469,7 @@ public class ConfigService {
         return propertyValue;
     }
 
-    private static @Nullable PropertyValue getValidatedPropertyValue(
+    private static PropertyValue getValidatedPropertyValue(
             Map<String, PropertyValue> properties, String propertyName, PropertyType propertyType) {
         PropertyValue propertyValue = properties.get(propertyName);
         if (propertyValue == null) {
@@ -493,7 +491,6 @@ public class ConfigService {
         }
     }
 
-    @Value.Immutable
     interface PluginConfigTemp {
         String id();
         Map<String, PropertyValue> properties();

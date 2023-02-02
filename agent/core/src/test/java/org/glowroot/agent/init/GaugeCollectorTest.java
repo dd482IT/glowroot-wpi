@@ -62,7 +62,6 @@ public class GaugeCollectorTest {
     private Ticker ticker;
     private Logger logger;
 
-    @BeforeEach
     public void beforeEachTest() throws Exception {
         ConfigService configService = mock(ConfigService.class);
         AdvancedConfig advancedConfig =
@@ -79,12 +78,10 @@ public class GaugeCollectorTest {
         gaugeCollector.setLoggerForTesting(logger);
     }
 
-    @AfterEach
     public void afterEachTest() {
         verifyNoMoreInteractions(logger);
     }
 
-    @Test
     public void shouldCaptureNonCounterGauge() throws Exception {
         // given
         GaugeConfig gaugeConfig = ImmutableGaugeConfig.builder()
@@ -104,7 +101,6 @@ public class GaugeCollectorTest {
         assertThat(gaugeValues.get(0).getWeight()).isEqualTo(1);
     }
 
-    @Test
     public void shouldNotCaptureCounterGauge() throws Exception {
         // given
         GaugeConfig gaugeConfig = ImmutableGaugeConfig.builder()
@@ -125,7 +121,6 @@ public class GaugeCollectorTest {
         assertThat(gaugeValues).isEmpty();
     }
 
-    @Test
     public void shouldCaptureCounterGauge() throws Exception {
         // given
         GaugeConfig gaugeConfig = ImmutableGaugeConfig.builder()
@@ -150,7 +145,6 @@ public class GaugeCollectorTest {
         assertThat(gaugeValues.get(0).getWeight()).isEqualTo(SECONDS.toNanos(2));
     }
 
-    @Test
     public void shouldHandleInvalidMBeanObjectName() throws Exception {
         // given
         GaugeConfig gaugeConfig = ImmutableGaugeConfig.builder()
@@ -168,7 +162,6 @@ public class GaugeCollectorTest {
                 any(MalformedObjectNameException.class));
     }
 
-    @Test
     public void shouldHandleMBeanInstanceNotFoundBeforeLoggingDelay() throws Exception {
         // given
         GaugeConfig gaugeConfig = ImmutableGaugeConfig.builder()
@@ -189,7 +182,6 @@ public class GaugeCollectorTest {
         verify(logger).debug(nullable(String.class), any(Exception.class));
     }
 
-    @Test
     public void shouldHandleMBeanInstanceNotFoundAfterLoggingDelay() throws Exception {
         // given
         GaugeConfig gaugeConfig = ImmutableGaugeConfig.builder()
@@ -211,7 +203,6 @@ public class GaugeCollectorTest {
         verify(logger).warn("mbean not {}: {}", "found", "xyz:aaa=bbb");
     }
 
-    @Test
     public void shouldHandleMBeanInstanceNotFoundBeforeAndAfterLoggingDelay() throws Exception {
         // given
         GaugeConfig gaugeConfig = ImmutableGaugeConfig.builder()
@@ -238,7 +229,6 @@ public class GaugeCollectorTest {
                         + " changed under Configuration > Advanced)", "found", "xyz:aaa=bbb", 60);
     }
 
-    @Test
     public void shouldHandleMBeanAttributeNotFound() throws Exception {
         // given
         GaugeConfig gaugeConfig = ImmutableGaugeConfig.builder()
@@ -262,7 +252,6 @@ public class GaugeCollectorTest {
         verify(logger).warn("mbean attribute {} not found in {}", "ddd", "xyz:aaa=bbb");
     }
 
-    @Test
     public void shouldHandleMBeanAttributeOtherException() throws Exception {
         // given
         GaugeConfig gaugeConfig = ImmutableGaugeConfig.builder()
@@ -288,7 +277,6 @@ public class GaugeCollectorTest {
                 eq("ddd"), any(RuntimeException.class));
     }
 
-    @Test
     public void shouldHandleMBeanAttributeNotANumber() throws Exception {
         // given
         GaugeConfig gaugeConfig = ImmutableGaugeConfig.builder()
@@ -313,7 +301,6 @@ public class GaugeCollectorTest {
                 "MBean attribute value is not a valid number: \"not a number\"");
     }
 
-    @Test
     public void shouldHandleMBeanAttributeNotANumberOrString() throws Exception {
         // given
         GaugeConfig gaugeConfig = ImmutableGaugeConfig.builder()

@@ -173,13 +173,12 @@ public class MessageTemplateImpl implements MessageTemplate {
 
         private final PathEvaluator pathEvaluator;
 
-        @VisibleForTesting
-        ValuePathPart(PartType partType, @Nullable Class<?> type, String pathAndFormat) {
+        ValuePathPart(PartType partType, Class<?> type, String pathAndFormat) {
             super(partType);
             this.pathEvaluator = PathEvaluator.create(type, pathAndFormat);
         }
 
-        String evaluatePart(@Nullable Object base) {
+        String evaluatePart(Object base) {
             if (base == null) {
                 // this is same as String.valueOf((Object) null);
                 return "null";
@@ -195,7 +194,7 @@ public class MessageTemplateImpl implements MessageTemplate {
             }
         }
 
-        private static String valueOf(@Nullable Object value) {
+        private static String valueOf(Object value) {
             if (value == null) {
                 return String.valueOf(value);
             } else if (value instanceof byte[]) {
@@ -210,7 +209,7 @@ public class MessageTemplateImpl implements MessageTemplate {
             }
         }
 
-        private static void appendValue(StringBuilder sb, @Nullable Object value) {
+        private static void appendValue(StringBuilder sb, Object value) {
             if (value == null) {
                 sb.append(String.valueOf(value));
             } else if (value instanceof Iterable) {
@@ -272,17 +271,16 @@ public class MessageTemplateImpl implements MessageTemplate {
         }
     }
 
-    @VisibleForTesting
     static class PathEvaluator {
 
         private static final Splitter splitter = Splitter.on('.').omitEmptyStrings();
 
         private final Accessor[] accessors;
         private final List<String> remainingPath;
-        private final @Nullable String format;
-        private final @Nullable String formatArg;
+        private final String format;
+        private final String formatArg;
 
-        static PathEvaluator create(@Nullable Class<?> type, String pathAndFormat) {
+        static PathEvaluator create(Class<?> type, String pathAndFormat) {
             String path;
             String format;
             String formatArg;
@@ -324,14 +322,13 @@ public class MessageTemplateImpl implements MessageTemplate {
         }
 
         private PathEvaluator(List<Accessor> accessors, List<String> remainingPath,
-                @Nullable String format, @Nullable String formatArg) {
+                String format, String formatArg) {
             this.accessors = accessors.toArray(new Accessor[accessors.size()]);
             this.remainingPath = remainingPath;
             this.format = format;
             this.formatArg = formatArg;
         }
 
-        @Nullable
         Object evaluateOnBase(Object base) throws Exception {
             Object curr = base;
             for (Accessor accessor : accessors) {

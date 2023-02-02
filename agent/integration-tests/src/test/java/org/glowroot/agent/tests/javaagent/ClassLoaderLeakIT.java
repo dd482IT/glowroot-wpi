@@ -36,23 +36,19 @@ public class ClassLoaderLeakIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         // need memory limited javaagent
         container = JavaagentContainer.createWithExtraJvmArgs(Collections.singletonList("-Xmx64m"));
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldNotRunOutOfPermGenSpace() throws Exception {
         // when
         container.executeNoExpectedTrace(ShouldGenerateLotsOfClassLoaders.class);

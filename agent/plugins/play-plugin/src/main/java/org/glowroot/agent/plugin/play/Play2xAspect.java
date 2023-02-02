@@ -41,23 +41,16 @@ public class Play2xAspect {
 
     // "play.core.routing.TaggingInvoker" is for play 2.4.x and later
     // "play.core.Router$Routes$TaggingInvoker" is for play 2.3.x
-    @Shim({"play.core.routing.TaggingInvoker", "play.core.Router$Routes$TaggingInvoker"})
     public interface TaggingInvoker {
 
-        @Shim("scala.collection.immutable.Map cachedHandlerTags()")
-        @Nullable
         ScalaMap glowroot$cachedHandlerTags();
     }
 
-    @Shim("scala.collection.immutable.Map")
     public interface ScalaMap {
 
-        @Shim("scala.Option get(java.lang.Object)")
-        @Nullable
         ScalaOption glowroot$get(Object key);
     }
 
-    @Shim("scala.Option")
     public interface ScalaOption {
 
         boolean isDefined();
@@ -65,12 +58,9 @@ public class Play2xAspect {
         Object get();
     }
 
-    @Pointcut(className = "play.core.routing.TaggingInvoker|play.core.Router$Routes$TaggingInvoker",
-            methodName = "call", methodParameterTypes = {"scala.Function0"})
     public static class HandlerInvokerAdvice {
-        @OnBefore
         public static void onBefore(ThreadContext context,
-                @BindReceiver TaggingInvoker taggingInvoker) {
+                TaggingInvoker taggingInvoker) {
             ScalaMap tags = taggingInvoker.glowroot$cachedHandlerTags();
             if (tags == null) {
                 return;
@@ -100,14 +90,11 @@ public class Play2xAspect {
         }
     }
 
-    @Pointcut(className = "views.html.*", methodName = "apply", methodParameterTypes = {".."},
-            timerName = "play render", nestingGroup = "play-render")
     public static class RenderAdvice {
 
         private static final TimerName timerName = Agent.getTimerName(RenderAdvice.class);
 
-        @OnBefore
-        public static TraceEntry onBefore(ThreadContext context, @BindReceiver Object view) {
+        public static TraceEntry onBefore(ThreadContext context, Object view) {
             String viewName = view.getClass().getSimpleName();
             // strip off trailing $
             viewName = viewName.substring(0, viewName.length() - 1);
@@ -115,14 +102,12 @@ public class Play2xAspect {
                     timerName);
         }
 
-        @OnReturn
-        public static void onReturn(@BindTraveler TraceEntry traceEntry) {
+        public static void onReturn(TraceEntry traceEntry) {
             traceEntry.end();
         }
 
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler TraceEntry traceEntry) {
+        public static void onThrow(Throwable t,
+                TraceEntry traceEntry) {
             traceEntry.endWithError(t);
         }
     }
@@ -138,23 +123,17 @@ public class Play2xAspect {
 
     // ========== play 2.0.x - 2.2.x ==========
 
-    @Shim("play.core.Router$HandlerDef")
     public interface HandlerDef {
 
-        @Nullable
         String controller();
 
-        @Nullable
         String method();
     }
 
-    @Pointcut(className = "play.core.Router$HandlerInvoker", methodName = "call",
-            methodParameterTypes = {"scala.Function0", "play.core.Router$HandlerDef"})
     public static class OldHandlerInvokerAdvice {
-        @OnBefore
         public static void onBefore(ThreadContext context,
-                @SuppressWarnings("unused") @BindParameter Object action,
-                @BindParameter HandlerDef handlerDef, @BindClassMeta PlayInvoker invoker) {
+                @SuppressWarnings("unused") Object action,
+                HandlerDef handlerDef, PlayInvoker invoker) {
             String controller = handlerDef.controller();
             String method = handlerDef.method();
             // path() method doesn't exist in play 2.0.x so need to use reflection instead of shim

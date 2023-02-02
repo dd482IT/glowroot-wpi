@@ -100,7 +100,7 @@ public class LiveAggregateRepositoryImpl implements LiveAggregateRepository {
     }
 
     @Override
-    public @Nullable LiveResult<OverviewAggregate> getOverviewAggregates(String agentId,
+    public LiveResult<OverviewAggregate> getOverviewAggregates(String agentId,
             AggregateQuery query) {
         List<AggregateIntervalCollector> intervalCollectors =
                 aggregator.getOrderedIntervalCollectorsInRange(query.from(), query.to());
@@ -121,7 +121,7 @@ public class LiveAggregateRepositoryImpl implements LiveAggregateRepository {
     }
 
     @Override
-    public @Nullable LiveResult<PercentileAggregate> getPercentileAggregates(String agentId,
+    public LiveResult<PercentileAggregate> getPercentileAggregates(String agentId,
             AggregateQuery query) {
         List<AggregateIntervalCollector> intervalCollectors =
                 aggregator.getOrderedIntervalCollectorsInRange(query.from(), query.to());
@@ -142,7 +142,7 @@ public class LiveAggregateRepositoryImpl implements LiveAggregateRepository {
     }
 
     @Override
-    public @Nullable LiveResult<ThroughputAggregate> getThroughputAggregates(String agentId,
+    public LiveResult<ThroughputAggregate> getThroughputAggregates(String agentId,
             AggregateQuery query) {
         List<AggregateIntervalCollector> intervalCollectors =
                 aggregator.getOrderedIntervalCollectorsInRange(query.from(), query.to());
@@ -163,7 +163,7 @@ public class LiveAggregateRepositoryImpl implements LiveAggregateRepository {
     }
 
     @Override
-    public @Nullable String getFullQueryText(String agentRollupId, String fullQueryTextSha1) {
+    public String getFullQueryText(String agentRollupId, String fullQueryTextSha1) {
         List<AggregateIntervalCollector> intervalCollectors =
                 aggregator.getOrderedIntervalCollectorsInRange(0, Long.MAX_VALUE);
         for (AggregateIntervalCollector intervalCollector : intervalCollectors) {

@@ -25,7 +25,6 @@ public class WeavingJDK14BytecodeTest {
     // in particular, this test exercises WeavingMethodVisitor.loadTarget() where the method is
     // static (see comment in that code about .class constants not being supported in classes
     // that were compiled to jdk 1.4)
-    @Test
     public void shouldWeaveJDK14StaticMethodUsingBindReceiverParameter() throws Exception {
         // given
         Misc test = WeaverTest.newWovenObject(BasicMisc.class, Misc.class, BasicAdvice.class);

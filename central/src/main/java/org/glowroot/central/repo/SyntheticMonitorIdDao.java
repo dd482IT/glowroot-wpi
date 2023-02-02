@@ -106,7 +106,6 @@ class SyntheticMonitorIdDao {
         return ImmutableList.of(session.writeAsync(boundStatement));
     }
 
-    @Value.Immutable
     interface SyntheticMonitorKey {
         String agentRollupId();
         long captureTime();

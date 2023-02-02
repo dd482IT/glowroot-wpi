@@ -39,74 +39,65 @@ public interface LiveTraceRepository {
     //
     // SharedQueryTexts are returned with either fullTrace or
     // truncatedText/truncatedEndText/fullTraceSha1
-    @Nullable
     Entries getEntries(String agentId, String traceId) throws Exception;
 
     // null return value means trace not found or was found but had no queries
     //
     // SharedQueryTexts are returned with either fullTrace or truncatedText/fullTraceSha1
-    @Nullable
     Queries getQueries(String agentId, String traceId) throws Exception;
 
     // null return value means trace not found or was found but had no main thread profile
-    @Nullable
     Profile getMainThreadProfile(String agentId, String traceId) throws Exception;
 
     // null return value means trace not found or was found but had no aux thread profile
-    @Nullable
     Profile getAuxThreadProfile(String agentId, String traceId) throws Exception;
 
     // null return value means trace not found
     //
     // since this is only used by export, SharedQueryTexts are always returned with fullTrace
     // (never with truncatedText/truncatedEndText/fullTraceSha1)
-    @Nullable
     Trace getFullTrace(String agentId, String traceId) throws Exception;
 
-    int getMatchingTraceCount(String transactionType, @Nullable String transactionName);
+    int getMatchingTraceCount(String transactionType, String transactionName);
 
     List<TracePoint> getMatchingActiveTracePoints(TraceKind traceKind, String transactionType,
-            @Nullable String transactionName, TracePointFilter filter, int limit, long captureTime,
+            String transactionName, TracePointFilter filter, int limit, long captureTime,
             long captureTick);
 
     List<TracePoint> getMatchingPendingPoints(TraceKind traceKind, String transactionType,
-            @Nullable String transactionName, TracePointFilter filter, long captureTime);
+            String transactionName, TracePointFilter filter, long captureTime);
 
     Set<String> getTransactionTypes(String agentId);
 
-    @Value.Immutable
     public interface Entries {
         List<Trace.Entry> entries();
         List<Trace.SharedQueryText> sharedQueryTexts();
     }
 
-    @Value.Immutable
     public interface Queries {
         List<Aggregate.Query> queries();
         List<Trace.SharedQueryText> sharedQueryTexts();
     }
 
-    @Value.Immutable
     public interface EntriesAndQueries {
         List<Trace.Entry> entries();
         List<Aggregate.Query> queries();
         List<Trace.SharedQueryText> sharedQueryTexts();
     }
 
-    @Value.Immutable
     abstract class TracePointFilter {
 
         public abstract long durationNanosLow();
-        public abstract @Nullable Long durationNanosHigh();
-        public abstract @Nullable StringComparator headlineComparator();
-        public abstract @Nullable String headline();
-        public abstract @Nullable StringComparator errorMessageComparator();
-        public abstract @Nullable String errorMessage();
-        public abstract @Nullable StringComparator userComparator();
-        public abstract @Nullable String user();
-        public abstract @Nullable String attributeName();
-        public abstract @Nullable StringComparator attributeValueComparator();
-        public abstract @Nullable String attributeValue();
+        public abstract Long durationNanosHigh();
+        public abstract StringComparator headlineComparator();
+        public abstract String headline();
+        public abstract StringComparator errorMessageComparator();
+        public abstract String errorMessage();
+        public abstract StringComparator userComparator();
+        public abstract String user();
+        public abstract String attributeName();
+        public abstract StringComparator attributeValueComparator();
+        public abstract String attributeValue();
 
         public boolean matchesDuration(long durationNanos) {
             if (durationNanos < durationNanosLow()) {
@@ -154,7 +145,7 @@ public interface LiveTraceRepository {
         }
 
         private static boolean matchesUsingStringComparator(String text,
-                @Nullable String filterText, @Nullable StringComparator filterComparator)
+                String filterText, StringComparator filterComparator)
                 throws AssertionError {
             if (filterComparator == null || Strings.isNullOrEmpty(filterText)) {
                 return true;
@@ -163,7 +154,6 @@ public interface LiveTraceRepository {
         }
     }
 
-    @Value.Immutable
     interface TracePoint {
         String agentId();
         String traceId();
@@ -197,45 +187,45 @@ public interface LiveTraceRepository {
         }
 
         @Override
-        public @Nullable Entries getEntries(String agentId, String traceId) {
+        public Entries getEntries(String agentId, String traceId) {
             return null;
         }
 
         @Override
-        public @Nullable Queries getQueries(String agentId, String traceId) {
+        public Queries getQueries(String agentId, String traceId) {
             return null;
         }
 
         @Override
-        public @Nullable Profile getMainThreadProfile(String agentId, String traceId) {
+        public Profile getMainThreadProfile(String agentId, String traceId) {
             return null;
         }
 
         @Override
-        public @Nullable Profile getAuxThreadProfile(String agentId, String traceId) {
+        public Profile getAuxThreadProfile(String agentId, String traceId) {
             return null;
         }
 
         @Override
-        public @Nullable Trace getFullTrace(String agentId, String traceId) {
+        public Trace getFullTrace(String agentId, String traceId) {
             return null;
         }
 
         @Override
-        public int getMatchingTraceCount(String transactionType, @Nullable String transactionName) {
+        public int getMatchingTraceCount(String transactionType, String transactionName) {
             return 0;
         }
 
         @Override
         public List<TracePoint> getMatchingActiveTracePoints(TraceKind traceKind,
-                String transactionType, @Nullable String transactionName, TracePointFilter filter,
+                String transactionType, String transactionName, TracePointFilter filter,
                 int limit, long captureTime, long captureTick) {
             return ImmutableList.of();
         }
 
         @Override
         public List<TracePoint> getMatchingPendingPoints(TraceKind traceKind,
-                String transactionType, @Nullable String transactionName, TracePointFilter filter,
+                String transactionType, String transactionName, TracePointFilter filter,
                 long captureTime) {
             return ImmutableList.of();
         }

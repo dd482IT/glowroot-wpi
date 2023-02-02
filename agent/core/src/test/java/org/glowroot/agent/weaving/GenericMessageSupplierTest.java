@@ -28,7 +28,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class GenericMessageSupplierTest {
 
-    @Test
     public void shouldRenderConstant() throws Exception {
         MessageTemplateImpl template =
                 createMessageTemplateImpl("abc", TestReceiver.class, "execute", HasName.class);
@@ -38,7 +37,6 @@ public class GenericMessageSupplierTest {
         assertThat(text).isEqualTo("abc");
     }
 
-    @Test
     public void shouldRenderNormal() throws Exception {
         MessageTemplateImpl template = createMessageTemplateImpl(
                 "{{this.class.name}}.{{methodName}}(): {{0.name}} => {{_}}", TestReceiver.class,
@@ -49,7 +47,6 @@ public class GenericMessageSupplierTest {
         assertThat(text).isEqualTo(TestReceiver.class.getName() + ".execute(): the name => ");
     }
 
-    @Test
     public void shouldRenderNullPart() throws Exception {
         MessageTemplateImpl template = createMessageTemplateImpl(
                 "{{this.class.name}}.{{methodName}}(): {{0.name}} => {{_}}", TestReceiver.class,
@@ -60,7 +57,6 @@ public class GenericMessageSupplierTest {
         assertThat(text).isEqualTo("null.execute(): the name => ");
     }
 
-    @Test
     public void shouldRenderRequestedArgOutOfBounds() throws Exception {
         MessageTemplateImpl template = createMessageTemplateImpl(
                 "{{this.class.name}}.{{methodName}}(): {{0.name}}, {{1.oops}} => {{_}}",
@@ -72,7 +68,6 @@ public class GenericMessageSupplierTest {
                 + ".execute(): the name, <requested arg index out of bounds: 1> => ");
     }
 
-    @Test
     public void shouldRenderTrailingText() throws Exception {
         MessageTemplateImpl template = createMessageTemplateImpl(
                 "{{this.class.name}}.{{methodName}}(): {{0.name}} trailing", TestReceiver.class,
@@ -83,7 +78,6 @@ public class GenericMessageSupplierTest {
         assertThat(text).isEqualTo(TestReceiver.class.getName() + ".execute(): the name trailing");
     }
 
-    @Test
     public void shouldRenderBadTemplate() throws Exception {
         MessageTemplateImpl template = createMessageTemplateImpl(
                 "{{this.class.name}}.{{methodName}}(): {{1.name}} trailing", TestReceiver.class,
@@ -95,7 +89,6 @@ public class GenericMessageSupplierTest {
                 + ".execute(): <requested arg index out of bounds: 1> trailing");
     }
 
-    @Test
     public void shouldRenderBadTemplate2() throws Exception {
         MessageTemplateImpl template = createMessageTemplateImpl(
                 "{{this.class.name}}.{{methodName}}(): {{x.name}} trailing", TestReceiver.class,
@@ -107,7 +100,6 @@ public class GenericMessageSupplierTest {
                 .isEqualTo(TestReceiver.class.getName() + ".execute(): {{x.name}} trailing");
     }
 
-    @Test
     public void shouldRenderBadMessage() throws Exception {
         MessageTemplateImpl template = createMessageTemplateImpl(
                 "{{this.class.name}}.{{methodName}}(): {{0.name}} trailing", TestReceiver.class,
@@ -119,7 +111,6 @@ public class GenericMessageSupplierTest {
                 + ".execute(): <requested arg index out of bounds: 0> trailing");
     }
 
-    @Test
     public void shouldRenderMessageWithThrowingPart() throws Exception {
         MessageTemplateImpl template = createMessageTemplateImpl(
                 "{{this.class.name}}.{{methodName}}(): {{0.throwingName}} trailing",
@@ -131,7 +122,6 @@ public class GenericMessageSupplierTest {
                 + ".execute(): <error evaluating: java.lang.RuntimeException: Abc Xyz> trailing");
     }
 
-    @Test
     public void shouldRenderArray() throws Exception {
         MessageTemplateImpl template =
                 createMessageTemplateImpl("{{this.class.name}}.{{methodName}}(): {{0.names}}",
@@ -142,7 +132,6 @@ public class GenericMessageSupplierTest {
         assertThat(text).isEqualTo(TestReceiver.class.getName() + ".execute(): [the name, two]");
     }
 
-    @Test
     public void shouldRenderArray1() throws Exception {
         MessageTemplateImpl template =
                 createMessageTemplateImpl("{{this.class.name}}.{{methodName}}(): {{0.names.name}}",
@@ -154,7 +143,6 @@ public class GenericMessageSupplierTest {
                 .isEqualTo(TestReceiver.class.getName() + ".execute(): [the name, the name]");
     }
 
-    @Test
     public void shouldRenderArray2() throws Exception {
         MessageTemplateImpl template =
                 createMessageTemplateImpl("{{this.class.name}}.{{methodName}}(): {{0.names.name}}",
@@ -166,7 +154,6 @@ public class GenericMessageSupplierTest {
                 .isEqualTo(TestReceiver.class.getName() + ".execute(): [[the name, the name]]");
     }
 
-    @Test
     public void shouldRenderArrayLength() throws Exception {
         MessageTemplateImpl template = createMessageTemplateImpl(
                 "{{this.class.name}}.{{methodName}}(): {{0.names.length}}", TestArrayReceiver.class,

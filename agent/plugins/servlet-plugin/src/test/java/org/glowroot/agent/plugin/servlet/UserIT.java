@@ -41,22 +41,18 @@ public class UserIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void testHasRequestUserPrincipal() throws Exception {
         // when
         Trace trace = container.execute(HasRequestUserPrincipal.class, "Web");
@@ -64,14 +60,12 @@ public class UserIT {
         assertThat(trace.getHeader().getUser()).isEqualTo("my name is mock");
     }
 
-    @Test
     public void testHasRequestWithExceptionOnGetUserPrincipal() throws Exception {
         // when
         container.execute(HasRequestWithExceptionOnGetUserPrincipal.class, "Web");
         // then don't blow up
     }
 
-    @Test
     public void testHasSessionUserAttribute() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "sessionUserAttribute",
@@ -82,7 +76,6 @@ public class UserIT {
         assertThat(trace.getHeader().getUser()).isEqualTo("abc");
     }
 
-    @Test
     public void testSetSessionUserAttribute() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "sessionUserAttribute",
@@ -93,7 +86,6 @@ public class UserIT {
         assertThat(trace.getHeader().getUser()).isEqualTo("abc");
     }
 
-    @Test
     public void testSetSessionUserAttributeNull() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "sessionUserAttribute",
@@ -106,7 +98,6 @@ public class UserIT {
         assertThat(trace.getHeader().getUser()).isEqualTo("something");
     }
 
-    @Test
     public void testHasNestedSessionUserAttributePath() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "sessionUserAttribute",
@@ -117,7 +108,6 @@ public class UserIT {
         assertThat(trace.getHeader().getUser()).isEqualTo("xyz");
     }
 
-    @Test
     public void testSetNestedSessionUserAttributePath() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "sessionUserAttribute",
@@ -128,7 +118,6 @@ public class UserIT {
         assertThat(trace.getHeader().getUser()).isEqualTo("xyz");
     }
 
-    @Test
     public void testHasMissingSessionUserAttribute() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "sessionUserAttribute",
@@ -139,7 +128,6 @@ public class UserIT {
         assertThat(trace.getHeader().getUser()).isEmpty();
     }
 
-    @Test
     public void testHasMissingNestedSessionUserAttributePath() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "sessionUserAttribute",
@@ -150,7 +138,6 @@ public class UserIT {
         assertThat(trace.getHeader().getUser()).isEmpty();
     }
 
-    @Test
     public void testHasHttpSession() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "sessionUserAttribute", "::id");
@@ -160,7 +147,6 @@ public class UserIT {
         assertThat(trace.getHeader().getUser()).isEqualTo("123456789");
     }
 
-    @Test
     public void testHasNoHttpSession() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "sessionUserAttribute", "::id");
@@ -170,7 +156,6 @@ public class UserIT {
         assertThat(trace.getHeader().getUser()).isEmpty();
     }
 
-    @Test
     public void testCreateHttpSession() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "sessionUserAttribute", "::id");
@@ -180,7 +165,6 @@ public class UserIT {
         assertThat(trace.getHeader().getUser()).isEqualTo("123456789");
     }
 
-    @Test
     public void testCreateHttpSessionTrue() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "sessionUserAttribute", "::id");
@@ -190,7 +174,6 @@ public class UserIT {
         assertThat(trace.getHeader().getUser()).isEqualTo("123456789");
     }
 
-    @Test
     public void testCreateHttpSessionFalse() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "sessionUserAttribute", "::id");
@@ -200,7 +183,6 @@ public class UserIT {
         assertThat(trace.getHeader().getUser()).isEmpty();
     }
 
-    @Test
     public void testChangeHttpSession() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "sessionUserAttribute", "::id");
@@ -210,7 +192,6 @@ public class UserIT {
         assertThat(trace.getHeader().getUser()).isEqualTo("123456789");
     }
 
-    @Test
     public void testCreateAndChangeHttpSession() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "sessionUserAttribute", "::id");

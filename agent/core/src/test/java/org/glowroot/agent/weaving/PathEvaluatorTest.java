@@ -30,7 +30,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class PathEvaluatorTest {
 
-    @Test
     public void shouldCallGetterMethod() throws Exception {
         // given
         PathEvaluator pathEvaluator = PathEvaluator.create(SomeObject.class, "one");
@@ -40,7 +39,6 @@ public class PathEvaluatorTest {
         assertThat(value).isEqualTo("1");
     }
 
-    @Test
     public void shouldCallBooleanGetterMethod() throws Exception {
         // given
         PathEvaluator pathEvaluator = PathEvaluator.create(SomeObject.class, "two");
@@ -50,7 +48,6 @@ public class PathEvaluatorTest {
         assertThat(value).isTrue();
     }
 
-    @Test
     public void shouldCallNonGetterMethod() throws Exception {
         // given
         PathEvaluator pathEvaluator = PathEvaluator.create(SomeObject.class, "three");
@@ -60,7 +57,6 @@ public class PathEvaluatorTest {
         assertThat(value).isEqualTo("3");
     }
 
-    @Test
     public void shouldGetField() throws Exception {
         // given
         PathEvaluator pathEvaluator = PathEvaluator.create(SomeObject.class, "four");
@@ -70,7 +66,6 @@ public class PathEvaluatorTest {
         assertThat(value).isEqualTo("4");
     }
 
-    @Test
     public void shouldCallMethodOnPackagePrivateClass() throws Exception {
         // given
         PathEvaluator pathEvaluator = PathEvaluator.create(List.class, "size");
@@ -82,7 +77,6 @@ public class PathEvaluatorTest {
         assertThat(value).isEqualTo(0);
     }
 
-    @Test
     public void shouldTestNestedPath() throws Exception {
         // given
         PathEvaluator pathEvaluator = PathEvaluator.create(A.class, "b.str");
@@ -92,7 +86,6 @@ public class PathEvaluatorTest {
         assertThat(value).isEqualTo("abc");
     }
 
-    @Test
     public void shouldTestNestedPathWithNull() throws Exception {
         // given
         PathEvaluator pathEvaluator = PathEvaluator.create(A.class, "b.nil.str");
@@ -102,7 +95,6 @@ public class PathEvaluatorTest {
         assertThat(value).isNull();
     }
 
-    @Test
     public void shouldTestNestedArrayPathNavigation() throws Exception {
         // given
         PathEvaluator pathEvaluator = PathEvaluator.create(A.class, "b.c.d.str");
@@ -112,7 +104,6 @@ public class PathEvaluatorTest {
         assertThat(value).containsExactly("xyz", "xyz");
     }
 
-    @Test
     public void shouldTestRemainingPath() throws Exception {
         // given
         PathEvaluator pathEvaluator = PathEvaluator.create(A.class, "b.eee");
@@ -124,7 +115,6 @@ public class PathEvaluatorTest {
         assertThat(value).isEqualTo("eeeeee");
     }
 
-    @Test
     public void shouldFormatByteArrayAsHex() throws Exception {
         // given
         ValuePathPart valuePathPart =
@@ -135,7 +125,6 @@ public class PathEvaluatorTest {
         assertThat(value).isEqualTo("0x78797a");
     }
 
-    @Test
     public void shouldFormatByteArrayUsingCharset() throws Exception {
         // given
         ValuePathPart valuePathPart =
@@ -146,7 +135,6 @@ public class PathEvaluatorTest {
         assertThat(value).isEqualTo("xyz");
     }
 
-    @Test
     public void shouldFormatByteArrayUsingDefaultCharset() throws Exception {
         // given
         ValuePathPart valuePathPart =

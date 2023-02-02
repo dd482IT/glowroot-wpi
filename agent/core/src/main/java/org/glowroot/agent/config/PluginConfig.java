@@ -36,21 +36,16 @@ import org.glowroot.wire.api.model.AgentConfigOuterClass.AgentConfig.PluginPrope
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-@Value.Immutable
 public abstract class PluginConfig {
 
-    @JsonIgnore
     public abstract PluginDescriptor pluginDescriptor();
 
-    @Value.Derived
     public String id() {
         return pluginDescriptor().id();
     }
 
     public abstract Map<String, PropertyValue> properties();
 
-    @Value.Derived
-    @JsonIgnore
     ImmutableMap<String, Boolean> booleanProperties() {
         Map<String, Boolean> booleanProperties = Maps.newHashMap();
         for (Map.Entry<String, PropertyValue> entry : properties().entrySet()) {
@@ -63,8 +58,6 @@ public abstract class PluginConfig {
         return ImmutableMap.copyOf(booleanProperties);
     }
 
-    @Value.Derived
-    @JsonIgnore
     ImmutableMap<String, String> stringProperties() {
         Map<String, String> stringProperties = Maps.newHashMap();
         for (Map.Entry<String, PropertyValue> entry : properties().entrySet()) {
@@ -77,8 +70,6 @@ public abstract class PluginConfig {
         return ImmutableMap.copyOf(stringProperties);
     }
 
-    @Value.Derived
-    @JsonIgnore
     ImmutableMap<String, Optional<Double>> doubleProperties() {
         Map<String, Optional<Double>> doubleProperties = Maps.newHashMap();
         for (Map.Entry<String, PropertyValue> entry : properties().entrySet()) {
@@ -93,8 +84,6 @@ public abstract class PluginConfig {
         return ImmutableMap.copyOf(doubleProperties);
     }
 
-    @Value.Derived
-    @JsonIgnore
     ImmutableMap<String, List<String>> listProperties() {
         Map<String, List<String>> listProperties = Maps.newHashMap();
         for (Map.Entry<String, PropertyValue> entry : properties().entrySet()) {
@@ -121,7 +110,7 @@ public abstract class PluginConfig {
         return value != null && value;
     }
 
-    public @Nullable Double getDoubleProperty(String name) {
+    public Double getDoubleProperty(String name) {
         Optional<Double> value = doubleProperties().get(name);
         return value == null ? null : value.orNull();
     }

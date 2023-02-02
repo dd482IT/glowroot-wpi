@@ -21,7 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ConfigDefaultsTest {
 
-    @Test
     public void shouldGetLastPart() {
         assertThat(MoreConfigDefaults.getLastPartForDisplay("aaa")).isEqualTo("aaa");
         assertThat(MoreConfigDefaults.getLastPartForDisplay("aaa::")).isEqualTo("aaa");

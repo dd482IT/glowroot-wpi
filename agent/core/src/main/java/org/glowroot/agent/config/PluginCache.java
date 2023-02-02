@@ -42,7 +42,6 @@ import org.glowroot.common.util.ObjectMappers;
 import static com.google.common.base.Charsets.UTF_8;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-@Value.Immutable
 public abstract class PluginCache {
 
     private static final Logger logger = LoggerFactory.getLogger(PluginCache.class);
@@ -59,7 +58,7 @@ public abstract class PluginCache {
     public abstract ImmutableList<File> pluginJars();
     public abstract ImmutableList<PluginDescriptor> pluginDescriptors();
 
-    public static PluginCache create(@Nullable File pluginsDir, boolean offlineViewer)
+    public static PluginCache create(File pluginsDir, boolean offlineViewer)
             throws Exception {
         ImmutablePluginCache.Builder builder = ImmutablePluginCache.builder();
         List<File> pluginJars = getPluginJars(pluginsDir);
@@ -84,7 +83,7 @@ public abstract class PluginCache {
                 .build();
     }
 
-    private static ImmutableList<File> getPluginJars(@Nullable File pluginsDir) {
+    private static ImmutableList<File> getPluginJars(File pluginsDir) {
         if (pluginsDir == null) {
             return ImmutableList.of();
         }
@@ -101,7 +100,7 @@ public abstract class PluginCache {
         return ImmutableList.copyOf(pluginJars);
     }
 
-    private static ImmutableList<File> getStandaloneDescriptors(@Nullable File pluginsDir) {
+    private static ImmutableList<File> getStandaloneDescriptors(File pluginsDir) {
         if (pluginsDir == null) {
             return ImmutableList.of();
         }
@@ -130,7 +129,7 @@ public abstract class PluginCache {
     }
 
     private static List<PluginDescriptor> createForOfflineViewer(List<File> pluginJars,
-            @Nullable File pluginsDir) throws IOException {
+            File pluginsDir) throws IOException {
         List<PluginDescriptor> pluginDescriptors = readPluginDescriptors(pluginJars, pluginsDir);
         List<PluginDescriptor> pluginDescriptorsWithoutAdvice = Lists.newArrayList();
         for (PluginDescriptor pluginDescriptor : pluginDescriptors) {
@@ -143,7 +142,7 @@ public abstract class PluginCache {
     }
 
     private static List<PluginDescriptor> readPluginDescriptors(List<File> pluginJars,
-            @Nullable File pluginsDir) throws IOException {
+            File pluginsDir) throws IOException {
         List<PluginDescriptor> pluginDescriptors = Lists.newArrayList();
         for (File pluginJar : pluginJars) {
             URL url = new URL("jar:" + pluginJar.toURI() + "!/META-INF/glowroot.plugin.json");
@@ -159,7 +158,7 @@ public abstract class PluginCache {
         return pluginDescriptors;
     }
 
-    private static void buildPluginDescriptor(URL url, @Nullable File pluginJar,
+    private static void buildPluginDescriptor(URL url, File pluginJar,
             List<PluginDescriptor> pluginDescriptors) throws IOException {
         String content = Resources.toString(url, UTF_8);
         ImmutablePluginDescriptor pluginDescriptor;

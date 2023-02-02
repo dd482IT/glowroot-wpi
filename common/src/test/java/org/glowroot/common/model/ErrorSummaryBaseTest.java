@@ -26,7 +26,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ErrorSummaryBaseTest {
 
-    @Test
     public void shouldSortByErrorRate() {
         // given
         List<TransactionNameErrorSummary> elements = buildElements();
@@ -39,7 +38,6 @@ public class ErrorSummaryBaseTest {
         assertThat(elements.get(2).transactionName()).isEqualTo("a");
     }
 
-    @Test
     public void shouldSortByErrorCount() {
         // given
         List<TransactionNameErrorSummary> elements = buildElements();

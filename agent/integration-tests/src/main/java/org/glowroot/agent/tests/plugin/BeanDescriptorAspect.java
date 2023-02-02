@@ -32,39 +32,31 @@ import org.glowroot.agent.plugin.api.weaving.Pointcut;
 // this is for testing weaving of bootstrap classes
 public class BeanDescriptorAspect {
 
-    @Pointcut(className = "java.beans.BeanDescriptor", methodName = "getBeanClass",
-            methodParameterTypes = {}, timerName = "get bean class")
     public static class GetBeanClassAdvice {
 
         private static final TimerName timerName = Agent.getTimerName(GetBeanClassAdvice.class);
 
-        @OnBefore
         public static TraceEntry onBefore(OptionalThreadContext context,
-                @BindClassMeta TestClassMeta meta) {
+                TestClassMeta meta) {
             return context.startTraceEntry(MessageSupplier.create(meta.classInfo.getName()),
                     timerName);
         }
-        @OnAfter
-        public static void onAfter(@BindTraveler TraceEntry traceEntry) {
+        public static void onAfter(TraceEntry traceEntry) {
             traceEntry.end();
         }
     }
 
-    @Pointcut(className = "java.beans.BeanDescriptor", methodName = "getCustomizerClass",
-            methodParameterTypes = {}, timerName = "get customizer class")
     public static class GetCustomizerClassAdvice {
 
         private static final TimerName timerName =
                 Agent.getTimerName(GetCustomizerClassAdvice.class);
 
-        @OnBefore
         public static TraceEntry onBefore(OptionalThreadContext context,
-                @BindMethodMeta TestMethodMeta meta) {
+                TestMethodMeta meta) {
             return context.startTraceEntry(MessageSupplier.create(meta.methodInfo.getName()),
                     timerName);
         }
-        @OnAfter
-        public static void onAfter(@BindTraveler TraceEntry traceEntry) {
+        public static void onAfter(TraceEntry traceEntry) {
             traceEntry.end();
         }
     }

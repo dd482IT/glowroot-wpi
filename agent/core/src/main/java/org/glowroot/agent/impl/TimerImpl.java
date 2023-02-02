@@ -52,7 +52,6 @@ import org.glowroot.wire.api.model.TraceOuterClass.Trace;
 // in-flight (e.g. partial traces and active traces displayed in the UI) may not be visible
 //
 // all timing data is in nanoseconds
-@Styles.Private
 public class TimerImpl implements Timer, TransactionTimer {
 
     private static final Logger logger = LoggerFactory.getLogger(TimerImpl.class);
@@ -60,7 +59,7 @@ public class TimerImpl implements Timer, TransactionTimer {
     private static final Ticker ticker = Tickers.getTicker();
 
     private final ThreadContextImpl threadContext;
-    private final @Nullable TimerImpl parent;
+    private final TimerImpl parent;
     private final TimerNameImpl timerName;
 
     // nanosecond rollover (292 years) isn't a concern for total time on a single transaction
@@ -74,19 +73,19 @@ public class TimerImpl implements Timer, TransactionTimer {
     // synchronized access during timer capture which is important
     //
     // lazy initialize to save memory in common case where this is a leaf timer
-    private @MonotonicNonNull NestedTimerMap nestedTimers;
+    private NestedTimerMap nestedTimers;
 
     // separate linked list for safe iterating by other threads (e.g. partial trace capture and
     // active trace viewer)
-    private @MonotonicNonNull TimerImpl headChild;
-    private final @Nullable TimerImpl nextSibling;
+    private TimerImpl headChild;
+    private final TimerImpl nextSibling;
 
     static TimerImpl createRootTimer(ThreadContextImpl threadContext, TimerNameImpl timerName) {
         return new TimerImpl(threadContext, null, null, timerName);
     }
 
-    private TimerImpl(ThreadContextImpl threadContext, @Nullable TimerImpl parent,
-            @Nullable TimerImpl nextSibling, TimerNameImpl timerName) {
+    private TimerImpl(ThreadContextImpl threadContext, TimerImpl parent,
+            TimerImpl nextSibling, TimerNameImpl timerName) {
         this.timerName = timerName;
         this.parent = parent;
         this.nextSibling = nextSibling;
@@ -94,7 +93,6 @@ public class TimerImpl implements Timer, TransactionTimer {
     }
 
     // safe to be called from another thread when transaction is still active transaction
-    @JsonIgnore
     Trace.Timer toProto() {
         Trace.Timer.Builder builder = Trace.Timer.newBuilder();
         builder.setName(timerName.name());

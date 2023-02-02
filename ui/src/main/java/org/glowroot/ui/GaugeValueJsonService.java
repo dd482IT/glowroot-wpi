@@ -43,7 +43,6 @@ import org.glowroot.wire.api.model.CollectorServiceOuterClass.GaugeValueMessage.
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-@JsonService
 class GaugeValueJsonService {
 
     private static final ObjectMapper mapper = ObjectMappers.create();
@@ -59,9 +58,8 @@ class GaugeValueJsonService {
         this.configRepository = configRepository;
     }
 
-    @GET(path = "/backend/jvm/gauges", permission = "agent:jvm:gauges")
-    String getGaugeValues(@BindAgentRollupId String agentRollupId,
-            @BindRequest GaugeValueRequest request) throws Exception {
+    String getGaugeValues(String agentRollupId,
+            GaugeValueRequest request) throws Exception {
         int rollupLevel = rollupLevelService.getGaugeRollupLevelForView(request.from(),
                 request.to(), agentRollupId.endsWith("::"));
         long dataPointIntervalMillis;
@@ -318,7 +316,6 @@ class GaugeValueJsonService {
         return updatedGauges;
     }
 
-    @Value.Immutable
     interface GaugeValueRequest {
         long from();
         long to();
@@ -326,7 +323,6 @@ class GaugeValueJsonService {
         ImmutableList<String> gaugeName();
     }
 
-    @Value.Immutable
     interface AllGaugeResponse {
         List<Gauge> allGauges();
         List<String> defaultGaugeNames();

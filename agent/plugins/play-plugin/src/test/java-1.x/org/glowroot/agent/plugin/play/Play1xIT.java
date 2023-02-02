@@ -43,24 +43,20 @@ public class Play1xIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         // javaagent is required for Executor.execute() weaving (tests run in play dev mode which
         // uses netty)
         container = JavaagentContainer.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldCaptureIndexRoute() throws Exception {
         // when
         Trace trace = container.execute(GetIndex.class);
@@ -81,7 +77,6 @@ public class Play1xIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureApplicationIndexRoute() throws Exception {
         // when
         Trace trace = container.execute(GetApplicationIndex.class);
@@ -102,7 +97,6 @@ public class Play1xIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureApplicationCalculateRoute() throws Exception {
         // when
         Trace trace = container.execute(GetApplicationCalculate.class);

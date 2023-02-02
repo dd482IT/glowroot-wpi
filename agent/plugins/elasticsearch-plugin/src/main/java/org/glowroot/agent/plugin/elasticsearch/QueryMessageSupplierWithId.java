@@ -21,9 +21,9 @@ import org.glowroot.agent.plugin.api.checker.Nullable;
 
 class QueryMessageSupplierWithId extends QueryMessageSupplier {
 
-    private final @Nullable String id;
+    private final String id;
 
-    QueryMessageSupplierWithId(@Nullable String id) {
+    QueryMessageSupplierWithId(String id) {
         this.id = id;
     }
 

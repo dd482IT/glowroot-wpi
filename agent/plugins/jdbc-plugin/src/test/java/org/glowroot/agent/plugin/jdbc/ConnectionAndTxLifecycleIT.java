@@ -42,22 +42,18 @@ public class ConnectionAndTxLifecycleIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void testConnectionLifecycle() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID,
@@ -80,7 +76,6 @@ public class ConnectionAndTxLifecycleIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testConnectionLifecycleDisabled() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureGetConnection", false);
@@ -96,7 +91,6 @@ public class ConnectionAndTxLifecycleIT {
         assertThat(header.getEntryCount()).isZero();
     }
 
-    @Test
     public void testConnectionLifecyclePartiallyDisabled() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureConnectionClose", true);
@@ -116,7 +110,6 @@ public class ConnectionAndTxLifecycleIT {
         assertThat(header.getEntryCount()).isZero();
     }
 
-    @Test
     public void testConnectionLifecycleGetConnectionThrows() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID,
@@ -138,7 +131,6 @@ public class ConnectionAndTxLifecycleIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testConnectionLifecycleGetConnectionThrowsDisabled() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureGetConnection", false);
@@ -154,7 +146,6 @@ public class ConnectionAndTxLifecycleIT {
         assertThat(header.getEntryCount()).isZero();
     }
 
-    @Test
     public void testConnectionLifecycleGetConnectionThrowsPartiallyDisabled() throws Exception {
         // when
         Trace trace = container.execute(ExecuteGetConnectionOnThrowingDataSource.class);
@@ -167,7 +158,6 @@ public class ConnectionAndTxLifecycleIT {
         assertThat(header.getEntryCount()).isZero();
     }
 
-    @Test
     public void testConnectionLifecycleCloseConnectionThrows() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID,
@@ -193,7 +183,6 @@ public class ConnectionAndTxLifecycleIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testConnectionLifecycleCloseConnectionThrowsDisabled() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureGetConnection", false);
@@ -209,7 +198,6 @@ public class ConnectionAndTxLifecycleIT {
         assertThat(header.getEntryCount()).isZero();
     }
 
-    @Test
     public void testConnectionLifecycleCloseConnectionThrowsPartiallyDisabled() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureConnectionClose", true);
@@ -229,7 +217,6 @@ public class ConnectionAndTxLifecycleIT {
         assertThat(header.getEntryCount()).isZero();
     }
 
-    @Test
     public void testTransactionLifecycle() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID,
@@ -259,7 +246,6 @@ public class ConnectionAndTxLifecycleIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testTransactionLifecycleThrowing() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID,
@@ -288,7 +274,6 @@ public class ConnectionAndTxLifecycleIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testConnectionLifecycleAndTransactionLifecycleTogether() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID,

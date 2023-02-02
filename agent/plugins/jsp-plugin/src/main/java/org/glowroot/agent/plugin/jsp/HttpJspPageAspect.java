@@ -30,30 +30,23 @@ import org.glowroot.agent.plugin.api.weaving.Pointcut;
 
 public class HttpJspPageAspect {
 
-    @Pointcut(className = "javax.servlet.jsp.HttpJspPage", methodName = "_jspService",
-            methodParameterTypes = {"javax.servlet.http.HttpServletRequest",
-                    "javax.servlet.http.HttpServletResponse"},
-            nestingGroup = "jsp", timerName = "jsp render")
     public static class HttpJspPageAdvice {
 
         private static final TimerName timerName = Agent.getTimerName(HttpJspPageAdvice.class);
 
-        @OnBefore
-        public static TraceEntry onBefore(ThreadContext context, @BindReceiver Object httpJspPage) {
+        public static TraceEntry onBefore(ThreadContext context, Object httpJspPage) {
             // get filename from classname
             String filename = HttpJspPages.getFilename(httpJspPage.getClass());
             return context.startTraceEntry(MessageSupplier.create("jsp render: {}", filename),
                     timerName);
         }
 
-        @OnReturn
-        public static void onReturn(@BindTraveler TraceEntry traceEntry) {
+        public static void onReturn(TraceEntry traceEntry) {
             traceEntry.end();
         }
 
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler TraceEntry traceEntry) {
+        public static void onThrow(Throwable t,
+                TraceEntry traceEntry) {
             traceEntry.endWithError(t);
         }
     }

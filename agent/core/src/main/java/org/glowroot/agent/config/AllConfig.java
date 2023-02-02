@@ -34,7 +34,6 @@ import org.glowroot.common.config.UiDefaultsConfig;
 import org.glowroot.wire.api.model.AgentConfigOuterClass.AgentConfig;
 import org.glowroot.wire.api.model.AgentConfigOuterClass.AgentConfig.PluginProperty;
 
-@Value.Immutable
 public abstract class AllConfig {
 
     abstract TransactionConfig transaction();

@@ -39,7 +39,6 @@ public class CappedDatabaseOutputStreamTest {
     private CappedDatabaseOutputStream cappedOut;
     private RandomAccessFile in;
 
-    @BeforeEach
     public void onBefore() throws IOException {
         tempFile = File.createTempFile("glowroot-test-", ".capped.txt");
         scheduledExecutor = Executors.newSingleThreadScheduledExecutor();
@@ -48,7 +47,6 @@ public class CappedDatabaseOutputStreamTest {
         in = new RandomAccessFile(tempFile, "r");
     }
 
-    @AfterEach
     public void onAfter() throws IOException {
         scheduledExecutor.shutdownNow();
         cappedOut.close();
@@ -56,7 +54,6 @@ public class CappedDatabaseOutputStreamTest {
         tempFile.delete();
     }
 
-    @Test
     public void shouldWrite() throws IOException {
         // given
         Writer out = new OutputStreamWriter(cappedOut);
@@ -72,7 +69,6 @@ public class CappedDatabaseOutputStreamTest {
         assertWrite(text, cappedId);
     }
 
-    @Test
     public void shouldWriteUsingByteArray() throws IOException {
         // given
         String text = "0123456789";
@@ -87,7 +83,6 @@ public class CappedDatabaseOutputStreamTest {
         assertWrite(text, cappedId);
     }
 
-    @Test
     public void shouldWriteUsingSingleBytes() throws IOException {
         // when
         cappedOut.startBlock();
@@ -108,7 +103,6 @@ public class CappedDatabaseOutputStreamTest {
         assertWrite("0123456789", cappedId);
     }
 
-    @Test
     public void shouldWrap() throws IOException {
         // given
         Writer out = new OutputStreamWriter(cappedOut);
@@ -149,7 +143,6 @@ public class CappedDatabaseOutputStreamTest {
         assertThat(content).isEqualTo(text);
     }
 
-    @Test
     public void shouldWrapAndKeepGoing() throws IOException {
         // given
         Writer out = new OutputStreamWriter(cappedOut);
@@ -192,7 +185,6 @@ public class CappedDatabaseOutputStreamTest {
         assertThat(content).isEqualTo(text);
     }
 
-    @Test
     public void shouldWrapAndResize() throws IOException {
         // given
         Writer out = new OutputStreamWriter(cappedOut);
@@ -235,7 +227,6 @@ public class CappedDatabaseOutputStreamTest {
         assertThat(content).isEqualTo(text);
     }
 
-    @Test
     public void shouldWrapAndResizeVerySmall() throws IOException {
         // given
         Writer out = new OutputStreamWriter(cappedOut);
@@ -279,7 +270,6 @@ public class CappedDatabaseOutputStreamTest {
         assertThat(content).isEqualTo(text);
     }
 
-    @Test
     public void shouldWrapWithoutEnoughSpaceAtEndForContiguousBlockHeader() throws IOException {
         // given
         String text = "0123456789";

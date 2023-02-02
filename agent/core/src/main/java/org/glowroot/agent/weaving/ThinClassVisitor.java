@@ -34,7 +34,7 @@ class ThinClassVisitor extends ClassVisitor {
 
     private int majorVersion;
 
-    private @Nullable ThinClass thinClass;
+    private ThinClass thinClass;
 
     private boolean constructorPointcut;
 
@@ -43,8 +43,8 @@ class ThinClassVisitor extends ClassVisitor {
     }
 
     @Override
-    public void visit(int version, int access, String name, @Nullable String signature,
-            @Nullable String superName, String /*@Nullable*/ [] interfaces) {
+    public void visit(int version, int access, String name, String signature,
+            String superName, String /*@Nullable*/ [] interfaces) {
         majorVersion = version & 0xFFFF;
         thinClassBuilder.access(access);
         thinClassBuilder.name(name);
@@ -55,7 +55,7 @@ class ThinClassVisitor extends ClassVisitor {
     }
 
     @Override
-    public @Nullable AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
+    public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
         thinClassBuilder.addAnnotations(descriptor);
         if (descriptor.equals("Lorg/glowroot/agent/plugin/api/weaving/Pointcut;")) {
             return new PointcutAnnotationVisitor();
@@ -68,7 +68,7 @@ class ThinClassVisitor extends ClassVisitor {
 
     @Override
     public MethodVisitor visitMethod(int access, String name, String descriptor,
-            @Nullable String signature, String /*@Nullable*/ [] exceptions) {
+            String signature, String /*@Nullable*/ [] exceptions) {
         ImmutableThinMethod.Builder thinMethodBuilder = ImmutableThinMethod.builder();
         thinMethodBuilder.access(access);
         thinMethodBuilder.name(name);
@@ -97,11 +97,9 @@ class ThinClassVisitor extends ClassVisitor {
         return constructorPointcut;
     }
 
-    @Value.Immutable
     interface ThinClass {
         int access();
         String name();
-        @Nullable
         String superName();
         List<String> interfaces();
         List<String> annotations();
@@ -110,12 +108,10 @@ class ThinClassVisitor extends ClassVisitor {
         List<Type> ejbRemoteInterfaces();
     }
 
-    @Value.Immutable
     interface ThinMethod {
         int access();
         String name();
         String descriptor();
-        @Nullable
         String signature();
         List<String> exceptions();
         List<String> annotations();
@@ -128,7 +124,7 @@ class ThinClassVisitor extends ClassVisitor {
         }
 
         @Override
-        public void visit(@Nullable String name, Object value) {
+        public void visit(String name, Object value) {
             if ("methodName".equals(name) && "<init>".equals(value)) {
                 constructorPointcut = true;
             }
@@ -145,7 +141,7 @@ class ThinClassVisitor extends ClassVisitor {
         }
 
         @Override
-        public @Nullable AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
+        public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
             thinMethodBuilder.addAnnotations(descriptor);
             return null;
         }
@@ -168,7 +164,7 @@ class ThinClassVisitor extends ClassVisitor {
         }
 
         @Override
-        public @Nullable AnnotationVisitor visitArray(String name) {
+        public AnnotationVisitor visitArray(String name) {
             if (name.equals("value")) {
                 return new ValueAnnotationVisitor();
             } else {
@@ -184,7 +180,7 @@ class ThinClassVisitor extends ClassVisitor {
         }
 
         @Override
-        public void visit(@Nullable String name, Object value) {
+        public void visit(String name, Object value) {
             if (name == null && value instanceof Type) {
                 thinClassBuilder.addEjbRemoteInterfaces((Type) value);
             }

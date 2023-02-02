@@ -34,7 +34,6 @@ public class ScheduledRunnableTest {
 
     private ScheduledExecutorService scheduledExecutorService;
 
-    @BeforeEach
     @SuppressWarnings("unchecked")
     public void beforeEachTest() {
         scheduledExecutorService = mock(ScheduledExecutorService.class);
@@ -44,7 +43,6 @@ public class ScheduledRunnableTest {
                 any(TimeUnit.class))).thenReturn(mock(ScheduledFuture.class));
     }
 
-    @Test
     public void testScheduleWithFixedDelay() {
         // given
         TestScheduledRunnable testScheduledRunnable = new TestScheduledRunnable();
@@ -57,7 +55,6 @@ public class ScheduledRunnableTest {
         verifyNoMoreInteractions(scheduledExecutorService);
     }
 
-    @Test
     public void testScheduleWithFixedDelayCalledTwice() {
         // given
         TestScheduledRunnable testScheduledRunnable = new TestScheduledRunnable();
@@ -70,7 +67,6 @@ public class ScheduledRunnableTest {
         verifyNoMoreInteractions(scheduledExecutorService);
     }
 
-    @Test
     public void testCancelWithNoFuture() {
         // given
         TestScheduledRunnable testScheduledRunnable = new TestScheduledRunnable();
@@ -80,7 +76,6 @@ public class ScheduledRunnableTest {
         // do nothing
     }
 
-    @Test
     public void testExceptionalScheduledRunnable() {
         // given
         ExceptionalScheduledRunnable testScheduledRunnable = new ExceptionalScheduledRunnable();

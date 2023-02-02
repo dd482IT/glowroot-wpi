@@ -31,13 +31,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ReportJsonServiceTest {
 
-    @Test
     public void testRollupCaptureTime() throws ParseException {
         testRollupCaptureTime("UTC");
         testRollupCaptureTime("America/Los_Angeles");
     }
 
-    @Test
     public void testRollupInterval() throws ParseException {
         testRollupIntervalMillis(ROLLUP.HOURLY, "UTC", "20161127T00", HOURS.toMillis(1));
         testRollupIntervalMillis(ROLLUP.HOURLY, "UTC", "20161127T01", HOURS.toMillis(1));

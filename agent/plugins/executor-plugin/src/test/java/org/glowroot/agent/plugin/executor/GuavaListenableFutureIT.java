@@ -39,7 +39,6 @@ public class GuavaListenableFutureIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         // unshaded doesn't work under javaagent because glowroot loads guava classes before the
         // Weaver is registered, so the guava classes don't have a chance to get woven
@@ -47,7 +46,6 @@ public class GuavaListenableFutureIT {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         // need null check in case assumption is false in setUp()
         if (container != null) {
@@ -55,12 +53,10 @@ public class GuavaListenableFutureIT {
         }
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldCaptureListenerAddedBeforeComplete() throws Exception {
         // when
         Trace trace = container.execute(AddListenerBeforeComplete.class);
@@ -79,7 +75,6 @@ public class GuavaListenableFutureIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureListenerAddedAfterComplete() throws Exception {
         // when
         Trace trace = container.execute(AddListenerAfterComplete.class);
@@ -98,7 +93,6 @@ public class GuavaListenableFutureIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureSameExecutorListenerAddedBeforeComplete() throws Exception {
         // when
         Trace trace = container.execute(AddSameExecutorListenerBeforeComplete.class);
@@ -117,7 +111,6 @@ public class GuavaListenableFutureIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureSameExecutorListenerAddedAfterComplete() throws Exception {
         // when
         Trace trace = container.execute(AddSameExecutorListenerAfterComplete.class);

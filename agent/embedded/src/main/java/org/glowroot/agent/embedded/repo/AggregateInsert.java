@@ -52,16 +52,16 @@ import static org.glowroot.agent.util.Checkers.castUntainted;
 class AggregateInsert implements JdbcUpdate {
 
     private final String transactionType;
-    private final @Nullable String transactionName;
+    private final String transactionName;
     private final long captureTime;
     private final double totalDurationNanos;
     private final long transactionCount;
     private final long errorCount;
     private final boolean asyncTransactions;
-    private final @Nullable Long queriesCappedId;
-    private final @Nullable Long serviceCallsCappedId;
-    private final @Nullable Long mainThreadProfileCappedId;
-    private final @Nullable Long auxThreadProfileCappedId;
+    private final Long queriesCappedId;
+    private final Long serviceCallsCappedId;
+    private final Long mainThreadProfileCappedId;
+    private final Long auxThreadProfileCappedId;
     private final byte /*@Nullable*/ [] mainThreadRootTimers;
     private final double mainThreadTotalCpuNanos;
     private final double mainThreadTotalBlockedNanos;
@@ -77,7 +77,7 @@ class AggregateInsert implements JdbcUpdate {
 
     private final int rollupLevel;
 
-    AggregateInsert(String transactionType, @Nullable String transactionName,
+    AggregateInsert(String transactionType, String transactionName,
             long captureTime, Aggregate aggregate, List<TruncatedQueryText> truncatedQueryTexts,
             int rollupLevel, CappedDatabase cappedDatabase) throws IOException {
         this.transactionType = transactionType;
@@ -131,7 +131,7 @@ class AggregateInsert implements JdbcUpdate {
         durationNanosHistogramBytes = aggregate.getDurationNanosHistogram().toByteArray();
     }
 
-    AggregateInsert(String transactionType, @Nullable String transactionName,
+    AggregateInsert(String transactionType, String transactionName,
             long captureTime, MutableAggregate aggregate, int rollupLevel,
             CappedDatabase cappedDatabase, ScratchBuffer scratchBuffer) throws IOException {
         this.transactionType = transactionType;
@@ -275,7 +275,7 @@ class AggregateInsert implements JdbcUpdate {
         return queries;
     }
 
-    private static List<Stored.QueriesByType> toStored(@Nullable QueryCollector collector) {
+    private static List<Stored.QueriesByType> toStored(QueryCollector collector) {
         if (collector == null) {
             return ImmutableList.of();
         }
@@ -331,7 +331,7 @@ class AggregateInsert implements JdbcUpdate {
     }
 
     private static List<Stored.ServiceCallsByType> toStored(
-            @Nullable ServiceCallCollector collector) {
+            ServiceCallCollector collector) {
         if (collector == null) {
             return ImmutableList.of();
         }
@@ -358,7 +358,7 @@ class AggregateInsert implements JdbcUpdate {
         return serviceCalls;
     }
 
-    private static @Nullable Long writeQueries(CappedDatabase cappedDatabase,
+    private static Long writeQueries(CappedDatabase cappedDatabase,
             List<Stored.QueriesByType> queries) throws IOException {
         if (queries.isEmpty()) {
             return null;
@@ -366,7 +366,7 @@ class AggregateInsert implements JdbcUpdate {
         return cappedDatabase.writeMessages(queries, RollupCappedDatabaseStats.AGGREGATE_QUERIES);
     }
 
-    private static @Nullable Long writeServiceCalls(CappedDatabase cappedDatabase,
+    private static Long writeServiceCalls(CappedDatabase cappedDatabase,
             List<Stored.ServiceCallsByType> serviceCalls) throws IOException {
         if (serviceCalls.isEmpty()) {
             return null;
@@ -375,8 +375,8 @@ class AggregateInsert implements JdbcUpdate {
                 RollupCappedDatabaseStats.AGGREGATE_SERVICE_CALLS);
     }
 
-    private static @Nullable Long writeProfile(CappedDatabase cappedDatabase,
-            @Nullable MutableProfile profile) throws IOException {
+    private static Long writeProfile(CappedDatabase cappedDatabase,
+            MutableProfile profile) throws IOException {
         if (profile == null) {
             return null;
         }
@@ -384,7 +384,7 @@ class AggregateInsert implements JdbcUpdate {
                 RollupCappedDatabaseStats.AGGREGATE_PROFILES);
     }
 
-    private static @Nullable Long writeProfile(CappedDatabase cappedDatabase, Profile profile)
+    private static Long writeProfile(CappedDatabase cappedDatabase, Profile profile)
             throws IOException {
         return cappedDatabase.writeMessage(profile, RollupCappedDatabaseStats.AGGREGATE_PROFILES);
     }

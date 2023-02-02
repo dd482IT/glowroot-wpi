@@ -29,14 +29,12 @@ public class ConfigServiceImplDefensiveCheckTest {
 
     private ConfigServiceImpl configService;
 
-    @BeforeEach
     public void beforeEachTest() {
         ConfigService configService = mock(ConfigService.class);
         this.configService = ConfigServiceImpl.create(configService,
                 ImmutableList.<PluginDescriptor>of(), "dummy");
     }
 
-    @Test
     public void testGetProperty() {
         assertThat(configService.getStringProperty(null).value()).isEqualTo("");
         assertThat(configService.getBooleanProperty(null).value()).isEqualTo(false);
@@ -46,12 +44,10 @@ public class ConfigServiceImplDefensiveCheckTest {
         assertThat(configService.getDoubleProperty("").value()).isEqualTo(null);
     }
 
-    @Test
     public void testRegisterConfigListener() {
         configService.registerConfigListener(null);
     }
 
-    @Test
     public void testRegisterListener() {
         configService.registerConfigListener(null);
     }

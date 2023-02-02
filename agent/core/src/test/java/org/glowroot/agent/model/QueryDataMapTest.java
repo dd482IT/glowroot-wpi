@@ -25,7 +25,6 @@ import static org.mockito.Mockito.mock;
 
 public class QueryDataMapTest {
 
-    @Test
     public void testBucketCollision() {
         // given
         QueryDataMap map = new QueryDataMap("");

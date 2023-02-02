@@ -81,7 +81,7 @@ class IncidentDao implements IncidentRepository {
     }
 
     @Override
-    public @Nullable OpenIncident readOpenIncident(String agentRollupId, AlertCondition condition,
+    public OpenIncident readOpenIncident(String agentRollupId, AlertCondition condition,
             AlertSeverity severity) throws Exception {
         return dataSource.query(new SingleOpenIncident(condition, severity));
     }
@@ -136,7 +136,7 @@ class IncidentDao implements IncidentRepository {
         }
 
         @Override
-        public @Nullable OpenIncident processResultSet(ResultSet resultSet) throws Exception {
+        public OpenIncident processResultSet(ResultSet resultSet) throws Exception {
             if (!resultSet.next()) {
                 return null;
             }
@@ -152,7 +152,7 @@ class IncidentDao implements IncidentRepository {
         }
 
         @Override
-        public @Nullable OpenIncident valueIfDataSourceClosed() {
+        public OpenIncident valueIfDataSourceClosed() {
             return null;
         }
     }

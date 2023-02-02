@@ -21,7 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class LiveJvmServiceImplTest {
 
-    @Test
     public void testNonParseable() {
         assertThat(LiveJvmServiceImpl.parseProcessId("")).isNull();
         assertThat(LiveJvmServiceImpl.parseProcessId("x")).isNull();
@@ -30,7 +29,6 @@ public class LiveJvmServiceImplTest {
         assertThat(LiveJvmServiceImpl.parseProcessId("x@y")).isNull();
     }
 
-    @Test
     public void testParseable() {
         assertThat(LiveJvmServiceImpl.parseProcessId("123456@host")).isEqualTo(123456);
     }

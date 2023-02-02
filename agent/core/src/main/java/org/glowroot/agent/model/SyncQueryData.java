@@ -41,8 +41,8 @@ public class SyncQueryData implements QueryData {
 
     private final String queryType;
     private final String queryText;
-    private final @Nullable SyncQueryData nextQueryData;
-    private final @Nullable SyncQueryData limitExceededBucket;
+    private final SyncQueryData nextQueryData;
+    private final SyncQueryData limitExceededBucket;
 
     // nanosecond rollover (292 years) isn't a concern for total time on a single transaction
     private long sumOfStartTicks;
@@ -54,8 +54,8 @@ public class SyncQueryData implements QueryData {
     // also tracked as queries)
     private long totalRows = -1;
 
-    public SyncQueryData(String queryType, String queryText, @Nullable SyncQueryData nextQueryData,
-            @Nullable SyncQueryData limitExceededBucket) {
+    public SyncQueryData(String queryType, String queryText, SyncQueryData nextQueryData,
+            SyncQueryData limitExceededBucket) {
         this.queryType = queryType;
         this.queryText = queryText;
         this.nextQueryData = nextQueryData;
@@ -71,7 +71,7 @@ public class SyncQueryData implements QueryData {
         return queryText;
     }
 
-    public @Nullable SyncQueryData getNextQueryData() {
+    public SyncQueryData getNextQueryData() {
         return nextQueryData;
     }
 

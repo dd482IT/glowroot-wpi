@@ -109,7 +109,6 @@ import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 import static io.netty.handler.codec.http.HttpResponseStatus.PRECONDITION_FAILED;
 
-@JsonService
 class AdminJsonService {
 
     private static final Logger logger = LoggerFactory.getLogger(ConfigJsonService.class);
@@ -133,7 +132,7 @@ class AdminJsonService {
     private final HttpClient httpClient;
 
     // null when running in servlet container
-    private volatile @MonotonicNonNull HttpServer httpServer;
+    private volatile HttpServer httpServer;
 
     AdminJsonService(boolean central, boolean offlineViewer, boolean webPortReadOnly,
             List<File> confDirs, ConfigRepository configRepository,
@@ -155,9 +154,8 @@ class AdminJsonService {
     }
 
     // all users have permission to change their own password
-    @POST(path = "/backend/change-password", permission = "")
-    String changePassword(@BindRequest ChangePassword changePassword,
-            @BindAuthentication Authentication authentication) throws Exception {
+    String changePassword(ChangePassword changePassword,
+            Authentication authentication) throws Exception {
         if (authentication.anonymous()) {
             throw new JsonServiceException(BAD_REQUEST, "cannot change anonymous password");
         }
@@ -175,7 +173,6 @@ class AdminJsonService {
         return "";
     }
 
-    @GET(path = "/backend/admin/general", permission = "admin:view:general")
     String getGeneralConfig() throws Exception {
         if (central) {
             return getCentralAdminGeneralConfig();
@@ -184,7 +181,6 @@ class AdminJsonService {
         }
     }
 
-    @GET(path = "/backend/admin/web", permission = "admin:view:web")
     String getWebConfig() throws Exception {
         if (central) {
             return getCentralWebConfig();
@@ -193,7 +189,6 @@ class AdminJsonService {
         }
     }
 
-    @GET(path = "/backend/admin/storage", permission = "admin:view:storage")
     String getStorageConfig() throws Exception {
         if (central) {
             CentralStorageConfig config = configRepository.getCentralStorageConfig();
@@ -204,7 +199,6 @@ class AdminJsonService {
         }
     }
 
-    @GET(path = "/backend/admin/smtp", permission = "admin:view:smtp")
     String getSmtpConfig() throws Exception {
         SmtpConfig config = configRepository.getSmtpConfig();
         String localServerName = InetAddress.getLocalHost().getHostName();
@@ -214,13 +208,11 @@ class AdminJsonService {
                 .build());
     }
 
-    @GET(path = "/backend/admin/http-proxy", permission = "admin:view:httpProxy")
     String getHttpProxyConfig() throws Exception {
         HttpProxyConfig config = configRepository.getHttpProxyConfig();
         return mapper.writeValueAsString(HttpProxyConfigDto.create(config));
     }
 
-    @GET(path = "/backend/admin/ldap", permission = "admin:view:ldap")
     String getLdapConfig() throws Exception {
         List<String> allGlowrootRoles = Lists.newArrayList();
         for (RoleConfig roleConfig : configRepository.getRoleConfigs()) {
@@ -233,25 +225,21 @@ class AdminJsonService {
                 .build());
     }
 
-    @GET(path = "/backend/admin/pager-duty", permission = "admin:view:pagerDuty")
     String getPagerDutyConfig() throws Exception {
         PagerDutyConfig config = configRepository.getPagerDutyConfig();
         return mapper.writeValueAsString(PagerDutyConfigDto.create(config));
     }
 
-    @GET(path = "/backend/admin/slack", permission = "admin:view:slack")
     String getSlackConfig() throws Exception {
         SlackConfig config = configRepository.getSlackConfig();
         return mapper.writeValueAsString(SlackConfigDto.create(config));
     }
 
-    @GET(path = "/backend/admin/healthchecks-io", permission = "admin:view:healthchecksIo")
     String getHealthchecksIoConfig() throws Exception {
         HealthchecksIoConfig config = configRepository.getHealthchecksIoConfig();
         return mapper.writeValueAsString(HealthchecksIoConfigDto.create(config));
     }
 
-    @GET(path = "/backend/admin/json", permission = "admin:view")
     String getAllAdmin() throws Exception {
         Object config;
         if (central) {
@@ -275,8 +263,7 @@ class AdminJsonService {
         return sb.toString();
     }
 
-    @POST(path = "/backend/admin/general", permission = "admin:edit:general")
-    String updateGeneralConfig(@BindRequest String content) throws Exception {
+    String updateGeneralConfig(String content) throws Exception {
         if (central) {
             CentralAdminGeneralConfigDto configDto =
                     mapper.readValue(content, ImmutableCentralAdminGeneralConfigDto.class);
@@ -300,8 +287,7 @@ class AdminJsonService {
         }
     }
 
-    @POST(path = "/backend/admin/web", permission = "admin:edit:web")
-    Object updateWebConfig(@BindRequest String content) throws Exception {
+    Object updateWebConfig(String content) throws Exception {
         if (central) {
             CentralWebConfigDto configDto =
                     mapper.readValue(content, ImmutableCentralWebConfigDto.class);
@@ -357,8 +343,7 @@ class AdminJsonService {
         }
     }
 
-    @POST(path = "/backend/admin/storage", permission = "admin:edit:storage")
-    String updateStorageConfig(@BindRequest String content) throws Exception {
+    String updateStorageConfig(String content) throws Exception {
         if (central) {
             CentralStorageConfigDto configDto =
                     mapper.readValue(content, ImmutableCentralStorageConfigDto.class);
@@ -382,8 +367,7 @@ class AdminJsonService {
         return getStorageConfig();
     }
 
-    @POST(path = "/backend/admin/smtp", permission = "admin:edit:smtp")
-    String updateSmtpConfig(@BindRequest SmtpConfigDto configDto) throws Exception {
+    String updateSmtpConfig(SmtpConfigDto configDto) throws Exception {
         try {
             configRepository.updateSmtpConfig(configDto.convert(configRepository),
                     configDto.version());
@@ -395,8 +379,7 @@ class AdminJsonService {
         return getSmtpConfig();
     }
 
-    @POST(path = "/backend/admin/http-proxy", permission = "admin:edit:httpProxy")
-    String updateHttpProxyConfig(@BindRequest HttpProxyConfigDto configDto) throws Exception {
+    String updateHttpProxyConfig(HttpProxyConfigDto configDto) throws Exception {
         try {
             configRepository.updateHttpProxyConfig(configDto.convert(configRepository),
                     configDto.version());
@@ -408,8 +391,7 @@ class AdminJsonService {
         return getHttpProxyConfig();
     }
 
-    @POST(path = "/backend/admin/ldap", permission = "admin:edit:ldap")
-    String updateLdapConfig(@BindRequest LdapConfigDto configDto) throws Exception {
+    String updateLdapConfig(LdapConfigDto configDto) throws Exception {
         try {
             configRepository.updateLdapConfig(configDto.convert(configRepository),
                     configDto.version());
@@ -421,8 +403,7 @@ class AdminJsonService {
         return getLdapConfig();
     }
 
-    @POST(path = "/backend/admin/pager-duty", permission = "admin:edit:pagerDuty")
-    String updatePagerDutyConfig(@BindRequest PagerDutyConfigDto configDto) throws Exception {
+    String updatePagerDutyConfig(PagerDutyConfigDto configDto) throws Exception {
         try {
             configRepository.updatePagerDutyConfig(configDto.convert(), configDto.version());
         } catch (DuplicatePagerDutyIntegrationKeyException e) {
@@ -435,8 +416,7 @@ class AdminJsonService {
         return getPagerDutyConfig();
     }
 
-    @POST(path = "/backend/admin/slack", permission = "admin:edit:slack")
-    String updateSlackConfig(@BindRequest SlackConfigDto configDto) throws Exception {
+    String updateSlackConfig(SlackConfigDto configDto) throws Exception {
         try {
             configRepository.updateSlackConfig(configDto.convert(), configDto.version());
         } catch (DuplicateSlackWebhookUrlException e) {
@@ -449,8 +429,7 @@ class AdminJsonService {
         return getSlackConfig();
     }
 
-    @POST(path = "/backend/admin/healthchecks-io", permission = "admin:edit:healthchecksIo")
-    String updateHealthchecksIoConfig(@BindRequest HealthchecksIoConfigDto configDto)
+    String updateHealthchecksIoConfig(HealthchecksIoConfigDto configDto)
             throws Exception {
         try {
             configRepository.updateHealthchecksIoConfig(configDto.convert(), configDto.version());
@@ -460,8 +439,7 @@ class AdminJsonService {
         return getHealthchecksIoConfig();
     }
 
-    @POST(path = "/backend/admin/json", permission = "admin:edit")
-    String updateAllAdmin(@BindRequest String content) throws Exception {
+    String updateAllAdmin(String content) throws Exception {
         JsonNode rootNode = mapper.readTree(content);
         AllAdminConfigUtil.updatePasswords(rootNode, configRepository);
         if (central) {
@@ -476,8 +454,7 @@ class AdminJsonService {
         return getAllAdmin();
     }
 
-    @POST(path = "/backend/admin/send-test-email", permission = "admin:edit:smtp")
-    String sendTestEmail(@BindRequest SmtpConfigDto configDto) throws IOException {
+    String sendTestEmail(SmtpConfigDto configDto) throws IOException {
         // capturing newPlainPassword separately so that newPassword doesn't go through
         // encryption/decryption which has possibility of throwing
         // org.glowroot.common.repo.util.LazySecretKey.SymmetricEncryptionKeyMissingException
@@ -521,8 +498,7 @@ class AdminJsonService {
         return "{}";
     }
 
-    @POST(path = "/backend/admin/test-http-proxy", permission = "admin:edit:httpProxy")
-    String testHttpProxy(@BindRequest HttpProxyConfigDto configDto) throws IOException {
+    String testHttpProxy(HttpProxyConfigDto configDto) throws IOException {
         // capturing newPlainPassword separately so that newPassword doesn't go through
         // encryption/decryption which has possibility of throwing
         // org.glowroot.common.repo.util.LazySecretKey.SymmetricEncryptionKeyMissingException
@@ -574,8 +550,7 @@ class AdminJsonService {
         return sb.toString();
     }
 
-    @POST(path = "/backend/admin/test-ldap", permission = "admin:edit:ldap")
-    String testLdap(@BindRequest LdapConfigDto configDto) throws Exception {
+    String testLdap(LdapConfigDto configDto) throws Exception {
         // capturing newPlainPassword separately so that newPassword doesn't go through
         // encryption/decryption which has possibility of throwing
         // org.glowroot.common.repo.util.LazySecretKey.SymmetricEncryptionKeyMissingException
@@ -618,24 +593,21 @@ class AdminJsonService {
         return sb.toString();
     }
 
-    @POST(path = "/backend/admin/defrag-h2-data", permission = "")
-    void defragH2Data(@BindAuthentication Authentication authentication) throws Exception {
+    void defragH2Data(Authentication authentication) throws Exception {
         if (!offlineViewer && !authentication.isAdminPermitted("admin:edit:storage")) {
             throw new JsonServiceException(HttpResponseStatus.FORBIDDEN);
         }
         repoAdmin.defragH2Data();
     }
 
-    @POST(path = "/backend/admin/compact-h2-data", permission = "")
-    void compactH2Data(@BindAuthentication Authentication authentication) throws Exception {
+    void compactH2Data(Authentication authentication) throws Exception {
         if (!offlineViewer && !authentication.isAdminPermitted("admin:edit:storage")) {
             throw new JsonServiceException(HttpResponseStatus.FORBIDDEN);
         }
         repoAdmin.compactH2Data();
     }
 
-    @POST(path = "/backend/admin/analyze-h2-disk-space", permission = "")
-    String analyzeH2DiskSpace(@BindAuthentication Authentication authentication) throws Exception {
+    String analyzeH2DiskSpace(Authentication authentication) throws Exception {
         if (!offlineViewer && !authentication.isAdminPermitted("admin:edit:storage")) {
             throw new JsonServiceException(HttpResponseStatus.FORBIDDEN);
         }
@@ -654,28 +626,23 @@ class AdminJsonService {
         return sb.toString();
     }
 
-    @POST(path = "/backend/admin/analyze-trace-counts", permission = "")
-    String analyzeTraceCounts(@BindAuthentication Authentication authentication) throws Exception {
+    String analyzeTraceCounts(Authentication authentication) throws Exception {
         if (!offlineViewer && !authentication.isAdminPermitted("admin:edit:storage")) {
             throw new JsonServiceException(HttpResponseStatus.FORBIDDEN);
         }
         return mapper.writeValueAsString(repoAdmin.analyzeTraceCounts());
     }
 
-    @POST(path = "/backend/admin/delete-all-stored-data", permission = "admin:edit:storage")
     void deleteAllData() throws Exception {
         repoAdmin.deleteAllData();
         liveAggregateRepository.clearInMemoryData();
     }
 
-    @POST(path = "/backend/admin/update-cassandra-twcs-window-sizes",
-            permission = "admin:edit:storage")
     String updateCassandraTwcsWindowSizes() throws Exception {
         return Integer.toString(repoAdmin.updateCassandraTwcsWindowSizes());
     }
 
-    @GET(path = "/backend/admin/cassandra-write-totals", permission = "admin:view:storage")
-    String getCassandraWriteTotals(@BindRequest CassandraWriteTotalsRequest request)
+    String getCassandraWriteTotals(CassandraWriteTotalsRequest request)
             throws JsonProcessingException {
         String tableName = request.tableName();
         String agentRollupId = request.agentRollupId();
@@ -695,7 +662,7 @@ class AdminJsonService {
         }
     }
 
-    private @Nullable File getConfFile(String fileName) {
+    private File getConfFile(String fileName) {
         for (File confDir : confDirs) {
             File confFile = new File(confDir, fileName);
             if (confFile.exists()) {
@@ -705,7 +672,6 @@ class AdminJsonService {
         return null;
     }
 
-    @RequiresNonNull("httpServer")
     private CommonResponse onSuccessfulEmbeddedWebUpdate(EmbeddedWebConfig config)
             throws Exception {
         boolean closeCurrentChannelAfterPortChange = false;
@@ -784,7 +750,7 @@ class AdminJsonService {
         }
     }
 
-    private static String createErrorResponse(@Nullable String message) throws IOException {
+    private static String createErrorResponse(String message) throws IOException {
         StringBuilder sb = new StringBuilder();
         JsonGenerator jg = mapper.getFactory().createGenerator(CharStreams.asWriter(sb));
         try {
@@ -798,19 +764,16 @@ class AdminJsonService {
         return sb.toString();
     }
 
-    @Value.Immutable
     interface ChangePassword {
         String currentPassword();
         String newPassword();
     }
 
-    @Value.Immutable
     interface EmbeddedAdminGeneralConfigResponse {
         EmbeddedAdminGeneralConfigDto config();
         String defaultAgentDisplayName();
     }
 
-    @Value.Immutable
     interface EmbeddedWebConfigResponse {
         EmbeddedWebConfigDto config();
         int activePort();
@@ -821,35 +784,27 @@ class AdminJsonService {
         List<String> confDirs();
     }
 
-    @Value.Immutable
     interface CentralWebConfigResponse {
         CentralWebConfigDto config();
     }
 
-    @Value.Immutable
     interface SmtpConfigResponse {
         SmtpConfigDto config();
         String localServerName();
     }
 
-    @Value.Immutable
     interface LdapConfigResponse {
         LdapConfigDto config();
         List<String> allGlowrootRoles();
     }
 
-    @Value.Immutable
     interface CassandraWriteTotalsRequest {
-        @Nullable
         String tableName();
-        @Nullable
         String agentRollupId();
-        @Nullable
         String transactionType();
         int limit();
     }
 
-    @Value.Immutable
     abstract static class EmbeddedAdminGeneralConfigDto {
 
         abstract String agentDisplayName();
@@ -869,7 +824,6 @@ class AdminJsonService {
         }
     }
 
-    @Value.Immutable
     abstract static class CentralAdminGeneralConfigDto {
 
         abstract String centralDisplayName();
@@ -889,7 +843,6 @@ class AdminJsonService {
         }
     }
 
-    @Value.Immutable
     abstract static class EmbeddedWebConfigDto {
 
         abstract int port();
@@ -924,7 +877,6 @@ class AdminJsonService {
         }
     }
 
-    @Value.Immutable
     abstract static class CentralWebConfigDto {
 
         abstract int sessionTimeoutMinutes();
@@ -947,7 +899,6 @@ class AdminJsonService {
         }
     }
 
-    @Value.Immutable
     abstract static class EmbeddedStorageConfigDto {
 
         abstract ImmutableList<Integer> rollupExpirationHours();
@@ -979,7 +930,6 @@ class AdminJsonService {
         }
     }
 
-    @Value.Immutable
     abstract static class CentralStorageConfigDto {
 
         abstract ImmutableList<Integer> rollupExpirationHours();
@@ -1010,24 +960,20 @@ class AdminJsonService {
         }
     }
 
-    @Value.Immutable
     abstract static class SmtpConfigDto {
 
         abstract String host();
-        @JsonInclude
-        abstract @Nullable Integer port();
-        @JsonInclude
-        abstract @Nullable ConnectionSecurity connectionSecurity();
+        abstract Integer port();
+        abstract ConnectionSecurity connectionSecurity();
         abstract String username();
         abstract boolean passwordExists();
-        @Value.Default
         String newPassword() { // only used in request
             return "";
         }
         abstract Map<String, String> additionalProperties();
         abstract String fromEmailAddress();
         abstract String fromDisplayName();
-        abstract @Nullable String testEmailRecipient(); // only used in request
+        abstract String testEmailRecipient(); // only used in request
         abstract String version();
 
         private SmtpConfig convert(ConfigRepository configRepository) throws Exception {
@@ -1068,19 +1014,16 @@ class AdminJsonService {
         }
     }
 
-    @Value.Immutable
     abstract static class HttpProxyConfigDto {
 
         abstract String host();
-        @JsonInclude
-        abstract @Nullable Integer port();
+        abstract Integer port();
         abstract String username();
         abstract boolean passwordExists();
-        @Value.Default
         String newPassword() { // only used in request
             return "";
         }
-        abstract @Nullable String testUrl(); // only used in request
+        abstract String testUrl(); // only used in request
         abstract String version();
 
         private HttpProxyConfig convert(ConfigRepository configRepository) throws Exception {
@@ -1114,16 +1057,13 @@ class AdminJsonService {
         }
     }
 
-    @Value.Immutable
     abstract static class LdapConfigDto {
 
         abstract String host();
-        @JsonInclude
-        abstract @Nullable Integer port();
+        abstract Integer port();
         abstract boolean ssl();
         abstract String username();
         abstract boolean passwordExists();
-        @Value.Default
         String newPassword() { // only used in request
             return "";
         }
@@ -1132,8 +1072,8 @@ class AdminJsonService {
         abstract String groupBaseDn();
         abstract String groupSearchFilter();
         abstract Map<String, List<String>> roleMappings();
-        abstract @Nullable String authTestUsername(); // only used in request
-        abstract @Nullable String authTestPassword(); // only used in request
+        abstract String authTestUsername(); // only used in request
+        abstract String authTestPassword(); // only used in request
         abstract String version();
 
         private LdapConfig convert(ConfigRepository configRepository) throws Exception {
@@ -1178,7 +1118,6 @@ class AdminJsonService {
         }
     }
 
-    @Value.Immutable
     abstract static class PagerDutyConfigDto {
 
         public abstract List<ImmutablePagerDutyIntegrationKey> integrationKeys();
@@ -1198,7 +1137,6 @@ class AdminJsonService {
         }
     }
 
-    @Value.Immutable
     abstract static class SlackConfigDto {
 
         public abstract List<ImmutableSlackWebhookDto> webhooks();
@@ -1222,10 +1160,8 @@ class AdminJsonService {
         }
     }
 
-    @Value.Immutable
     abstract static class SlackWebhookDto {
 
-        @Nullable
         abstract String id(); // null for new webhooks
         abstract String url();
         abstract String display();
@@ -1251,7 +1187,6 @@ class AdminJsonService {
         }
     }
 
-    @Value.Immutable
     abstract static class HealthchecksIoConfigDto {
 
         abstract String pingUrl();

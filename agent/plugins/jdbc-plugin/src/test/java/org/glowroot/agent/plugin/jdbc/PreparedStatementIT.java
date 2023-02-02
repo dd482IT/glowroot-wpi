@@ -56,22 +56,18 @@ public class PreparedStatementIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void testPreparedStatement() throws Exception {
         // when
         Trace trace = container.execute(ExecutePreparedStatementAndIterateOverResults.class);
@@ -103,7 +99,6 @@ public class PreparedStatementIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void testPreparedStatementQuery() throws Exception {
         // when
         Trace trace = container.execute(ExecutePreparedStatementQueryAndIterateOverResults.class);
@@ -135,7 +130,6 @@ public class PreparedStatementIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void testPreparedStatementUpdate() throws Exception {
         // when
         Trace trace = container.execute(ExecutePreparedStatementUpdate.class);
@@ -167,7 +161,6 @@ public class PreparedStatementIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void testPreparedStatementInsertWithGeneratedKeys() throws Exception {
         // when
         Trace trace = container.execute(ExecutePreparedStatementInsertWithGeneratedKeys.class);
@@ -199,7 +192,6 @@ public class PreparedStatementIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void testPreparedStatementLargeParamSetFirst() throws Exception {
         // when
         Trace trace = container.execute(ExecutePreparedStatementLargeParamSetFirst.class);
@@ -234,7 +226,6 @@ public class PreparedStatementIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void testPreparedStatementNullSql() throws Exception {
         // when
         Trace trace = container.execute(PreparedStatementNullSql.class);
@@ -245,7 +236,6 @@ public class PreparedStatementIT {
         assertThat(trace.getQueryCount()).isZero();
     }
 
-    @Test
     public void testPreparedStatementThrowing() throws Exception {
         // when
         Trace trace = container.execute(ExecutePreparedStatementThrowing.class);
@@ -279,7 +269,6 @@ public class PreparedStatementIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void testPreparedStatementWithTonsOfBindParameters() throws Exception {
         // when
         Trace trace = container.execute(
@@ -322,7 +311,6 @@ public class PreparedStatementIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void testPreparedStatementWithoutBindParameters() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureBindParametersIncludes",
@@ -358,7 +346,6 @@ public class PreparedStatementIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void testPreparedStatementWithSetNull() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureBindParametersIncludes",
@@ -394,7 +381,6 @@ public class PreparedStatementIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void testPreparedStatementWithBinary() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureBindParametersIncludes",
@@ -447,7 +433,6 @@ public class PreparedStatementIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void testPreparedStatementWithBinaryUsingSetObject() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureBindParametersIncludes",
@@ -500,7 +485,6 @@ public class PreparedStatementIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void testPreparedStatementWithBinaryStream() throws Exception {
 
         if (Connections.getConnectionType() == ConnectionType.COMMONS_DBCP_WRAPPED) {
@@ -549,7 +533,6 @@ public class PreparedStatementIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void testPreparedStatementWithCharacterStream() throws Exception {
 
         if (Connections.getConnectionType() == ConnectionType.COMMONS_DBCP_WRAPPED) {
@@ -620,7 +603,6 @@ public class PreparedStatementIT {
         return filtered;
     }
 
-    @Test
     public void testPreparedStatementWithClear() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureBindParametersIncludes",
@@ -656,7 +638,6 @@ public class PreparedStatementIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void testPreparedStatementThatHasInternalGlowrootToken() throws Exception {
         // when
         Trace trace = container.execute(ExecutePreparedStatementThatHasInternalGlowrootToken.class);

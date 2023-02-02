@@ -43,14 +43,13 @@ public class ThreadStatsComponent {
     private final long startingWaitedMillis;
     private final long startingAllocatedBytes;
 
-    private final @Nullable ThreadAllocatedBytes threadAllocatedBytes;
+    private final ThreadAllocatedBytes threadAllocatedBytes;
 
-    @GuardedBy("lock")
-    private volatile @MonotonicNonNull ThreadStats completedThreadStats;
+    private volatile ThreadStats completedThreadStats;
 
     private final Object lock = new Object();
 
-    public ThreadStatsComponent(@Nullable ThreadAllocatedBytes threadAllocatedBytes) {
+    public ThreadStatsComponent(ThreadAllocatedBytes threadAllocatedBytes) {
         threadId = Thread.currentThread().getId();
         ThreadInfo threadInfo = threadMXBean.getThreadInfo(threadId, 0);
         // thread info for current thread cannot be null
@@ -177,7 +176,6 @@ public class ThreadStatsComponent {
         }
     }
 
-    @RequiresNonNull("threadAllocatedBytes")
     private long getAllocatedBytesInternal() {
         long allocatedBytes = threadAllocatedBytes.getThreadAllocatedBytesSafely(threadId);
         if (startingAllocatedBytes != -1 && allocatedBytes != -1) {

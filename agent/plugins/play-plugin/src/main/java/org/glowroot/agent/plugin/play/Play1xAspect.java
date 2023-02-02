@@ -33,22 +33,17 @@ import org.glowroot.agent.plugin.api.weaving.Pointcut;
 
 public class Play1xAspect {
 
-    @Pointcut(className = "play.mvc.ActionInvoker", methodName = "invoke",
-            methodParameterTypes = {"play.mvc.Http$Request", "play.mvc.Http$Response"},
-            timerName = "http request")
     public static class ActionInvokerAdvice {
 
         private static final TimerName timerName = Agent.getTimerName(ActionInvokerAdvice.class);
 
-        @OnBefore
         public static TraceEntry onBefore(OptionalThreadContext context) {
             return context.startTraceEntry(MessageSupplier.create("play action invoker"),
                     timerName);
         }
 
-        @OnReturn
-        public static void onReturn(ThreadContext context, @BindTraveler TraceEntry traceEntry,
-                @BindParameter Object request, @BindClassMeta PlayInvoker invoker) {
+        public static void onReturn(ThreadContext context, TraceEntry traceEntry,
+                Object request, PlayInvoker invoker) {
             String action = invoker.getAction(request);
             if (action != null) {
                 int index = action.lastIndexOf('.');
@@ -60,9 +55,8 @@ public class Play1xAspect {
             traceEntry.end();
         }
 
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler TraceEntry traceEntry) {
+        public static void onThrow(Throwable t,
+                TraceEntry traceEntry) {
             traceEntry.endWithError(t);
         }
     }

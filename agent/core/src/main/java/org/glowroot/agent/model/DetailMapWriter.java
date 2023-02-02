@@ -40,7 +40,7 @@ public class DetailMapWriter {
         return mapToProto(detail);
     }
 
-    private static Trace.DetailEntry createDetailEntry(String name, @Nullable Object value) {
+    private static Trace.DetailEntry createDetailEntry(String name, Object value) {
         if (value instanceof Map) {
             return Trace.DetailEntry.newBuilder()
                     .setName(name)
@@ -90,7 +90,7 @@ public class DetailMapWriter {
         return detailValues;
     }
 
-    private static List<Trace.DetailValue> singleObjectToProto(@Nullable Object value) {
+    private static List<Trace.DetailValue> singleObjectToProto(Object value) {
         Trace.DetailValue detailValue = createValue(value);
         if (detailValue == null) {
             return ImmutableList.of();
@@ -100,7 +100,7 @@ public class DetailMapWriter {
     }
 
     private static Trace. /*@Nullable*/ DetailValue createValue(
-            @Nullable Object possiblyOptionalValue) {
+            Object possiblyOptionalValue) {
         Object value = stripOptional(possiblyOptionalValue);
         if (value == null) {
             // add nothing (as a corollary, this will strip null/Optional.absent() items from lists)
@@ -122,7 +122,7 @@ public class DetailMapWriter {
         }
     }
 
-    private static @Nullable Object stripOptional(@Nullable Object value) {
+    private static Object stripOptional(Object value) {
         if (value == null) {
             return null;
         }

@@ -124,7 +124,6 @@ class CentralConfigDao {
         centralConfigCache.invalidate(key);
     }
 
-    @Nullable
     Object read(String key) throws Exception {
         return centralConfigCache.get(key).orNull();
     }

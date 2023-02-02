@@ -36,46 +36,38 @@ public class CappedDatabaseResizeTest {
     private ScheduledExecutorService scheduledExecutor;
     private CappedDatabase cappedDatabase;
 
-    @BeforeEach
     public void onBefore() throws IOException {
         tempFile = File.createTempFile("glowroot-test-", ".capped.db");
         scheduledExecutor = Executors.newSingleThreadScheduledExecutor();
         cappedDatabase = new CappedDatabase(tempFile, 2, scheduledExecutor, Ticker.systemTicker());
     }
 
-    @AfterEach
     public void onAfter() throws IOException {
         scheduledExecutor.shutdownNow();
         cappedDatabase.close();
         tempFile.delete();
     }
 
-    @Test
     public void shouldWrapAndThenResizeSmaller() throws Exception {
         shouldWrapAndResize(1);
     }
 
-    @Test
     public void shouldWrapAndThenResizeSameSize() throws Exception {
         shouldWrapAndResize(2);
     }
 
-    @Test
     public void shouldWrapAndThenResizeLarger() throws Exception {
         shouldWrapAndResize(3);
     }
 
-    @Test
     public void shouldResizeSmallerAndThenWrap() throws Exception {
         shouldResizeAndWrap(1);
     }
 
-    @Test
     public void shouldResizeSameSizeAndThenWrap() throws Exception {
         shouldResizeAndWrap(2);
     }
 
-    @Test
     public void shouldResizeLargerAndThenWrap() throws Exception {
         shouldResizeAndWrap(3);
     }

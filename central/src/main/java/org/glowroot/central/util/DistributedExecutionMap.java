@@ -23,7 +23,6 @@ import org.infinispan.util.function.SerializableFunction;
 
 public interface DistributedExecutionMap<K extends /*@NonNull*/ Serializable, V extends /*@NonNull*/ Object> {
 
-    @Nullable
     V get(K key);
 
     void put(K key, V value);

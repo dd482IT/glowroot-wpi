@@ -18,15 +18,12 @@ package org.glowroot.agent.plugin.grails;
 import grails.artefact.Artefact;
 import grails.web.Action;
 
-@Artefact("Controller")
 public class HelloController {
 
-    @Action
     public String abc() {
         return "hello world abc";
     }
 
-    @Action
     public String index() {
         return "hello world index";
     }

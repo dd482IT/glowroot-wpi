@@ -37,22 +37,18 @@ public class ObjectPoolIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = JavaagentContainer.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void testReturningCommonsDbcpConnection() throws Exception {
 
         // this is needed for multi-lib-tests, to isolate changing one version at a time
@@ -73,7 +69,6 @@ public class ObjectPoolIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLeakingCommonsDbcpConnection() throws Exception {
 
         // this is needed for multi-lib-tests, to isolate changing one version at a time
@@ -98,7 +93,6 @@ public class ObjectPoolIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testReturningCommonsDbcp2Connection() throws Exception {
 
         // this is needed for multi-lib-tests, to isolate changing one version at a time
@@ -119,7 +113,6 @@ public class ObjectPoolIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLeakingCommonsDbcp2Connection() throws Exception {
 
         // this is needed for multi-lib-tests, to isolate changing one version at a time
@@ -144,7 +137,6 @@ public class ObjectPoolIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testReturningTomcatConnection() throws Exception {
 
         // this is needed for multi-lib-tests, to isolate changing one version at a time
@@ -165,7 +157,6 @@ public class ObjectPoolIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLeakingTomcatConnection() throws Exception {
 
         // this is needed for multi-lib-tests, to isolate changing one version at a time
@@ -190,7 +181,6 @@ public class ObjectPoolIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testReturningTomcatAsyncConnection() throws Exception {
 
         // this is needed for multi-lib-tests, to isolate changing one version at a time
@@ -211,7 +201,6 @@ public class ObjectPoolIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLeakingTomcatAsyncConnection() throws Exception {
 
         // this is needed for multi-lib-tests, to isolate changing one version at a time
@@ -236,7 +225,6 @@ public class ObjectPoolIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testReturningGlassfishConnection() throws Exception {
 
         // this is needed for multi-lib-tests, to isolate changing one version at a time
@@ -258,7 +246,6 @@ public class ObjectPoolIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLeakingGlassfishConnection() throws Exception {
 
         // this is needed for multi-lib-tests, to isolate changing one version at a time
@@ -284,7 +271,6 @@ public class ObjectPoolIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testReturningHikariConnection() throws Exception {
 
         // this is needed for multi-lib-tests, to isolate changing one version at a time
@@ -305,7 +291,6 @@ public class ObjectPoolIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLeakingHikariConnection() throws Exception {
 
         // this is needed for multi-lib-tests, to isolate changing one version at a time
@@ -330,7 +315,6 @@ public class ObjectPoolIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testReturningBitronixConnection() throws Exception {
 
         // this is needed for multi-lib-tests, to isolate changing one version at a time
@@ -351,7 +335,6 @@ public class ObjectPoolIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLeakingBitronixConnection() throws Exception {
 
         // this is needed for multi-lib-tests, to isolate changing one version at a time
@@ -376,7 +359,6 @@ public class ObjectPoolIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLeakingMultipleConnections() throws Exception {
 
         // this is needed for multi-lib-tests, to isolate changing one version at a time
@@ -405,7 +387,6 @@ public class ObjectPoolIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLeakingConnectionWithLocationStackTrace() throws Exception {
 
         // this is needed for multi-lib-tests, to isolate changing one version at a time

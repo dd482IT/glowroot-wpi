@@ -33,24 +33,19 @@ import org.glowroot.agent.plugin.api.weaving.Shim;
 
 public class GrailsControllerClassAspect {
 
-    @Shim("grails.core.GrailsControllerClass")
     public interface GrailsControllerClass {
         String getDefaultAction();
         String getName();
         String getFullName();
     }
 
-    @Pointcut(className = "grails.core.GrailsControllerClass", methodName = "invoke",
-            methodParameterTypes = {"java.lang.Object", "java.lang.String"},
-            timerName = "grails controller")
     public static class ControllerAdvice {
         private static final TimerName timerName = Agent.getTimerName(ControllerAdvice.class);
 
-        @OnBefore
         public static TraceEntry onBefore(ThreadContext context,
-                @BindReceiver GrailsControllerClass grailsController,
-                @SuppressWarnings("unused") @BindParameter Object controller,
-                @BindParameter String action) {
+                GrailsControllerClass grailsController,
+                @SuppressWarnings("unused") Object controller,
+                String action) {
             String actionName = action == null ? grailsController.getDefaultAction() : action;
             context.setTransactionName(grailsController.getName() + "#" + actionName,
                     Priority.CORE_PLUGIN);
@@ -58,14 +53,12 @@ public class GrailsControllerClassAspect {
                     grailsController.getFullName(), actionName), timerName);
         }
 
-        @OnReturn
-        public static void onReturn(@BindTraveler TraceEntry traceEntry) {
+        public static void onReturn(TraceEntry traceEntry) {
             traceEntry.end();
         }
 
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler TraceEntry traceEntry) {
+        public static void onThrow(Throwable t,
+                TraceEntry traceEntry) {
             traceEntry.endWithError(t);
         }
     }

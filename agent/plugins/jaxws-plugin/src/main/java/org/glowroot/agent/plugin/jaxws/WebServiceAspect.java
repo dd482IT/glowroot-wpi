@@ -37,15 +37,12 @@ public class WebServiceAspect {
     private static final BooleanProperty useAltTransactionNaming =
             Agent.getConfigService("jaxws").getBooleanProperty("useAltTransactionNaming");
 
-    @Pointcut(classAnnotation = "javax.jws.WebService", methodAnnotation = "javax.jws.WebMethod",
-            methodParameterTypes = {".."}, timerName = "jaxws service")
     public static class ResourceAdvice {
 
         private static final TimerName timerName = Agent.getTimerName(ResourceAdvice.class);
 
-        @OnBefore
         public static TraceEntry onBefore(ThreadContext context,
-                @BindMethodMeta ServiceMethodMeta serviceMethodMeta) {
+                ServiceMethodMeta serviceMethodMeta) {
 
             if (useAltTransactionNaming.value()) {
                 context.setTransactionName(serviceMethodMeta.getAltTransactionName(),
@@ -60,18 +57,16 @@ public class WebServiceAspect {
                     timerName);
         }
 
-        @OnReturn
-        public static void onReturn(@BindTraveler TraceEntry traceEntry) {
+        public static void onReturn(TraceEntry traceEntry) {
             traceEntry.end();
         }
 
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler TraceEntry traceEntry) {
+        public static void onThrow(Throwable t,
+                TraceEntry traceEntry) {
             traceEntry.endWithError(t);
         }
 
-        private static String getTransactionName(@Nullable ServletRequestInfo servletRequestInfo,
+        private static String getTransactionName(ServletRequestInfo servletRequestInfo,
                 String methodName) {
             if (servletRequestInfo == null) {
                 return '#' + methodName;

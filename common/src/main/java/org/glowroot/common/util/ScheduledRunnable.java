@@ -27,7 +27,7 @@ public abstract class ScheduledRunnable implements Runnable, Cancellable {
 
     private static final Logger logger = LoggerFactory.getLogger(ScheduledRunnable.class);
 
-    private volatile @MonotonicNonNull ScheduledFuture<?> future;
+    private volatile ScheduledFuture<?> future;
 
     public void scheduleWithFixedDelay(ScheduledExecutorService scheduledExecutor,
             long initialDelay, long period, TimeUnit unit) {

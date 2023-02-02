@@ -33,7 +33,6 @@ class NotGuava {
         return dir;
     }
 
-    @EnsuresNonNull("#1")
     static <T extends /*@Nullable*/ Object> /*@NonNull*/ T checkNotNull(T reference) {
         if (reference == null) {
             throw new NullPointerException();

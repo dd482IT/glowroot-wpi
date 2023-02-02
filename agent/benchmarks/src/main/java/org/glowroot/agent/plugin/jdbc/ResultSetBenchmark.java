@@ -37,18 +37,13 @@ import org.openjdk.jmh.annotations.TearDown;
 import org.glowroot.agent.plugin.jdbc.support.MockConnection;
 import org.glowroot.microbenchmarks.support.TransactionWorthy;
 
-@BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.NANOSECONDS)
-@State(Scope.Thread)
 public class ResultSetBenchmark extends TransactionWorthy {
 
-    @Param
     private Database database;
 
     private Connection connection;
     private PreparedStatement preparedStatement;
 
-    @Setup
     public void setup() throws SQLException {
         switch (database) {
             case HSQLDB:
@@ -70,14 +65,11 @@ public class ResultSetBenchmark extends TransactionWorthy {
         preparedStatement = connection.prepareStatement("select * from mock");
     }
 
-    @TearDown
     public void tearDown() throws SQLException {
         preparedStatement.close();
         connection.close();
     }
 
-    @Benchmark
-    @OperationsPerInvocation(10000)
     public void next() throws Exception {
         doSomethingTransactionWorthy();
     }

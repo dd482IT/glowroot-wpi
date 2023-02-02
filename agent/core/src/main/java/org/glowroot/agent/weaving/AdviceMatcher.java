@@ -31,8 +31,6 @@ import org.slf4j.LoggerFactory;
 import org.glowroot.agent.plugin.api.weaving.MethodModifier;
 import org.glowroot.common.util.Styles;
 
-@Value.Immutable
-@Styles.AllParameters
 abstract class AdviceMatcher {
 
     private static final Logger logger = LoggerFactory.getLogger(AdviceMatcher.class);
@@ -171,7 +169,7 @@ abstract class AdviceMatcher {
         return pointcutClassName.isEmpty() || pointcutClassName.equals(className);
     }
 
-    private static boolean isAnnotationMatch(List<String> annotations, @Nullable Pattern pattern,
+    private static boolean isAnnotationMatch(List<String> annotations, Pattern pattern,
             String strictMatch) {
         for (String annotation : annotations) {
             annotation = annotation.replace('/', '.').substring(1, annotation.length() - 1);

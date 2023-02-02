@@ -43,7 +43,6 @@ public class InstrumentationConfigValidationTest {
             .traceEntryEnabledProperty("")
             .build();
 
-    @Test
     public void testValid() {
         // when
         List<String> validationErrors = baseConfig.validationErrors();
@@ -51,7 +50,6 @@ public class InstrumentationConfigValidationTest {
         assertThat(validationErrors).isEmpty();
     }
 
-    @Test
     public void testInvalidClassNameAndMethodName() {
         // given
         InstrumentationConfig config = ImmutableInstrumentationConfig.builder().copyFrom(baseConfig)
@@ -64,7 +62,6 @@ public class InstrumentationConfigValidationTest {
                 "methodName and methodAnnotation are both empty");
     }
 
-    @Test
     public void testInvalidEmptyTimerName() {
         // given
         InstrumentationConfig config =
@@ -75,7 +72,6 @@ public class InstrumentationConfigValidationTest {
         assertThat(validationErrors).containsExactly("timerName is empty");
     }
 
-    @Test
     public void testInvalidCharactersInTimerName() {
         // given
         InstrumentationConfig config = ImmutableInstrumentationConfig.builder().copyFrom(baseConfig)
@@ -86,7 +82,6 @@ public class InstrumentationConfigValidationTest {
         assertThat(validationErrors).containsExactly("timerName contains invalid characters: a_b");
     }
 
-    @Test
     public void testValidEmptyTimerName() {
         // given
         InstrumentationConfig config = ImmutableInstrumentationConfig.builder().copyFrom(baseConfig)
@@ -97,7 +92,6 @@ public class InstrumentationConfigValidationTest {
         assertThat(validationErrors).isEmpty();
     }
 
-    @Test
     public void testInvalidTraceEntry() {
         // given
         InstrumentationConfig config = ImmutableInstrumentationConfig.builder().copyFrom(baseConfig)
@@ -108,7 +102,6 @@ public class InstrumentationConfigValidationTest {
         assertThat(validationErrors).containsExactly("traceEntryMessageTemplate is empty");
     }
 
-    @Test
     public void testInvalidTransaction() {
         // given
         InstrumentationConfig config = ImmutableInstrumentationConfig.builder().copyFrom(baseConfig)

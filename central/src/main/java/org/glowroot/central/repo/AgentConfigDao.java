@@ -195,7 +195,7 @@ public class AgentConfigDao {
         throw new OptimisticLockException();
     }
 
-    public @Nullable AgentConfig read(String agentRollupId) throws Exception {
+    public AgentConfig read(String agentRollupId) throws Exception {
         Optional<AgentConfigAndUpdateToken> optional = agentConfigCache.get(agentRollupId);
         if (optional.isPresent()) {
             return optional.get().config();
@@ -205,7 +205,7 @@ public class AgentConfigDao {
     }
 
     // does not apply to agent rollups
-    public @Nullable AgentConfigAndUpdateToken readForUpdate(String agentId) throws Exception {
+    public AgentConfigAndUpdateToken readForUpdate(String agentId) throws Exception {
         return agentConfigCache.get(agentId).orNull();
     }
 
@@ -219,7 +219,7 @@ public class AgentConfigDao {
     }
 
     private static AgentConfig buildUpdatedAgentConfig(AgentConfig agentConfig,
-            @Nullable AgentConfig existingAgentConfig, boolean overwriteExisting) {
+            AgentConfig existingAgentConfig, boolean overwriteExisting) {
         if (existingAgentConfig == null) {
             return agentConfig.toBuilder()
                     // agent should not send general config, but clearing it just to be safe
@@ -307,10 +307,8 @@ public class AgentConfigDao {
         AgentConfig updateAgentConfig(AgentConfig agentConfig) throws Exception;
     }
 
-    @Value.Immutable
     public interface AgentConfigAndUpdateToken {
         AgentConfig config();
-        @Nullable
         UUID updateToken();
     }
 }

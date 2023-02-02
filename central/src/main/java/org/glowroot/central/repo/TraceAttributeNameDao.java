@@ -107,8 +107,6 @@ class TraceAttributeNameDao implements TraceAttributeNameRepository {
         return Ints.saturatedCast(ttl + DAYS.toSeconds(1));
     }
 
-    @Value.Immutable
-    @Styles.AllParameters
     interface TraceAttributeNameKey {
         String agentRollupId();
         String transactionType();

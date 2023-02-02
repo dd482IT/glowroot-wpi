@@ -56,117 +56,79 @@ public class ActionRequestBuilderAspect {
         });
     }
 
-    @Shim("org.elasticsearch.action.ActionRequestBuilder")
     public interface ActionRequestBuilder {
 
-        @Shim("org.elasticsearch.action.ActionRequest request()")
-        @Nullable
         ActionRequest glowroot$request();
     }
 
-    @Shim("org.elasticsearch.action.search.SearchRequestBuilder")
     public interface SearchRequestBuilder {
 
-        @Shim("org.elasticsearch.search.builder.SearchSourceBuilder sourceBuilder()")
-        @Nullable
         Object glowroot$sourceBuilder();
     }
 
-    @Shim("org.elasticsearch.action.ActionRequest")
     public interface ActionRequest {}
 
-    @Shim("org.elasticsearch.action.index.IndexRequest")
     public interface IndexRequest extends ActionRequest {
-        @Nullable
         String index();
-        @Nullable
         String type();
     }
 
-    @Shim("org.elasticsearch.action.get.GetRequest")
     public interface GetRequest extends ActionRequest {
-        @Nullable
         String index();
-        @Nullable
         String type();
-        @Nullable
         String id();
     }
 
-    @Shim("org.elasticsearch.action.update.UpdateRequest")
     public interface UpdateRequest extends ActionRequest {
-        @Nullable
         String index();
-        @Nullable
         String type();
-        @Nullable
         String id();
     }
 
-    @Shim("org.elasticsearch.action.delete.DeleteRequest")
     public interface DeleteRequest extends ActionRequest {
-        @Nullable
         String index();
-        @Nullable
         String type();
-        @Nullable
         String id();
     }
 
-    @Shim("org.elasticsearch.action.search.SearchRequest")
     public interface SearchRequest extends ActionRequest {
-        @Nullable
         String /*@Nullable*/ [] indices();
-        @Nullable
         String /*@Nullable*/ [] types();
     }
 
-    @Shim("org.elasticsearch.common.bytes.BytesReference")
     public interface BytesReference {
-        @Nullable
         String toUtf8();
     }
 
-    @Pointcut(className = "org.elasticsearch.action.ActionRequestBuilder", methodName = "get",
-            methodParameterTypes = {}, nestingGroup = "elasticsearch",
-            timerName = "elasticsearch query", suppressionKey = "wait-on-future")
     public static class ExecuteAdvice {
         private static final TimerName timerName = Agent.getTimerName(ExecuteAdvice.class);
-        @OnBefore
-        public static @Nullable QueryEntry onBefore(ThreadContext context,
-                @BindReceiver ActionRequestBuilder actionRequestBuilder) {
+        public static QueryEntry onBefore(ThreadContext context,
+                ActionRequestBuilder actionRequestBuilder) {
             return context.startQueryEntry(QUERY_TYPE, getQueryText(actionRequestBuilder),
                     getQueryMessageSupplier(actionRequestBuilder), timerName);
         }
-        @OnReturn
-        public static void onReturn(@BindTraveler @Nullable QueryEntry queryEntry) {
+        public static void onReturn(QueryEntry queryEntry) {
             if (queryEntry != null) {
                 queryEntry.endWithLocationStackTrace(stackTraceThresholdMillis, MILLISECONDS);
             }
         }
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler @Nullable QueryEntry queryEntry) {
+        public static void onThrow(Throwable t,
+                QueryEntry queryEntry) {
             if (queryEntry != null) {
                 queryEntry.endWithError(t);
             }
         }
     }
 
-    @Pointcut(className = "org.elasticsearch.action.ActionRequestBuilder", methodName = "execute",
-            methodParameterTypes = {}, nestingGroup = "elasticsearch",
-            timerName = "elasticsearch query")
     public static class ExecuteAsyncAdvice {
         private static final TimerName timerName = Agent.getTimerName(ExecuteAsyncAdvice.class);
-        @OnBefore
-        public static @Nullable AsyncQueryEntry onBefore(ThreadContext context,
-                @BindReceiver ActionRequestBuilder actionRequestBuilder) {
+        public static AsyncQueryEntry onBefore(ThreadContext context,
+                ActionRequestBuilder actionRequestBuilder) {
             return context.startAsyncQueryEntry(QUERY_TYPE, getQueryText(actionRequestBuilder),
                     getQueryMessageSupplier(actionRequestBuilder), timerName);
         }
-        @OnReturn
-        public static void onReturn(@BindReturn @Nullable ActionFutureMixin future,
-                @BindTraveler @Nullable AsyncQueryEntry asyncQueryEntry) {
+        public static void onReturn(ActionFutureMixin future,
+                AsyncQueryEntry asyncQueryEntry) {
             if (asyncQueryEntry == null) {
                 return;
             }
@@ -190,9 +152,8 @@ public class ActionRequestBuilderAspect {
                 return;
             }
         }
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler @Nullable AsyncQueryEntry asyncQueryEntry) {
+        public static void onThrow(Throwable t,
+                AsyncQueryEntry asyncQueryEntry) {
             if (asyncQueryEntry != null) {
                 asyncQueryEntry.stopSyncTimer();
                 asyncQueryEntry.endWithError(t);
@@ -227,9 +188,7 @@ public class ActionRequestBuilderAspect {
     private static String getQueryText(SearchRequest request,
             SearchRequestBuilder actionRequestBuilder) {
         StringBuilder sb = new StringBuilder("SEARCH ");
-        @Nullable
         String[] indices = request.indices();
-        @Nullable
         String[] types = request.types();
         if (indices != null && indices.length > 0) {
             if (types != null && types.length > 0) {
@@ -276,7 +235,7 @@ public class ActionRequestBuilderAspect {
         }
     }
 
-    private static void appendTo(StringBuilder sb, @Nullable String[] values) {
+    private static void appendTo(StringBuilder sb, String[] values) {
         boolean first = true;
         for (String value : values) {
             if (!first) {

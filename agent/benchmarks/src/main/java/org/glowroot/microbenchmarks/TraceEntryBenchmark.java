@@ -30,23 +30,16 @@ import org.openjdk.jmh.annotations.State;
 import org.glowroot.microbenchmarks.support.TraceEntryWorthy;
 import org.glowroot.microbenchmarks.support.TransactionWorthy;
 
-@BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.NANOSECONDS)
-@State(Scope.Thread)
 public class TraceEntryBenchmark extends TransactionWorthy {
 
-    @Param
     private PointcutType pointcutType;
 
     private TraceEntryWorthy traceEntryWorthy;
 
-    @Setup
     public void setup() {
         traceEntryWorthy = new TraceEntryWorthy();
     }
 
-    @Benchmark
-    @OperationsPerInvocation(2000)
     public void execute() throws Exception {
         doSomethingTransactionWorthy();
     }

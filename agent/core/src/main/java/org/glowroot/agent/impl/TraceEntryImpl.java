@@ -58,11 +58,11 @@ class TraceEntryImpl extends QueryEntryBase implements AsyncQueryEntry, Timer {
     private static final Ticker ticker = Tickers.getTicker();
 
     private final ThreadContextImpl threadContext;
-    private final @Nullable TraceEntryImpl parentTraceEntry;
-    private final @Nullable Object messageSupplier;
+    private final TraceEntryImpl parentTraceEntry;
+    private final Object messageSupplier;
 
     // volatile so it can be set from another thread (needed for async trace entries)
-    private volatile @Nullable ErrorMessage errorMessage;
+    private volatile ErrorMessage errorMessage;
 
     private final long startTick;
 
@@ -73,22 +73,22 @@ class TraceEntryImpl extends QueryEntryBase implements AsyncQueryEntry, Timer {
     private boolean initialComplete;
 
     // this is for maintaining linear list of trace entries
-    private @Nullable TraceEntryImpl nextTraceEntry;
+    private TraceEntryImpl nextTraceEntry;
 
     // only null for trace entries added using addEntryEntry()
-    private final @Nullable TimerImpl syncTimer;
-    private final @Nullable AsyncTimer asyncTimer;
+    private final TimerImpl syncTimer;
+    private final AsyncTimer asyncTimer;
     // not volatile, so depends on memory barrier in Transaction for visibility
-    private @Nullable ImmutableList<StackTraceElement> locationStackTrace;
+    private ImmutableList<StackTraceElement> locationStackTrace;
 
     // only used by transaction thread
     private long locationStackTraceThreshold;
     // only used by transaction thread
-    private @Nullable TimerImpl extendedTimer;
+    private TimerImpl extendedTimer;
 
     static TraceEntryImpl createCompletedErrorEntry(ThreadContextImpl threadContext,
-            TraceEntryImpl parentTraceEntry, @Nullable Object messageSupplier,
-            @Nullable QueryData queryData, ErrorMessage errorMessage, long startTick,
+            TraceEntryImpl parentTraceEntry, Object messageSupplier,
+            QueryData queryData, ErrorMessage errorMessage, long startTick,
             long endTick) {
         // timing/etc for queryData have been captured already at this point, so passing
         // queryExecutionCount -1 because that triggers special case to bypass calling start on
@@ -102,10 +102,10 @@ class TraceEntryImpl extends QueryEntryBase implements AsyncQueryEntry, Timer {
         return entry;
     }
 
-    TraceEntryImpl(ThreadContextImpl threadContext, @Nullable TraceEntryImpl parentTraceEntry,
-            @Nullable Object messageSupplier, @Nullable QueryData queryData,
-            long queryExecutionCount, long startTick, @Nullable TimerImpl syncTimer,
-            @Nullable AsyncTimer asyncTimer) {
+    TraceEntryImpl(ThreadContextImpl threadContext, TraceEntryImpl parentTraceEntry,
+            Object messageSupplier, QueryData queryData,
+            long queryExecutionCount, long startTick, TimerImpl syncTimer,
+            AsyncTimer asyncTimer) {
         super(queryData, startTick, queryExecutionCount);
         this.threadContext = threadContext;
         this.parentTraceEntry = parentTraceEntry;
@@ -118,16 +118,14 @@ class TraceEntryImpl extends QueryEntryBase implements AsyncQueryEntry, Timer {
     }
 
     @Override
-    public @Nullable Object getMessageSupplier() {
+    public Object getMessageSupplier() {
         return messageSupplier;
     }
 
-    @Nullable
     ErrorMessage getErrorMessage() {
         return errorMessage;
     }
 
-    @Nullable
     List<StackTraceElement> getLocationStackTrace() {
         return locationStackTrace;
     }
@@ -238,7 +236,7 @@ class TraceEntryImpl extends QueryEntryBase implements AsyncQueryEntry, Timer {
     }
 
     @Override
-    public void endWithError(@Nullable String message) {
+    public void endWithError(String message) {
         if (initialComplete) {
             // this guards against end*() being called multiple times on async trace entries
             return;
@@ -247,7 +245,7 @@ class TraceEntryImpl extends QueryEntryBase implements AsyncQueryEntry, Timer {
     }
 
     @Override
-    public void endWithError(@Nullable String message, Throwable t) {
+    public void endWithError(String message, Throwable t) {
         if (initialComplete) {
             // this guards against end*() being called multiple times on async trace entries
             return;
@@ -321,7 +319,6 @@ class TraceEntryImpl extends QueryEntryBase implements AsyncQueryEntry, Timer {
         extendQueryData(currTick);
     }
 
-    @RequiresNonNull("asyncTimer")
     private void extendAsync() {
         ThreadContextThreadLocal.Holder holder =
                 BytecodeServiceHolder.get().getCurrentThreadContextHolder();
@@ -369,7 +366,6 @@ class TraceEntryImpl extends QueryEntryBase implements AsyncQueryEntry, Timer {
         }
     }
 
-    @RequiresNonNull("asyncTimer")
     private void stopAsync() {
         long endTick = ticker.read();
         if (extendedTimer == null) {
@@ -392,12 +388,10 @@ class TraceEntryImpl extends QueryEntryBase implements AsyncQueryEntry, Timer {
         return threadContext;
     }
 
-    @Nullable
     TraceEntryImpl getParentTraceEntry() {
         return parentTraceEntry;
     }
 
-    @Nullable
     TraceEntryImpl getNextTraceEntry() {
         return nextTraceEntry;
     }
@@ -417,7 +411,6 @@ class TraceEntryImpl extends QueryEntryBase implements AsyncQueryEntry, Timer {
         return initialComplete && selfNestingLevel == 0;
     }
 
-    @EnsuresNonNullIf(expression = "asyncTimer", result = true)
     private boolean isAsync() {
         return asyncTimer != null;
     }
@@ -451,13 +444,13 @@ class TraceEntryImpl extends QueryEntryBase implements AsyncQueryEntry, Timer {
         endInternal(endTick, null);
     }
 
-    private void endWithErrorInternal(@Nullable String message, @Nullable Throwable t) {
+    private void endWithErrorInternal(String message, Throwable t) {
         ErrorMessage errorMessage = ErrorMessage.create(message, t,
                 threadContext.getTransaction().getThrowableFrameLimitCounter());
         endInternal(ticker.read(), errorMessage);
     }
 
-    private void endInternal(long endTick, @Nullable ErrorMessage errorMessage) {
+    private void endInternal(long endTick, ErrorMessage errorMessage) {
         // syncTimer is only null for trace entries added using addEntryEntry(), and these trace
         // entries are not returned from plugin api so no way for end...() to be called
         checkNotNull(syncTimer);

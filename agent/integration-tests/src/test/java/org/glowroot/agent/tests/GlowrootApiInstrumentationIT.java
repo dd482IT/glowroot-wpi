@@ -35,22 +35,18 @@ public class GlowrootApiInstrumentationIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldCaptureTransaction() throws Exception {
         // when
         Trace trace = container.execute(CaptureTransaction.class);
@@ -59,7 +55,6 @@ public class GlowrootApiInstrumentationIT {
         assertThat(trace.getHeader().getTransactionName()).isEqualTo("xyz zyx");
     }
 
-    @Test
     public void shouldCaptureTraceEntry() throws Exception {
         // when
         Trace trace = container.execute(CaptureTraceEntry.class);
@@ -77,7 +72,6 @@ public class GlowrootApiInstrumentationIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureTimer() throws Exception {
         // when
         Trace trace = container.execute(CaptureTimer.class);
@@ -93,8 +87,6 @@ public class GlowrootApiInstrumentationIT {
             captureTransaction("zyx");
         }
 
-        @Instrumentation.Transaction(transactionType = "abc type", transactionName = "xyz {{0}}",
-                traceHeadline = "abc xyz {{0}}", timer = "mmm")
         public void captureTransaction(@SuppressWarnings("unused") String str) {}
     }
 
@@ -110,7 +102,6 @@ public class GlowrootApiInstrumentationIT {
             captureTraceEntry("zyx");
         }
 
-        @Instrumentation.TraceEntry(message = "xyz {{0}} => {{_}}", timer = "ooo")
         public String captureTraceEntry(String str) {
             return str + "0";
         }
@@ -130,7 +121,6 @@ public class GlowrootApiInstrumentationIT {
     }
 
     public interface QQQ {
-        @Instrumentation.Timer("qqq")
         void qqq();
     }
 

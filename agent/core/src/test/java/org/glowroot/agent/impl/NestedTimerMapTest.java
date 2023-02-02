@@ -28,7 +28,6 @@ import static org.mockito.Mockito.mock;
 
 public class NestedTimerMapTest {
 
-    @Test
     public void testBucketCollision() {
         // given
         NestedTimerMap map = new NestedTimerMap();

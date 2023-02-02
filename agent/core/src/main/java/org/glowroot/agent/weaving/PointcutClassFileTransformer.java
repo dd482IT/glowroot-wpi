@@ -30,8 +30,8 @@ public class PointcutClassFileTransformer implements ClassFileTransformer {
             LoggerFactory.getLogger(PointcutClassFileTransformer.class);
 
     @Override
-    public byte /*@Nullable*/ [] transform(@Nullable ClassLoader loader, @Nullable String className,
-            @Nullable Class<?> classBeingRedefined, @Nullable ProtectionDomain protectionDomain,
+    public byte /*@Nullable*/ [] transform(ClassLoader loader, String className,
+            Class<?> classBeingRedefined, ProtectionDomain protectionDomain,
             byte[] bytes) {
         try {
             ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);

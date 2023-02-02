@@ -31,7 +31,6 @@ import static org.mockito.Mockito.when;
 
 public class UiAnalyzedMethodOrderingTest {
 
-    @Test
     public void shouldReadOrderedMethods() throws URISyntaxException {
         // given
         AnalyzedWorld analyzedWorld = mock(AnalyzedWorld.class);

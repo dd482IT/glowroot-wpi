@@ -38,23 +38,19 @@ public class ThreadIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         // tests only work with javaagent container because they need to weave java.lang.Thread
         container = JavaagentContainer.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldCaptureThread() throws Exception {
         // when
         Trace trace = container.execute(DoExecuteThread.class);
@@ -62,7 +58,6 @@ public class ThreadIT {
         checkTrace(trace, false, false);
     }
 
-    @Test
     public void shouldCaptureThreadWithName() throws Exception {
         // when
         Trace trace = container.execute(DoExecuteThreadWithName.class);
@@ -70,7 +65,6 @@ public class ThreadIT {
         checkTrace(trace, false, false);
     }
 
-    @Test
     public void shouldCaptureThreadWithThreadGroup() throws Exception {
         // when
         Trace trace = container.execute(DoExecuteThreadWithThreadGroup.class);
@@ -78,7 +72,6 @@ public class ThreadIT {
         checkTrace(trace, false, false);
     }
 
-    @Test
     public void shouldCaptureThreadWithThreadGroupAndName() throws Exception {
         // when
         Trace trace = container.execute(DoExecuteThreadWithThreadGroupAndName.class);
@@ -86,7 +79,6 @@ public class ThreadIT {
         checkTrace(trace, false, false);
     }
 
-    @Test
     public void shouldCaptureThreadSubclassed() throws Exception {
         // when
         Trace trace = container.execute(DoExecuteThreadSubclassed.class);
@@ -94,7 +86,6 @@ public class ThreadIT {
         checkTrace(trace, false, false);
     }
 
-    @Test
     public void shouldCaptureThreadSubSubclassed() throws Exception {
         // when
         Trace trace = container.execute(DoExecuteThreadSubSubclassed.class);
@@ -102,7 +93,6 @@ public class ThreadIT {
         checkTrace(trace, false, false);
     }
 
-    @Test
     public void shouldCaptureThreadSubSubclassedWithRunnable() throws Exception {
         // when
         Trace trace = container.execute(DoExecuteThreadSubSubclassedWithRunnable.class);

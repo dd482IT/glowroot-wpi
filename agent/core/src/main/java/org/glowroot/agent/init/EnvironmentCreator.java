@@ -113,8 +113,7 @@ public class EnvironmentCreator {
                 .build();
     }
 
-    @VisibleForTesting
-    static @Nullable Long getTotalPhysicalMemoryBytes(OperatingSystemMXBean operatingSystemMXBean) {
+    static Long getTotalPhysicalMemoryBytes(OperatingSystemMXBean operatingSystemMXBean) {
         Class<?> sunClass;
         try {
             sunClass = Class.forName("com.sun.management.OperatingSystemMXBean");
@@ -147,7 +146,7 @@ public class EnvironmentCreator {
         }
     }
 
-    private static @Nullable String getHeapDumpPathFromCommandLine() {
+    private static String getHeapDumpPathFromCommandLine() {
         RuntimeMXBean runtimeMXBean = ManagementFactory.getRuntimeMXBean();
         for (String arg : runtimeMXBean.getInputArguments()) {
             if (arg.startsWith("-XX:HeapDumpPath=")) {

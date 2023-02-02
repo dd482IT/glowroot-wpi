@@ -36,7 +36,6 @@ public class ProfilingIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
         // capture one header to warm up the system, otherwise sometimes there are delays in class
@@ -45,17 +44,14 @@ public class ProfilingIT {
         container.checkAndReset();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldReadProfile() throws Exception {
         // given
         setProfilingIntervalMillis(20);
@@ -66,7 +62,6 @@ public class ProfilingIT {
         assertThat(trace.getHeader().getMainThreadProfileSampleCount()).isBetween(5L, 15L);
     }
 
-    @Test
     public void shouldNotReadProfile() throws Exception {
         // given
         setProfilingIntervalMillis(0);

@@ -29,7 +29,6 @@ public interface IncidentRepository {
     void insertOpenIncident(String agentRollupId, AlertCondition condition, AlertSeverity severity,
             AlertNotification notification, long openTime) throws Exception;
 
-    @Nullable
     OpenIncident readOpenIncident(String agentRollupId, AlertCondition condition,
             AlertSeverity severity) throws Exception;
 
@@ -42,7 +41,6 @@ public interface IncidentRepository {
 
     List<ResolvedIncident> readResolvedIncidents(long from) throws Exception;
 
-    @Value.Immutable
     interface OpenIncident {
         String agentRollupId();
         long openTime();
@@ -51,7 +49,6 @@ public interface IncidentRepository {
         AlertNotification notification();
     }
 
-    @Value.Immutable
     interface ResolvedIncident {
         String agentRollupId();
         long openTime();

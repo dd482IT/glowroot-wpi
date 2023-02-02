@@ -35,22 +35,18 @@ import org.glowroot.common.config.ImmutableInstrumentationConfig;
 import org.glowroot.common.config.InstrumentationConfig;
 import org.glowroot.common.util.ObjectMappers;
 
-@Value.Immutable
 public abstract class PluginDescriptor {
 
     public abstract String id();
     public abstract String name();
     public abstract ImmutableList<PropertyDescriptor> properties();
-    @JsonProperty("instrumentation")
     public abstract ImmutableList<InstrumentationConfig> instrumentationConfigs();
     public abstract ImmutableList<String> aspects();
-    @Value.Default
     public boolean collocate() {
         return false;
     }
 
-    @JsonIgnore
-    public abstract @Nullable File pluginJar();
+    public abstract File pluginJar();
 
     // this is only for use by glowroot-agent-dist-maven-plugin, which needs to perform
     // de-serialization of shaded immutables objects using shaded jackson

@@ -33,16 +33,12 @@ import org.glowroot.agent.plugin.servlet._.ServletPluginProperties;
 
 public class ResponseHeaderAspect {
 
-    @Pointcut(className = "javax.servlet.ServletResponse", methodName = "setContentLength",
-            methodParameterTypes = {"int"}, nestingGroup = "servlet-inner-call")
     public static class SetContentLengthAdvice {
-        @IsEnabled
         public static boolean isEnabled() {
             // good to short-cut advice if no response headers need to be captured
             return ServletPluginProperties.captureResponseHeadersNonEmpty();
         }
-        @OnAfter
-        public static void onAfter(ThreadContext context, @BindParameter int value) {
+        public static void onAfter(ThreadContext context, int value) {
             if (!ServletPluginProperties.captureContentLengthResponseHeader()) {
                 return;
             }
@@ -54,16 +50,12 @@ public class ResponseHeaderAspect {
         }
     }
 
-    @Pointcut(className = "javax.servlet.ServletResponse", methodName = "setContentLengthLong",
-            methodParameterTypes = {"long"}, nestingGroup = "servlet-inner-call")
     public static class SetContentLengthLongAdvice {
-        @IsEnabled
         public static boolean isEnabled() {
             // good to short-cut advice if no response headers need to be captured
             return ServletPluginProperties.captureResponseHeadersNonEmpty();
         }
-        @OnAfter
-        public static void onAfter(ThreadContext context, @BindParameter long value) {
+        public static void onAfter(ThreadContext context, long value) {
             if (!ServletPluginProperties.captureContentLengthResponseHeader()) {
                 return;
             }
@@ -75,18 +67,14 @@ public class ResponseHeaderAspect {
         }
     }
 
-    @Pointcut(className = "javax.servlet.ServletResponse", methodName = "setContentType",
-            methodParameterTypes = {"java.lang.String"}, nestingGroup = "servlet-inner-call")
     public static class SetContentTypeAdvice {
-        @IsEnabled
         public static boolean isEnabled() {
             // good to short-cut advice if no response headers need to be captured
             return ServletPluginProperties.captureResponseHeadersNonEmpty();
         }
-        @OnAfter
-        public static void onAfter(ThreadContext context, @BindReceiver Object response,
-                @BindParameter @Nullable String value,
-                @BindClassMeta ResponseInvoker responseInvoker) {
+        public static void onAfter(ThreadContext context, Object response,
+                String value,
+                ResponseInvoker responseInvoker) {
             if (value == null) {
                 // seems nothing sensible to do here other than ignore
                 return;
@@ -107,17 +95,13 @@ public class ResponseHeaderAspect {
         }
     }
 
-    @Pointcut(className = "javax.servlet.ServletResponse", methodName = "setCharacterEncoding",
-            methodParameterTypes = {"java.lang.String"}, nestingGroup = "servlet-inner-call")
     public static class SetCharacterEncodingAdvice {
-        @IsEnabled
         public static boolean isEnabled() {
             // good to short-cut advice if no response headers need to be captured
             return ServletPluginProperties.captureResponseHeadersNonEmpty();
         }
-        @OnAfter
-        public static void onAfter(ThreadContext context, @BindReceiver Object response,
-                @BindClassMeta ResponseInvoker responseInvoker) {
+        public static void onAfter(ThreadContext context, Object response,
+                ResponseInvoker responseInvoker) {
             if (!ServletPluginProperties.captureContentTypeResponseHeader()) {
                 return;
             }
@@ -130,18 +114,14 @@ public class ResponseHeaderAspect {
         }
     }
 
-    @Pointcut(className = "javax.servlet.ServletResponse", methodName = "setLocale",
-            methodParameterTypes = {"java.util.Locale"}, nestingGroup = "servlet-inner-call")
     public static class SetLocaleAdvice {
-        @IsEnabled
         public static boolean isEnabled() {
             // good to short-cut advice if no response headers need to be captured
             return ServletPluginProperties.captureResponseHeadersNonEmpty();
         }
-        @OnAfter
-        public static void onAfter(ThreadContext context, @BindReceiver Object response,
-                @BindParameter @Nullable Locale locale,
-                @BindClassMeta ResponseInvoker responseInvoker) {
+        public static void onAfter(ThreadContext context, Object response,
+                Locale locale,
+                ResponseInvoker responseInvoker) {
             if (locale == null) {
                 // seems nothing sensible to do here other than ignore
                 return;
@@ -166,18 +146,13 @@ public class ResponseHeaderAspect {
         }
     }
 
-    @Pointcut(className = "javax.servlet.http.HttpServletResponse", methodName = "setHeader",
-            methodParameterTypes = {"java.lang.String", "java.lang.String"},
-            nestingGroup = "servlet-inner-call")
     public static class SetHeaderAdvice {
-        @IsEnabled
         public static boolean isEnabled() {
             // good to short-cut advice if no response headers need to be captured
             return ServletPluginProperties.captureResponseHeadersNonEmpty();
         }
-        @OnAfter
-        public static void onAfter(ThreadContext context, @BindParameter @Nullable String name,
-                @BindParameter @Nullable String value) {
+        public static void onAfter(ThreadContext context, String name,
+                String value) {
             if (name == null || value == null) {
                 // seems nothing sensible to do here other than ignore
                 return;
@@ -193,18 +168,13 @@ public class ResponseHeaderAspect {
         }
     }
 
-    @Pointcut(className = "javax.servlet.http.HttpServletResponse", methodName = "setDateHeader",
-            methodParameterTypes = {"java.lang.String", "long"},
-            nestingGroup = "servlet-inner-call")
     public static class SetDateHeaderAdvice {
-        @IsEnabled
         public static boolean isEnabled() {
             // good to short-cut advice if no response headers need to be captured
             return ServletPluginProperties.captureResponseHeadersNonEmpty();
         }
-        @OnAfter
-        public static void onAfter(ThreadContext context, @BindParameter @Nullable String name,
-                @BindParameter long value) {
+        public static void onAfter(ThreadContext context, String name,
+                long value) {
             if (name == null) {
                 // seems nothing sensible to do here other than ignore
                 return;
@@ -220,17 +190,13 @@ public class ResponseHeaderAspect {
         }
     }
 
-    @Pointcut(className = "javax.servlet.http.HttpServletResponse", methodName = "setIntHeader",
-            methodParameterTypes = {"java.lang.String", "int"}, nestingGroup = "servlet-inner-call")
     public static class SetIntHeaderAdvice {
-        @IsEnabled
         public static boolean isEnabled() {
             // good to short-cut advice if no response headers need to be captured
             return ServletPluginProperties.captureResponseHeadersNonEmpty();
         }
-        @OnAfter
-        public static void onAfter(ThreadContext context, @BindParameter @Nullable String name,
-                @BindParameter int value) {
+        public static void onAfter(ThreadContext context, String name,
+                int value) {
             if (name == null) {
                 // seems nothing sensible to do here other than ignore
                 return;
@@ -246,18 +212,13 @@ public class ResponseHeaderAspect {
         }
     }
 
-    @Pointcut(className = "javax.servlet.http.HttpServletResponse", methodName = "addHeader",
-            methodParameterTypes = {"java.lang.String", "java.lang.String"},
-            nestingGroup = "servlet-inner-call")
     public static class AddHeaderAdvice {
-        @IsEnabled
         public static boolean isEnabled() {
             // good to short-cut advice if no response headers need to be captured
             return ServletPluginProperties.captureResponseHeadersNonEmpty();
         }
-        @OnAfter
-        public static void onAfter(ThreadContext context, @BindParameter @Nullable String name,
-                @BindParameter @Nullable String value) {
+        public static void onAfter(ThreadContext context, String name,
+                String value) {
             if (name == null || value == null) {
                 // seems nothing sensible to do here other than ignore
                 return;
@@ -273,18 +234,13 @@ public class ResponseHeaderAspect {
         }
     }
 
-    @Pointcut(className = "javax.servlet.http.HttpServletResponse", methodName = "addDateHeader",
-            methodParameterTypes = {"java.lang.String", "long"},
-            nestingGroup = "servlet-inner-call")
     public static class AddDateHeaderAdvice {
-        @IsEnabled
         public static boolean isEnabled() {
             // good to short-cut advice if no response headers need to be captured
             return ServletPluginProperties.captureResponseHeadersNonEmpty();
         }
-        @OnAfter
-        public static void onAfter(ThreadContext context, @BindParameter @Nullable String name,
-                @BindParameter long value) {
+        public static void onAfter(ThreadContext context, String name,
+                long value) {
             if (name == null) {
                 // seems nothing sensible to do here other than ignore
                 return;
@@ -300,17 +256,13 @@ public class ResponseHeaderAspect {
         }
     }
 
-    @Pointcut(className = "javax.servlet.http.HttpServletResponse", methodName = "addIntHeader",
-            methodParameterTypes = {"java.lang.String", "int"}, nestingGroup = "servlet-inner-call")
     public static class AddIntHeaderAdvice {
-        @IsEnabled
         public static boolean isEnabled() {
             // good to short-cut advice if no response headers need to be captured
             return ServletPluginProperties.captureResponseHeadersNonEmpty();
         }
-        @OnAfter
-        public static void onAfter(ThreadContext context, @BindParameter @Nullable String name,
-                @BindParameter int value) {
+        public static void onAfter(ThreadContext context, String name,
+                int value) {
             if (name == null) {
                 // seems nothing sensible to do here other than ignore
                 return;

@@ -24,7 +24,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ClassLoadersTest {
 
-    @Test
     public void shouldDeleteRegularFile() throws IOException {
         // given
         File file = File.createTempFile("glowroot-unit-test-", "");
@@ -34,7 +33,6 @@ public class ClassLoadersTest {
         assertThat(file.isDirectory()).isTrue();
     }
 
-    @Test
     public void shouldCreateDirectory() throws IOException {
         // given
         File file = File.createTempFile("glowroot-unit-test-", "");

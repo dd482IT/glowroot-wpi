@@ -34,22 +34,18 @@ public class GlowrootApiIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldSetTransactionType() throws Exception {
         // when
         Trace trace = container.execute(SetTransactionType.class);
@@ -57,7 +53,6 @@ public class GlowrootApiIT {
         assertThat(trace.getHeader().getTransactionType()).isEqualTo("a type");
     }
 
-    @Test
     public void shouldSetTransactionName() throws Exception {
         // when
         Trace trace = container.execute(SetTransactionName.class);
@@ -65,7 +60,6 @@ public class GlowrootApiIT {
         assertThat(trace.getHeader().getTransactionName()).isEqualTo("a name");
     }
 
-    @Test
     public void shouldSetTransactionUser() throws Exception {
         // when
         Trace trace = container.execute(SetTransactionUser.class);
@@ -73,7 +67,6 @@ public class GlowrootApiIT {
         assertThat(trace.getHeader().getUser()).isEqualTo("a user");
     }
 
-    @Test
     public void shouldAddTransactionAttribute() throws Exception {
         // when
         Trace trace = container.execute(AddTransactionAttribute.class);
@@ -84,7 +77,6 @@ public class GlowrootApiIT {
         assertThat(attribute.getValueList()).containsExactly("a val");
     }
 
-    @Test
     public void shouldSetTransactionSlowThreshold() throws Exception {
         // when
         container.executeNoExpectedTrace(SetTransactionSlowThreshold.class);

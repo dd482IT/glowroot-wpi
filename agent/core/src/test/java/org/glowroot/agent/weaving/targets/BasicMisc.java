@@ -25,7 +25,6 @@ import org.glowroot.agent.weaving.SomeAspect.SomeMethod;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@SomeClass
 public class BasicMisc extends SuperBasicMisc implements Misc, Misc2, Misc3, SubMisc2 {
 
     // the cascading constructor is for testing that MixinInit is called exactly once
@@ -42,7 +41,6 @@ public class BasicMisc extends SuperBasicMisc implements Misc, Misc2, Misc3, Sub
 
     // Misc implementation
     @Override
-    @TestAnnotation
     public void execute1() {
         // do some stuff that can be intercepted
         new BasicMisc();
@@ -59,7 +57,6 @@ public class BasicMisc extends SuperBasicMisc implements Misc, Misc2, Misc3, Sub
     }
 
     @Override
-    @SomeMethod
     public String executeWithReturn() {
         return "xyz";
     }
@@ -83,7 +80,7 @@ public class BasicMisc extends SuperBasicMisc implements Misc, Misc2, Misc3, Sub
     @Override
     void superBasic() {}
 
-    private void withInnerArg(@SuppressWarnings("unused") @Nullable Inner inner) {}
+    private void withInnerArg(@SuppressWarnings("unused") Inner inner) {}
 
     private static class Inner {}
 
@@ -93,7 +90,7 @@ public class BasicMisc extends SuperBasicMisc implements Misc, Misc2, Misc3, Sub
         public void execute1() {}
 
         @Override
-        public @Nullable String executeWithReturn() {
+        public String executeWithReturn() {
             return null;
         }
 

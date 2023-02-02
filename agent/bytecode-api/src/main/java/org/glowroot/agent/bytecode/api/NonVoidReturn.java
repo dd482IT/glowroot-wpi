@@ -21,18 +21,18 @@ import org.glowroot.agent.plugin.api.weaving.OptionalReturn;
 
 public class NonVoidReturn implements OptionalReturn {
 
-    private final @Nullable Object returnValue;
+    private final Object returnValue;
 
-    public static OptionalReturn create(@Nullable Object returnValue) {
+    public static OptionalReturn create(Object returnValue) {
         return new NonVoidReturn(returnValue);
     }
 
-    private NonVoidReturn(@Nullable Object returnValue) {
+    private NonVoidReturn(Object returnValue) {
         this.returnValue = returnValue;
     }
 
     @Override
-    public @Nullable Object getValue() {
+    public Object getValue() {
         return returnValue;
     }
 

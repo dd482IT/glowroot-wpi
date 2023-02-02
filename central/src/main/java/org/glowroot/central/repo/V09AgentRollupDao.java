@@ -68,7 +68,7 @@ public class V09AgentRollupDao {
         agentRollupIdsCache.invalidate(SINGLE_CACHE_KEY);
     }
 
-    public @Nullable String getV09AgentRollupId(String v09AgentId) throws Exception {
+    public String getV09AgentRollupId(String v09AgentId) throws Exception {
         return agentRollupIdsCache.get(SINGLE_CACHE_KEY).get(v09AgentId);
     }
 

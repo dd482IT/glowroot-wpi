@@ -26,15 +26,15 @@ public class LoggingEventInvoker {
 
     private static final Logger logger = Logger.getLogger(LoggingEventInvoker.class);
 
-    private final @Nullable Method getLoggerNameMethod;
+    private final Method getLoggerNameMethod;
 
-    private final @Nullable Method getFormattedMessageMethod;
-    private final @Nullable Method getLevelMethod;
+    private final Method getFormattedMessageMethod;
+    private final Method getLevelMethod;
 
-    private final @Nullable Method getThrowableProxyMethod;
-    private final @Nullable Method getThrowableMethod;
+    private final Method getThrowableProxyMethod;
+    private final Method getThrowableMethod;
 
-    private final @Nullable Method toIntMethod;
+    private final Method toIntMethod;
 
     public LoggingEventInvoker(ClassInfo classInfo) {
         Class<?> loggerClass = Reflection
@@ -92,7 +92,6 @@ public class LoggingEventInvoker {
         return Reflection.invokeWithDefault(toIntMethod, level, 0);
     }
 
-    @Nullable
     Throwable getThrowable(Object loggingEvent) {
         Object throwableInformation =
                 Reflection.invoke(getThrowableProxyMethod, loggingEvent);

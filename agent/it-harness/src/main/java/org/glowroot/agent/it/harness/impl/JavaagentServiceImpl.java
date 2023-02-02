@@ -49,11 +49,11 @@ class JavaagentServiceImpl extends JavaagentServiceImplBase {
         CHECK_THREADS = Boolean.getBoolean("glowroot.test.checkThreads");
     }
 
-    private volatile @Nullable Thread executingAppThread;
+    private volatile Thread executingAppThread;
 
-    private volatile @Nullable Set<Thread> preExistingThreads;
+    private volatile Set<Thread> preExistingThreads;
 
-    private volatile @Nullable Callable<java.lang.Void> serverCloseable;
+    private volatile Callable<java.lang.Void> serverCloseable;
 
     @Override
     public void ping(Void request, StreamObserver<Void> responseObserver) {

@@ -44,22 +44,22 @@ class InstrumentationSeekerClassVisitor extends ClassVisitor {
 
     private final List<InstrumentationConfig> instrumentationConfigs = Lists.newArrayList();
 
-    private @MonotonicNonNull String owner;
+    private String owner;
 
     InstrumentationSeekerClassVisitor() {
         super(ASM9);
     }
 
     @Override
-    public void visit(int version, int access, String name, @Nullable String signature,
-            @Nullable String superName, String /*@Nullable*/ [] interfaces) {
+    public void visit(int version, int access, String name, String signature,
+            String superName, String /*@Nullable*/ [] interfaces) {
         super.visit(version, access, name, signature, superName, interfaces);
         this.owner = name;
     }
 
     @Override
     public MethodVisitor visitMethod(int access, String name, String descriptor,
-            @Nullable String signature, String /*@Nullable*/ [] exceptions) {
+            String signature, String /*@Nullable*/ [] exceptions) {
         return new InstrumentationAnnotationMethodVisitor(name, descriptor);
     }
 
@@ -72,9 +72,9 @@ class InstrumentationSeekerClassVisitor extends ClassVisitor {
         private final String methodName;
         private final String descriptor;
 
-        private @MonotonicNonNull TransactionAnnotationVisitor transactionAnnotationVisitor;
-        private @MonotonicNonNull TraceEntryAnnotationVisitor traceEntryAnnotationVisitor;
-        private @MonotonicNonNull TimerAnnotationVisitor timerAnnotationVisitor;
+        private TransactionAnnotationVisitor transactionAnnotationVisitor;
+        private TraceEntryAnnotationVisitor traceEntryAnnotationVisitor;
+        private TimerAnnotationVisitor timerAnnotationVisitor;
 
         private InstrumentationAnnotationMethodVisitor(String methodName, String descriptor) {
             super(ASM9);
@@ -83,7 +83,7 @@ class InstrumentationSeekerClassVisitor extends ClassVisitor {
         }
 
         @Override
-        public @Nullable AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
+        public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
             if (descriptor.equals("Lorg/glowroot/agent/api/Instrumentation$Transaction;")
                     || descriptor.equals("Lorg/glowroot/agent/api/Instrument$Transaction;")) {
                 transactionAnnotationVisitor = new TransactionAnnotationVisitor();
@@ -192,7 +192,6 @@ class InstrumentationSeekerClassVisitor extends ClassVisitor {
                     .build());
         }
 
-        @RequiresNonNull("owner")
         private ImmutableInstrumentationConfig.Builder startBuilder() {
             Type type = Type.getObjectType(owner);
             Type[] argumentTypes = Type.getArgumentTypes(descriptor);
@@ -209,18 +208,18 @@ class InstrumentationSeekerClassVisitor extends ClassVisitor {
 
     private static class TransactionAnnotationVisitor extends AnnotationVisitor {
 
-        private @Nullable String transactionType;
-        private @Nullable String transactionNameTemplate;
-        private @Nullable String traceHeadline;
-        private @Nullable String timerName;
-        private @Nullable AlreadyInTransactionBehavior alreadyInTransactionBehavior;
+        private String transactionType;
+        private String transactionNameTemplate;
+        private String traceHeadline;
+        private String timerName;
+        private AlreadyInTransactionBehavior alreadyInTransactionBehavior;
 
         private TransactionAnnotationVisitor() {
             super(ASM9);
         }
 
         @Override
-        public void visit(@Nullable String name, Object value) {
+        public void visit(String name, Object value) {
             if (name == null) {
                 return;
             }
@@ -258,15 +257,15 @@ class InstrumentationSeekerClassVisitor extends ClassVisitor {
 
     private static class TraceEntryAnnotationVisitor extends AnnotationVisitor {
 
-        private @Nullable String messageTemplate;
-        private @Nullable String timerName;
+        private String messageTemplate;
+        private String timerName;
 
         private TraceEntryAnnotationVisitor() {
             super(ASM9);
         }
 
         @Override
-        public void visit(@Nullable String name, Object value) {
+        public void visit(String name, Object value) {
             if (name == null) {
                 return;
             }
@@ -280,14 +279,14 @@ class InstrumentationSeekerClassVisitor extends ClassVisitor {
 
     private static class TimerAnnotationVisitor extends AnnotationVisitor {
 
-        private @Nullable String timerName;
+        private String timerName;
 
         private TimerAnnotationVisitor() {
             super(ASM9);
         }
 
         @Override
-        public void visit(@Nullable String name, Object value) {
+        public void visit(String name, Object value) {
             if (name == null) {
                 return;
             }

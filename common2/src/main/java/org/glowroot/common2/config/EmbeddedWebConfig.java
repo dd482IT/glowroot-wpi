@@ -22,45 +22,35 @@ import org.immutables.value.Value;
 
 import org.glowroot.common.util.Versions;
 
-@Value.Immutable
 public abstract class EmbeddedWebConfig implements WebConfig {
 
-    @Value.Default
     public int port() {
         return 4000;
     }
 
-    @Value.Default
     public String bindAddress() {
         return "127.0.0.1";
     }
 
-    @Value.Default
-    @JsonInclude(Include.NON_EMPTY)
     public boolean https() {
         return false;
     }
 
-    @Value.Default
     public String contextPath() {
         return "/";
     }
 
     // timeout 0 means sessions do not time out (except on jvm restart)
     @Override
-    @Value.Default
     public int sessionTimeoutMinutes() {
         return 30;
     }
 
     @Override
-    @Value.Default
     public String sessionCookieName() {
         return "GLOWROOT_SESSION_ID";
     }
 
-    @Value.Derived
-    @JsonIgnore
     public String version() {
         return Versions.getJsonVersion(this);
     }

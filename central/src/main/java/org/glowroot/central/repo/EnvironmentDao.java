@@ -55,7 +55,7 @@ public class EnvironmentDao implements EnvironmentRepository {
     }
 
     @Override
-    public @Nullable Environment read(String agentId) throws Exception {
+    public Environment read(String agentId) throws Exception {
         BoundStatement boundStatement = readPS.bind();
         boundStatement.setString(0, agentId);
         Row row = session.read(boundStatement).one();

@@ -75,7 +75,6 @@ public class ConfigRepositoryIT {
     private static ConfigRepository configRepository;
     private static AgentConfigDao agentConfigDao;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         SharedSetupRunListener.startCassandra();
         clusterManager = ClusterManager.create();
@@ -99,7 +98,6 @@ public class ConfigRepositoryIT {
                 new ConfigRepositoryImpl(centralConfigDao, agentConfigDao, userDao, roleDao, "");
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         asyncExecutor.shutdown();
         // remove bad data so other tests don't have issue
@@ -113,7 +111,6 @@ public class ConfigRepositoryIT {
         SharedSetupRunListener.stopCassandra();
     }
 
-    @Test
     public void shouldUpdateTransactionConfig() throws Exception {
         // given
         String agentId = UUID.randomUUID().toString();
@@ -134,7 +131,6 @@ public class ConfigRepositoryIT {
         assertThat(config).isEqualTo(updatedConfig);
     }
 
-    @Test
     public void shouldUpdateJvmConfig() throws Exception {
         // given
         String agentId = UUID.randomUUID().toString();
@@ -155,7 +151,6 @@ public class ConfigRepositoryIT {
         assertThat(config).isEqualTo(updatedConfig);
     }
 
-    @Test
     public void shouldUpdateUiConfig() throws Exception {
         // given
         String agentId = UUID.randomUUID().toString();
@@ -177,7 +172,6 @@ public class ConfigRepositoryIT {
         assertThat(config).isEqualTo(updatedConfig);
     }
 
-    @Test
     public void shouldUpdateAdvancedConfig() throws Exception {
         // given
         String agentId = UUID.randomUUID().toString();
@@ -202,7 +196,6 @@ public class ConfigRepositoryIT {
         assertThat(config).isEqualTo(updatedConfig);
     }
 
-    @Test
     public void shouldCrudGaugeConfig() throws Exception {
         // given
         String agentId = UUID.randomUUID().toString();
@@ -250,7 +243,6 @@ public class ConfigRepositoryIT {
         assertThat(gaugeConfigs).isEmpty();
     }
 
-    @Test
     public void shouldCrudAlertConfig() throws Exception {
         // given
         String agentId = UUID.randomUUID().toString();
@@ -309,7 +301,6 @@ public class ConfigRepositoryIT {
         assertThat(alertConfigs).isEmpty();
     }
 
-    @Test
     public void shouldCrudInstrumentationConfig() throws Exception {
         // given
         String agentId = UUID.randomUUID().toString();
@@ -374,7 +365,6 @@ public class ConfigRepositoryIT {
         assertThat(instrumentationConfigs).isEmpty();
     }
 
-    @Test
     public void shouldCrudUserConfig() throws Exception {
         // given
         UserConfig userConfig = ImmutableUserConfig.builder()
@@ -428,7 +418,6 @@ public class ConfigRepositoryIT {
         assertThat(userConfigs.get(0).username()).isEqualTo("anonymous");
     }
 
-    @Test
     public void shouldCrudRoleConfig() throws Exception {
         // given
         RoleConfig roleConfig = ImmutableRoleConfig.builder()
@@ -476,7 +465,6 @@ public class ConfigRepositoryIT {
         assertThat(roleConfigs.get(0).name()).isEqualTo("Administrator");
     }
 
-    @Test
     public void shouldUpdateWebConfig() throws Exception {
         // given
         CentralWebConfig config = configRepository.getCentralWebConfig();
@@ -493,7 +481,6 @@ public class ConfigRepositoryIT {
         assertThat(config).isEqualTo(updatedConfig);
     }
 
-    @Test
     public void shouldUpdateCentralStorageConfig() throws Exception {
         // given
         CentralStorageConfig config = configRepository.getCentralStorageConfig();
@@ -521,7 +508,6 @@ public class ConfigRepositoryIT {
         assertThat(config).isEqualTo(updatedConfig);
     }
 
-    @Test
     public void shouldUpdateSmtpConfig() throws Exception {
         // given
         SmtpConfig config = configRepository.getSmtpConfig();
@@ -545,7 +531,6 @@ public class ConfigRepositoryIT {
         assertThat(config).isEqualTo(updatedConfig);
     }
 
-    @Test
     public void shouldUpdateHttpProxyConfig() throws Exception {
         // given
         HttpProxyConfig config = configRepository.getHttpProxyConfig();
@@ -564,7 +549,6 @@ public class ConfigRepositoryIT {
         assertThat(config).isEqualTo(updatedConfig);
     }
 
-    @Test
     public void shouldUpdateLdapConfig() throws Exception {
         // given
         LdapConfig config = configRepository.getLdapConfig();

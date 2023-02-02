@@ -78,17 +78,15 @@ class ClasspathCache {
     private static final Logger logger = LoggerFactory.getLogger(ClasspathCache.class);
 
     private final AnalyzedWorld analyzedWorld;
-    private final @Nullable Instrumentation instrumentation;
+    private final Instrumentation instrumentation;
 
-    @GuardedBy("this")
     private final Set<Location> classpathLocations = Sets.newHashSet();
 
     // using ImmutableMultimap because it is very space efficient
     // this is not updated often so trading space efficiency for copying the entire map on update
-    @GuardedBy("this")
     private ImmutableMultimap<String, Location> classNameLocations = ImmutableMultimap.of();
 
-    ClasspathCache(AnalyzedWorld analyzedWorld, @Nullable Instrumentation instrumentation) {
+    ClasspathCache(AnalyzedWorld analyzedWorld, Instrumentation instrumentation) {
         this.analyzedWorld = analyzedWorld;
         this.instrumentation = instrumentation;
     }
@@ -175,7 +173,6 @@ class ClasspathCache {
         }
     }
 
-    @GuardedBy("this")
     private void updateCacheWithClasspathClasses(Multimap<String, Location> newClassNameLocations) {
         String javaClassPath = StandardSystemProperty.JAVA_CLASS_PATH.value();
         if (javaClassPath == null) {
@@ -191,7 +188,6 @@ class ClasspathCache {
     }
 
     // TODO refactor this and above method which are nearly identical
-    @GuardedBy("this")
     private void updateCacheWithBootstrapClasses(Multimap<String, Location> newClassNameLocations) {
         String bootClassPath = System.getProperty("sun.boot.class.path");
         if (bootClassPath == null) {
@@ -206,7 +202,6 @@ class ClasspathCache {
         }
     }
 
-    @GuardedBy("this")
     private void updateCache(ClassLoader loader, Multimap<String, Location> newClassNameLocations) {
         List<URL> urls = getURLs(loader);
         List<Location> locations = Lists.newArrayList();
@@ -235,7 +230,6 @@ class ClasspathCache {
         return loaders;
     }
 
-    @GuardedBy("this")
     private void loadClassNames(Location location,
             Multimap<String, Location> newClassNameLocations) {
         if (classpathLocations.contains(location)) {
@@ -274,7 +268,6 @@ class ClasspathCache {
         }
     }
 
-    @GuardedBy("this")
     private void loadClassNamesFromJarFile(File jarFile, Location location,
             Multimap<String, Location> newClassNameLocations) throws IOException {
         Closer closer = Closer.create();
@@ -290,7 +283,6 @@ class ClasspathCache {
         }
     }
 
-    @GuardedBy("this")
     private void loadClassNamesFromManifestClassPath(JarInputStream jarIn, File jarFile,
             Multimap<String, Location> newClassNameLocations) {
         Manifest manifest = jarIn.getManifest();
@@ -365,7 +357,7 @@ class ClasspathCache {
         return analyzedMethods;
     }
 
-    private static @Nullable Location tryToGetFileFromURL(URL url, ClassLoader loader) {
+    private static Location tryToGetFileFromURL(URL url, ClassLoader loader) {
         if (url.getProtocol().equals("vfs")) {
             // special case for jboss/wildfly
             try {
@@ -491,7 +483,7 @@ class ClasspathCache {
         }
     }
 
-    private static @Nullable Location getFileFromJBossVfsURL(URL url, ClassLoader loader)
+    private static Location getFileFromJBossVfsURL(URL url, ClassLoader loader)
             throws Exception {
         Object virtualFile = url.openConnection().getContent();
         Class<?> virtualFileClass = loader.loadClass("org.jboss.vfs.VirtualFile");
@@ -505,14 +497,12 @@ class ClasspathCache {
         return getLocationFromFile(file);
     }
 
-    @Value.Immutable(prehash = true)
     interface UiAnalyzedMethod {
         String name();
         // these are class names
         ImmutableList<String> parameterTypes();
         String returnType();
         int modifiers();
-        @Nullable
         String signature();
         ImmutableList<String> exceptions();
     }
@@ -551,8 +541,8 @@ class ClasspathCache {
         }
 
         @Override
-        public @Nullable MethodVisitor visitMethod(int access, String name, String descriptor,
-                @Nullable String signature, String /*@Nullable*/ [] exceptions) {
+        public MethodVisitor visitMethod(int access, String name, String descriptor,
+                String signature, String /*@Nullable*/ [] exceptions) {
             if ((access & ACC_SYNTHETIC) != 0 || (access & ACC_NATIVE) != 0) {
                 // don't add synthetic or native methods to the analyzed model
                 return null;
@@ -582,7 +572,7 @@ class ClasspathCache {
         }
     }
 
-    private static @Nullable Location getLocationFromFile(File file) {
+    private static Location getLocationFromFile(File file) {
         boolean exists = file.exists();
         if (exists && file.isDirectory()) {
             return ImmutableLocation.builder().directory(file).build();
@@ -699,15 +689,10 @@ class ClasspathCache {
         return Resources.toByteArray(uri.toURL());
     }
 
-    @Value.Immutable
     interface Location {
-        @Nullable
         File directory();
-        @Nullable
         File jarFile();
-        @Nullable
         String jarFileInsideJarFile();
-        @Nullable
         String directoryInsideJarFile();
     }
 }

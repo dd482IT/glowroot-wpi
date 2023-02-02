@@ -63,7 +63,7 @@ class ClassAnalyzer {
     private final ThinClass thinClass;
     private final String className;
     private final boolean intf;
-    private final @Nullable ClassLoader loader;
+    private final ClassLoader loader;
 
     private final ImmutableAnalyzedClass.Builder analyzedClassBuilder;
     private final ImmutableList<AdviceMatcher> adviceMatchers;
@@ -81,16 +81,16 @@ class ClassAnalyzer {
 
     private final boolean hackAdvisors;
 
-    private @MonotonicNonNull Map<String, List<Advice>> methodAdvisors;
-    private @MonotonicNonNull List<AnalyzedMethod> methodsThatOnlyNowFulfillAdvice;
+    private Map<String, List<Advice>> methodAdvisors;
+    private List<AnalyzedMethod> methodsThatOnlyNowFulfillAdvice;
 
     // this is used to propagate bridge method advice to its target
-    private @MonotonicNonNull Map<ThinMethod, List<Advice>> bridgeTargetAdvisors;
+    private Map<ThinMethod, List<Advice>> bridgeTargetAdvisors;
 
     ClassAnalyzer(ThinClass thinClass, List<Advice> advisors, List<ShimType> shimTypes,
-            List<MixinType> mixinTypes, @Nullable ClassLoader loader, AnalyzedWorld analyzedWorld,
-            @Nullable CodeSource codeSource, byte[] classBytes,
-            @Nullable Class<?> classBeingRedefined, boolean noLongerNeedToWeaveMainMethods) {
+            List<MixinType> mixinTypes, ClassLoader loader, AnalyzedWorld analyzedWorld,
+            CodeSource codeSource, byte[] classBytes,
+            Class<?> classBeingRedefined, boolean noLongerNeedToWeaveMainMethods) {
         this.thinClass = thinClass;
         this.loader = loader;
         ImmutableList<String> interfaceNames = ClassNames.fromInternalNames(thinClass.interfaces());
@@ -275,7 +275,6 @@ class ClassAnalyzer {
         return checkNotNull(methodsThatOnlyNowFulfillAdvice);
     }
 
-    @RequiresNonNull("bridgeTargetAdvisors")
     private List<Advice> analyzeMethod(ThinMethod thinMethod) {
         if (Modifier.isFinal(thinMethod.access()) && Modifier.isPublic(thinMethod.access())) {
             ImmutablePublicFinalMethod.Builder builder = ImmutablePublicFinalMethod.builder()
@@ -325,7 +324,6 @@ class ClassAnalyzer {
     }
 
     // returns mutable list if non-empty so items can be removed
-    @RequiresNonNull("bridgeTargetAdvisors")
     private List<Advice> getMatchingAdvisors(ThinMethod thinMethod, List<String> methodAnnotations,
             List<Type> parameterTypes, Type returnType) {
         Set<Advice> matchingAdvisors = Sets.newHashSet();
@@ -360,7 +358,7 @@ class ClassAnalyzer {
         return sortAdvisors(matchingAdvisors);
     }
 
-    private @Nullable ThinMethod getTargetMethod(ThinMethod bridgeMethod) {
+    private ThinMethod getTargetMethod(ThinMethod bridgeMethod) {
         List<ThinMethod> possibleTargetMethods = getPossibleTargetMethods(bridgeMethod);
         if (possibleTargetMethods.isEmpty()) {
             // probably a visibility bridge for public method in package-private super class
@@ -566,7 +564,7 @@ class ClassAnalyzer {
     }
 
     private static MatchedMixinTypes getMatchedMixinTypes(List<MixinType> mixinTypes,
-            String className, @Nullable Class<?> classBeingRedefined,
+            String className, Class<?> classBeingRedefined,
             List<AnalyzedClass> superAnalyzedHierarchy,
             List<AnalyzedClass> interfaceAnalyzedHierarchy) {
         Set<MixinType> matchedMixinTypes = Sets.newHashSet();
@@ -761,7 +759,7 @@ class ClassAnalyzer {
     }
 
     private static List<AnalyzedMethodKey> getNonAbstractMethods(String className,
-            @Nullable ClassLoader loader) throws ClassNotFoundException, IOException {
+            ClassLoader loader) throws ClassNotFoundException, IOException {
         String path = ClassNames.toInternalName(className) + ".class";
         URL url;
         if (loader == null) {
@@ -783,7 +781,7 @@ class ClassAnalyzer {
     }
 
     private static List<AnalyzedMethodKey> getNonAbstractMethodsPlanB(String className,
-            @Nullable ClassLoader loader) throws ClassNotFoundException {
+            ClassLoader loader) throws ClassNotFoundException {
         Class<?> clazz = Class.forName(className, false, loader);
         List<AnalyzedMethodKey> analyzedMethodKeys = Lists.newArrayList();
         for (Method method : clazz.getDeclaredMethods()) {
@@ -799,14 +797,12 @@ class ClassAnalyzer {
 
     // AnalyzedMethod equivalence defined only in terms of method name and parameter types
     // so that overridden methods will be equivalent
-    @Value.Immutable
     abstract static class AnalyzedMethodKey {
 
         abstract String name();
         abstract ImmutableList<String> parameterTypes();
         // null is only used when constructing key purely for lookup
-        @Value.Auxiliary
-        abstract @Nullable AnalyzedMethod analyzedMethod();
+        abstract AnalyzedMethod analyzedMethod();
 
         private static AnalyzedMethodKey wrap(AnalyzedMethod analyzedMethod) {
             return ImmutableAnalyzedMethodKey.builder()
@@ -817,13 +813,11 @@ class ClassAnalyzer {
         }
     }
 
-    @Value.Immutable
     interface MatchedShimTypes {
         List<ShimType> reweavable();
         List<ShimType> nonReweavable();
     }
 
-    @Value.Immutable
     interface MatchedMixinTypes {
         List<MixinType> reweavable();
         List<MixinType> nonReweavable();
@@ -842,8 +836,8 @@ class ClassAnalyzer {
         }
 
         @Override
-        public @Nullable MethodVisitor visitMethod(int access, String name, String descriptor,
-                @Nullable String signature, String /*@Nullable*/ [] exceptions) {
+        public MethodVisitor visitMethod(int access, String name, String descriptor,
+                String signature, String /*@Nullable*/ [] exceptions) {
             if ((access & ACC_BRIDGE) == 0) {
                 return null;
             }
@@ -899,8 +893,8 @@ class ClassAnalyzer {
         }
 
         @Override
-        public @Nullable MethodVisitor visitMethod(int access, String name, String descriptor,
-                @Nullable String signature, String /*@Nullable*/ [] exceptions) {
+        public MethodVisitor visitMethod(int access, String name, String descriptor,
+                String signature, String /*@Nullable*/ [] exceptions) {
             if (!Modifier.isAbstract(access)) {
                 ImmutableAnalyzedMethodKey.Builder builder = ImmutableAnalyzedMethodKey.builder()
                         .name(name);

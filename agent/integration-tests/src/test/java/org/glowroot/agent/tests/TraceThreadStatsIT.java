@@ -42,22 +42,18 @@ public class TraceThreadStatsIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldTestCpuTime() throws Exception {
         // given
         enableCaptureThreadStats();
@@ -68,7 +64,6 @@ public class TraceThreadStatsIT {
                 .isGreaterThanOrEqualTo(MILLISECONDS.toNanos(10));
     }
 
-    @Test
     public void shouldTestWaitTime() throws Exception {
         // given
         enableCaptureThreadStats();
@@ -79,7 +74,6 @@ public class TraceThreadStatsIT {
                 .isGreaterThanOrEqualTo(5);
     }
 
-    @Test
     public void shouldTestBlockTime() throws Exception {
         // given
         enableCaptureThreadStats();

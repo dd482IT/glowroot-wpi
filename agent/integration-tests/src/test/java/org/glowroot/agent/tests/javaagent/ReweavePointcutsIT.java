@@ -30,7 +30,6 @@ import org.glowroot.wire.api.model.AgentConfigOuterClass.AgentConfig.Instrumenta
 
 public class ReweavePointcutsIT extends ConfiguredInstrumentationIT {
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = JavaagentContainer.create();
         // make sure the classes are loaded once before re-weaving
@@ -39,12 +38,10 @@ public class ReweavePointcutsIT extends ConfiguredInstrumentationIT {
         container.executeNoExpectedTrace(ShouldExecuteWithArgs.class);
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @BeforeEach
     public void beforeEachTest() throws Exception {
         List<InstrumentationConfig> instrumentationConfigs = Lists.newArrayList();
         instrumentationConfigs.add(buildInstrumentationForExecute1());
@@ -55,25 +52,21 @@ public class ReweavePointcutsIT extends ConfiguredInstrumentationIT {
     }
 
     @Override
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
     @Override
-    @Test
     public void shouldExecute1() throws Exception {
         super.shouldExecute1();
     }
 
     @Override
-    @Test
     public void shouldRenderTraceEntryMessageTemplateWithReturnValue() throws Exception {
         super.shouldRenderTraceEntryMessageTemplateWithReturnValue();
     }
 
     @Override
-    @Test
     public void shouldRenderTraceHeadline() throws Exception {
         super.shouldRenderTraceHeadline();
     }

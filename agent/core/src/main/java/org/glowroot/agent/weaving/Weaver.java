@@ -69,7 +69,7 @@ public class Weaver {
     private static final Logger logger = LoggerFactory.getLogger(Weaver.class);
 
     // useful for debugging java.lang.VerifyError and java.lang.ClassFormatError
-    private static final @Nullable String DEBUG_CLASS_NAME;
+    private static final String DEBUG_CLASS_NAME;
 
     static {
         String debugClassName = System.getProperty("glowroot.debug.className");
@@ -134,8 +134,8 @@ public class Weaver {
     }
 
     byte /*@Nullable*/ [] weave(byte[] classBytes, String className,
-            @Nullable Class<?> classBeingRedefined, @Nullable CodeSource codeSource,
-            @Nullable ClassLoader loader) {
+            Class<?> classBeingRedefined, CodeSource codeSource,
+            ClassLoader loader) {
         if (weavingDisabledForLoggingDeadlock) {
             return null;
         }
@@ -159,7 +159,7 @@ public class Weaver {
         }
     }
 
-    private @Nullable TimerImpl startWeavingTimer(long startTick) {
+    private TimerImpl startWeavingTimer(long startTick) {
         if (!weavingTimerEnabled) {
             return null;
         }
@@ -176,8 +176,8 @@ public class Weaver {
     }
 
     private byte /*@Nullable*/ [] weaveUnderTimer(byte[] classBytes, String className,
-            @Nullable Class<?> classBeingRedefined, @Nullable CodeSource codeSource,
-            @Nullable ClassLoader loader) {
+            Class<?> classBeingRedefined, CodeSource codeSource,
+            ClassLoader loader) {
         List<Advice> advisors = AnalyzedWorld.mergeInstrumentationAnnotations(this.advisors.get(),
                 classBytes, loader, className);
         ThinClassVisitor accv = new ThinClassVisitor();
@@ -323,7 +323,6 @@ public class Weaver {
         // blocked by the deadlocked threads
         weavingDisabledForLoggingDeadlock = true;
         try {
-            @Nullable
             ThreadInfo[] threadInfos = threadBean.getThreadInfo(deadlockedThreadIds,
                     threadBean.isObjectMonitorUsageSupported(), false);
             StringBuilder sb = new StringBuilder();
@@ -419,8 +418,8 @@ public class Weaver {
         }
 
         @Override
-        public @Nullable MethodVisitor visitMethod(int access, String name, String descriptor,
-                @Nullable String signature, String /*@Nullable*/ [] exceptions) {
+        public MethodVisitor visitMethod(int access, String name, String descriptor,
+                String signature, String /*@Nullable*/ [] exceptions) {
             MethodVisitor mv = cw.visitMethod(access, name, descriptor, signature, exceptions);
             if (name.equals("checkDelegateType")
                     && descriptor.equals("(Ljavax/enterprise/inject/spi/Decorator;)V")) {
@@ -459,7 +458,7 @@ public class Weaver {
 
         @Override
         public MethodVisitor visitMethod(int access, String name, String descriptor,
-                @Nullable String signature, String /*@Nullable*/ [] exceptions) {
+                String signature, String /*@Nullable*/ [] exceptions) {
             MethodVisitor mv = cw.visitMethod(access, name, descriptor, signature, exceptions);
             if (name.equals("<clinit>") && descriptor.equals("()V")) {
                 return new JBossUrlHackMethodVisitor(mv, access, name, descriptor);
@@ -526,7 +525,7 @@ public class Weaver {
 
         @Override
         public MethodVisitor visitMethod(int access, String name, String descriptor,
-                @Nullable String signature, String /*@Nullable*/ [] exceptions) {
+                String signature, String /*@Nullable*/ [] exceptions) {
             MethodVisitor mv = cw.visitMethod(access, name, descriptor, signature, exceptions);
             if (name.equals("defineClass") && descriptor.equals("(Ljava/lang/String;[BII"
                     + "Ljava/security/ProtectionDomain;)Ljava/lang/Class;")) {
@@ -553,8 +552,6 @@ public class Weaver {
         }
     }
 
-    @Pointcut(className = "", methodName = "", methodParameterTypes = {},
-            timerName = "glowroot weaving")
     private static class OnlyForTheTimerName {
         private OnlyForTheTimerName() {}
     }

@@ -28,7 +28,6 @@ import org.slf4j.LoggerFactory;
 import org.glowroot.common.config.PropertyValue;
 import org.glowroot.common.config.PropertyValue.PropertyType;
 
-@Value.Immutable
 public abstract class PropertyDescriptor {
 
     private static final Logger logger = LoggerFactory.getLogger(PropertyDescriptor.class);
@@ -37,22 +36,18 @@ public abstract class PropertyDescriptor {
 
     public abstract PropertyType type();
 
-    @JsonProperty("default")
-    public abstract @Nullable PropertyValue defaultValue();
+    public abstract PropertyValue defaultValue();
 
     public abstract String label();
 
-    @Value.Default
     public String checkboxLabel() {
         return "";
     }
 
-    @Value.Default
     public String description() {
         return "";
     }
 
-    @JsonIgnore
     PropertyValue getValidatedNonNullDefaultValue() {
         PropertyValue defaultValue = defaultValue();
         if (defaultValue == null) {

@@ -31,20 +31,19 @@ import org.glowroot.agent.plugin.mongodb.MongoCursorAspect.MongoCursorMixin;
 public class MongoIterableAspect {
 
     // the field and method names are verbose since they will be mixed in to existing classes
-    @Mixin({"com.mongodb.client.FindIterable", "com.mongodb.client.AggregateIterable"})
     public static class MongoIterableImpl implements MongoIterableMixin {
 
         // does not need to be volatile, app/framework must provide visibility of MongoIterables if
         // used across threads and this can piggyback
-        private transient @Nullable QueryEntry glowroot$queryEntry;
+        private transient QueryEntry glowroot$queryEntry;
 
         @Override
-        public @Nullable QueryEntry glowroot$getQueryEntry() {
+        public QueryEntry glowroot$getQueryEntry() {
             return glowroot$queryEntry;
         }
 
         @Override
-        public void glowroot$setQueryEntry(@Nullable QueryEntry queryEntry) {
+        public void glowroot$setQueryEntry(QueryEntry queryEntry) {
             glowroot$queryEntry = queryEntry;
         }
     }
@@ -52,40 +51,30 @@ public class MongoIterableAspect {
     // the method names are verbose since they will be mixed in to existing classes
     public interface MongoIterableMixin {
 
-        @Nullable
         QueryEntry glowroot$getQueryEntry();
 
-        void glowroot$setQueryEntry(@Nullable QueryEntry queryEntry);
+        void glowroot$setQueryEntry(QueryEntry queryEntry);
     }
 
-    @Pointcut(className = "com.mongodb.client.FindIterable", methodName = "*",
-            methodParameterTypes = {".."}, methodReturnType = "com.mongodb.client.FindIterable")
     public static class MapAdvice {
 
-        @OnReturn
-        public static void onReturn(@BindReturn @Nullable MongoIterableMixin newMongoIterable,
-                @BindReceiver MongoIterableMixin mongoIterable) {
+        public static void onReturn(MongoIterableMixin newMongoIterable,
+                MongoIterableMixin mongoIterable) {
             if (newMongoIterable != null) {
                 newMongoIterable.glowroot$setQueryEntry(mongoIterable.glowroot$getQueryEntry());
             }
         }
     }
 
-    @Pointcut(className = "com.mongodb.client.MongoIterable",
-            subTypeRestriction = "com.mongodb.client.FindIterable"
-                    + "|com.mongodb.client.AggregateIterable",
-            methodName = "first", methodParameterTypes = {}, nestingGroup = "mongodb")
     public static class FirstAdvice {
 
-        @OnBefore
-        public static @Nullable Timer onBefore(@BindReceiver MongoIterableMixin mongoIterable) {
+        public static Timer onBefore(MongoIterableMixin mongoIterable) {
             QueryEntry queryEntry = mongoIterable.glowroot$getQueryEntry();
             return queryEntry == null ? null : queryEntry.extend();
         }
 
-        @OnReturn
-        public static void onReturn(@BindReturn @Nullable Object document,
-                @BindReceiver MongoIterableMixin mongoIterable) {
+        public static void onReturn(Object document,
+                MongoIterableMixin mongoIterable) {
             QueryEntry queryEntry = mongoIterable.glowroot$getQueryEntry();
             if (queryEntry == null) {
                 return;
@@ -97,24 +86,17 @@ public class MongoIterableAspect {
             }
         }
 
-        @OnAfter
-        public static void onAfter(@BindTraveler @Nullable Timer timer) {
+        public static void onAfter(Timer timer) {
             if (timer != null) {
                 timer.stop();
             }
         }
     }
 
-    @Pointcut(className = "com.mongodb.client.MongoIterable",
-            subTypeRestriction = "com.mongodb.client.FindIterable"
-                    + "|com.mongodb.client.AggregateIterable",
-            methodName = "iterator", methodParameterTypes = {},
-            methodReturnType = "com.mongodb.client.MongoCursor", nestingGroup = "mongodb")
     public static class IteratorAdvice {
 
-        @OnReturn
-        public static void onReturn(@BindReturn @Nullable MongoCursorMixin mongoCursor,
-                @BindReceiver MongoIterableMixin mongoIterable) {
+        public static void onReturn(MongoCursorMixin mongoCursor,
+                MongoIterableMixin mongoIterable) {
             if (mongoCursor != null) {
                 mongoCursor.glowroot$setQueryEntry(mongoIterable.glowroot$getQueryEntry());
             }

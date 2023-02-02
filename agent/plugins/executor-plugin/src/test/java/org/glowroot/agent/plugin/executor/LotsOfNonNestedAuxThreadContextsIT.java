@@ -40,7 +40,6 @@ public class LotsOfNonNestedAuxThreadContextsIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         // tests only work with javaagent container because they need to weave bootstrap classes
         // that implement Executor and ExecutorService
@@ -49,17 +48,14 @@ public class LotsOfNonNestedAuxThreadContextsIT {
         container = JavaagentContainer.createWithExtraJvmArgs(ImmutableList.of("-Xmx32m"));
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldCaptureSubmitCallable() throws Exception {
         // when
         Trace trace = container.execute(DoSubmitCallable.class);

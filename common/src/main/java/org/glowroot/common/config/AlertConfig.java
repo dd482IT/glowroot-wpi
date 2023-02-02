@@ -31,14 +31,13 @@ import org.glowroot.wire.api.model.AgentConfigOuterClass.AgentConfig.AlertConfig
 import org.glowroot.wire.api.model.AgentConfigOuterClass.AgentConfig.AlertConfig.AlertSeverity;
 import org.glowroot.wire.api.model.Proto.OptionalDouble;
 
-@Value.Immutable
 public abstract class AlertConfig {
 
     public abstract AlertCondition condition();
     public abstract AlertSeverity severity();
-    public abstract @Nullable ImmutableEmailNotification emailNotification();
-    public abstract @Nullable ImmutablePagerDutyNotification pagerDutyNotification();
-    public abstract @Nullable ImmutableSlackNotification slackNotification();
+    public abstract ImmutableEmailNotification emailNotification();
+    public abstract ImmutablePagerDutyNotification pagerDutyNotification();
+    public abstract ImmutableSlackNotification slackNotification();
 
     public static ImmutableAlertConfig create(AgentConfig.AlertConfig config) {
         ImmutableAlertConfig.Builder builder = ImmutableAlertConfig.builder()
@@ -231,58 +230,42 @@ public abstract class AlertConfig {
                 .build();
     }
 
-    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY,
-            property = "conditionType")
-    @JsonSubTypes({
-            @Type(value = ImmutableMetricCondition.class, name = "metric"),
-            @Type(value = ImmutableSyntheticMonitorCondition.class, name = "synthetic-monitor"),
-            @Type(value = ImmutableHeartbeatCondition.class, name = "heartbeat")})
     interface AlertCondition {}
 
-    @Value.Immutable
     abstract static class MetricCondition implements AlertCondition {
         abstract String metric();
-        abstract @Nullable String transactionType();
-        abstract @Nullable String transactionName();
-        abstract @Nullable Double percentile();
-        abstract @Nullable String errorMessageFilter();
+        abstract String transactionType();
+        abstract String transactionName();
+        abstract Double percentile();
+        abstract String errorMessageFilter();
         abstract double threshold();
-        @Value.Default
-        @JsonInclude(value = Include.NON_EMPTY)
         boolean lowerBoundThreshold() {
             return false;
         }
         abstract int timePeriodSeconds();
-        @Value.Default
-        @JsonInclude(value = Include.NON_EMPTY)
         long minTransactionCount() {
             return 0;
         }
     }
 
-    @Value.Immutable
     interface SyntheticMonitorCondition extends AlertCondition {
         String syntheticMonitorId();
         int thresholdMillis();
         int consecutiveCount();
     }
 
-    @Value.Immutable
     interface HeartbeatCondition extends AlertCondition {
         int timePeriodSeconds();
     }
 
-    @Value.Immutable
     interface EmailNotification {
         List<String> emailAddresses();
     }
 
-    @Value.Immutable
     interface PagerDutyNotification {
         String pagerDutyIntegrationKey();
     }
 
-    @Value.Immutable
     interface SlackNotification {
         String slackWebhookId();
         List<String> slackChannels();

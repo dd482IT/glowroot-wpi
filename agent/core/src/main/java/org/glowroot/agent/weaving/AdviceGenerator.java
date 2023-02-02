@@ -73,14 +73,14 @@ class AdviceGenerator {
     private static final AtomicInteger counter = new AtomicInteger();
 
     private final InstrumentationConfig config;
-    private final @Nullable String pluginId;
+    private final String pluginId;
     private final int priorityForSetters;
     private final String adviceInternalName;
-    private final @Nullable String methodMetaInternalName;
+    private final String methodMetaInternalName;
     private final int uniqueNum;
 
     static ImmutableMap<Advice, LazyDefinedClass> createAdvisors(
-            List<InstrumentationConfig> configs, @Nullable String pluginId, boolean userPlugin,
+            List<InstrumentationConfig> configs, String pluginId, boolean userPlugin,
             boolean reweavable) {
         Map<Advice, LazyDefinedClass> advisors = Maps.newHashMap();
         for (InstrumentationConfig config : configs) {
@@ -99,7 +99,7 @@ class AdviceGenerator {
         return ImmutableMap.copyOf(advisors);
     }
 
-    private AdviceGenerator(InstrumentationConfig config, @Nullable String pluginId,
+    private AdviceGenerator(InstrumentationConfig config, String pluginId,
             boolean userPlugin) {
         this.config = config;
         this.pluginId = pluginId;
@@ -321,7 +321,6 @@ class AdviceGenerator {
         mv.visitEnd();
     }
 
-    @RequiresNonNull("methodMetaInternalName")
     private void addOnBeforeMethod(ClassWriter cw) {
         MethodVisitor mv = visitOnBeforeMethod(cw, "Lorg/glowroot/agent/plugin/api/TraceEntry;");
         mv.visitCode();
@@ -615,7 +614,6 @@ class AdviceGenerator {
         mv.visitEnd();
     }
 
-    @RequiresNonNull("methodMetaInternalName")
     private LazyDefinedClass generateMethodMetaClass(InstrumentationConfig config) {
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS + ClassWriter.COMPUTE_FRAMES);
         cw.visit(V1_5, ACC_PUBLIC + ACC_SUPER, methodMetaInternalName, null, "java/lang/Object",
@@ -676,7 +674,6 @@ class AdviceGenerator {
                 threadContextSetterName, "(Ljava/lang/String;I)V", true);
     }
 
-    @RequiresNonNull("methodMetaInternalName")
     private void generateMethodMetaConstructor(ClassWriter cw) {
         MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "<init>",
                 "(Lorg/glowroot/agent/plugin/api/MethodInfo;)V", null, null);
@@ -748,7 +745,6 @@ class AdviceGenerator {
         mv.visitEnd();
     }
 
-    @RequiresNonNull("methodMetaInternalName")
     private void generateMethodMetaGetter(ClassWriter cw, String fieldName, String methodName) {
         MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, methodName,
                 "()Lorg/glowroot/agent/bytecode/api/MessageTemplate;", null, null);

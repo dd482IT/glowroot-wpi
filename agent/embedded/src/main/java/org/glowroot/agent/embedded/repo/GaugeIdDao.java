@@ -90,7 +90,6 @@ class GaugeIdDao {
         return gaugeId;
     }
 
-    @Nullable
     Long getGaugeId(String gaugeName) throws SQLException {
         Long gaugeId = lastCaptureTimeUpdatedInThePastDay.getIfPresent(gaugeName);
         if (gaugeId != null) {

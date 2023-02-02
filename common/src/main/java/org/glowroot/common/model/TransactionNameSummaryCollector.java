@@ -155,7 +155,6 @@ public class TransactionNameSummaryCollector {
         TOTAL_TIME, AVERAGE_TIME, THROUGHPUT, TOTAL_CPU_TIME, AVERAGE_CPU_TIME, TOTAL_ALLOCATED_MEMORY, AVERAGE_ALLOCATED_MEMORY
     }
 
-    @Value.Immutable
     public interface TransactionNameSummary {
         String transactionName();
         // aggregates use double instead of long to avoid (unlikely) 292 year nanosecond rollover

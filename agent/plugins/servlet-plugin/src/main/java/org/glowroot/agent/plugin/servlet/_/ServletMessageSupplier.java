@@ -44,15 +44,15 @@ public class ServletMessageSupplier extends MessageSupplier implements ServletRe
     private final String requestMethod;
     private final String requestContextPath;
     private final String requestServletPath;
-    private final @Nullable String requestPathInfo;
+    private final String requestPathInfo;
     private final String requestUri;
-    private final @Nullable String requestQueryString;
+    private final String requestQueryString;
 
-    private volatile @MonotonicNonNull Map<String, Object> requestParameters;
+    private volatile Map<String, Object> requestParameters;
 
     private final Map<String, Object> requestHeaders;
 
-    private final @Nullable RequestHostAndPortDetail requestHostAndPortDetail;
+    private final RequestHostAndPortDetail requestHostAndPortDetail;
 
     private volatile int responseCode;
 
@@ -66,14 +66,14 @@ public class ServletMessageSupplier extends MessageSupplier implements ServletRe
     private final Map<String, String> sessionAttributeInitialValueMap;
 
     // ConcurrentHashMap does not allow null values, so need to use Optional values
-    private volatile @MonotonicNonNull ConcurrentMap<String, Optional<String>> sessionAttributeUpdatedValueMap;
+    private volatile ConcurrentMap<String, Optional<String>> sessionAttributeUpdatedValueMap;
 
-    private @Nullable List<String> jaxRsParts;
+    private List<String> jaxRsParts;
 
     public ServletMessageSupplier(String requestMethod, String requestContextPath,
-            String requestServletPath, @Nullable String requestPathInfo, String requestUri,
-            @Nullable String requestQueryString, Map<String, Object> requestHeaders,
-            @Nullable RequestHostAndPortDetail requestHostAndPortDetail,
+            String requestServletPath, String requestPathInfo, String requestUri,
+            String requestQueryString, Map<String, Object> requestHeaders,
+            RequestHostAndPortDetail requestHostAndPortDetail,
             Map<String, String> sessionAttributeMap) {
         this.requestMethod = requestMethod;
         this.requestContextPath = requestContextPath;
@@ -157,7 +157,7 @@ public class ServletMessageSupplier extends MessageSupplier implements ServletRe
     }
 
     @Override
-    public @Nullable String getPathInfo() {
+    public String getPathInfo() {
         return requestPathInfo;
     }
 
@@ -220,7 +220,7 @@ public class ServletMessageSupplier extends MessageSupplier implements ServletRe
     }
 
     public void putSessionAttributeChangedValue(String attributeName,
-            @Nullable String attributeValue) {
+            String attributeValue) {
         if (sessionAttributeUpdatedValueMap == null) {
             sessionAttributeUpdatedValueMap = new ConcurrentHashMap<String, Optional<String>>();
         }
@@ -248,7 +248,6 @@ public class ServletMessageSupplier extends MessageSupplier implements ServletRe
         }
     }
 
-    @RequiresNonNull("sessionAttributeUpdatedValueMap")
     private void addMidRequestSessionAttributeDetail(Map<String, Object> detail) {
         Map<String, /*@Nullable*/ Object> sessionAttributeInitialValuePlusMap =
                 new HashMap<String, /*@Nullable*/ Object>();
@@ -267,7 +266,7 @@ public class ServletMessageSupplier extends MessageSupplier implements ServletRe
                 sessionAttributeUpdatedValueMap);
     }
 
-    static @Nullable String maskRequestQueryString(@Nullable String requestQueryString,
+    static String maskRequestQueryString(String requestQueryString,
             List<Pattern> maskPatterns) {
         if (requestQueryString == null) {
             return null;
@@ -321,8 +320,8 @@ public class ServletMessageSupplier extends MessageSupplier implements ServletRe
         }
     }
 
-    private static @Nullable Map<String, Object> maskRequestParameters(
-            @Nullable Map<String, Object> requestParameters, List<Pattern> maskPatterns) {
+    private static Map<String, Object> maskRequestParameters(
+            Map<String, Object> requestParameters, List<Pattern> maskPatterns) {
         if (requestParameters == null) {
             return null;
         }

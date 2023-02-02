@@ -28,7 +28,7 @@ public class Beans {
 
     private Beans() {}
 
-    public static @Nullable Object value(@Nullable Object obj, List<String> path) throws Exception {
+    public static Object value(Object obj, List<String> path) throws Exception {
         return service.getBeanValue(obj, path);
     }
 

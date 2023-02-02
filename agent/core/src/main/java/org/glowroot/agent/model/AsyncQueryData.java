@@ -24,7 +24,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 public class AsyncQueryData implements QueryData {
 
     private final String queryText;
-    private final @Nullable AsyncQueryData limitExceededBucket;
+    private final AsyncQueryData limitExceededBucket;
 
     private final AtomicLong sumOfStartTicks = new AtomicLong();
     private final AtomicLong sumOfEndTicks = new AtomicLong();
@@ -35,7 +35,7 @@ public class AsyncQueryData implements QueryData {
     // also tracked as queries)
     private final AtomicLong totalRows = new AtomicLong(-1);
 
-    public AsyncQueryData(String queryText, @Nullable AsyncQueryData limitExceededBucket) {
+    public AsyncQueryData(String queryText, AsyncQueryData limitExceededBucket) {
         this.queryText = queryText;
         this.limitExceededBucket = limitExceededBucket;
     }

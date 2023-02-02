@@ -42,7 +42,6 @@ public class ConfigDaoIT {
     private static ExecutorService asyncExecutor;
     private static AgentConfigDao agentConfigDao;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         SharedSetupRunListener.startCassandra();
         clusterManager = ClusterManager.create();
@@ -55,7 +54,6 @@ public class ConfigDaoIT {
         agentConfigDao = new AgentConfigDao(session, agentDisplayDao, clusterManager, 10);
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         asyncExecutor.shutdown();
         session.close();
@@ -64,12 +62,10 @@ public class ConfigDaoIT {
         SharedSetupRunListener.stopCassandra();
     }
 
-    @BeforeEach
     public void before() throws Exception {
         session.updateSchemaWithRetry("truncate agent_config");
     }
 
-    @Test
     public void shouldStoreAgentConfig() throws Exception {
         // given
         AgentConfig agentConfig = AgentConfig.getDefaultInstance();
@@ -80,7 +76,6 @@ public class ConfigDaoIT {
         assertThat(readAgentConfig).isEqualTo(agentConfig);
     }
 
-    @Test
     public void shouldNotOverwriteExistingAgentConfig() throws Exception {
         // given
         AgentConfig agentConfig = AgentConfig.getDefaultInstance();

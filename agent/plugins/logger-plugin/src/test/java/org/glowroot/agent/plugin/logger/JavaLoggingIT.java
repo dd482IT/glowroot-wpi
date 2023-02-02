@@ -38,7 +38,6 @@ public class JavaLoggingIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         Assumptions.assumeFalse(isBridged());
         Assumptions.assumeTrue(isShaded());
@@ -69,7 +68,6 @@ public class JavaLoggingIT {
         }
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         // need null check in case assumption is false in setUp()
         if (container != null) {
@@ -77,12 +75,10 @@ public class JavaLoggingIT {
         }
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void testLog() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID,
@@ -114,7 +110,6 @@ public class JavaLoggingIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLogWithThrowable() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID,
@@ -162,7 +157,6 @@ public class JavaLoggingIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLogWithNullThrowable() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID,
@@ -201,7 +195,6 @@ public class JavaLoggingIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLogWithLogRecord() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID,
@@ -231,7 +224,6 @@ public class JavaLoggingIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLogWithPriority() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID,
@@ -263,7 +255,6 @@ public class JavaLoggingIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLogWithPriorityAndThrowable() throws Exception {
         // when
         Trace trace = container.execute(ShouldLogWithPriorityAndThrowable.class);
@@ -310,7 +301,6 @@ public class JavaLoggingIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLogWithPriorityAndNullThrowable() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID,
@@ -351,7 +341,6 @@ public class JavaLoggingIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLogWithParameters() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID,
@@ -385,7 +374,6 @@ public class JavaLoggingIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLocalizedLogWithParameters() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID,

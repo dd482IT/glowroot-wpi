@@ -29,36 +29,30 @@ import static org.mockito.Mockito.mock;
 
 public class ReflectionTest {
 
-    @BeforeAll
     public static void setUp() {
         PluginServiceHolder.set(mock(PluginService.class));
     }
 
-    @Test
     public void shouldReturnNullMethodWhenClassIsNull() {
         assertThat(Reflection.getMethod(null, null)).isNull();
     }
 
-    @Test
     public void shouldReturnNullMethodWhenMethodNotFound() {
         assertThat(Reflection.getMethod(String.class, "thereWillNeverBeMethodWithThisName"))
                 .isNull();
     }
 
-    @Test
     public void shouldReturnDefaultValueWhenMethodIsNull() {
         assertThat(Reflection.invokeWithDefault(null, null, "the default"))
                 .isEqualTo("the default");
     }
 
-    @Test
     public void shouldReturnDefaultValueWhenMethodReturnsNull() throws Exception {
         Method method = Optional.class.getMethod("orNull");
         assertThat(Reflection.invokeWithDefault(method, Optional.absent(), "the default"))
                 .isEqualTo("the default");
     }
 
-    @Test
     public void shouldReturnDefaultValueWhenMethodThrowsException() throws Exception {
         Method method = Optional.class.getMethod("get");
         assertThat(Reflection.invokeWithDefault(method, Optional.absent(), "the default"))

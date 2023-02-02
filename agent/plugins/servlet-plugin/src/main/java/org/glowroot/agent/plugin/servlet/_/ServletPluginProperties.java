@@ -57,7 +57,7 @@ public class ServletPluginProperties {
     private static boolean captureContentTypeResponseHeader;
     private static boolean captureContentLanguageResponseHeader;
 
-    private static @Nullable SessionAttributePath userAttributePath;
+    private static SessionAttributePath userAttributePath;
 
     private static List<SessionAttributePath> captureSessionAttributePaths =
             Collections.emptyList();
@@ -140,7 +140,7 @@ public class ServletPluginProperties {
         return captureContentLanguageResponseHeader;
     }
 
-    public static @Nullable SessionAttributePath userAttributePath() {
+    public static SessionAttributePath userAttributePath() {
         return userAttributePath;
     }
 

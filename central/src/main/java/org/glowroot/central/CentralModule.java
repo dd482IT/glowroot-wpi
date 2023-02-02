@@ -111,7 +111,7 @@ public class CentralModule {
     private static final int TARGET_MAX_CENTRAL_UI_USERS = 100;
 
     // need to wait to init logger until after establishing centralDir
-    private static volatile @MonotonicNonNull Logger startupLogger;
+    private static volatile Logger startupLogger;
 
     private final boolean servlet;
     private final ClusterManager clusterManager;
@@ -132,7 +132,6 @@ public class CentralModule {
         return create(getCentralDir());
     }
 
-    @VisibleForTesting
     public static CentralModule create(File centralDir) throws Exception {
         return new CentralModule(centralDir, null);
     }
@@ -142,7 +141,7 @@ public class CentralModule {
         return new CentralModule(centralDir, servletContext);
     }
 
-    private CentralModule(File centralDir, @Nullable ServletContext servletContext)
+    private CentralModule(File centralDir, ServletContext servletContext)
             throws Exception {
         servlet = servletContext != null;
         ClusterManager clusterManager = null;
@@ -828,7 +827,6 @@ public class CentralModule {
         return properties;
     }
 
-    @RequiresNonNull("startupLogger")
     private static Session connect(CentralConfiguration centralConfig) throws Exception {
         Session session = null;
         // instantiate the default timestamp generator (AtomicMonotonicTimestampGenerator) only once
@@ -978,7 +976,6 @@ public class CentralModule {
     }
 
     // TODO report checker framework issue that occurs without this suppression
-    @EnsuresNonNull("startupLogger")
     @SuppressWarnings("contracts.postcondition.not.satisfied")
     private static void initLogging(File confDir, File logDir) {
         File logbackXmlOverride = new File(confDir, "logback.xml");
@@ -1005,7 +1002,7 @@ public class CentralModule {
     private static Future<?> submit(ExecutorService executor, ShutdownFunction fn) {
         return executor.submit(new Callable</*@Nullable*/ Void>() {
             @Override
-            public @Nullable Void call() throws Exception {
+            public Void call() throws Exception {
                 fn.run();
                 return null;
             }
@@ -1016,50 +1013,40 @@ public class CentralModule {
         void run() throws Exception;
     }
 
-    @Value.Immutable
     abstract static class CentralConfiguration {
 
-        @Value.Default
         List<String> cassandraContactPoint() {
             return ImmutableList.of("127.0.0.1");
         }
         
-        @Value.Default
         int cassandraPort() {
         	return 9042;
         }
 
-        @Value.Default
         String cassandraUsername() {
             return "";
         }
 
-        @Value.Default
         String cassandraPassword() {
             return "";
         }
         
-        @Value.Default
         boolean cassandraSSL() {
         	return false;
         }
 
-        @Value.Default
         String cassandraKeyspace() {
             return "glowroot";
         }
 
-        @Value.Default
         ConsistencyLevel cassandraReadConsistencyLevel() {
             return ConsistencyLevel.QUORUM;
         }
 
-        @Value.Default
         ConsistencyLevel cassandraWriteConsistencyLevel() {
             return ConsistencyLevel.QUORUM;
         }
 
-        @Value.Derived
         String cassandraConsistencyLevelDisplay() {
             ConsistencyLevel readConsistencyLevel = cassandraReadConsistencyLevel();
             ConsistencyLevel writeConsistencyLevel = cassandraWriteConsistencyLevel();
@@ -1070,12 +1057,10 @@ public class CentralModule {
             }
         }
 
-        @Value.Default
         String cassandraSymmetricEncryptionKey() {
             return "";
         }
 
-        @Value.Default
         int cassandraGcGraceSeconds() {
             // since rollup operations are idempotent, any records resurrected after gc_grace_seconds
             // would just create extra work, but not have any other effect
@@ -1087,51 +1072,40 @@ public class CentralModule {
             return (int) HOURS.toSeconds(4);
         }
 
-        @Value.Default
         int cassandraMaxConcurrentQueries() {
             return 1024;
         }
 
-        @Value.Default
         int cassandraPoolTimeoutMillis() {
             // central runs lots of parallel async queries and is very spiky since all aggregates
             // come in right after each minute marker
             return 10000;
         }
 
-        @Value.Default
         String grpcBindAddress() {
             return "0.0.0.0";
         }
 
-        @Value.Default
-        @Nullable
         Integer grpcHttpPort() {
             return 8181;
         }
 
-        @Value.Default
-        @Nullable
         Integer grpcHttpsPort() {
             return null;
         }
 
-        @Value.Default
         String uiBindAddress() {
             return "0.0.0.0";
         }
 
-        @Value.Default
         int uiPort() {
             return 4000;
         }
 
-        @Value.Default
         boolean uiHttps() {
             return false;
         }
 
-        @Value.Default
         String uiContextPath() {
             return "/";
         }

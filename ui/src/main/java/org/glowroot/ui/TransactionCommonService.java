@@ -369,7 +369,6 @@ class TransactionCommonService {
         return profileCollector;
     }
 
-    @Nullable
     String readFullQueryText(String agentRollupId, String fullQueryTextSha1) throws Exception {
         // checking live data is not efficient since must perform many sha1 hashes
         // so check repository first

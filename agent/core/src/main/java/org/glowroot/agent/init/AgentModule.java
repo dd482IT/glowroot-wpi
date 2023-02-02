@@ -106,29 +106,29 @@ public class AgentModule {
     private final TransactionService transactionService;
     private final BytecodeServiceImpl bytecodeService;
 
-    private volatile @MonotonicNonNull DeadlockedActiveWeavingRunnable deadlockedActiveWeavingRunnable;
-    private volatile @MonotonicNonNull TraceCollector traceCollector;
-    private volatile @MonotonicNonNull TransactionProcessor transactionProcessor;
+    private volatile DeadlockedActiveWeavingRunnable deadlockedActiveWeavingRunnable;
+    private volatile TraceCollector traceCollector;
+    private volatile TransactionProcessor transactionProcessor;
 
-    private volatile @MonotonicNonNull LazyPlatformMBeanServer lazyPlatformMBeanServer;
+    private volatile LazyPlatformMBeanServer lazyPlatformMBeanServer;
 
-    private volatile @MonotonicNonNull GaugeCollector gaugeCollector;
-    private volatile @MonotonicNonNull StackTraceCollector stackTraceCollector;
+    private volatile GaugeCollector gaugeCollector;
+    private volatile StackTraceCollector stackTraceCollector;
 
-    private volatile @MonotonicNonNull ImmediateTraceStoreWatcher immedateTraceStoreWatcher;
+    private volatile ImmediateTraceStoreWatcher immedateTraceStoreWatcher;
 
     private final boolean jvmRetransformClassesSupported;
 
-    private volatile @MonotonicNonNull LiveTraceRepositoryImpl liveTraceRepository;
-    private volatile @MonotonicNonNull LiveAggregateRepositoryImpl liveAggregateRepository;
-    private volatile @MonotonicNonNull LiveWeavingServiceImpl liveWeavingService;
-    private volatile @MonotonicNonNull LiveJvmServiceImpl liveJvmService;
+    private volatile LiveTraceRepositoryImpl liveTraceRepository;
+    private volatile LiveAggregateRepositoryImpl liveAggregateRepository;
+    private volatile LiveWeavingServiceImpl liveWeavingService;
+    private volatile LiveJvmServiceImpl liveJvmService;
 
     // accepts @Nullable Ticker to deal with shading issues when called from GlowrootModule
-    public AgentModule(Clock clock, @Nullable Ticker nullableTicker, final PluginCache pluginCache,
-            final ConfigService configService, @Nullable Instrumentation instrumentation,
-            @Nullable File glowrootJarFile, File tmpDir,
-            @Nullable PreCheckClassFileTransformer preCheckClassFileTransformer) throws Exception {
+    public AgentModule(Clock clock, Ticker nullableTicker, final PluginCache pluginCache,
+            final ConfigService configService, Instrumentation instrumentation,
+            File glowrootJarFile, File tmpDir,
+            PreCheckClassFileTransformer preCheckClassFileTransformer) throws Exception {
 
         this.clock = clock;
         this.ticker = nullableTicker == null ? Tickers.getTicker() : nullableTicker;
@@ -242,8 +242,8 @@ public class AgentModule {
     }
 
     public void onEnteringMain(ScheduledExecutorService backgroundExecutor, Collector collector,
-            @Nullable Instrumentation instrumentation, @Nullable File glowrootJarFile,
-            @Nullable String mainClass) throws Exception {
+            Instrumentation instrumentation, File glowrootJarFile,
+            String mainClass) throws Exception {
 
         weaver.setNoLongerNeedToWeaveMainMethods();
 
@@ -344,7 +344,7 @@ public class AgentModule {
     }
 
     public static boolean logAnyImportantClassLoadedPriorToWeavingInit(
-            Class<?>[] initialLoadedClasses, @Nullable File glowrootJarFile, boolean preCheck) {
+            Class<?>[] initialLoadedClasses, File glowrootJarFile, boolean preCheck) {
         List<String> loadedImportantClassNames = Lists.newArrayList();
         for (Class<?> initialLoadedClass : initialLoadedClasses) {
             String className = initialLoadedClass.getName();
@@ -361,7 +361,7 @@ public class AgentModule {
     }
 
     private static void logLoadedImportantClassWarning(List<String> loadedImportantClassNames,
-            @Nullable File glowrootJarFile, boolean preCheck) {
+            File glowrootJarFile, boolean preCheck) {
         if (preCheck) {
             // this is only logged with -Dglowroot.debug.preCheckLoadedClasses=true
             startupLogger.warn("PRE-CHECK: one or more important classes were loaded before"
@@ -403,7 +403,7 @@ public class AgentModule {
         return nativeAgentArgs;
     }
 
-    private static List<String> getJavaAgentArgsBeforeGlowroot(@Nullable File glowrootJarFile) {
+    private static List<String> getJavaAgentArgsBeforeGlowroot(File glowrootJarFile) {
         if (glowrootJarFile == null) {
             return ImmutableList.of();
         }
@@ -439,7 +439,6 @@ public class AgentModule {
         }
     }
 
-    @OnlyUsedByTests
     public void close() throws Exception {
         if (immedateTraceStoreWatcher != null) {
             immedateTraceStoreWatcher.cancel();

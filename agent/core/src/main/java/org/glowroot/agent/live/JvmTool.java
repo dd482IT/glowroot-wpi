@@ -65,7 +65,7 @@ class JvmTool {
     }
 
     static <T> T run(long pid, String methodName, InputStreamProcessor<T> processor,
-            boolean allowAttachSelf, @Nullable File glowrootJarFile) throws Exception {
+            boolean allowAttachSelf, File glowrootJarFile) throws Exception {
         if (allowAttachSelf) {
             return run(pid, methodName, processor);
         } else {
@@ -119,7 +119,7 @@ class JvmTool {
     }
 
     private static <T> T runExternalAttach(long pid, String methodName,
-            InputStreamProcessor<T> processor, @Nullable File glowrootJarFile) throws Exception {
+            InputStreamProcessor<T> processor, File glowrootJarFile) throws Exception {
         List<String> command = buildCommand(pid, methodName, glowrootJarFile);
         ProcessBuilder processBuilder = new ProcessBuilder(command);
         Process process = processBuilder.start();
@@ -165,7 +165,7 @@ class JvmTool {
     }
 
     private static List<String> buildCommand(long pid, String methodName,
-            @Nullable File glowrootJarFile) {
+            File glowrootJarFile) {
         List<String> command = Lists.newArrayList();
         String javaExecutable = StandardSystemProperty.JAVA_HOME.value() + File.separator + "bin"
                 + File.separator + "java";
@@ -178,7 +178,7 @@ class JvmTool {
         return command;
     }
 
-    private static List<String> buildClasspath(@Nullable File glowrootJarFile) {
+    private static List<String> buildClasspath(File glowrootJarFile) {
         if (glowrootJarFile == null || !isShaded()) {
             // this is just to support testing
             List<String> classpath = Lists.newArrayList();
@@ -199,7 +199,7 @@ class JvmTool {
         }
     }
 
-    private static List<String> splitClasspath(@Nullable String classpath) {
+    private static List<String> splitClasspath(String classpath) {
         if (Strings.isNullOrEmpty(classpath)) {
             return ImmutableList.of();
         }
@@ -238,7 +238,7 @@ class JvmTool {
 
     private static class SystemOutProcessor implements InputStreamProcessor</*@Nullable*/ Void> {
         @Override
-        public @Nullable Void process(InputStream in) throws IOException {
+        public Void process(InputStream in) throws IOException {
             ByteStreams.copy(in, System.out);
             return null;
         }

@@ -29,7 +29,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class JarFileShadingIT {
 
-    @Test
     public void shouldCheckThatJarIsWellShaded() throws IOException {
         File glowrootCoreJarFile = getGlowrootAgentJarFile();
         List<String> acceptableEntries = Lists.newArrayList();

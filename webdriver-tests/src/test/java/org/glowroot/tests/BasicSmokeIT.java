@@ -53,7 +53,6 @@ import static org.openqa.selenium.By.xpath;
 
 public class BasicSmokeIT extends WebDriverIT {
 
-    @BeforeAll
     public static void setUp() throws Exception {
         String content = httpGet("http://localhost:" + getUiPort()
                 + "/backend/config/transaction?agent-id=" + agentId);
@@ -101,12 +100,10 @@ public class BasicSmokeIT extends WebDriverIT {
         });
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.interruptAppUnderTest();
     }
 
-    @Test
     public void shouldCheckTransactionPages() throws Exception {
         App app = app();
         GlobalNavbar globalNavbar = globalNavbar();
@@ -134,7 +131,6 @@ public class BasicSmokeIT extends WebDriverIT {
         clickAcross();
     }
 
-    @Test
     public void shouldCheckNonActiveTraceModalPages() throws Exception {
         App app = app();
 
@@ -174,7 +170,6 @@ public class BasicSmokeIT extends WebDriverIT {
         clickAroundInTraceModal(traceId, false);
     }
 
-    @Test
     public void shouldCheckActiveTraceModalPages() throws Exception {
         App app = app();
         GlobalNavbar globalNavbar = globalNavbar();
@@ -191,7 +186,6 @@ public class BasicSmokeIT extends WebDriverIT {
         clickAroundInTraceModal(traceId, true);
     }
 
-    @Test
     public void shouldCheckErrorsPages() throws Exception {
         App app = app();
         GlobalNavbar globalNavbar = globalNavbar();
@@ -223,7 +217,6 @@ public class BasicSmokeIT extends WebDriverIT {
         waitFor(xpath("//label[normalize-space()='Response time']"));
     }
 
-    @Test
     public void shouldCheckJvmPages() throws Exception {
         App app = app();
         GlobalNavbar globalNavbar = globalNavbar();
@@ -285,7 +278,6 @@ public class BasicSmokeIT extends WebDriverIT {
         app.open("/jvm/capabilities");
     }
 
-    @Test
     public void shouldRunReportTransactionAverage() throws Exception {
         // given
         App app = app();
@@ -307,7 +299,6 @@ public class BasicSmokeIT extends WebDriverIT {
         waitFor(xpath("//div[@ng-if='showChart']"));
     }
 
-    @Test
     public void shouldRunReportTransactionPercentile() throws Exception {
         // given
         App app = app();
@@ -330,7 +321,6 @@ public class BasicSmokeIT extends WebDriverIT {
         waitFor(xpath("//div[@ng-if='showChart']"));
     }
 
-    @Test
     public void shouldRunReportTransactionCount() throws Exception {
         // given
         App app = app();
@@ -352,7 +342,6 @@ public class BasicSmokeIT extends WebDriverIT {
         waitFor(xpath("//div[@ng-if='showChart']"));
     }
 
-    @Test
     public void shouldRunReportErrorRate() throws Exception {
         // given
         App app = app();
@@ -374,7 +363,6 @@ public class BasicSmokeIT extends WebDriverIT {
         waitFor(xpath("//div[@ng-if='showChart']"));
     }
 
-    @Test
     public void shouldRunReportErrorCount() throws Exception {
         // given
         App app = app();
@@ -396,7 +384,6 @@ public class BasicSmokeIT extends WebDriverIT {
         waitFor(xpath("//div[@ng-if='showChart']"));
     }
 
-    @Test
     public void shouldRunReportGauge() throws Exception {
         // given
         App app = app();
@@ -418,17 +405,14 @@ public class BasicSmokeIT extends WebDriverIT {
         waitFor(xpath("//div[@ng-if='showChart']"));
     }
 
-    @Test
     public void shouldCheckLogPage() throws Exception {
         httpGet("http://localhost:" + getUiPort() + "/log");
     }
 
-    @Test
     public void shouldCheckHealthCheckPage() throws Exception {
         httpGet("http://localhost:" + getUiPort() + "/health");
     }
 
-    @Test
     public void shouldCheckCassandraWriteTotals() throws Exception {
         Assumptions.assumeTrue(WebDriverSetup.useCentral);
         httpGet("http://localhost:" + getUiPort()

@@ -42,28 +42,23 @@ public class SuspendedResourceIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         // javaagent is required for Executor.execute() weaving
         container = JavaagentContainer.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldCaptureSuspendedResponse() throws Exception {
         shouldCaptureSuspendedResponse("", WithNormalServletMappingCallSuspended.class);
     }
 
-    @Test
     public void shouldCaptureSuspendedResponseWithContextPath() throws Exception {
         shouldCaptureSuspendedResponse("/zzz",
                 WithNormalServletMappingCallSuspendedWithContextPath.class);
@@ -112,14 +107,11 @@ public class SuspendedResourceIT {
         }
     }
 
-    @Path("suspended")
     public static class SuspendedResource {
 
         private final ExecutorService executor = Executors.newCachedThreadPool();
 
-        @GET
-        @Path("{param}")
-        public void log(@Suspended final AsyncResponse asyncResponse) {
+        public void log(final AsyncResponse asyncResponse) {
             executor.execute(new Runnable() {
                 @Override
                 public void run() {

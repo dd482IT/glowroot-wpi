@@ -128,7 +128,6 @@ public class GaugeValueDaoWithV09Support implements GaugeValueDao {
     }
 
     @Override
-    @OnlyUsedByTests
     public void truncateAll() throws Exception {
         delegate.truncateAll();
     }

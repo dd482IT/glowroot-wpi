@@ -47,22 +47,18 @@ public class MongoDbPluginIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldCaptureCount() throws Exception {
         // when
         Trace trace = container.execute(ExecuteCount.class);
@@ -95,7 +91,6 @@ public class MongoDbPluginIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureDistinct() throws Exception {
         // when
         Trace trace = container.execute(ExecuteDistinct.class);
@@ -128,7 +123,6 @@ public class MongoDbPluginIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureFindZeroRecords() throws Exception {
         // when
         Trace trace = container.execute(ExecuteFindZeroRecords.class);
@@ -162,7 +156,6 @@ public class MongoDbPluginIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureFindOneRecord() throws Exception {
         // when
         Trace trace = container.execute(ExecuteFindOneRecord.class);
@@ -196,7 +189,6 @@ public class MongoDbPluginIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureAggregate() throws Exception {
         // when
         Trace trace = container.execute(ExecuteAggregate.class);

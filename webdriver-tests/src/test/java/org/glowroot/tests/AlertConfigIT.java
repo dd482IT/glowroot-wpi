@@ -34,7 +34,6 @@ import static org.openqa.selenium.By.xpath;
 
 public class AlertConfigIT extends WebDriverIT {
 
-    @BeforeAll
     public static void setUp() throws Exception {
         // wait for java.lang:type=Memory:HeapMemoryUsage.used gauge to show up in the UI so that
         // alerts can be set up for it
@@ -62,7 +61,6 @@ public class AlertConfigIT extends WebDriverIT {
         }
     }
 
-    @Test
     public void shouldAddTransactionTimeAlert() throws Exception {
         // given
         App app = app();
@@ -100,7 +98,6 @@ public class AlertConfigIT extends WebDriverIT {
                 .isEqualTo("noone@example.org, example@example.org");
     }
 
-    @Test
     public void shouldAddTransactionCountAlert() throws Exception {
         // given
         App app = app();
@@ -136,7 +133,6 @@ public class AlertConfigIT extends WebDriverIT {
                 .isEqualTo("noone@example.org, example@example.org");
     }
 
-    @Test
     public void shouldAddTransactionCountLowerBoundAlert() throws Exception {
         // given
         App app = app();
@@ -171,7 +167,6 @@ public class AlertConfigIT extends WebDriverIT {
                 .isEqualTo("noone@example.org, example@example.org");
     }
 
-    @Test
     public void shouldAddErrorRateAlert() throws Exception {
         // given
         App app = app();
@@ -205,7 +200,6 @@ public class AlertConfigIT extends WebDriverIT {
                 .isEqualTo("noone@example.org, example@example.org");
     }
 
-    @Test
     public void shouldAddGaugeAlert() throws Exception {
         // given
         App app = app();
@@ -237,7 +231,6 @@ public class AlertConfigIT extends WebDriverIT {
                 .isEqualTo("noone@example.org, example@example.org");
     }
 
-    @Test
     public void shouldAddGaugeLowerBoundAlert() throws Exception {
         // given
         App app = app();
@@ -269,7 +262,6 @@ public class AlertConfigIT extends WebDriverIT {
                 .isEqualTo("noone@example.org, example@example.org");
     }
 
-    @Test
     public void shouldUpdateTransactionCountAlert() throws Exception {
         // given
         App app = app();
@@ -297,7 +289,6 @@ public class AlertConfigIT extends WebDriverIT {
                 + " equal to 3");
     }
 
-    @Test
     public void shouldUpdateTransactionCountLowerBoundAlert() throws Exception {
         // given
         App app = app();
@@ -323,7 +314,6 @@ public class AlertConfigIT extends WebDriverIT {
         clickLinkWithWait("Web - XYZ - transaction count over the last 2 minutes is equal to 0");
     }
 
-    @Test
     public void shouldUpdateTransactionTimeAlert() throws Exception {
         // given
         App app = app();
@@ -351,7 +341,6 @@ public class AlertConfigIT extends WebDriverIT {
                 + " to 1,000 milliseconds");
     }
 
-    @Test
     public void shouldUpdateErrorRateAlert() throws Exception {
         // given
         App app = app();
@@ -379,7 +368,6 @@ public class AlertConfigIT extends WebDriverIT {
                 "Web - error rate over the last 2 minutes is greater than or equal to 5 percent");
     }
 
-    @Test
     public void shouldUpdateGaugeAlert() throws Exception {
         // given
         App app = app();
@@ -407,7 +395,6 @@ public class AlertConfigIT extends WebDriverIT {
                 + " last 2 minutes is greater than or equal to 2.0 MB");
     }
 
-    @Test
     public void shouldUpdateGaugeLowerBoundAlert() throws Exception {
         // given
         App app = app();
@@ -435,7 +422,6 @@ public class AlertConfigIT extends WebDriverIT {
                 + " last 2 minutes is less than or equal to 2.0 MB");
     }
 
-    @Test
     public void shouldDeleteAlert() throws Exception {
         // given
         App app = app();

@@ -59,61 +59,42 @@ public class ControllerAspect {
     private static final FastThreadLocal</*@Nullable*/ String> webSocketTransactionName =
             new FastThreadLocal</*@Nullable*/ String>();
 
-    @Shim("org.springframework.web.servlet.mvc.method.RequestMappingInfo")
     public interface RequestMappingInfo {
-        @Shim("org.springframework.web.servlet.mvc.condition.PatternsRequestCondition"
-                + " getPatternsCondition()")
-        @Nullable
         PatternsRequestCondition glowroot$getPatternsCondition();
     }
 
-    @Shim("org.springframework.web.servlet.mvc.condition.PatternsRequestCondition")
     public interface PatternsRequestCondition {
-        @Nullable
         Set<String> getPatterns();
     }
 
-    @Shim("org.springframework.web.socket.WebSocketSession")
     public interface WebSocketSession {
-        @Nullable
         URI getUri();
     }
 
-    @Shim("org.springframework.messaging.handler.invocation.AbstractMethodMessageHandler")
     public interface AbstractMethodMessageHandler {
-        @Shim("java.lang.String getDestination(org.springframework.messaging.Message)")
-        @Nullable
         String glowroot$getDestination(Object message);
     }
 
-    @Shim("org.springframework.messaging.simp.SimpMessageMappingInfo")
     public interface SimpMessageMappingInfo {
-        @Shim("org.springframework.messaging.handler.DestinationPatternsMessageCondition"
-                + " getDestinationConditions()")
-        @Nullable
         DestinationPatternsMessageCondition glowroot$getDestinationConditions();
     }
 
-    @Shim("org.springframework.messaging.handler.DestinationPatternsMessageCondition")
     public interface DestinationPatternsMessageCondition {
-        @Nullable
         Set<String> getPatterns();
     }
 
     // the field and method names are verbose since they will be mixed in to existing classes
-    @Mixin({"org.springframework.messaging.support.ExecutorSubscribableChannel$SendTask",
-            "org.springframework.messaging.support.ExecutorSubscribableChannel$1"})
     public static class WithWebSocketUriImpl implements WithWebSocketUriMixin {
 
-        private transient @Nullable URI glowroot$webSocketUri;
+        private transient URI glowroot$webSocketUri;
 
         @Override
-        public @Nullable URI glowroot$getWebSocketUri() {
+        public URI glowroot$getWebSocketUri() {
             return glowroot$webSocketUri;
         }
 
         @Override
-        public void glowroot$setWebSocketUri(@Nullable URI uri) {
+        public void glowroot$setWebSocketUri(URI uri) {
             this.glowroot$webSocketUri = uri;
         }
     }
@@ -121,19 +102,14 @@ public class ControllerAspect {
     // the field and method names are verbose since they will be mixed in to existing classes
     public interface WithWebSocketUriMixin {
 
-        @Nullable
         URI glowroot$getWebSocketUri();
 
-        void glowroot$setWebSocketUri(@Nullable URI uri);
+        void glowroot$setWebSocketUri(URI uri);
     }
 
-    @Pointcut(className = "org.springframework.web.servlet.handler.AbstractHandlerMethodMapping",
-            methodName = "handleMatch", methodParameterTypes = {"java.lang.Object",
-                    "java.lang.String", "javax.servlet.http.HttpServletRequest"})
     public static class HandlerMethodMappingAdvice {
-        @OnBefore
         public static void onBefore(ThreadContext context,
-                @BindParameter @Nullable Object mapping) {
+                Object mapping) {
             if (useAltTransactionNaming.value()) {
                 return;
             }
@@ -168,13 +144,9 @@ public class ControllerAspect {
         }
     }
 
-    @Pointcut(className = "org.springframework.web.servlet.handler.AbstractUrlHandlerMapping",
-            methodName = "exposePathWithinMapping", methodParameterTypes = {"java.lang.String",
-                    "java.lang.String", "javax.servlet.http.HttpServletRequest"})
     public static class UrlHandlerMappingAdvice {
-        @OnBefore
         public static void onBefore(ThreadContext context,
-                @BindParameter @Nullable String bestMatchingPattern) {
+                String bestMatchingPattern) {
             if (useAltTransactionNaming.value()) {
                 return;
             }
@@ -196,15 +168,10 @@ public class ControllerAspect {
         }
     }
 
-    @Pointcut(classAnnotation = "org.springframework.stereotype.Controller"
-            + "|org.springframework.web.bind.annotation.RestController",
-            methodAnnotation = "org.springframework.web.bind.annotation.RequestMapping",
-            methodParameterTypes = {".."}, timerName = "spring controller")
     public static class ControllerAdvice {
         private static final TimerName timerName = Agent.getTimerName(ControllerAdvice.class);
-        @OnBefore
         public static TraceEntry onBefore(ThreadContext context,
-                @BindMethodMeta ControllerMethodMeta controllerMethodMeta) {
+                ControllerMethodMeta controllerMethodMeta) {
             if (useAltTransactionNaming.value()) {
                 context.setTransactionName(controllerMethodMeta.getAltTransactionName(),
                         Priority.CORE_PLUGIN);
@@ -213,73 +180,51 @@ public class ControllerAspect {
                     controllerMethodMeta.getControllerClassName(),
                     controllerMethodMeta.getMethodName()), timerName);
         }
-        @OnReturn
-        public static void onReturn(@BindTraveler TraceEntry traceEntry) {
+        public static void onReturn(TraceEntry traceEntry) {
             traceEntry.end();
         }
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler TraceEntry traceEntry) {
+        public static void onThrow(Throwable t,
+                TraceEntry traceEntry) {
             traceEntry.endWithError(t);
         }
     }
 
-    @Pointcut(className = "org.springframework.web.socket.WebSocketHandler",
-            methodName = "handleMessage",
-            methodParameterTypes = {"org.springframework.web.socket.WebSocketSession", ".."})
     public static class HandleMessageAdvice {
-        @OnBefore
-        public static Holder</*@Nullable*/ URI> onBefore(@BindParameter WebSocketSession session) {
+        public static Holder</*@Nullable*/ URI> onBefore(WebSocketSession session) {
             Holder</*@Nullable*/ URI> holder = webSocketUri.getHolder();
             holder.set(session.getUri());
             return holder;
         }
-        @OnAfter
-        public static void onAfter(@BindTraveler Holder</*@Nullable*/ URI> holder) {
+        public static void onAfter(Holder</*@Nullable*/ URI> holder) {
             holder.set(null);
         }
     }
 
-    @Pointcut(className = "org.springframework.messaging.support.ExecutorSubscribableChannel$*",
-            superTypeRestriction = "java.lang.Runnable", methodName = "<init>",
-            methodParameterTypes = {".."})
     public static class SendTaskInitAdvice {
-        @OnReturn
-        public static void onReturn(@BindReceiver WithWebSocketUriMixin withWebSocketUri) {
+        public static void onReturn(WithWebSocketUriMixin withWebSocketUri) {
             withWebSocketUri.glowroot$setWebSocketUri(webSocketUri.get());
         }
     }
 
-    @Pointcut(className = "org.springframework.messaging.support.ExecutorSubscribableChannel$*",
-            superTypeRestriction = "java.lang.Runnable", methodName = "run",
-            methodParameterTypes = {})
     public static class SendTaskRunAdvice {
-        @OnBefore
         public static Holder</*@Nullable*/ URI> onBefore(
-                @BindReceiver WithWebSocketUriMixin withWebSocketUri) {
+                WithWebSocketUriMixin withWebSocketUri) {
             Holder</*@Nullable*/ URI> holder = webSocketUri.getHolder();
             holder.set(withWebSocketUri.glowroot$getWebSocketUri());
             return holder;
         }
-        @OnAfter
-        public static void onAfter(@BindTraveler Holder</*@Nullable*/ URI> holder) {
+        public static void onAfter(Holder</*@Nullable*/ URI> holder) {
             holder.set(null);
         }
     }
 
-    @Pointcut(className = "org.springframework.messaging.simp.annotation.support"
-            + ".SimpAnnotationMethodMessageHandler", methodName = "handleMatch",
-            methodParameterTypes = {"java.lang.Object",
-                    "org.springframework.messaging.handler.HandlerMethod", "java.lang.String",
-                    "org.springframework.messaging.Message"})
     public static class WebSocketMappingAdvice {
-        @OnBefore
-        public static @Nullable Holder</*@Nullable*/ String> onBefore(
-                @BindParameter @Nullable Object mapping,
-                @SuppressWarnings("unused") @BindParameter @Nullable Object handlerMethod,
-                @BindParameter @Nullable String lookupDestination,
-                @BindParameter @Nullable Object message,
-                @BindReceiver AbstractMethodMessageHandler messageHandler) {
+        public static Holder</*@Nullable*/ String> onBefore(
+                Object mapping,
+                @SuppressWarnings("unused") Object handlerMethod,
+                String lookupDestination,
+                Object message,
+                AbstractMethodMessageHandler messageHandler) {
             if (useAltTransactionNaming.value()) {
                 return null;
             }
@@ -322,22 +267,17 @@ public class ControllerAspect {
             holder.set(sb.toString());
             return holder;
         }
-        @OnAfter
-        public static void onAfter(@BindTraveler @Nullable Holder</*@Nullable*/ String> holder) {
+        public static void onAfter(Holder</*@Nullable*/ String> holder) {
             if (holder != null) {
                 holder.set(null);
             }
         }
     }
 
-    @Pointcut(classAnnotation = "org.springframework.stereotype.Controller",
-            methodAnnotation = "org.springframework.messaging.handler.annotation.MessageMapping",
-            methodParameterTypes = {".."}, timerName = "spring websocket controller")
     public static class MessageMappingAdvice {
         private static final TimerName timerName = Agent.getTimerName(ControllerAdvice.class);
-        @OnBefore
         public static TraceEntry onBefore(OptionalThreadContext context,
-                @BindMethodMeta ControllerMethodMeta controllerMethodMeta) {
+                ControllerMethodMeta controllerMethodMeta) {
             String transactionName;
             if (useAltTransactionNaming.value()) {
                 transactionName = controllerMethodMeta.getAltTransactionName();
@@ -353,18 +293,16 @@ public class ControllerAspect {
                             controllerMethodMeta.getMethodName()),
                     timerName);
         }
-        @OnReturn
-        public static void onReturn(@BindTraveler TraceEntry traceEntry) {
+        public static void onReturn(TraceEntry traceEntry) {
             traceEntry.end();
         }
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler TraceEntry traceEntry) {
+        public static void onThrow(Throwable t,
+                TraceEntry traceEntry) {
             traceEntry.endWithError(t);
         }
     }
 
-    private static String getServletPath(@Nullable ServletRequestInfo servletRequestInfo) {
+    private static String getServletPath(ServletRequestInfo servletRequestInfo) {
         if (servletRequestInfo == null) {
             return "";
         }

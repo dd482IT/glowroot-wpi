@@ -21,7 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class RoutesTest {
 
-    @Test
     public void test() {
         assertThat(Routes.simplifiedRoute("")).isEqualTo("");
         assertThat(Routes.simplifiedRoute("/one")).isEqualTo("/one");

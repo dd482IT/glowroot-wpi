@@ -103,7 +103,7 @@ public class IncidentDao implements IncidentRepository {
     }
 
     @Override
-    public @Nullable OpenIncident readOpenIncident(String agentRollupId, AlertCondition condition,
+    public OpenIncident readOpenIncident(String agentRollupId, AlertCondition condition,
             AlertSeverity severity) throws Exception {
         BoundStatement boundStatement = readOpenIncidentPS.bind();
         int i = 0;

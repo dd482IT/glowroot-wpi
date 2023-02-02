@@ -91,14 +91,14 @@ class Util {
         runInternal(modulePath, test, new String[] {profile}, javaVersions);
     }
 
-    private static void runInternal(String modulePath, @Nullable String test, String[] profiles,
+    private static void runInternal(String modulePath, String test, String[] profiles,
             JavaVersion... javaVersions) throws Exception {
         for (JavaVersion javaVersion : javaVersions) {
             runTest(modulePath, test, javaVersion, profiles);
         }
     }
 
-    private static void runTest(String modulePath, @Nullable String test, JavaVersion javaVersion,
+    private static void runTest(String modulePath, String test, JavaVersion javaVersion,
             String... profiles) throws Exception {
         System.out.println(javaVersion);
         report.println(javaVersion);

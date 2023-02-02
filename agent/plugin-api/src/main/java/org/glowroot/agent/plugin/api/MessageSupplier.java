@@ -36,7 +36,7 @@ public abstract class MessageSupplier {
     /**
      * Creates a {@code MessageSupplier} for the specified {@code message}.
      */
-    public static MessageSupplier create(@Nullable final String message) {
+    public static MessageSupplier create(final String message) {
         return new MessageSupplier() {
             @Override
             public Message get() {
@@ -51,7 +51,7 @@ public abstract class MessageSupplier {
      * The {@code template} can contain one or more placeholders <code>{}</code> that will be
      * substituted if/when the message text is needed by the specified {@code args}.
      */
-    public static MessageSupplier create(final String template, final @Nullable String... args) {
+    public static MessageSupplier create(final String template, final String... args) {
         return new MessageSupplier() {
             @Override
             public Message get() {

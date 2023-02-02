@@ -91,7 +91,6 @@ public class AdviceOrderingTest {
             .hasBindOptionalThreadContext(false)
             .build();
 
-    @Test
     public void shouldCompare() {
         Ordering<Advice> ordering = Advice.ordering;
         assertThat(ordering.compare(advicePriority1, advicePriority2)).isNegative();
@@ -104,23 +103,15 @@ public class AdviceOrderingTest {
         assertThat(ordering.compare(adviceTimerNameEmpty2, adviceTimerNameEmpty1)).isZero();
     }
 
-    @Pointcut(className = "dummy", methodName = "dummy", methodParameterTypes = {}, timerName = "b",
-            order = 1)
     private static class OnlyForTheOrder1 {}
 
-    @Pointcut(className = "dummy", methodName = "dummy", methodParameterTypes = {}, timerName = "a",
-            order = 2)
     private static class OnlyForTheOrder2 {}
 
-    @Pointcut(className = "dummy", methodName = "dummy", methodParameterTypes = {}, timerName = "a")
     private static class OnlyForTheTimerNameA {}
 
-    @Pointcut(className = "dummy", methodName = "dummy", methodParameterTypes = {}, timerName = "b")
     private static class OnlyForTheTimerNameB {}
 
-    @Pointcut(className = "dummy", methodName = "dummy", methodParameterTypes = {})
     private static class OnlyForTheTimerNameEmpty1 {}
 
-    @Pointcut(className = "dummy", methodName = "dummy", methodParameterTypes = {})
     private static class OnlyForTheTimerNameEmpty2 {}
 }

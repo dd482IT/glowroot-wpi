@@ -124,7 +124,6 @@ public class Compilations {
         return new File(location.toURI());
     }
 
-    @VisibleForTesting
     static String getPublicClassName(String source) {
         Matcher matcher = CLASS_NAME_PATTERN.matcher(source);
         if (matcher.find()) {

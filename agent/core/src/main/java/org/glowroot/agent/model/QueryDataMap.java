@@ -28,7 +28,7 @@ public class QueryDataMap {
 
     // capacity must always be a power of 2, see comments in get() and put()
     private int capacity = 4;
-    private @Nullable Object[] table = new Object[capacity << 1];
+    private Object[] table = new Object[capacity << 1];
 
     private int size = 0;
     private int threshold = 3; // 0.75 * capacity
@@ -41,7 +41,7 @@ public class QueryDataMap {
         return type;
     }
 
-    public @Nullable SyncQueryData get(String key) {
+    public SyncQueryData get(String key) {
         // this mask requires capacity to be a power of 2
         int bucket = (key.hashCode() & (capacity - 1)) << 1;
         Object keyAtBucket = table[bucket];
@@ -63,7 +63,7 @@ public class QueryDataMap {
         putWithoutRehashCheck(key, value);
     }
 
-    private void putWithoutRehashCheck(Object key, @Nullable Object value) {
+    private void putWithoutRehashCheck(Object key, Object value) {
         // this mask requires capacity to be a power of 2
         int bucket = (key.hashCode() & (capacity - 1)) << 1;
         Object keyAtBucket = table[bucket];
@@ -75,9 +75,8 @@ public class QueryDataMap {
         putChained(key, value, bucket, keyAtBucket);
     }
 
-    private void putChained(Object key, @Nullable Object value, int bucket, Object keyAtBucket) {
+    private void putChained(Object key, Object value, int bucket, Object keyAtBucket) {
         if (keyAtBucket == CHAINED_KEY) {
-            @Nullable
             Object[] chain = (/*@Nullable*/ Object[]) checkNotNull(table[bucket + 1]);
             int chainLength = chain.length;
             for (int i = 0; i < chainLength; i += 2) {
@@ -87,7 +86,6 @@ public class QueryDataMap {
                     return;
                 }
             }
-            @Nullable
             Object[] newChain = new Object[chainLength << 1];
             System.arraycopy(chain, 0, newChain, 0, chainLength);
             newChain[chainLength] = key;
@@ -95,7 +93,6 @@ public class QueryDataMap {
             table[bucket + 1] = newChain;
             return;
         }
-        @Nullable
         Object[] chain = new Object[4];
         chain[0] = keyAtBucket;
         chain[1] = table[bucket + 1];
@@ -106,7 +103,6 @@ public class QueryDataMap {
     }
 
     private void rehash() {
-        @Nullable
         Object[] existingTable = table;
         capacity <<= 1;
         threshold <<= 1;
@@ -118,7 +114,6 @@ public class QueryDataMap {
                 continue;
             }
             if (key == CHAINED_KEY) {
-                @Nullable
                 Object[] values = (/*@Nullable*/ Object[]) checkNotNull(existingTable[i + 1]);
                 putChainedValues(values);
             } else {
@@ -137,8 +132,7 @@ public class QueryDataMap {
         }
     }
 
-    private static @Nullable SyncQueryData getChained(String key, Object value) {
-        @Nullable
+    private static SyncQueryData getChained(String key, Object value) {
         Object[] chainedTable = (/*@Nullable*/ Object[]) value;
         for (int i = 0; i < chainedTable.length; i += 2) {
             if (key.equals(chainedTable[i])) {

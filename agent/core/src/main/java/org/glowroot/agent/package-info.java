@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-@Styles.Standard
 package org.glowroot.agent;
 
 import org.glowroot.common.util.Styles;

@@ -42,22 +42,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(CassandraExtension.class)
 public class CassandraAsyncIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = CassandraExtension.getContainer();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldAsyncExecuteStatement() throws Exception {
         // when
         Trace trace = container.execute(ExecuteAsyncStatement.class);
@@ -90,7 +86,6 @@ public class CassandraAsyncIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldConcurrentlyAsyncExecuteSameStatement() throws Exception {
         // when
         Trace trace = container.execute(ConcurrentlyExecuteSameAsyncStatement.class);
@@ -124,7 +119,6 @@ public class CassandraAsyncIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldAsyncExecuteStatementReturningNoRecords() throws Exception {
         // when
         Trace trace = container.execute(ExecuteAsyncStatementReturningNoRecords.class);
@@ -158,7 +152,6 @@ public class CassandraAsyncIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldAsyncIterateUsingOneAndAll() throws Exception {
         // when
         Trace trace = container.execute(AsyncIterateUsingOneAndAll.class);
@@ -191,7 +184,6 @@ public class CassandraAsyncIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldAsyncExecuteBoundStatement() throws Exception {
         // when
         Trace trace = container.execute(AsyncExecuteBoundStatement.class);
@@ -225,7 +217,6 @@ public class CassandraAsyncIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldAsyncExecuteBatchStatement() throws Exception {
         // when
         Trace trace = container.execute(AsyncExecuteBatchStatement.class);

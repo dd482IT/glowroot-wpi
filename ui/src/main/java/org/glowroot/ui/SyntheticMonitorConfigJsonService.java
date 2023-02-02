@@ -48,14 +48,12 @@ import org.glowroot.wire.api.model.AgentConfigOuterClass.AgentConfig.SyntheticMo
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-@JsonService
 class SyntheticMonitorConfigJsonService {
 
     private static final ObjectMapper mapper = ObjectMappers.create();
 
     private static final Pattern encryptPattern = Pattern.compile("\"ENCRYPT:([^\"]*)\"");
 
-    @VisibleForTesting
     static final Ordering<SyntheticMonitorConfig> orderingByDisplay =
             new Ordering<SyntheticMonitorConfig>() {
                 @Override
@@ -72,10 +70,8 @@ class SyntheticMonitorConfigJsonService {
     }
 
     // central supports synthetic monitor configs on rollups
-    @GET(path = "/backend/config/synthetic-monitors",
-            permission = "agent:config:view:syntheticMonitor")
-    String getSyntheticMonitor(@BindAgentRollupId String agentRollupId,
-            @BindRequest SyntheticMonitorConfigRequest request) throws Exception {
+    String getSyntheticMonitor(String agentRollupId,
+            SyntheticMonitorConfigRequest request) throws Exception {
         Optional<String> id = request.id();
         if (id.isPresent()) {
             SyntheticMonitorConfig config =
@@ -97,10 +93,8 @@ class SyntheticMonitorConfigJsonService {
     }
 
     // central supports synthetic monitor configs on rollups
-    @POST(path = "/backend/config/synthetic-monitors/add",
-            permission = "agent:config:edit:syntheticMonitors")
-    String addSyntheticMonitor(@BindAgentRollupId String agentRollupId,
-            @BindRequest SyntheticMonitorConfigDto configDto)
+    String addSyntheticMonitor(String agentRollupId,
+            SyntheticMonitorConfigDto configDto)
             throws Exception {
         SyntheticMonitorConfig config;
         try {
@@ -124,10 +118,8 @@ class SyntheticMonitorConfigJsonService {
     }
 
     // central supports synthetic monitor configs on rollups
-    @POST(path = "/backend/config/synthetic-monitors/update",
-            permission = "agent:config:edit:syntheticMonitors")
-    String updateSyntheticMonitor(@BindAgentRollupId String agentRollupId,
-            @BindRequest SyntheticMonitorConfigDto configDto) throws Exception {
+    String updateSyntheticMonitor(String agentRollupId,
+            SyntheticMonitorConfigDto configDto) throws Exception {
         SyntheticMonitorConfig config;
         try {
             config = configDto.convert(configRepository.getLazySecretKey());
@@ -144,14 +136,12 @@ class SyntheticMonitorConfigJsonService {
     }
 
     // central supports synthetic monitor configs on rollups
-    @POST(path = "/backend/config/synthetic-monitors/remove",
-            permission = "agent:config:edit:syntheticMonitors")
-    void removeSyntheticMonitor(@BindAgentRollupId String agentRollupId,
-            @BindRequest SyntheticMonitorConfigRequest request) throws Exception {
+    void removeSyntheticMonitor(String agentRollupId,
+            SyntheticMonitorConfigRequest request) throws Exception {
         configRepository.deleteSyntheticMonitorConfig(agentRollupId, request.id().get());
     }
 
-    private static @Nullable String validate(SyntheticMonitorConfig config) throws Exception {
+    private static String validate(SyntheticMonitorConfig config) throws Exception {
         if (config.getKind() == SyntheticMonitorKind.JAVA) {
             // only used by central
             Class<?> javaSource;
@@ -204,12 +194,10 @@ class SyntheticMonitorConfigJsonService {
         return sb.toString();
     }
 
-    @Value.Immutable
     interface SyntheticMonitorConfigRequest {
         Optional<String> id();
     }
 
-    @Value.Immutable
     abstract static class SyntheticMonitorConfigListDto {
 
         abstract String display();
@@ -223,13 +211,12 @@ class SyntheticMonitorConfigJsonService {
         }
     }
 
-    @Value.Immutable
     abstract static class SyntheticMonitorConfigDto {
 
         abstract SyntheticMonitorKind kind();
-        abstract @Nullable String display();
-        abstract @Nullable String pingUrl();
-        abstract @Nullable String javaSource();
+        abstract String display();
+        abstract String pingUrl();
+        abstract String javaSource();
         abstract Optional<String> id(); // absent for insert operations
         abstract Optional<String> version(); // absent for insert operations
 

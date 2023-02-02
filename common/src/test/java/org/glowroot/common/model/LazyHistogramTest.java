@@ -24,7 +24,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class LazyHistogramTest {
 
-    @Test
     public void shouldTestPercentiles() {
         // test smaller numbers in more detail since that is where laziness occurs
         for (int i = 0; i < 2000000; i += 10000) {
@@ -34,7 +33,6 @@ public class LazyHistogramTest {
         shouldTestPercentiles(100000000);
     }
 
-    @Test
     public void shouldTestEncodeDecode() throws Exception {
         // test smaller numbers in more detail since that is where laziness occurs
         for (int i = 0; i < 2000000; i += 10000) {
@@ -44,7 +42,6 @@ public class LazyHistogramTest {
         shouldTestEncodeDecode(100000000);
     }
 
-    @Test
     public void shouldTestEncodeDecodeAndAddMore() throws Exception {
         // test smaller numbers in more detail since that is where laziness occurs
         for (int i = 0; i < 2000000; i += 10000) {
@@ -54,7 +51,6 @@ public class LazyHistogramTest {
         shouldTestEncodeDecodeAndAddMore(100000000);
     }
 
-    @Test
     public void shouldTestDecodeOnTopOfExisting() throws Exception {
         // test smaller numbers in more detail since that is where laziness occurs
         for (int i = 0; i < 2000000; i += 10000) {

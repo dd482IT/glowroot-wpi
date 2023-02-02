@@ -79,7 +79,7 @@ public class LiveTraceRepositoryImpl implements LiveTraceRepository {
     }
 
     @Override
-    public @Nullable Entries getEntries(String agentId, String traceId) {
+    public Entries getEntries(String agentId, String traceId) {
         for (Transaction transaction : Iterables.concat(transactionRegistry.getTransactions(),
                 traceCollector.getPendingTransactions())) {
             if (transaction.getTraceId().equals(traceId)) {
@@ -96,7 +96,7 @@ public class LiveTraceRepositoryImpl implements LiveTraceRepository {
     }
 
     @Override
-    public @Nullable Queries getQueries(String agentId, String traceId) {
+    public Queries getQueries(String agentId, String traceId) {
         for (Transaction transaction : Iterables.concat(transactionRegistry.getTransactions(),
                 traceCollector.getPendingTransactions())) {
             if (transaction.getTraceId().equals(traceId)) {
@@ -111,7 +111,7 @@ public class LiveTraceRepositoryImpl implements LiveTraceRepository {
     }
 
     @Override
-    public @Nullable Profile getMainThreadProfile(String agentId, String traceId) {
+    public Profile getMainThreadProfile(String agentId, String traceId) {
         for (Transaction transaction : Iterables.concat(transactionRegistry.getTransactions(),
                 traceCollector.getPendingTransactions())) {
             if (transaction.getTraceId().equals(traceId)) {
@@ -122,7 +122,7 @@ public class LiveTraceRepositoryImpl implements LiveTraceRepository {
     }
 
     @Override
-    public @Nullable Profile getAuxThreadProfile(String agentId, String traceId) {
+    public Profile getAuxThreadProfile(String agentId, String traceId) {
         for (Transaction transaction : Iterables.concat(transactionRegistry.getTransactions(),
                 traceCollector.getPendingTransactions())) {
             if (transaction.getTraceId().equals(traceId)) {
@@ -133,7 +133,7 @@ public class LiveTraceRepositoryImpl implements LiveTraceRepository {
     }
 
     @Override
-    public @Nullable Trace getFullTrace(String agentId, String traceId) throws Exception {
+    public Trace getFullTrace(String agentId, String traceId) throws Exception {
         for (Transaction transaction : Iterables.concat(transactionRegistry.getTransactions(),
                 traceCollector.getPendingTransactions())) {
             if (transaction.getTraceId().equals(traceId)) {
@@ -162,7 +162,7 @@ public class LiveTraceRepositoryImpl implements LiveTraceRepository {
     }
 
     @Override
-    public int getMatchingTraceCount(String transactionType, @Nullable String transactionName) {
+    public int getMatchingTraceCount(String transactionType, String transactionName) {
         // include active traces, this is mostly for the case where there is just a single very
         // long running active trace and it would be misleading to display Traces (0) on the tab
         int count = 0;
@@ -179,7 +179,7 @@ public class LiveTraceRepositoryImpl implements LiveTraceRepository {
 
     @Override
     public List<TracePoint> getMatchingActiveTracePoints(TraceKind traceKind,
-            String transactionType, @Nullable String transactionName, TracePointFilter filter,
+            String transactionType, String transactionName, TracePointFilter filter,
             int limit, long captureTime, long captureTick) {
         List<TracePoint> activeTracePoints = Lists.newArrayList();
         for (Transaction transaction : transactionRegistry.getTransactions()) {
@@ -200,7 +200,7 @@ public class LiveTraceRepositoryImpl implements LiveTraceRepository {
         Collections.sort(activeTracePoints,
                 Ordering.natural().reverse().onResultOf(new Function<TracePoint, Long>() {
                     @Override
-                    public Long apply(@Nullable TracePoint tracePoint) {
+                    public Long apply(TracePoint tracePoint) {
                         checkNotNull(tracePoint);
                         return tracePoint.durationNanos();
                     }
@@ -213,7 +213,7 @@ public class LiveTraceRepositoryImpl implements LiveTraceRepository {
 
     @Override
     public List<TracePoint> getMatchingPendingPoints(TraceKind traceKind, String transactionType,
-            @Nullable String transactionName, TracePointFilter filter, long captureTime) {
+            String transactionName, TracePointFilter filter, long captureTime) {
         List<TracePoint> points = Lists.newArrayList();
         for (Transaction transaction : traceCollector.getPendingTransactions()) {
             if (matches(transaction, traceKind, transactionType, transactionName, filter)) {
@@ -244,9 +244,8 @@ public class LiveTraceRepositoryImpl implements LiveTraceRepository {
         return transactionTypes;
     }
 
-    @VisibleForTesting
     boolean matchesActive(Transaction transaction, String transactionType,
-            @Nullable String transactionName) {
+            String transactionName) {
         if (!traceCollector.shouldStoreSlow(transaction)) {
             return false;
         }
@@ -278,7 +277,7 @@ public class LiveTraceRepositoryImpl implements LiveTraceRepository {
     }
 
     private boolean matches(Transaction transaction, TraceKind traceKind, String transactionType,
-            @Nullable String transactionName, TracePointFilter filter) {
+            String transactionName, TracePointFilter filter) {
         ErrorMessage errorMessage = transaction.getErrorMessage();
         return matchesKind(transaction, traceKind)
                 && matchesTransactionType(transaction, transactionType)
@@ -304,7 +303,7 @@ public class LiveTraceRepositoryImpl implements LiveTraceRepository {
     }
 
     private static boolean matchesTransactionName(Transaction transaction,
-            @Nullable String transactionName) {
+            String transactionName) {
         return transactionName == null || transactionName.equals(transaction.getTransactionName());
     }
 
@@ -313,8 +312,8 @@ public class LiveTraceRepositoryImpl implements LiveTraceRepository {
         private final List<Trace.Entry> entries = Lists.newArrayList();
         private List<Aggregate.Query> queries = ImmutableList.of();
         private List<String> sharedQueryTexts = ImmutableList.of();
-        private @Nullable Profile mainThreadProfile;
-        private @Nullable Profile auxThreadProfile;
+        private Profile mainThreadProfile;
+        private Profile auxThreadProfile;
         private Trace. /*@Nullable*/ Header header;
 
         @Override

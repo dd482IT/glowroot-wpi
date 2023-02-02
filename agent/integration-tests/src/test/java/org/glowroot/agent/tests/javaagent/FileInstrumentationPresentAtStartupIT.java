@@ -35,7 +35,6 @@ public class FileInstrumentationPresentAtStartupIT {
     protected static Container container;
     private static File testDir;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         testDir = TempDirs.createTempDir("glowroot-test-dir");
         container = Containers.create(testDir);
@@ -57,18 +56,15 @@ public class FileInstrumentationPresentAtStartupIT {
         container = Containers.create(testDir);
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
         TempDirs.deleteRecursively(testDir);
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldExecute1() throws Exception {
         // just verify that set up / tear down doesn't fail
     }

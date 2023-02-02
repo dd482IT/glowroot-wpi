@@ -28,37 +28,31 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class BeansTest {
 
-    @Test
     public void shouldCallGetterMethod() throws Exception {
         String value = (String) Beans.value(new SomeObject(), ImmutableList.of("one"));
         assertThat(value).isEqualTo("1");
     }
 
-    @Test
     public void shouldCallBooleanGetterMethod() throws Exception {
         boolean value = (Boolean) Beans.value(new SomeObject(), ImmutableList.of("two"));
         assertThat(value).isTrue();
     }
 
-    @Test
     public void shouldCallNonGetterMethod() throws Exception {
         String value = (String) Beans.value(new SomeObject(), ImmutableList.of("three"));
         assertThat(value).isEqualTo("3");
     }
 
-    @Test
     public void shouldGetField() throws Exception {
         String value = (String) Beans.value(new SomeObject(), ImmutableList.of("four"));
         assertThat(value).isEqualTo("4");
     }
 
-    @Test
     public void shouldGetOnNullObject() throws Exception {
         String value = (String) Beans.value(null, ImmutableList.of("one"));
         assertThat(value).isNull();
     }
 
-    @Test
     public void shouldCallMethodOnPackagePrivateClass() throws Exception {
         List<String> list = Lists.newArrayList();
         list = Collections.synchronizedList(list);
@@ -66,20 +60,17 @@ public class BeansTest {
         assertThat(size).isEqualTo(0);
     }
 
-    @Test
     public void shouldGetList() throws Exception {
         @SuppressWarnings("unchecked")
         List<String> value = (List<String>) Beans.value(new SomeObject(), ImmutableList.of("five"));
         assertThat(value).containsExactly("a", "x", "z");
     }
 
-    @Test
     public void shouldGetListSize() throws Exception {
         Integer value = (Integer) Beans.value(new SomeObject(), ImmutableList.of("five", "size"));
         assertThat(value).isEqualTo(3);
     }
 
-    @Test
     public void shouldGetListValues() throws Exception {
         @SuppressWarnings("unchecked")
         List<String> value =
@@ -87,26 +78,22 @@ public class BeansTest {
         assertThat(value).containsExactly("first", "second");
     }
 
-    @Test
     public void shouldGetArray() throws Exception {
         String[] value = (String[]) Beans.value(new SomeObject(), ImmutableList.of("seven"));
         assertThat(value).containsExactly("a", "x", "z");
     }
 
-    @Test
     public void shouldGetArrayLength() throws Exception {
         Integer value =
                 (Integer) Beans.value(new SomeObject(), ImmutableList.of("seven", "length"));
         assertThat(value).isEqualTo(3);
     }
 
-    @Test
     public void shouldGetArrayValues() throws Exception {
         Object[] value = (Object[]) Beans.value(new SomeObject(), ImmutableList.of("eight", "z"));
         assertThat(value).containsExactly("first", "second");
     }
 
-    @Test
     public void shouldGetMap() throws Exception {
         @SuppressWarnings("unchecked")
         Map<String, String> value =
@@ -114,19 +101,16 @@ public class BeansTest {
         assertThat(value).isEqualTo(ImmutableMap.of("a", "b", "c", "d", "e", "f"));
     }
 
-    @Test
     public void shouldGetMapSize() throws Exception {
         Integer value = (Integer) Beans.value(new SomeObject(), ImmutableList.of("nine", "size"));
         assertThat(value).isEqualTo(3);
     }
 
-    @Test
     public void shouldGetMapValue() throws Exception {
         String value = (String) Beans.value(new SomeObject(), ImmutableList.of("nine", "a"));
         assertThat(value).isEqualTo("b");
     }
 
-    @Test
     public void shouldGetMapNestedValue() throws Exception {
         String value = (String) Beans.value(new SomeObject(), ImmutableList.of("ten", "a", "z"));
         assertThat(value).isEqualTo("first");

@@ -88,7 +88,6 @@ public interface AggregateRepository {
     void mergeAuxThreadProfilesInto(String agentRollupId, AggregateQuery query,
             ProfileCollector collector) throws Exception;
 
-    @Nullable
     String readFullQueryText(String agentRollupId, String fullQueryTextSha1) throws Exception;
 
     // query.from() is non-inclusive

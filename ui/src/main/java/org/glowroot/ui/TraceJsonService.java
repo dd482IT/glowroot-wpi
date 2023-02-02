@@ -19,7 +19,6 @@ import org.immutables.value.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@JsonService
 class TraceJsonService {
 
     private static final Logger logger = LoggerFactory.getLogger(TraceJsonService.class);
@@ -31,8 +30,7 @@ class TraceJsonService {
     }
 
     // see special case for "agent:trace" permission in Authentication.isPermitted()
-    @GET(path = "/backend/trace/header", permission = "agent:trace")
-    String getHeader(@BindAgentId String agentId, @BindRequest HeaderRequest request)
+    String getHeader(String agentId, HeaderRequest request)
             throws Exception {
         String headerJson = traceCommonService.getHeaderJson(agentId, request.traceId(),
                 request.checkLiveTraces());
@@ -45,10 +43,8 @@ class TraceJsonService {
         }
     }
 
-    @Value.Immutable
     abstract static class HeaderRequest {
         abstract String traceId();
-        @Value.Default
         boolean checkLiveTraces() {
             return false;
         }

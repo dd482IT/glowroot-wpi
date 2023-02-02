@@ -37,7 +37,7 @@ class PreparedStatementMirror extends StatementMirror {
     private boolean parametersShared;
     // ok for this field to be non-volatile since it is only temporary storage for a single thread
     // while that thread is setting parameter values into the prepared statement and executing it
-    private @Nullable Collection<BindParameterList> batchedParameters;
+    private Collection<BindParameterList> batchedParameters;
     private int batchSize;
 
     PreparedStatementMirror(String sql) {
@@ -65,7 +65,6 @@ class PreparedStatementMirror extends StatementMirror {
         }
     }
 
-    @Nullable
     BindParameterList getParameters() {
         parametersShared = true;
         return parameters;
@@ -80,7 +79,7 @@ class PreparedStatementMirror extends StatementMirror {
     }
 
     // remember parameterIndex starts at 1 not 0
-    void setParameterValue(int parameterIndex, @Nullable Object object) {
+    void setParameterValue(int parameterIndex, Object object) {
         if (parametersShared) {
             // separate method for less common path to not impact inlining budget of fast(er) path
             copyParameters();

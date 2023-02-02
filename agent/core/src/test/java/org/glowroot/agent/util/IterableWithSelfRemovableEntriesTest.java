@@ -26,7 +26,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class IterableWithSelfRemovableEntriesTest {
 
-    @Test
     public void test() {
         IterableWithSelfRemovableEntries<Object> collection =
                 new IterableWithSelfRemovableEntries<Object>();

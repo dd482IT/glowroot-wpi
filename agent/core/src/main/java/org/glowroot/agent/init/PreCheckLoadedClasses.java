@@ -81,7 +81,7 @@ public class PreCheckLoadedClasses {
 
     public static class PreCheckClassFileTransformer implements ClassFileTransformer {
 
-        private static volatile @MonotonicNonNull Logger logger;
+        private static volatile Logger logger;
 
         private final Set<String> importantInternalNames;
         private final String shadeProofJulLoggerInternalName =
@@ -103,9 +103,9 @@ public class PreCheckLoadedClasses {
         }
 
         @Override
-        public byte /*@Nullable*/ [] transform(@Nullable ClassLoader loader,
-                @Nullable String className, @Nullable Class<?> classBeingRedefined,
-                @Nullable ProtectionDomain protectionDomain, byte[] bytes) {
+        public byte /*@Nullable*/ [] transform(ClassLoader loader,
+                String className, Class<?> classBeingRedefined,
+                ProtectionDomain protectionDomain, byte[] bytes) {
             try {
                 if (className == null) {
                     return null;

@@ -50,75 +50,60 @@ public interface TraceRepository {
             throws Exception;
 
     // null return value means trace not found
-    @Nullable
     HeaderPlus readHeaderPlus(String agentId, String traceId) throws Exception;
 
     // null return value means trace not found or was found but had no entries
     //
     // SharedQueryTexts are returned with either fullTrace or
     // truncatedText/truncatedEndText/fullTraceSha1
-    @Nullable
     Entries readEntries(String agentId, String traceId) throws Exception;
 
     // null return value means trace not found or was found but had no queries
     //
     // SharedQueryTexts are returned with either fullTrace or
     // truncatedText/truncatedEndText/fullTraceSha1
-    @Nullable
     Queries readQueries(String agentId, String traceId) throws Exception;
 
     // null return value means trace not found or was found but had no entries
     //
     // since this is only used by export, SharedQueryTexts are always returned with fullTrace
     // (never with truncatedText/truncatedEndText/fullTraceSha1)
-    @Nullable
     EntriesAndQueries readEntriesAndQueriesForExport(String agentId, String traceId)
             throws Exception;
 
     // null return value means trace not found or was found but had no main thread profile
-    @Nullable
     Profile readMainThreadProfile(String agentId, String traceId) throws Exception;
 
     // null return value means trace not found or was found but had no aux thread profile
-    @Nullable
     Profile readAuxThreadProfile(String agentId, String traceId) throws Exception;
 
-    @Value.Immutable
     interface TraceQuery {
         String transactionType();
-        @Nullable
         String transactionName();
         long from();
         long to();
     }
 
-    @Value.Immutable
     interface ErrorMessageFilter {
         List<String> includes();
         List<String> excludes();
     }
 
-    @Value.Immutable
     interface ErrorMessageResult {
         List<ErrorMessagePoint> points();
         Result<ErrorMessageCount> counts();
     }
 
-    @Value.Immutable
-    @Styles.AllParameters
     interface ErrorMessagePoint {
         long captureTime();
         long errorCount();
     }
 
-    @Value.Immutable
-    @Styles.AllParameters
     interface ErrorMessageCount {
         String message();
         long count();
     }
 
-    @Value.Immutable
     interface HeaderPlus {
         Trace.Header header();
         Existence entriesExistence();

@@ -35,7 +35,6 @@ public class LogManagerIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         // this test only passes when glowroot is shaded, since otherwise the unshaded guava library
         // uses and initializes java.util.logging before
@@ -46,7 +45,6 @@ public class LogManagerIT {
                 .of("-Djava.util.logging.manager=" + CustomLogManager.class.getName()));
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         // need null check in case assumption is false in setUp()
         if (container != null) {
@@ -54,12 +52,10 @@ public class LogManagerIT {
         }
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldTest() throws Exception {
         // given
         // when

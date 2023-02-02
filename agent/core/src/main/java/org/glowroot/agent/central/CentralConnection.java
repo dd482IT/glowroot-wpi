@@ -81,7 +81,7 @@ class CentralConnection {
     private volatile boolean initCallSucceeded;
     private volatile boolean closed;
 
-    CentralConnection(String collectorAddress, @Nullable String collectorAuthority,
+    CentralConnection(String collectorAddress, String collectorAuthority,
             List<File> confDirs, AtomicBoolean inConnectionFailure) throws SSLException {
         ParsedCollectorAddress parsedCollectorAddress = parseCollectorAddress(collectorAddress);
         channelExecutor =
@@ -202,14 +202,12 @@ class CentralConnection {
         }
     }
 
-    @OnlyUsedByTests
     void close() {
         closed = true;
         retryExecutor.shutdown();
         channel.shutdown();
     }
 
-    @OnlyUsedByTests
     void awaitClose() throws InterruptedException {
         if (!retryExecutor.awaitTermination(10, SECONDS)) {
             throw new IllegalStateException("Could not terminate executor");
@@ -269,7 +267,7 @@ class CentralConnection {
                 .build();
     }
 
-    private static @Nullable File getTrustCertCollectionFile(List<File> confDirs) {
+    private static File getTrustCertCollectionFile(List<File> confDirs) {
         for (File confDir : confDirs) {
             File confFile = new File(confDir, "grpc-trusted-root-certs.pem");
             if (confFile.exists()) {
@@ -279,13 +277,11 @@ class CentralConnection {
         return null;
     }
 
-    @Value.Immutable
     interface ParsedCollectorAddress {
         boolean https();
         List<CollectorTarget> targets();
     }
 
-    @Value.Immutable
     interface CollectorTarget {
         String host();
         int port();

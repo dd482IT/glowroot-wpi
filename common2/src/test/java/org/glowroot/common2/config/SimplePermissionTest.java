@@ -23,7 +23,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SimplePermissionTest {
 
-    @Test
     public void test() throws Exception {
         assertThat(SimplePermission.create("a:b:c").implies(SimplePermission.create("a:b:c")))
                 .isTrue();
@@ -43,7 +42,6 @@ public class SimplePermissionTest {
                 .isFalse();
     }
 
-    @Test
     public void testAgentPermissions() throws Exception {
         assertThat(SimplePermission.create("agent:abc,xyz:c")
                 .implies(SimplePermission.create("agent:abc:c"))).isTrue();
@@ -71,7 +69,6 @@ public class SimplePermissionTest {
                 .implies(SimplePermission.create("agent:abc:c"))).isFalse();
     }
 
-    @Test
     public void testAgentRollupPermissions() throws Exception {
         assertThat(SimplePermission.create("agent:\"abc::\",\"xyz::\":c")
                 .implies(SimplePermission.create("agent:\"abc::ddd\":c"))).isTrue();

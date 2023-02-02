@@ -37,167 +37,112 @@ public class ObjectPoolAspect {
     private static final BooleanProperty captureConnectionPoolLeakDetails =
             configService.getBooleanProperty("captureConnectionPoolLeakDetails");
 
-    @Pointcut(
-            className = "org.apache.commons.pool.impl.GenericObjectPool"
-                    + "|org.apache.commons.pool2.impl.GenericObjectPool",
-            methodName = "borrowObject", methodParameterTypes = {".."})
     public static class DbcpBorrowAdvice {
-        @IsEnabled
         public static boolean isEnabled() {
             return captureConnectionPoolLeaks.value();
         }
-        @OnReturn
-        public static void onReturn(@BindReturn @Nullable Object resource, ThreadContext context) {
+        public static void onReturn(Object resource, ThreadContext context) {
             if (resource != null) {
                 context.trackResourceAcquired(resource, captureConnectionPoolLeakDetails.value());
             }
         }
     }
 
-    @Pointcut(
-            className = "org.apache.commons.pool.impl.GenericObjectPool"
-                    + "|org.apache.commons.pool2.impl.GenericObjectPool",
-            methodName = "returnObject|invalidateObject",
-            methodParameterTypes = {"java.lang.Object"})
     public static class DbcpReturnAdvice {
-        @IsEnabled
         public static boolean isEnabled() {
             return captureConnectionPoolLeaks.value();
         }
-        @OnReturn
         public static void onReturn(ThreadContext context,
-                @BindParameter @Nullable Object resource) {
+                Object resource) {
             if (resource != null) {
                 context.trackResourceReleased(resource);
             }
         }
     }
 
-    @Pointcut(
-            className = "org.apache.tomcat.jdbc.pool.ConnectionPool",
-            methodName = "borrowConnection", methodParameterTypes = {".."})
     public static class TomcatBorrowAdvice {
-        @IsEnabled
         public static boolean isEnabled() {
             return captureConnectionPoolLeaks.value();
         }
-        @OnReturn
-        public static void onReturn(@BindReturn @Nullable Object resource, ThreadContext context) {
+        public static void onReturn(Object resource, ThreadContext context) {
             if (resource != null) {
                 context.trackResourceAcquired(resource, captureConnectionPoolLeakDetails.value());
             }
         }
     }
 
-    @Pointcut(
-            className = "org.apache.tomcat.jdbc.pool.ConnectionPool",
-            methodName = "returnConnection",
-            methodParameterTypes = {"org.apache.tomcat.jdbc.pool.PooledConnection"})
     public static class TomcatReturnAdvice {
-        @IsEnabled
         public static boolean isEnabled() {
             return captureConnectionPoolLeaks.value();
         }
-        @OnReturn
         public static void onReturn(ThreadContext context,
-                @BindParameter @Nullable Object resource) {
+                Object resource) {
             if (resource != null) {
                 context.trackResourceReleased(resource);
             }
         }
     }
 
-    @Pointcut(
-            className = "com.sun.gjc.spi.ManagedConnectionImpl", methodName = "getConnection",
-            methodParameterTypes = {"javax.security.auth.Subject",
-                    "javax.resource.spi.ConnectionRequestInfo"})
     public static class GlassfishBorrowAdvice {
-        @IsEnabled
         public static boolean isEnabled() {
             return captureConnectionPoolLeaks.value();
         }
-        @OnReturn
-        public static void onReturn(@BindReturn @Nullable Object resource, ThreadContext context) {
+        public static void onReturn(Object resource, ThreadContext context) {
             if (resource != null) {
                 context.trackResourceAcquired(resource, captureConnectionPoolLeakDetails.value());
             }
         }
     }
 
-    @Pointcut(
-            className = "com.sun.gjc.spi.ManagedConnectionImpl", methodName = "connectionClosed",
-            methodParameterTypes = {"java.lang.Exception", "com.sun.gjc.spi.base.ConnectionHolder"})
     public static class GlassfishReturnAdvice {
-        @IsEnabled
         public static boolean isEnabled() {
             return captureConnectionPoolLeaks.value();
         }
-        @OnReturn
         public static void onReturn(ThreadContext context,
-                @SuppressWarnings("unused") @BindParameter @Nullable Exception e,
-                @BindParameter Object connectionHolder) {
+                @SuppressWarnings("unused") Exception e,
+                Object connectionHolder) {
             if (connectionHolder != null) {
                 context.trackResourceReleased(connectionHolder);
             }
         }
     }
 
-    @Pointcut(
-            className = "com.zaxxer.hikari.pool.BaseHikariPool", methodName = "getConnection",
-            methodParameterTypes = {"long"})
     public static class HikariBorrowAdvice {
-        @IsEnabled
         public static boolean isEnabled() {
             return captureConnectionPoolLeaks.value();
         }
-        @OnReturn
-        public static void onReturn(@BindReturn @Nullable Object resource, ThreadContext context) {
+        public static void onReturn(Object resource, ThreadContext context) {
             if (resource != null) {
                 context.trackResourceAcquired(resource, captureConnectionPoolLeakDetails.value());
             }
         }
     }
 
-    @Pointcut(
-            className = "com.zaxxer.hikari.proxy.ConnectionProxy", methodName = "close",
-            methodParameterTypes = {})
     public static class HikariReturnAdvice {
-        @IsEnabled
         public static boolean isEnabled() {
             return captureConnectionPoolLeaks.value();
         }
-        @OnReturn
-        public static void onReturn(ThreadContext context, @BindReceiver Object connectionProxy) {
+        public static void onReturn(ThreadContext context, Object connectionProxy) {
             context.trackResourceReleased(connectionProxy);
         }
     }
 
-    @Pointcut(
-            className = "bitronix.tm.resource.jdbc.PoolingDataSource", methodName = "getConnection",
-            methodParameterTypes = {})
     public static class BitronixBorrowAdvice {
-        @IsEnabled
         public static boolean isEnabled() {
             return captureConnectionPoolLeaks.value();
         }
-        @OnReturn
-        public static void onReturn(@BindReturn @Nullable Object resource, ThreadContext context) {
+        public static void onReturn(Object resource, ThreadContext context) {
             if (resource != null) {
                 context.trackResourceAcquired(resource, captureConnectionPoolLeakDetails.value());
             }
         }
     }
 
-    @Pointcut(
-            className = "bitronix.tm.resource.jdbc.proxy.ConnectionJavaProxy", methodName = "close",
-            methodParameterTypes = {})
     public static class BitronixReturnAdvice {
-        @IsEnabled
         public static boolean isEnabled() {
             return captureConnectionPoolLeaks.value();
         }
-        @OnReturn
-        public static void onReturn(ThreadContext context, @BindReceiver Object connectionProxy) {
+        public static void onReturn(ThreadContext context, Object connectionProxy) {
             context.trackResourceReleased(connectionProxy);
         }
     }

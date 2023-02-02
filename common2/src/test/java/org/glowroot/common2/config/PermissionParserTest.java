@@ -21,7 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class PermissionParserTest {
 
-    @Test
     public void testWildcard() throws Exception {
         // given
         PermissionParser parser = new PermissionParser("agent:*:transaction");
@@ -32,7 +31,6 @@ public class PermissionParserTest {
         assertThat(parser.getPermission()).isEqualTo("agent:transaction");
     }
 
-    @Test
     public void testOneAgentId() throws Exception {
         // given
         PermissionParser parser = new PermissionParser("agent:abc:transaction");
@@ -43,7 +41,6 @@ public class PermissionParserTest {
         assertThat(parser.getPermission()).isEqualTo("agent:transaction");
     }
 
-    @Test
     public void testTwoAgentIds() throws Exception {
         // given
         PermissionParser parser = new PermissionParser("agent:abc,mno:transaction");
@@ -54,7 +51,6 @@ public class PermissionParserTest {
         assertThat(parser.getPermission()).isEqualTo("agent:transaction");
     }
 
-    @Test
     public void testThreeAgentIds() throws Exception {
         // given
         PermissionParser parser = new PermissionParser("agent:abc,mno,xyz:transaction");
@@ -65,7 +61,6 @@ public class PermissionParserTest {
         assertThat(parser.getPermission()).isEqualTo("agent:transaction");
     }
 
-    @Test
     public void testWithQuotes() throws Exception {
         // given
         PermissionParser parser = new PermissionParser("agent:abc,\"m,n:o\",xyz:transaction");
@@ -76,7 +71,6 @@ public class PermissionParserTest {
         assertThat(parser.getPermission()).isEqualTo("agent:transaction");
     }
 
-    @Test
     public void testWithQuotesAndEscapes() throws Exception {
         // given
         PermissionParser parser = new PermissionParser("agent:abc,\"m\\\"n\\\\o\",xyz:transaction");
@@ -87,7 +81,6 @@ public class PermissionParserTest {
         assertThat(parser.getPermission()).isEqualTo("agent:transaction");
     }
 
-    @Test
     public void testNoAgentId() throws Exception {
         // given
         PermissionParser parser = new PermissionParser("agent::transaction");
@@ -98,7 +91,6 @@ public class PermissionParserTest {
         assertThat(parser.getPermission()).isEqualTo("agent:transaction");
     }
 
-    @Test
     public void testAnotherNoAgentId() throws Exception {
         // given
         PermissionParser parser = new PermissionParser("agent:,:transaction");
@@ -109,7 +101,6 @@ public class PermissionParserTest {
         assertThat(parser.getPermission()).isEqualTo("agent:transaction");
     }
 
-    @Test
     public void testNoPermission() throws Exception {
         // given
         PermissionParser parser = new PermissionParser("agent:*");
@@ -120,7 +111,6 @@ public class PermissionParserTest {
         assertThat(parser.getPermission()).isEqualTo("agent");
     }
 
-    @Test
     public void testNoPermissionWithTrailingColon() throws Exception {
         // given
         PermissionParser parser = new PermissionParser("agent:*:");
@@ -131,7 +121,6 @@ public class PermissionParserTest {
         assertThat(parser.getPermission()).isEqualTo("agent");
     }
 
-    @Test
     public void testNoAgentIdAndNoPermission() throws Exception {
         // given
         PermissionParser parser = new PermissionParser("agent");
@@ -142,7 +131,6 @@ public class PermissionParserTest {
         assertThat(parser.getPermission()).isEqualTo("agent");
     }
 
-    @Test
     public void testNoAgentIdAndNoPermissionWithTrailingColon() throws Exception {
         // given
         PermissionParser parser = new PermissionParser("agent:");

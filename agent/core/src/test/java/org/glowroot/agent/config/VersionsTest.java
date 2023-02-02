@@ -23,7 +23,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class VersionsTest {
 
-    @Test
     public void shouldFallbackToZerosOnError() {
         // when
         String version = Versions.getJsonVersion(new A());

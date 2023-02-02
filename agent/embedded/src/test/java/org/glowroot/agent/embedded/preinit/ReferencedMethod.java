@@ -61,7 +61,7 @@ public class ReferencedMethod implements Comparable<ReferencedMethod> {
     }
 
     @Override
-    public boolean equals(@Nullable Object obj) {
+    public boolean equals(Object obj) {
         if (obj == this) {
             return true;
         }

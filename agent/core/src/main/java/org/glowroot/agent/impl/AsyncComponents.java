@@ -44,10 +44,8 @@ class AsyncComponents {
     // async root timers are the root timers which do not have corresponding thread context
     // (those corresponding to async trace entries)
     private final Object asyncTimerLock = new Object();
-    @GuardedBy("asyncTimerLock")
-    private @MonotonicNonNull List<AsyncTimer> asyncTimers;
-    @GuardedBy("asyncTimerLock")
-    private @MonotonicNonNull Map<String, MergedAsyncTimer> alreadyMergedAsyncTimers;
+    private List<AsyncTimer> asyncTimers;
+    private Map<String, MergedAsyncTimer> alreadyMergedAsyncTimers;
 
     private final int maxQueryAggregates;
     private final int maxServiceCallAggregates;

@@ -26,20 +26,20 @@ public class OkHttpClientCallInvoker {
 
     private static final Logger logger = Logger.getLogger(OkHttpClientCallInvoker.class);
 
-    private final @Nullable Field originalRequestField;
+    private final Field originalRequestField;
 
     public OkHttpClientCallInvoker(ClassInfo classInfo) {
         originalRequestField = getRequestField(classInfo.getLoader());
     }
 
-    public @Nullable Object getOriginalRequest(Object call) {
+    public Object getOriginalRequest(Object call) {
         if (originalRequestField == null) {
             return null;
         }
         return Reflection.getFieldValue(originalRequestField, call);
     }
 
-    private static @Nullable Field getRequestField(@Nullable ClassLoader loader) {
+    private static Field getRequestField(ClassLoader loader) {
         Class<?> callClass =
                 Reflection.getClassWithWarnIfNotFound("com.squareup.okhttp.Call", loader);
         if (callClass == null) {

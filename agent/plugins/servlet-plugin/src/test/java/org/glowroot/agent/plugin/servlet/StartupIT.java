@@ -51,22 +51,18 @@ public class StartupIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void testServletContextInitialized() throws Exception {
         // when
         Trace trace = container.execute(TestServletContextListener.class);
@@ -82,7 +78,6 @@ public class StartupIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testServletInit() throws Exception {
         // when
         Trace trace = container.execute(TestServletInit.class);
@@ -98,7 +93,6 @@ public class StartupIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testFilterInit() throws Exception {
         // when
         Trace trace = container.execute(TestFilterInit.class);
@@ -113,7 +107,6 @@ public class StartupIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testContainerInitializer() throws Exception {
         // when
         Trace trace = container.execute(TestServletContainerInitializer.class);

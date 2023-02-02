@@ -36,7 +36,6 @@ import org.glowroot.wire.api.model.ProfileOuterClass.Profile.ProfileNode;
 import org.glowroot.wire.api.model.Proto;
 import org.glowroot.wire.api.model.TraceOuterClass.Trace;
 
-@Styles.Private
 public class TraceCreator {
 
     private TraceCreator() {}
@@ -258,7 +257,7 @@ public class TraceCreator {
             return update;
         }
 
-        private static long getProfileSampleCount(@Nullable Profile profile) {
+        private static long getProfileSampleCount(Profile profile) {
             if (profile == null) {
                 return 0;
             }

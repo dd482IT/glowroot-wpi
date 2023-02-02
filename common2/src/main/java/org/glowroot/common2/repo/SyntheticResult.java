@@ -19,7 +19,6 @@ import java.util.List;
 
 import org.immutables.value.Value;
 
-@Value.Immutable
 public interface SyntheticResult {
 
     long captureTime();
@@ -27,7 +26,6 @@ public interface SyntheticResult {
     long executionCount();
     List<ErrorInterval> errorIntervals();
 
-    @Value.Immutable
     public interface ErrorInterval {
 
         long from();

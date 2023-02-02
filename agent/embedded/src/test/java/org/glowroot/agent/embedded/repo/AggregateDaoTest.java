@@ -53,7 +53,6 @@ import static org.mockito.Mockito.when;
 
 // this is not an integration test (*IT.java) since then it would run against shaded agent and fail
 // due to shading issues
-@Styles.Private
 public class AggregateDaoTest {
 
     private static final String AGENT_ID = "";
@@ -64,7 +63,6 @@ public class AggregateDaoTest {
     private CappedDatabase cappedDatabase;
     private AggregateDao aggregateDao;
 
-    @BeforeEach
     public void beforeEachTest() throws Exception {
         dataSource = new DataSource();
         if (dataSource.tableExists("overall_point")) {
@@ -90,7 +88,6 @@ public class AggregateDaoTest {
                 configRepository, mock(TransactionTypeDao.class), mock(FullQueryTextDao.class));
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         scheduledExecutor.shutdownNow();
         dataSource.close();
@@ -98,7 +95,6 @@ public class AggregateDaoTest {
         cappedFile.delete();
     }
 
-    @Test
     public void shouldReadTransactions() throws Exception {
         // given
         populateAggregates();

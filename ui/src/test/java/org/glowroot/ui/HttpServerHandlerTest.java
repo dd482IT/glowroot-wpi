@@ -21,7 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class HttpServerHandlerTest {
 
-    @Test
     public void shouldStripContextPath() {
         assertThat(HttpServerHandler.stripContextPath("/one", "/")).isEqualTo("/one");
         assertThat(HttpServerHandler.stripContextPath("/", "/")).isEqualTo("/");

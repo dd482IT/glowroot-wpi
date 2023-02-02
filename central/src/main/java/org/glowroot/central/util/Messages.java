@@ -44,7 +44,7 @@ public class Messages {
     }
 
     public static <T extends /*@NonNull*/ AbstractMessage> List<T> parseDelimitedFrom(
-            @Nullable ByteBuffer byteBuf, Parser<T> parser) throws IOException {
+            ByteBuffer byteBuf, Parser<T> parser) throws IOException {
         if (byteBuf == null) {
             return ImmutableList.of();
         }

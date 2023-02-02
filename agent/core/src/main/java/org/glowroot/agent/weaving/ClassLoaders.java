@@ -188,7 +188,6 @@ class ClassLoaders {
         }
     }
 
-    @Value.Immutable
     public interface LazyDefinedClass {
         Type type();
         byte[] bytes();

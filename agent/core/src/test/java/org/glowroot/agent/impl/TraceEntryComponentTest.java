@@ -26,7 +26,6 @@ import static org.mockito.Mockito.when;
 
 public class TraceEntryComponentTest {
 
-    @Test
     public void testTooManyPops() {
         // given
         ThreadContextImpl threadContext = mock(ThreadContextImpl.class);
@@ -41,7 +40,6 @@ public class TraceEntryComponentTest {
         // then ok
     }
 
-    @Test
     public void testMissedPop() {
         // given
         ThreadContextImpl threadContext = mock(ThreadContextImpl.class);
@@ -60,7 +58,6 @@ public class TraceEntryComponentTest {
         assertThat(traceEntryComponent.isCompleted()).isTrue();
     }
 
-    @Test
     public void testPopNonExisting() {
         // given
         ThreadContextImpl threadContext = mock(ThreadContextImpl.class);

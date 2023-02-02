@@ -30,23 +30,20 @@ import org.glowroot.common.util.Throwables;
 import org.glowroot.wire.api.model.Proto;
 import org.glowroot.wire.api.model.Proto.Throwable;
 
-@Value.Immutable
 public abstract class ErrorMessage {
 
     private static final int TRANSACTION_THROWABLE_FRAME_LIMIT =
             Integer.getInteger("glowroot.transaction.throwable.frame.limit", 100000);
 
-    @Value.Parameter
     public abstract String message();
 
     // cannot use Proto. /*@Nullable*/ Throwable
     // or org.glowroot.wire.api.model.Proto. /*@Nullable*/ Throwable here because Immutables needs
     // to be able to see the annotation
-    @Value.Parameter
-    public abstract @Nullable Throwable throwable();
+    public abstract Throwable throwable();
 
     // accepts null values so callers don't have to check if passing it in from elsewhere
-    public static ErrorMessage create(@Nullable String message,
+    public static ErrorMessage create(String message,
             java.lang. /*@Nullable*/ Throwable t, AtomicInteger transactionThrowableFrameCount) {
         if (t == null) {
             return ImmutableErrorMessage.of(Strings.nullToEmpty(message), null);
@@ -59,7 +56,7 @@ public abstract class ErrorMessage {
     }
 
     private static Proto.Throwable buildThrowableInfo(java.lang.Throwable t,
-            @Nullable List<StackTraceElement> causedStackTrace,
+            List<StackTraceElement> causedStackTrace,
             AtomicInteger transactionThrowableFrameCount, int recursionDepth) {
         StackTraceElement[] stackTraceElements =
                 MoreObjects.firstNonNull(t.getStackTrace(), new StackTraceElement[0]);
@@ -119,7 +116,7 @@ public abstract class ErrorMessage {
 
     private static StackTraceWithoutCommonFrames getStackTraceAndFramesInCommon(
             StackTraceElement[] stackTraceElements,
-            @Nullable List<StackTraceElement> causedStackTrace,
+            List<StackTraceElement> causedStackTrace,
             AtomicInteger transactionThrowableFrameCount) {
         if (transactionThrowableFrameCount.get() >= TRANSACTION_THROWABLE_FRAME_LIMIT) {
             return ImmutableStackTraceWithoutCommonFrames.builder()
@@ -153,12 +150,10 @@ public abstract class ErrorMessage {
                 .build();
     }
 
-    @Value.Immutable
     abstract static class StackTraceWithoutCommonFrames {
 
         abstract List<StackTraceElement> stackTrace();
 
-        @Value.Default
         public int framesInCommonWithEnclosing() {
             return 0;
         }

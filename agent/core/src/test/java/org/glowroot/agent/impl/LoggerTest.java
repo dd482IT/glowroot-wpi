@@ -28,7 +28,6 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 public class LoggerTest {
 
-    @Test
     public void testName() {
         // given
         org.slf4j.Logger slf4jLogger = mock(org.slf4j.Logger.class);
@@ -42,7 +41,6 @@ public class LoggerTest {
         verifyNoMoreInteractions(slf4jLogger);
     }
 
-    @Test
     public void testTraceMethods() {
         // given
         org.slf4j.Logger slf4jLogger = mock(org.slf4j.Logger.class);
@@ -68,7 +66,6 @@ public class LoggerTest {
         verifyNoMoreInteractions(slf4jLogger);
     }
 
-    @Test
     public void testDebugMethods() {
         // given
         org.slf4j.Logger slf4jLogger = mock(org.slf4j.Logger.class);
@@ -94,7 +91,6 @@ public class LoggerTest {
         verifyNoMoreInteractions(slf4jLogger);
     }
 
-    @Test
     public void testInfoMethods() {
         // given
         org.slf4j.Logger slf4jLogger = mock(org.slf4j.Logger.class);
@@ -120,7 +116,6 @@ public class LoggerTest {
         verifyNoMoreInteractions(slf4jLogger);
     }
 
-    @Test
     public void testWarnMethods() {
         // given
         org.slf4j.Logger slf4jLogger = mock(org.slf4j.Logger.class);
@@ -146,7 +141,6 @@ public class LoggerTest {
         verifyNoMoreInteractions(slf4jLogger);
     }
 
-    @Test
     public void testErrorMethods() {
         // given
         org.slf4j.Logger slf4jLogger = mock(org.slf4j.Logger.class);

@@ -35,7 +35,7 @@ public class GenericMessageSupplier extends MessageSupplier {
     private final String methodName;
 
     public static GenericMessageSupplier create(MessageTemplateImpl template, Object receiver,
-            String methodName, @Nullable Object... args) {
+            String methodName, Object... args) {
         // render paths to strings immediately in case the objects are mutable
         String[] resolvedReceiverPathParts = new String[template.getThisPathParts().size()];
         int i = 0;
@@ -64,7 +64,7 @@ public class GenericMessageSupplier extends MessageSupplier {
         this.methodName = methodName;
     }
 
-    private void setReturnValue(@Nullable Object returnValue) {
+    private void setReturnValue(Object returnValue) {
         // render the return value to strings immediately in case it is mutable
         String[] parts = new String[template.getReturnPathParts().size()];
         int i = 0;
@@ -111,7 +111,7 @@ public class GenericMessageSupplier extends MessageSupplier {
         return sb.toString();
     }
 
-    public static void updateWithReturnValue(TraceEntry traceEntry, @Nullable Object returnValue) {
+    public static void updateWithReturnValue(TraceEntry traceEntry, Object returnValue) {
         GenericMessageSupplier messageSupplier =
                 (GenericMessageSupplier) traceEntry.getMessageSupplier();
         if (messageSupplier != null) {

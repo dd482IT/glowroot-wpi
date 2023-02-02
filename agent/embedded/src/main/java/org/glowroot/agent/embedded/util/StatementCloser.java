@@ -25,7 +25,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 class StatementCloser {
 
     private final Statement statement;
-    private @Nullable Throwable thrown;
+    private Throwable thrown;
 
     StatementCloser(Statement statement) {
         this.statement = statement;

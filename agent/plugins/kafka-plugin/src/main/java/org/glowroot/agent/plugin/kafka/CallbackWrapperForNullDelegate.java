@@ -30,7 +30,7 @@ public class CallbackWrapperForNullDelegate implements Callback {
     }
 
     @Override
-    public void onCompletion(@Nullable RecordMetadata metadata, @Nullable Exception exception) {
+    public void onCompletion(RecordMetadata metadata, Exception exception) {
         if (exception == null) {
             asyncTraceEntry.end();
         } else {

@@ -148,7 +148,6 @@ public class TraceCollector {
         return pendingTransactions;
     }
 
-    @OnlyUsedByTests
     public void close() throws InterruptedException {
         closed = true;
         // shutdownNow() is needed here to send interrupt to collector thread
@@ -207,14 +206,14 @@ public class TraceCollector {
         }
     }
 
-    private static @Nullable Long getSlowThreshold(
+    private static Long getSlowThreshold(
             SlowThresholdOverridesForType slowThresholdOverridesForType, String transactionName) {
         Long slowThreshold = slowThresholdOverridesForType.thresholdNanos().get(transactionName);
         return slowThreshold == null ? slowThresholdOverridesForType.defaultThresholdNanos()
                 : slowThreshold;
     }
 
-    private static @Nullable Long getSlowThreshold(
+    private static Long getSlowThreshold(
             SlowThresholdOverridesForUser slowThresholdOverridesForUser, String transactionName) {
         Long slowThreshold = slowThresholdOverridesForUser.thresholdNanos().get(transactionName);
         return slowThreshold == null ? slowThresholdOverridesForUser.defaultThresholdNanos()
@@ -322,31 +321,26 @@ public class TraceCollector {
         }
     }
 
-    @Value.Immutable
     public interface PendingTrace {
         Transaction transaction();
         boolean slow();
         boolean partial();
     }
 
-    @Value.Immutable
     interface SlowThresholdOverridesForType {
-        @Nullable
         Long defaultThresholdNanos();
         Map<String, Long> thresholdNanos();
         Map<String, SlowThresholdOverridesForUser> userThresholds(); // key is user
     }
 
-    @Value.Immutable
     interface SlowThresholdOverridesForUser {
-        @Nullable
         Long defaultThresholdNanos();
         Map<String, Long> thresholdNanos();
     }
 
     private static class SlowThresholdOverridesForTypeBuilder {
 
-        private @Nullable Long defaultThresholdNanos;
+        private Long defaultThresholdNanos;
         private Map<String, SlowThresholdOverridesForUserBuilder> userThresholdNanos =
                 Maps.newHashMap();
         private Map<String, Long> thresholdNanos = Maps.newHashMap();
@@ -366,7 +360,7 @@ public class TraceCollector {
 
     private static class SlowThresholdOverridesForUserBuilder {
 
-        private @Nullable Long defaultThresholdNanos;
+        private Long defaultThresholdNanos;
         private Map<String, Long> thresholdNanos = Maps.newHashMap();
 
         private SlowThresholdOverridesForUser toImmutable() {

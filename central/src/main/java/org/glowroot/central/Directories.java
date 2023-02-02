@@ -59,7 +59,7 @@ class Directories {
     }
 
     // similar method from agent org.glowroot.agent.Directories
-    private static @Nullable File getDir(String shortName, Properties props)
+    private static File getDir(String shortName, Properties props)
             throws IOException {
         String dirPath = System.getProperty("glowroot." + shortName + ".dir");
         if (dirPath == null || dirPath.isEmpty()) {

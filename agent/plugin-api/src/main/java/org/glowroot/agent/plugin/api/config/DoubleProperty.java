@@ -19,6 +19,5 @@ import org.glowroot.agent.plugin.api.checker.Nullable;
 
 public interface DoubleProperty {
 
-    @Nullable
     Double value();
 }

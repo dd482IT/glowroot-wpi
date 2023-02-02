@@ -73,7 +73,7 @@ public class AdminConfigService {
     private volatile HealthchecksIoConfig healthchecksIoConfig;
 
     public static AdminConfigService create(List<File> confDirs, boolean configReadOnly,
-            @Nullable Integer webPortOverride) {
+            Integer webPortOverride) {
         AdminConfigService configService =
                 new AdminConfigService(confDirs, configReadOnly, webPortOverride);
         // it's nice to update config.json on startup if it is missing some/all config
@@ -87,7 +87,7 @@ public class AdminConfigService {
     }
 
     private AdminConfigService(List<File> confDirs, boolean configReadOnly,
-            @Nullable Integer webPortOverride) {
+            Integer webPortOverride) {
         adminConfigFile = new AdminConfigFile(confDirs, configReadOnly);
         ImmutableEmbeddedAdminGeneralConfig generalConfig =
                 adminConfigFile.getConfig("general", ImmutableEmbeddedAdminGeneralConfig.class);
@@ -349,7 +349,6 @@ public class AdminConfigService {
         adminConfigFile.writeConfigsOnStartup(configs);
     }
 
-    @OnlyUsedByTests
     public void resetAdminConfigForTests() throws IOException {
         generalConfig = ImmutableEmbeddedAdminGeneralConfig.builder().build();
         userConfigs = ImmutableList.<UserConfig>of(ImmutableUserConfig.builder()

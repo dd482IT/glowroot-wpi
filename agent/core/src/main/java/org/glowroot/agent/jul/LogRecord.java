@@ -21,45 +21,45 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class LogRecord {
 
-    private @Nullable String loggerName;
-    private @Nullable ResourceBundle resourceBundle;
-    private @Nullable String resourceBundleName;
+    private String loggerName;
+    private ResourceBundle resourceBundle;
+    private String resourceBundleName;
     private Level level;
     private long sequenceNumber;
-    private @Nullable String sourceClassName;
-    private @Nullable String sourceMethodName;
-    private @Nullable String message;
-    private @Nullable Object /*@Nullable*/ [] parameters;
+    private String sourceClassName;
+    private String sourceMethodName;
+    private String message;
+    private Object /*@Nullable*/ [] parameters;
     private int threadID;
     private long millis;
-    private @Nullable Throwable thrown;
+    private Throwable thrown;
 
     public LogRecord(Level level, String message) {
         this.level = level;
         this.message = message;
     }
 
-    public @Nullable String getLoggerName() {
+    public String getLoggerName() {
         return loggerName;
     }
 
-    public void setLoggerName(@Nullable String loggerName) {
+    public void setLoggerName(String loggerName) {
         this.loggerName = loggerName;
     }
 
-    public @Nullable ResourceBundle getResourceBundle() {
+    public ResourceBundle getResourceBundle() {
         return resourceBundle;
     }
 
-    public void setResourceBundle(@Nullable ResourceBundle resourceBundle) {
+    public void setResourceBundle(ResourceBundle resourceBundle) {
         this.resourceBundle = resourceBundle;
     }
 
-    public @Nullable String getResourceBundleName() {
+    public String getResourceBundleName() {
         return resourceBundleName;
     }
 
-    public void setResourceBundleName(@Nullable String resourceBundleName) {
+    public void setResourceBundleName(String resourceBundleName) {
         this.resourceBundleName = resourceBundleName;
     }
 
@@ -79,35 +79,35 @@ public class LogRecord {
         this.sequenceNumber = sequenceNumber;
     }
 
-    public @Nullable String getSourceClassName() {
+    public String getSourceClassName() {
         return sourceClassName;
     }
 
-    public void setSourceClassName(@Nullable String sourceClassName) {
+    public void setSourceClassName(String sourceClassName) {
         this.sourceClassName = sourceClassName;
     }
 
-    public @Nullable String getSourceMethodName() {
+    public String getSourceMethodName() {
         return sourceMethodName;
     }
 
-    public void setSourceMethodName(@Nullable String sourceMethodName) {
+    public void setSourceMethodName(String sourceMethodName) {
         this.sourceMethodName = sourceMethodName;
     }
 
-    public @Nullable String getMessage() {
+    public String getMessage() {
         return message;
     }
 
-    public void setMessage(@Nullable String message) {
+    public void setMessage(String message) {
         this.message = message;
     }
 
-    public @Nullable Object /*@Nullable*/ [] getParameters() {
+    public Object /*@Nullable*/ [] getParameters() {
         return parameters;
     }
 
-    public void setParameters(@Nullable Object /*@Nullable*/ [] parameters) {
+    public void setParameters(Object /*@Nullable*/ [] parameters) {
         this.parameters = parameters;
     }
 
@@ -127,11 +127,11 @@ public class LogRecord {
         this.millis = millis;
     }
 
-    public @Nullable Throwable getThrown() {
+    public Throwable getThrown() {
         return thrown;
     }
 
-    public void setThrown(@Nullable Throwable thrown) {
+    public void setThrown(Throwable thrown) {
         this.thrown = thrown;
     }
 }

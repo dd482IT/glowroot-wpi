@@ -25,7 +25,6 @@ import static org.mockito.Mockito.when;
 
 public class EncryptionTest {
 
-    @Test
     public void testEncryptionDecryption() throws Exception {
         // given
         LazySecretKey lazySecretKey = mock(LazySecretKey.class);

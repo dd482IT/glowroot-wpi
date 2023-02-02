@@ -45,22 +45,18 @@ public class JdbcPluginIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void testCallableStatement() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureBindParametersIncludes",
@@ -84,7 +80,6 @@ public class JdbcPluginIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testWithoutResultSetValueTimerNormal() throws Exception {
         // when
         Trace trace = container.execute(ExecuteStatementAndIterateOverResults.class);
@@ -94,7 +89,6 @@ public class JdbcPluginIT {
         assertThat(found).isFalse();
     }
 
-    @Test
     public void testWithResultSetValueTimerNormal() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureResultSetGet", true);
@@ -105,7 +99,6 @@ public class JdbcPluginIT {
         assertThat(found).isFalse();
     }
 
-    @Test
     public void testWithoutResultSetValueTimerUnderSeparateTraceEntry() throws Exception {
         // when
         Trace trace = container.execute(GetResultSetValueUnderSeparateTraceEntry.class);
@@ -114,7 +107,6 @@ public class JdbcPluginIT {
         assertThat(found).isFalse();
     }
 
-    @Test
     public void testWithResultSetValueTimerUnderSeparateTraceEntry() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureResultSetGet", true);
@@ -125,7 +117,6 @@ public class JdbcPluginIT {
         assertThat(found).isTrue();
     }
 
-    @Test
     public void testResultSetValueTimerUsingColumnName() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureResultSetGet", true);
@@ -136,7 +127,6 @@ public class JdbcPluginIT {
         assertThat(found).isFalse();
     }
 
-    @Test
     public void testResultSetValueTimerUsingColumnNameUnderSeparateTraceEntry() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureResultSetGet", true);
@@ -148,7 +138,6 @@ public class JdbcPluginIT {
         assertThat(found).isTrue();
     }
 
-    @Test
     public void testWithResultSetNavigateTimerNormal() throws Exception {
         // when
         Trace trace = container.execute(ExecuteStatementAndIterateOverResults.class);
@@ -157,7 +146,6 @@ public class JdbcPluginIT {
         assertThat(found).isFalse();
     }
 
-    @Test
     public void testWithResultSetNavigateTimerUnderSeparateTraceEntry() throws Exception {
         // when
         Trace trace = container.execute(IterateOverResultsUnderSeparateTraceEntry.class);
@@ -166,7 +154,6 @@ public class JdbcPluginIT {
         assertThat(found).isTrue();
     }
 
-    @Test
     public void testWithoutResultSetNavigateTimerUnderSeparateTraceEntry() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureResultSetNavigate",
@@ -178,7 +165,6 @@ public class JdbcPluginIT {
         assertThat(found).isFalse();
     }
 
-    @Test
     public void testDefaultStackTraceThreshold() throws Exception {
         // when
         Trace trace = container.execute(ExecuteStatementAndIterateOverResults.class);
@@ -199,7 +185,6 @@ public class JdbcPluginIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testZeroStackTraceThreshold() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "stackTraceThresholdMillis", 0.0);
@@ -223,7 +208,6 @@ public class JdbcPluginIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testNullStackTraceThreshold() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "stackTraceThresholdMillis",

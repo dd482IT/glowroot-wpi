@@ -23,6 +23,5 @@ public interface TraceDao extends TraceRepository {
 
     void store(String agentId, Trace trace) throws Exception;
 
-    @OnlyUsedByTests
     void truncateAll() throws Exception;
 }

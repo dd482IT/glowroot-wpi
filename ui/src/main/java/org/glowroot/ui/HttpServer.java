@@ -68,9 +68,9 @@ class HttpServer {
 
     private final boolean offlineViewer;
 
-    private volatile @Nullable SslContext sslContext;
-    private volatile @MonotonicNonNull Channel serverChannel;
-    private volatile @MonotonicNonNull Integer port;
+    private volatile SslContext sslContext;
+    private volatile Channel serverChannel;
+    private volatile Integer port;
 
     HttpServer(String bindAddress, boolean https, Supplier<String> contextPathSupplier,
             int numWorkerThreads, CommonHandler commonHandler, List<File> confDirs, boolean central,
@@ -156,7 +156,6 @@ class HttpServer {
         }
     }
 
-    @RequiresNonNull("serverChannel")
     private void onBindSuccess() {
         port = ((InetSocketAddress) serverChannel.localAddress()).getPort();
         String listener = offlineViewer ? "Offline viewer" : "UI";
@@ -176,7 +175,6 @@ class HttpServer {
         return bindAddress;
     }
 
-    @Nullable
     Integer getPort() {
         return port;
     }
@@ -270,7 +268,7 @@ class HttpServer {
                 + " grpc) was not found under '" + confDir.getAbsolutePath() + "'");
     }
 
-    private static @Nullable File getHttpsConfFile(List<File> confDirs, String fileName) {
+    private static File getHttpsConfFile(List<File> confDirs, String fileName) {
         for (File confDir : confDirs) {
             File confFile = new File(confDir, fileName);
             if (confFile.exists()) {

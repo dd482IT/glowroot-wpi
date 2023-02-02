@@ -36,7 +36,6 @@ public class RoleDaoIT {
     private static ClusterManager clusterManager;
     private static RoleDao roleDao;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         SharedSetupRunListener.startCassandra();
         cluster = Clusters.newCluster();
@@ -46,7 +45,6 @@ public class RoleDaoIT {
         roleDao = new RoleDao(session, clusterManager);
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         clusterManager.close();
         session.close();
@@ -54,7 +52,6 @@ public class RoleDaoIT {
         SharedSetupRunListener.stopCassandra();
     }
 
-    @Test
     public void shouldRead() throws Exception {
         // given
         roleDao.insert(ImmutableRoleConfig.builder()

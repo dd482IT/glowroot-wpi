@@ -40,22 +40,18 @@ public class TimerIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldReadTimers() throws Exception {
         // when
         Trace trace = container.execute(ShouldGenerateTraceWithTimers.class);
@@ -67,7 +63,6 @@ public class TimerIT {
         assertThat(rootTimer.getName()).isEqualTo("mock trace marker");
     }
 
-    @Test
     public void shouldReadTimersWithRootAndSelfNested() throws Exception {
         // when
         Trace trace = container.execute(ShouldGenerateTraceWithRootAndSelfNestedTimer.class);
@@ -80,7 +75,6 @@ public class TimerIT {
         assertThat(rootTimer.getCount()).isEqualTo(1);
     }
 
-    @Test
     public void shouldReadActiveTimers() throws Exception {
         // given
         container.getConfigService().updateAdvancedConfig(

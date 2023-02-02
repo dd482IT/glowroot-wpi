@@ -47,7 +47,6 @@ public class IncidentDaoIT {
     private static Session session;
     private static IncidentDao incidentDao;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         SharedSetupRunListener.startCassandra();
         cluster = Clusters.newCluster();
@@ -59,20 +58,17 @@ public class IncidentDaoIT {
         incidentDao = new IncidentDao(session, clock);
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         session.close();
         cluster.close();
         SharedSetupRunListener.stopCassandra();
     }
 
-    @BeforeEach
     public void beforeEach() throws Exception {
         session.updateSchemaWithRetry("truncate open_incident");
         session.updateSchemaWithRetry("truncate resolved_incident");
     }
 
-    @Test
     public void shouldNotExist() throws Exception {
         AlertCondition alertCondition = AlertCondition.newBuilder()
                 .setHeartbeatCondition(HeartbeatCondition.newBuilder()
@@ -82,7 +78,6 @@ public class IncidentDaoIT {
                 .isNull();
     }
 
-    @Test
     public void shouldExistAfterInsert() throws Exception {
         // given
         AlertCondition alertCondition = AlertCondition.newBuilder()
@@ -107,7 +102,6 @@ public class IncidentDaoIT {
         assertThat(openIncident.openTime()).isEqualTo(123);
     }
 
-    @Test
     public void shouldNotBeOpenAfterClose() throws Exception {
         // given
         AlertCondition alertCondition = AlertCondition.newBuilder()
@@ -125,7 +119,6 @@ public class IncidentDaoIT {
                 .isNull();
     }
 
-    @Test
     public void shouldBeClosedAfterClose() throws Exception {
         // given
         AlertCondition alertCondition = AlertCondition.newBuilder()
@@ -144,7 +137,6 @@ public class IncidentDaoIT {
         assertThat(resolvedIncidents.get(0).condition()).isEqualTo(alertCondition);
     }
 
-    @Test
     public void shouldReadAll() throws Exception {
         // given
         AlertCondition alertCondition = AlertCondition.newBuilder()

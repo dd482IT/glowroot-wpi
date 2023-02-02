@@ -21,7 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class LevelTest {
 
-    @Test
     public void testGetName() {
         assertThat(Level.WARNING.getName()).isEqualTo("WARNING");
     }

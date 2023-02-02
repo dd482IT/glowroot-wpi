@@ -43,7 +43,6 @@ public class MethodHandleRelatedCrashIT {
     private static File testDir;
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         // javascript engine was removed in Java 15, but this test is only important for Java 8 anyways
         assumeJava8();
@@ -54,7 +53,6 @@ public class MethodHandleRelatedCrashIT {
         container = new JavaagentContainer(testDir, true, ImmutableList.<String>of());
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         // need null check in case assumption is false in setUp()
         if (container != null) {
@@ -65,12 +63,10 @@ public class MethodHandleRelatedCrashIT {
         }
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldNotCrashJvm() throws Exception {
         container.executeNoExpectedTrace(ShouldNotCrashJvm.class);
     }

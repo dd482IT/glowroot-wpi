@@ -41,58 +41,47 @@ public class ServletDispatcherIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void testForwardServlet() throws Exception {
         testForwardServlet("", InvokeForwardServlet.class);
     }
 
-    @Test
     public void testForwardServletWithContextPath() throws Exception {
         testForwardServlet("/zzz", InvokeForwardServletWithContextPath.class);
     }
 
-    @Test
     public void testForwardServletUsingContext() throws Exception {
         testForwardServletUsingContext("", InvokeForwardServletUsingContext.class);
     }
 
-    @Test
     public void testForwardServletUsingContextWithContextPath() throws Exception {
         testForwardServletUsingContext("/zzz",
                 InvokeForwardServletUsingContextWithContextPath.class);
     }
 
-    @Test
     public void testForwardServletUsingNamed() throws Exception {
         testForwardServletUsingNamed("", InvokeForwardServletUsingNamed.class);
     }
 
-    @Test
     public void testForwardServletUsingNamedWithContextPath() throws Exception {
         testForwardServletUsingNamed("/zzz", InvokeForwardServletUsingNamedWithContextPath.class);
     }
 
-    @Test
     public void testIncludeServlet() throws Exception {
         testIncludeServlet("", InvokeIncludeServlet.class);
     }
 
-    @Test
     public void testIncludeServletWithContextPath() throws Exception {
         testIncludeServlet("/zzz", InvokeIncludeServletWithContextPath.class);
     }
@@ -304,7 +293,6 @@ public class ServletDispatcherIT {
         }
     }
 
-    @WebServlet(value = "/first-forward", loadOnStartup = 0)
     @SuppressWarnings("serial")
     public static class FirstForwardServlet extends HttpServlet {
         @Override
@@ -314,7 +302,6 @@ public class ServletDispatcherIT {
         }
     }
 
-    @WebServlet(value = "/first-forward-using-context", loadOnStartup = 0)
     @SuppressWarnings("serial")
     public static class FirstForwardUsingContextServlet extends HttpServlet {
         @Override
@@ -324,7 +311,6 @@ public class ServletDispatcherIT {
         }
     }
 
-    @WebServlet(value = "/first-forward-using-named", loadOnStartup = 0)
     @SuppressWarnings("serial")
     public static class FirstForwardUsingNamedServlet extends HttpServlet {
         @Override
@@ -334,7 +320,6 @@ public class ServletDispatcherIT {
         }
     }
 
-    @WebServlet(value = "/first-include", loadOnStartup = 0)
     @SuppressWarnings("serial")
     public static class FirstIncludeServlet extends HttpServlet {
         @Override
@@ -344,7 +329,6 @@ public class ServletDispatcherIT {
         }
     }
 
-    @WebServlet(urlPatterns = "/second", name = "yyy", loadOnStartup = 0)
     @SuppressWarnings("serial")
     public static class SecondServlet extends HttpServlet {
         @Override

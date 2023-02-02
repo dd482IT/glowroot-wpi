@@ -39,22 +39,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(ElasticsearchExtension.class)
 public class ElasticsearchAsyncIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() {
         container = ElasticsearchExtension.getContainer();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldCaptureDocumentPut() throws Exception {
         // when
         Trace trace = container.execute(ExecuteDocumentPut.class);
@@ -87,7 +83,6 @@ public class ElasticsearchAsyncIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureDocumentGet() throws Exception {
         // when
         Trace trace = container.execute(ExecuteDocumentGet.class);
@@ -120,7 +115,6 @@ public class ElasticsearchAsyncIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldConcurrentlyAsyncExecuteSameStatement() throws Exception {
         // when
         Trace trace = container.execute(ConcurrentlyExecuteSameAsyncStatement.class);
@@ -155,7 +149,6 @@ public class ElasticsearchAsyncIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureDocumentUpdate() throws Exception {
         // when
         Trace trace = container.execute(ExecuteDocumentUpdate.class);
@@ -188,7 +181,6 @@ public class ElasticsearchAsyncIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureDocumentDelete() throws Exception {
         // when
         Trace trace = container.execute(ExecuteDocumentDelete.class);
@@ -221,7 +213,6 @@ public class ElasticsearchAsyncIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureDocumentSearchWithoutSource() throws Exception {
         // when
         Trace trace = container.execute(ExecuteDocumentSearchWithoutSource.class);
@@ -254,7 +245,6 @@ public class ElasticsearchAsyncIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureDocumentSearchWithoutIndexesWithoutSource() throws Exception {
         // when
         Trace trace = container.execute(ExecuteDocumentSearchWithoutIndexesWithoutSource.class);
@@ -287,7 +277,6 @@ public class ElasticsearchAsyncIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureDocumentSearchWithoutIndexesWithoutTypesWithoutSource()
             throws Exception {
         // when
@@ -322,7 +311,6 @@ public class ElasticsearchAsyncIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureDocumentSearchWithMultipleIndexesWithMultipleTypesWithoutSource()
             throws Exception {
         // when
@@ -357,7 +345,6 @@ public class ElasticsearchAsyncIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureDocumentSearchWithSource() throws Exception {
         // when
         Trace trace = container.execute(ExecuteDocumentSearchWithSource.class);

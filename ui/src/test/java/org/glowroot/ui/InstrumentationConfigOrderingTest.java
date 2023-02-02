@@ -57,7 +57,6 @@ public class InstrumentationConfigOrderingTest {
             .setTraceEntryEnabledProperty("")
             .build();
 
-    @Test
     public void testDifferentClassNames() {
         // given
         Ordering<InstrumentationConfig> ordering = new InstrumentationConfigOrdering();
@@ -67,7 +66,6 @@ public class InstrumentationConfigOrderingTest {
         assertThat(compare).isNegative();
     }
 
-    @Test
     public void testSameClassNames() {
         // given
         Ordering<InstrumentationConfig> ordering = new InstrumentationConfigOrdering();
@@ -77,7 +75,6 @@ public class InstrumentationConfigOrderingTest {
         assertThat(compare).isPositive();
     }
 
-    @Test
     public void testSameClassAndMethodNames() {
         // given
         Ordering<InstrumentationConfig> ordering = new InstrumentationConfigOrdering();
@@ -88,7 +85,6 @@ public class InstrumentationConfigOrderingTest {
         assertThat(compare).isPositive();
     }
 
-    @Test
     public void testSameClassAndMethodNamesAndParamCount() {
         // given
         Ordering<InstrumentationConfig> ordering = new InstrumentationConfigOrdering();
@@ -100,7 +96,6 @@ public class InstrumentationConfigOrderingTest {
         assertThat(compare).isNegative();
     }
 
-    @Test
     public void testSameEverything() {
         // given
         Ordering<InstrumentationConfig> ordering = new InstrumentationConfigOrdering();

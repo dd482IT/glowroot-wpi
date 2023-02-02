@@ -54,7 +54,7 @@ public class Containers {
         return create(null);
     }
 
-    public static Container create(@Nullable File testDir) throws Exception {
+    public static Container create(File testDir) throws Exception {
         switch (harness) {
             case JAVAAGENT:
                 // this is the most realistic way to run tests because it launches an external JVM

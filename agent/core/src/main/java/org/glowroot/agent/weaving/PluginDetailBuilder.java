@@ -89,7 +89,7 @@ class PluginDetailBuilder {
         return acv.buildPointcutClass(bytes, false, null);
     }
 
-    static byte[] getBytes(String className, @Nullable File pluginJar) throws IOException {
+    static byte[] getBytes(String className, File pluginJar) throws IOException {
         String resourceName = "/" + className + ".class";
         URL url = PluginDetailBuilder.class.getResource(resourceName);
         if (url != null) {
@@ -102,12 +102,10 @@ class PluginDetailBuilder {
         throw new IOException("Class not found: " + className);
     }
 
-    @OnlyUsedByTests
     static PointcutClass buildAdviceClass(Class<?> clazz) throws IOException {
         return buildAdviceClassLookAtSuperClass(ClassNames.toInternalName(clazz.getName()));
     }
 
-    @OnlyUsedByTests
     static MixinClass buildMixinClass(Class<?> clazz) throws IOException {
         URL url = checkNotNull(PluginDetailBuilder.class
                 .getResource("/" + ClassNames.toInternalName(clazz.getName()) + ".class"));
@@ -117,7 +115,6 @@ class PluginDetailBuilder {
         return mcv.buildMixinClass(false, bytes);
     }
 
-    @OnlyUsedByTests
     private static PointcutClass buildAdviceClassLookAtSuperClass(String internalName)
             throws IOException {
         URL url =
@@ -152,11 +149,11 @@ class PluginDetailBuilder {
 
     private static class MemberClassVisitor extends ClassVisitor {
 
-        private @Nullable String name;
-        private @Nullable String superName;
+        private String name;
+        private String superName;
         private String /*@Nullable*/ [] interfaces;
-        private @Nullable PointcutAnnotationVisitor pointcutAnnotationVisitor;
-        private @Nullable MixinAnnotationVisitor mixinAnnotationVisitor;
+        private PointcutAnnotationVisitor pointcutAnnotationVisitor;
+        private MixinAnnotationVisitor mixinAnnotationVisitor;
         private List<PointcutMethodVisitor> pointcutMethodVisitors = Lists.newArrayList();
         private List<MixinMethodVisitor> mixinMethodVisitors = Lists.newArrayList();
         private boolean shim;
@@ -166,15 +163,15 @@ class PluginDetailBuilder {
         }
 
         @Override
-        public void visit(int version, int access, String name, @Nullable String signature,
-                @Nullable String superName, String /*@Nullable*/ [] interfaces) {
+        public void visit(int version, int access, String name, String signature,
+                String superName, String /*@Nullable*/ [] interfaces) {
             this.name = name;
             this.superName = superName;
             this.interfaces = interfaces;
         }
 
         @Override
-        public @Nullable AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
+        public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
             if (descriptor.equals("Lorg/glowroot/agent/plugin/api/weaving/Pointcut;")) {
                 pointcutAnnotationVisitor = new PointcutAnnotationVisitor();
                 return pointcutAnnotationVisitor;
@@ -190,8 +187,8 @@ class PluginDetailBuilder {
         }
 
         @Override
-        public @Nullable MethodVisitor visitMethod(int access, String name, String descriptor,
-                @Nullable String signature, String /*@Nullable*/ [] exceptions) {
+        public MethodVisitor visitMethod(int access, String name, String descriptor,
+                String signature, String /*@Nullable*/ [] exceptions) {
             if (pointcutAnnotationVisitor != null) {
                 PointcutMethodVisitor methodVisitor = new PointcutMethodVisitor(name, descriptor);
                 pointcutMethodVisitors.add(methodVisitor);
@@ -206,7 +203,7 @@ class PluginDetailBuilder {
         }
 
         private ImmutablePointcutClass buildPointcutClass(byte[] bytes,
-                boolean collocateInClassLoader, @Nullable File pluginJar) {
+                boolean collocateInClassLoader, File pluginJar) {
             ImmutablePointcutClass.Builder builder = ImmutablePointcutClass.builder()
                     .type(Type.getObjectType(checkNotNull(name)));
             for (PointcutMethodVisitor methodVisitor : pointcutMethodVisitors) {
@@ -282,7 +279,7 @@ class PluginDetailBuilder {
         }
 
         @Override
-        public void visit(@Nullable String name, Object value) {
+        public void visit(String name, Object value) {
             if ("className".equals(name)) {
                 className = (String) value;
             } else if ("classAnnotation".equals(name)) {
@@ -403,13 +400,13 @@ class PluginDetailBuilder {
         }
 
         @Override
-        public @Nullable AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
+        public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
             annotationTypes.add(Type.getType(descriptor));
             return null;
         }
 
         @Override
-        public @Nullable AnnotationVisitor visitParameterAnnotation(int parameter,
+        public AnnotationVisitor visitParameterAnnotation(int parameter,
                 String descriptor, boolean visible) {
             List<Type> list = parameterAnnotationTypes.get(parameter);
             if (list == null) {
@@ -439,7 +436,7 @@ class PluginDetailBuilder {
         private List<String> values = Lists.newArrayList();
 
         @Override
-        public void visit(@Nullable String name, Object value) {
+        public void visit(String name, Object value) {
             throw new IllegalStateException("Unexpected @Mixin attribute name: " + name);
         }
 
@@ -480,7 +477,7 @@ class PluginDetailBuilder {
         }
 
         @Override
-        public @Nullable AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
+        public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
             if (descriptor.equals("Lorg/glowroot/agent/plugin/api/weaving/MixinInit;")) {
                 if (Type.getArgumentTypes(this.descriptor).length > 0) {
                     throw new IllegalStateException("@MixinInit method cannot have any parameters");
@@ -504,7 +501,7 @@ class PluginDetailBuilder {
         }
 
         @Override
-        public void visit(@Nullable String name, Object value) {
+        public void visit(String name, Object value) {
             list.add((String) value);
         }
     }

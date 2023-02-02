@@ -28,7 +28,6 @@ import org.immutables.value.Value;
 
 public class TransactionNameErrorSummaryCollector {
 
-    @VisibleForTesting
     static final Ordering<TransactionNameErrorSummary> orderingByErrorCountDesc =
             new Ordering<TransactionNameErrorSummary>() {
                 @Override
@@ -38,7 +37,6 @@ public class TransactionNameErrorSummaryCollector {
                 }
             };
 
-    @VisibleForTesting
     static final Ordering<TransactionNameErrorSummary> orderingByErrorRateDesc =
             new Ordering<TransactionNameErrorSummary>() {
                 @Override
@@ -112,7 +110,6 @@ public class TransactionNameErrorSummaryCollector {
         ERROR_COUNT, ERROR_RATE
     }
 
-    @Value.Immutable
     public interface TransactionNameErrorSummary {
         String transactionName();
         long errorCount();

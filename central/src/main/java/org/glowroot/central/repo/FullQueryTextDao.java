@@ -98,7 +98,6 @@ class FullQueryTextDao {
                 .getInstance("org.glowroot.central:type=FullQueryTextRateLimiter"));
     }
 
-    @Nullable
     String getFullText(String agentRollupId, String fullTextSha1) throws Exception {
         String fullText = getFullTextUsingPS(agentRollupId, fullTextSha1, readCheckV2PS);
         if (fullText != null) {
@@ -133,7 +132,7 @@ class FullQueryTextDao {
         return futures;
     }
 
-    private @Nullable String getFullTextUsingPS(String agentRollupId, String fullTextSha1,
+    private String getFullTextUsingPS(String agentRollupId, String fullTextSha1,
             PreparedStatement readCheckPS) throws Exception {
         BoundStatement boundStatement = readCheckPS.bind();
         boundStatement.setString(0, agentRollupId);
@@ -209,8 +208,6 @@ class FullQueryTextDao {
                 .getInstance("org.glowroot.central:type=FullQueryTextRateLimiter"));
     }
 
-    @Value.Immutable
-    @Styles.AllParameters
     interface FullQueryTextKey {
         String agentId();
         String fullTextSha1();

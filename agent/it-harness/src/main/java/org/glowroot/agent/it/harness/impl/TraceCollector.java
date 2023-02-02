@@ -38,7 +38,7 @@ class TraceCollector {
     private final List<ExpectedLogMessage> expectedMessages = Lists.newCopyOnWriteArrayList();
     private final List<LogEvent> unexpectedMessages = Lists.newCopyOnWriteArrayList();
 
-    Trace getCompletedTrace(@Nullable String transactionType, @Nullable String transactionName,
+    Trace getCompletedTrace(String transactionType, String transactionName,
             int timeout, TimeUnit unit) throws InterruptedException {
         if (transactionName != null) {
             checkNotNull(transactionType);
@@ -160,8 +160,6 @@ class TraceCollector {
         return false;
     }
 
-    @Value.Immutable
-    @Value.Style(allParameters = true)
     interface ExpectedLogMessage {
         String loggerName();
         String partialMessage();

@@ -67,7 +67,7 @@ class MultipleAddressNameResolverFactory extends NameResolver.Factory {
         private final String authority;
         private final NameResolver.Args args;
 
-        private volatile @Nullable Listener listener;
+        private volatile Listener listener;
 
         private MultipleAddressNameResolver(List<CollectorTarget> targets, String authority,
                 NameResolver.Args args) {
@@ -124,13 +124,9 @@ class MultipleAddressNameResolverFactory extends NameResolver.Factory {
 
         private final Object lock = new Object();
 
-        @GuardedBy("lock")
         private final List<EquivalentAddressGroup> servers = Lists.newArrayList();
-        @GuardedBy("lock")
-        private @MonotonicNonNull Attributes attributes;
-        @GuardedBy("lock")
+        private Attributes attributes;
         private int onAddressesCount;
-        @GuardedBy("lock")
         private boolean closed;
 
         public AggregatingListener(Listener listener, List<NameResolver> nameResolvers) {
@@ -171,7 +167,6 @@ class MultipleAddressNameResolverFactory extends NameResolver.Factory {
             }
         }
 
-        @GuardedBy("lock")
         private void close() {
             for (NameResolver nameResolver : nameResolvers) {
                 nameResolver.shutdown();

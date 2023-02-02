@@ -36,8 +36,8 @@ class IbmJ9Java6HackClassFileTransformer implements ClassFileTransformer {
             LoggerFactory.getLogger(IbmJ9Java6HackClassFileTransformer.class);
 
     @Override
-    public byte /*@Nullable*/ [] transform(@Nullable ClassLoader loader, @Nullable String className,
-            @Nullable Class<?> classBeingRedefined, @Nullable ProtectionDomain protectionDomain,
+    public byte /*@Nullable*/ [] transform(ClassLoader loader, String className,
+            Class<?> classBeingRedefined, ProtectionDomain protectionDomain,
             byte[] bytes) {
         try {
             if ("com/google/protobuf/UnsafeUtil".equals(className)) {
@@ -64,7 +64,7 @@ class IbmJ9Java6HackClassFileTransformer implements ClassFileTransformer {
 
         @Override
         public MethodVisitor visitMethod(int access, String name, String descriptor,
-                @Nullable String signature, String /*@Nullable*/ [] exceptions) {
+                String signature, String /*@Nullable*/ [] exceptions) {
             MethodVisitor mv = cw.visitMethod(access, name, descriptor, signature, exceptions);
             if (name.equals("getUnsafe")) {
                 mv.visitCode();

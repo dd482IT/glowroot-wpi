@@ -44,22 +44,18 @@ public class OkHttpClientPluginIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldCaptureHttpGet() throws Exception {
         // when
         Trace trace = container.execute(ExecuteHttpGet.class);
@@ -75,7 +71,6 @@ public class OkHttpClientPluginIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureHttpPost() throws Exception {
         // when
         Trace trace = container.execute(ExecuteHttpPost.class);
@@ -90,7 +85,6 @@ public class OkHttpClientPluginIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureAsyncHttpGet() throws Exception {
         // when
         Trace trace = container.execute(ExecuteAsyncHttpGet.class);
@@ -116,7 +110,6 @@ public class OkHttpClientPluginIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureAsyncHttpPost() throws Exception {
         // when
         Trace trace = container.execute(ExecuteAsyncHttpPost.class);

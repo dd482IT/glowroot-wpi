@@ -34,7 +34,6 @@ public class LiveTraceRespositoryTest {
     private LiveTraceRepositoryImpl liveTraceRepository;
     private TraceCollector traceCollector;
 
-    @BeforeEach
     public void beforeEachTest() {
         TransactionRegistry transactionRegistry = mock(TransactionRegistry.class);
         traceCollector = mock(TraceCollector.class);
@@ -44,7 +43,6 @@ public class LiveTraceRespositoryTest {
                 clock, ticker);
     }
 
-    @Test
     public void testShouldNotStore() throws Exception {
         // given
         Transaction transaction = mock(Transaction.class);
@@ -57,7 +55,6 @@ public class LiveTraceRespositoryTest {
         assertThat(matches).isFalse();
     }
 
-    @Test
     public void testShouldStoreButDifferentTransactionType() throws Exception {
         // given
         Transaction transaction = mock(Transaction.class);
@@ -70,7 +67,6 @@ public class LiveTraceRespositoryTest {
         assertThat(matches).isFalse();
     }
 
-    @Test
     public void testShouldStoreAndSameTransactionTypeButNullTransactionName() throws Exception {
         // given
         Transaction transaction = mock(Transaction.class);
@@ -83,7 +79,6 @@ public class LiveTraceRespositoryTest {
         assertThat(matches).isFalse();
     }
 
-    @Test
     public void testShouldStoreAndSameTransactionTypeButDiffTransactionName() throws Exception {
         // given
         Transaction transaction = mock(Transaction.class);
@@ -96,7 +91,6 @@ public class LiveTraceRespositoryTest {
         assertThat(matches).isFalse();
     }
 
-    @Test
     public void testShouldMatch() throws Exception {
         // given
         Transaction transaction = mock(Transaction.class);

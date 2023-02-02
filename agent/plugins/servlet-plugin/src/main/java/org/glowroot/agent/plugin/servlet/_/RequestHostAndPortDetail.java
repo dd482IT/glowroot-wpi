@@ -21,12 +21,12 @@ public class RequestHostAndPortDetail {
 
     // -1 is used as error return value by RequestInvoker.getRemotePort()
     public static final int UNSET = -2;
-    public @Nullable String remoteAddress;
-    public @Nullable String remoteHostname;
+    public String remoteAddress;
+    public String remoteHostname;
     public int remotePort = UNSET;
-    public @Nullable String localAddress;
-    public @Nullable String localHostname;
+    public String localAddress;
+    public String localHostname;
     public int localPort = UNSET;
-    public @Nullable String serverHostname;
+    public String serverHostname;
     public int serverPort = UNSET;
 }

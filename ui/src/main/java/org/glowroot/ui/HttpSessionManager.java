@@ -154,7 +154,6 @@ class HttpSessionManager {
         return session.createAuthentication(central, configRepository);
     }
 
-    @Nullable
     String getSessionId(CommonRequest request) throws Exception {
         String cookieHeader = request.getHeader(HttpHeaderNames.COOKIE);
         if (cookieHeader == null) {
@@ -218,7 +217,7 @@ class HttpSessionManager {
                 .build();
     }
 
-    private @Nullable UserConfig getUserConfigCaseInsensitive(String username) throws Exception {
+    private UserConfig getUserConfigCaseInsensitive(String username) throws Exception {
         for (UserConfig userConfig : configRepository.getUserConfigs()) {
             if (userConfig.username().equalsIgnoreCase(username)) {
                 return userConfig;
@@ -283,8 +282,6 @@ class HttpSessionManager {
         }
     }
 
-    @Value.Immutable
-    @Serial.Structural
     abstract static class Session {
 
         abstract String caseAmbiguousUsername(); // the case is exactly as user entered during login
@@ -309,7 +306,6 @@ class HttpSessionManager {
         }
     }
 
-    @Value.Immutable
     abstract static class Authentication {
 
         abstract boolean central();

@@ -37,7 +37,7 @@ public class LazyHistogram {
     private int size;
     private boolean sorted;
 
-    private @MonotonicNonNull Histogram histogram;
+    private Histogram histogram;
 
     public LazyHistogram() {}
 
@@ -133,7 +133,6 @@ public class LazyHistogram {
         return histogram.getValueAtPercentile(percentile);
     }
 
-    @VisibleForTesting
     public void add(long value) {
         ensureCapacity(size + 1);
         if (histogram != null) {
@@ -160,7 +159,6 @@ public class LazyHistogram {
         }
     }
 
-    @EnsuresNonNull("histogram")
     private void convertValuesToHistogram() {
         // tracking nanoseconds, but only at microsecond precision (to save histogram space)
         histogram = new Histogram(1000, 2000, HISTOGRAM_SIGNIFICANT_DIGITS);
@@ -178,7 +176,7 @@ public class LazyHistogram {
 
     public static class ScratchBuffer {
 
-        private @MonotonicNonNull ByteBuffer buffer;
+        private ByteBuffer buffer;
 
         private final Object lock = new Object();
 

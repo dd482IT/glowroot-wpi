@@ -92,7 +92,6 @@ class RoleDao {
         return allRoleConfigsCache.get(ALL_ROLES_SINGLE_CACHE_KEY);
     }
 
-    @Nullable
     RoleConfig read(String name) throws Exception {
         return roleConfigCache.get(name).orNull();
     }

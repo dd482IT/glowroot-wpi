@@ -34,7 +34,6 @@ import static org.mockito.Mockito.when;
 
 public class LoggerTest {
 
-    @Test
     public void testImplementsAllMethods() {
         Set<MethodSignature> glowrootLoggerMethods = Sets.newHashSet();
         for (Method method : Logger.class.getMethods()) {
@@ -74,13 +73,11 @@ public class LoggerTest {
         assertThat(glowrootLoggerMethods).containsAll(loggerMethods);
     }
 
-    @Test
     public void testGetLogger() {
         Logger logger = Logger.getLogger("abc");
         assertThat(logger.getSlf4jLogger().getName()).isEqualTo("abc");
     }
 
-    @Test
     public void testGetName() {
         // given
         org.slf4j.Logger slf4jLogger = mock(org.slf4j.Logger.class);
@@ -91,7 +88,6 @@ public class LoggerTest {
         assertThat(logger.getName()).isEqualTo("xyz");
     }
 
-    @Test
     public void testNormalMethods() {
         // given
         org.slf4j.Logger slf4jLogger = mock(org.slf4j.Logger.class);
@@ -118,7 +114,6 @@ public class LoggerTest {
         verifyNoMoreInteractions(slf4jLogger);
     }
 
-    @Test
     public void testParameterizedLevelMethodsWithNoParams() {
         // given
         org.slf4j.Logger slf4jLogger = mock(org.slf4j.Logger.class);
@@ -145,7 +140,6 @@ public class LoggerTest {
         verifyNoMoreInteractions(slf4jLogger);
     }
 
-    @Test
     public void testParameterizedLevelMethodsWithSingleParam() {
         // given
         org.slf4j.Logger slf4jLogger = mock(org.slf4j.Logger.class);
@@ -184,7 +178,6 @@ public class LoggerTest {
         verifyNoMoreInteractions(slf4jLogger);
     }
 
-    @Test
     public void testParameterizedLevelMethodsWithArrayOfParams() {
         // given
         org.slf4j.Logger slf4jLogger = mock(org.slf4j.Logger.class);
@@ -223,7 +216,6 @@ public class LoggerTest {
         verifyNoMoreInteractions(slf4jLogger);
     }
 
-    @Test
     public void testParameterizedLevelMethodsWithThrowable() {
         // given
         org.slf4j.Logger slf4jLogger = mock(org.slf4j.Logger.class);
@@ -257,7 +249,6 @@ public class LoggerTest {
         verifyNoMoreInteractions(slf4jLogger);
     }
 
-    @Test
     public void testIsLoggableAll() {
         // given
         org.slf4j.Logger slf4jLogger = mock(org.slf4j.Logger.class);
@@ -280,7 +271,6 @@ public class LoggerTest {
         assertThat(logger.isLoggable(Level.FINEST)).isTrue();
     }
 
-    @Test
     public void testIsLoggableSome() {
         // given
         org.slf4j.Logger slf4jLogger = mock(org.slf4j.Logger.class);
@@ -303,7 +293,6 @@ public class LoggerTest {
         assertThat(logger.isLoggable(Level.FINEST)).isFalse();
     }
 
-    @Test
     public void testIsLoggableNone() {
         // given
         org.slf4j.Logger slf4jLogger = mock(org.slf4j.Logger.class);
@@ -326,7 +315,6 @@ public class LoggerTest {
         assertThat(logger.isLoggable(Level.FINEST)).isFalse();
     }
 
-    @Test
     public void testGetLevelSevere() {
         // given
         org.slf4j.Logger slf4jLogger = mock(org.slf4j.Logger.class);
@@ -337,7 +325,6 @@ public class LoggerTest {
         assertThat(logger.getLevel()).isEqualTo(Level.SEVERE);
     }
 
-    @Test
     public void testGetLevelWarning() {
         // given
         org.slf4j.Logger slf4jLogger = mock(org.slf4j.Logger.class);
@@ -348,7 +335,6 @@ public class LoggerTest {
         assertThat(logger.getLevel()).isEqualTo(Level.WARNING);
     }
 
-    @Test
     public void testGetLevelConfig() {
         // given
         org.slf4j.Logger slf4jLogger = mock(org.slf4j.Logger.class);
@@ -359,7 +345,6 @@ public class LoggerTest {
         assertThat(logger.getLevel()).isEqualTo(Level.CONFIG);
     }
 
-    @Test
     public void testGetLevelFine() {
         // given
         org.slf4j.Logger slf4jLogger = mock(org.slf4j.Logger.class);
@@ -370,7 +355,6 @@ public class LoggerTest {
         assertThat(logger.getLevel()).isEqualTo(Level.FINE);
     }
 
-    @Test
     public void testGetLevelFinest() {
         // given
         org.slf4j.Logger slf4jLogger = mock(org.slf4j.Logger.class);
@@ -381,7 +365,6 @@ public class LoggerTest {
         assertThat(logger.getLevel()).isEqualTo(Level.FINEST);
     }
 
-    @Test
     public void testGetLevelOff() {
         // given
         org.slf4j.Logger slf4jLogger = mock(org.slf4j.Logger.class);
@@ -391,7 +374,6 @@ public class LoggerTest {
         assertThat(logger.getLevel()).isEqualTo(Level.OFF);
     }
 
-    @Test
     public void testLogpParameterizedLevelMethodsWithNoParams() {
         // given
         org.slf4j.Logger slf4jLogger = mock(org.slf4j.Logger.class);
@@ -418,7 +400,6 @@ public class LoggerTest {
         verifyNoMoreInteractions(slf4jLogger);
     }
 
-    @Test
     public void testLogpParameterizedLevelMethodsWithSingleParam() {
         // given
         org.slf4j.Logger slf4jLogger = mock(org.slf4j.Logger.class);
@@ -457,7 +438,6 @@ public class LoggerTest {
         verifyNoMoreInteractions(slf4jLogger);
     }
 
-    @Test
     public void testLogpParameterizedLevelMethodsWithArrayOfParams() {
         // given
         org.slf4j.Logger slf4jLogger = mock(org.slf4j.Logger.class);
@@ -496,7 +476,6 @@ public class LoggerTest {
         verifyNoMoreInteractions(slf4jLogger);
     }
 
-    @Test
     public void testLogpParameterizedLevelMethodsWithThrowable() {
         // given
         org.slf4j.Logger slf4jLogger = mock(org.slf4j.Logger.class);
@@ -530,7 +509,6 @@ public class LoggerTest {
         verifyNoMoreInteractions(slf4jLogger);
     }
 
-    @Test
     public void testLogrbParameterizedLevelMethodsWithNoParams() {
         // given
         org.slf4j.Logger slf4jLogger = mock(org.slf4j.Logger.class);
@@ -557,7 +535,6 @@ public class LoggerTest {
         verifyNoMoreInteractions(slf4jLogger);
     }
 
-    @Test
     public void testLogrbParameterizedLevelMethodsWithSingleParam() {
         // given
         org.slf4j.Logger slf4jLogger = mock(org.slf4j.Logger.class);
@@ -596,7 +573,6 @@ public class LoggerTest {
         verifyNoMoreInteractions(slf4jLogger);
     }
 
-    @Test
     public void testLogrbParameterizedLevelMethodsWithArrayOfParams() {
         // given
         org.slf4j.Logger slf4jLogger = mock(org.slf4j.Logger.class);
@@ -642,7 +618,6 @@ public class LoggerTest {
         verifyNoMoreInteractions(slf4jLogger);
     }
 
-    @Test
     public void testLogrbParameterizedLevelMethodsWithVarArgsOfParams() {
         // given
         org.slf4j.Logger slf4jLogger = mock(org.slf4j.Logger.class);
@@ -681,7 +656,6 @@ public class LoggerTest {
         verifyNoMoreInteractions(slf4jLogger);
     }
 
-    @Test
     public void testLogrbParameterizedLevelMethodsWithVarArgsOfParams2() {
         // given
         org.slf4j.Logger slf4jLogger = mock(org.slf4j.Logger.class);
@@ -721,7 +695,6 @@ public class LoggerTest {
         verifyNoMoreInteractions(slf4jLogger);
     }
 
-    @Test
     public void testLogrbParameterizedLevelMethodsWithThrowable() {
         // given
         org.slf4j.Logger slf4jLogger = mock(org.slf4j.Logger.class);
@@ -755,7 +728,6 @@ public class LoggerTest {
         verifyNoMoreInteractions(slf4jLogger);
     }
 
-    @Test
     public void testLogrbParameterizedLevelMethodsWithThrowable2() {
         // given
         org.slf4j.Logger slf4jLogger = mock(org.slf4j.Logger.class);
@@ -789,7 +761,6 @@ public class LoggerTest {
         verifyNoMoreInteractions(slf4jLogger);
     }
 
-    @Test
     public void testLogrbParameterizedLevelMethodsWithResourceBundleObjectAndThrowable() {
         // given
         org.slf4j.Logger slf4jLogger = mock(org.slf4j.Logger.class);
@@ -823,7 +794,6 @@ public class LoggerTest {
         verifyNoMoreInteractions(slf4jLogger);
     }
 
-    @Test
     public void testEnteringExitingThrowingMethods() {
         // given
         org.slf4j.Logger slf4jLogger = mock(org.slf4j.Logger.class);
@@ -841,7 +811,6 @@ public class LoggerTest {
         verifyNoMoreInteractions(slf4jLogger);
     }
 
-    @Test
     public void testResourceBundle() {
         // given
         org.slf4j.Logger slf4jLogger = mock(org.slf4j.Logger.class);
@@ -855,7 +824,6 @@ public class LoggerTest {
         verifyNoMoreInteractions(slf4jLogger);
     }
 
-    @Value.Immutable
     interface MethodSignature {
         String name();
         List<String> parameterTypes();

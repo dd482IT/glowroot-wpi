@@ -36,7 +36,6 @@ import org.glowroot.wire.api.model.ProfileOuterClass.Profile;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-@Styles.Private
 public class MutableAggregate {
 
     private double totalDurationNanos;
@@ -50,12 +49,12 @@ public class MutableAggregate {
     // buckets (and memory) required
     private final LazyHistogram durationNanosHistogram = new LazyHistogram();
     // lazy instantiated to reduce memory footprint
-    private @MonotonicNonNull MutableTimer auxThreadRootTimer;
-    private @MonotonicNonNull MutableThreadStats auxThreadStats;
-    private @MonotonicNonNull QueryCollector queries;
-    private @MonotonicNonNull ServiceCallCollector serviceCalls;
-    private @MonotonicNonNull MutableProfile mainThreadProfile;
-    private @MonotonicNonNull MutableProfile auxThreadProfile;
+    private MutableTimer auxThreadRootTimer;
+    private MutableThreadStats auxThreadStats;
+    private QueryCollector queries;
+    private ServiceCallCollector serviceCalls;
+    private MutableProfile mainThreadProfile;
+    private MutableProfile auxThreadProfile;
 
     private final int maxQueryAggregates;
     private final int maxServiceCallAggregates;
@@ -97,7 +96,7 @@ public class MutableAggregate {
         }
     }
 
-    public @Nullable MutableThreadStats getAuxThreadStats() {
+    public MutableThreadStats getAuxThreadStats() {
         return auxThreadStats;
     }
 
@@ -109,19 +108,19 @@ public class MutableAggregate {
         return durationNanosHistogram;
     }
 
-    public @Nullable QueryCollector getQueries() {
+    public QueryCollector getQueries() {
         return queries;
     }
 
-    public @Nullable ServiceCallCollector getServiceCalls() {
+    public ServiceCallCollector getServiceCalls() {
         return serviceCalls;
     }
 
-    public @Nullable MutableProfile getMainThreadProfile() {
+    public MutableProfile getMainThreadProfile() {
         return mainThreadProfile;
     }
 
-    public @Nullable MutableProfile getAuxThreadProfile() {
+    public MutableProfile getAuxThreadProfile() {
         return auxThreadProfile;
     }
 
@@ -248,7 +247,7 @@ public class MutableAggregate {
     }
 
     public void mergeQuery(String queryType, String truncatedQueryText,
-            @Nullable String fullQueryTextSha1, double totalDurationNanos, long executionCount,
+            String fullQueryTextSha1, double totalDurationNanos, long executionCount,
             boolean hasTotalRows, long totalRows) {
         if (queries == null) {
             queries = new QueryCollector(maxQueryAggregates);

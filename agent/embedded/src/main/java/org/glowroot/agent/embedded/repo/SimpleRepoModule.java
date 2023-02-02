@@ -70,11 +70,11 @@ public class SimpleRepoModule {
     private final RollupLevelService rollupLevelService;
     private final AlertingService alertingService;
     private final HttpClient httpClient;
-    private final @Nullable ReaperRunnable reaperRunnable;
+    private final ReaperRunnable reaperRunnable;
 
     public SimpleRepoModule(DataSource dataSource, File dataDir, Clock clock, Ticker ticker,
             ConfigRepositoryImpl configRepository,
-            @Nullable ScheduledExecutorService backgroundExecutor) throws Exception {
+            ScheduledExecutorService backgroundExecutor) throws Exception {
         if (!dataDir.exists() && !dataDir.mkdir()) {
             throw new IOException("Could not create directory: " + dataDir.getAbsolutePath());
         }
@@ -204,7 +204,6 @@ public class SimpleRepoModule {
         return httpClient;
     }
 
-    @OnlyUsedByTests
     public void close() throws Exception {
         if (reaperRunnable != null) {
             reaperRunnable.cancel();

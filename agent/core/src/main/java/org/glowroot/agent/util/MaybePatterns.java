@@ -24,7 +24,7 @@ public class MaybePatterns {
 
     private MaybePatterns() {}
 
-    public static @Nullable Pattern buildPattern(String maybePattern) {
+    public static Pattern buildPattern(String maybePattern) {
         if (maybePattern.startsWith("/") && maybePattern.endsWith("/")) {
             // full regex power
             return Pattern.compile(maybePattern.substring(1, maybePattern.length() - 1));

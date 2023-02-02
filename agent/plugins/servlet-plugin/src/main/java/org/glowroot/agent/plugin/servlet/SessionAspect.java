@@ -32,14 +32,10 @@ import org.glowroot.agent.plugin.servlet._.ServletPluginProperties.SessionAttrib
 
 public class SessionAspect {
 
-    @Pointcut(className = "javax.servlet.http.HttpSession", methodName = "setAttribute|putValue",
-            methodParameterTypes = {"java.lang.String", "java.lang.Object"},
-            nestingGroup = "servlet-inner-call")
     public static class SetAttributeAdvice {
 
-        @OnAfter
-        public static void onAfter(ThreadContext context, @BindParameter @Nullable String name,
-                @BindParameter @Nullable Object value) {
+        public static void onAfter(ThreadContext context, String name,
+                Object value) {
             if (name == null) {
                 // theoretically possible, so just ignore
                 return;
@@ -55,7 +51,7 @@ public class SessionAspect {
         }
 
         private static void updateUserIfApplicable(ThreadContext context, String attributeName,
-                @Nullable Object attributeValue) {
+                Object attributeValue) {
             if (attributeValue == null) {
                 // if user value is set to null, don't clear it
                 return;
@@ -87,7 +83,7 @@ public class SessionAspect {
 
         private static void updateSessionAttributesIfApplicable(
                 ServletMessageSupplier messageSupplier, String attributeName,
-                @Nullable Object attributeValue) {
+                Object attributeValue) {
             if (ServletPluginProperties.captureSessionAttributeNames().contains(attributeName)
                     || ServletPluginProperties.captureSessionAttributeNames().contains("*")) {
                 // update all session attributes (possibly nested) at or under the set attribute
@@ -108,7 +104,7 @@ public class SessionAspect {
         }
 
         private static void updateSessionAttribute(ServletMessageSupplier messageSupplier,
-                String attributeName, @Nullable Object attributeValue) {
+                String attributeName, Object attributeValue) {
             if (attributeValue == null) {
                 messageSupplier.putSessionAttributeChangedValue(attributeName, null);
             } else {
@@ -118,7 +114,7 @@ public class SessionAspect {
         }
 
         private static void updateNestedSessionAttributes(ServletMessageSupplier messageSupplier,
-                SessionAttributePath attributePath, @Nullable Object attributeValue) {
+                SessionAttributePath attributePath, Object attributeValue) {
             String fullPath = attributePath.getFullPath();
             if (attributePath.isWildcard()) {
                 Object val = HttpSessions.getSessionAttribute(attributeValue, attributePath);
@@ -148,11 +144,8 @@ public class SessionAspect {
         }
     }
 
-    @Pointcut(className = "javax.servlet.http.HttpSession", methodName = "removeAttribute",
-            methodParameterTypes = {"java.lang.String"}, nestingGroup = "servlet-inner-call")
     public static class RemoveAttributeAdvice {
-        @OnAfter
-        public static void onAfter(ThreadContext context, @BindParameter @Nullable String name) {
+        public static void onAfter(ThreadContext context, String name) {
             // calling HttpSession.setAttribute() with null value is the same as calling
             // removeAttribute(), per the setAttribute() javadoc
             SetAttributeAdvice.onAfter(context, name, null);

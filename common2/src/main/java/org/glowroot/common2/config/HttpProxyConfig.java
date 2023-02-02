@@ -23,32 +23,22 @@ import org.immutables.value.Value;
 
 import org.glowroot.common.util.Versions;
 
-@Value.Immutable
 public abstract class HttpProxyConfig {
 
-    @Value.Default
-    @JsonInclude(Include.NON_EMPTY)
     public String host() {
         return "";
     }
 
-    @JsonInclude(Include.NON_NULL)
-    public abstract @Nullable Integer port();
+    public abstract Integer port();
 
-    @Value.Default
-    @JsonInclude(Include.NON_EMPTY)
     public String username() {
         return "";
     }
 
-    @Value.Default
-    @JsonInclude(Include.NON_EMPTY)
     public String encryptedPassword() {
         return "";
     }
 
-    @Value.Derived
-    @JsonIgnore
     public String version() {
         return Versions.getJsonVersion(this);
     }

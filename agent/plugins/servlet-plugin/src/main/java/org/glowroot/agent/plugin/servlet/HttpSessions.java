@@ -56,7 +56,7 @@ public class HttpSessions {
         return ImmutableMap.copyOf(captureMap);
     }
 
-    public static @Nullable Object getSessionAttribute(HttpSession session,
+    public static Object getSessionAttribute(HttpSession session,
             SessionAttributePath attributePath) {
         if (attributePath.isSessionId()) {
             return session.getId();
@@ -65,7 +65,7 @@ public class HttpSessions {
         return getSessionAttribute(attributeValue, attributePath);
     }
 
-    public static @Nullable Object getSessionAttribute(@Nullable Object attributeValue,
+    public static Object getSessionAttribute(Object attributeValue,
             SessionAttributePath attributePath) {
         List<String> nestedPath = attributePath.getNestedPath();
         if (nestedPath.isEmpty()) {

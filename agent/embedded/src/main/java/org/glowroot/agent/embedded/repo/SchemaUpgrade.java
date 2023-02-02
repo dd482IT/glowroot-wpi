@@ -42,7 +42,7 @@ class SchemaUpgrade {
             ImmutableList.<Column>of(ImmutableColumn.of("schema_version", ColumnType.BIGINT));
 
     private final DataSource dataSource;
-    private final @Nullable Integer initialSchemaVersion;
+    private final Integer initialSchemaVersion;
 
     SchemaUpgrade(DataSource dataSource) throws SQLException {
         this.dataSource = dataSource;
@@ -51,7 +51,7 @@ class SchemaUpgrade {
         initialSchemaVersion = getSchemaVersion(dataSource);
     }
 
-    public @Nullable Integer getInitialSchemaVersion() {
+    public Integer getInitialSchemaVersion() {
         return initialSchemaVersion;
     }
 
@@ -156,7 +156,7 @@ class SchemaUpgrade {
 
     }
 
-    private static @Nullable Integer getSchemaVersion(DataSource dataSource) throws SQLException {
+    private static Integer getSchemaVersion(DataSource dataSource) throws SQLException {
         Long schemaVersion =
                 dataSource.queryForOptionalLong("select schema_version from schema_version");
         if (schemaVersion != null) {

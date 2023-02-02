@@ -29,7 +29,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class WeaverErrorHandlingTest {
 
-    @Test
     public void shouldHandleVoidPrimitiveTravelerGracefully() throws Exception {
         // given
         SomeAspectThreadLocals.resetThreadLocals();
@@ -45,7 +44,6 @@ public class WeaverErrorHandlingTest {
         assertThat(SomeAspectThreadLocals.onAfterTraveler.get()).isEqualTo(0);
     }
 
-    @Test
     public void shouldHandleVoidPrimitiveBooleanTravelerGracefully() throws Exception {
         // given
         SomeAspectThreadLocals.resetThreadLocals();
@@ -61,7 +59,6 @@ public class WeaverErrorHandlingTest {
         assertThat(SomeAspectThreadLocals.onAfterTraveler.get()).isEqualTo(false);
     }
 
-    @Test
     public void shouldNotCallOnThrowForOnBeforeException() throws Exception {
         // given
         SomeAspectThreadLocals.resetThreadLocals();
@@ -83,7 +80,6 @@ public class WeaverErrorHandlingTest {
         assertThat(exception).isNotNull();
     }
 
-    @Test
     public void shouldNotCallOnThrowForOnReturnException() throws Exception {
         // given
         SomeAspectThreadLocals.resetThreadLocals();
@@ -106,7 +102,6 @@ public class WeaverErrorHandlingTest {
     }
 
     // same as MoreVeryBadAdvice, but testing weaving a method with a non-void return type
-    @Test
     public void shouldNotCallOnThrowForOnReturnException2() throws Exception {
         // given
         SomeAspectThreadLocals.resetThreadLocals();

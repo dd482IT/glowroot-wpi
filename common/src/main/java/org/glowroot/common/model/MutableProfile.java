@@ -332,8 +332,8 @@ public class MutableProfile {
         private List<ProfileNode> childNodes = Lists.newArrayListWithCapacity(2);
 
         // these fields are only used for filtering
-        private @Nullable String text;
-        private @Nullable String textUpper;
+        private String text;
+        private String textUpper;
         private boolean matched;
         private long ellipsedSampleCount;
 

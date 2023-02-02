@@ -113,8 +113,8 @@ class AdviceBuilder {
 
     private final ImmutableAdvice.Builder builder = ImmutableAdvice.builder();
 
-    private final @Nullable PointcutClass adviceClass;
-    private final @Nullable LazyDefinedClass lazyAdviceClass;
+    private final PointcutClass adviceClass;
+    private final LazyDefinedClass lazyAdviceClass;
 
     private boolean hasIsEnabledAdvice;
     private boolean hasOnBeforeAdvice;
@@ -370,7 +370,7 @@ class AdviceBuilder {
         return parameters;
     }
 
-    private static @Nullable Type getValidBindAnnotationType(List<Type> parameterAnnotationTypes,
+    private static Type getValidBindAnnotationType(List<Type> parameterAnnotationTypes,
             List<Type> validBindAnnotationTypes) throws AdviceConstructionException {
         Type foundBindAnnotationType = null;
         for (Type annotationType : parameterAnnotationTypes) {
@@ -409,7 +409,7 @@ class AdviceBuilder {
 
     @SuppressWarnings("serial")
     private static class AdviceConstructionException extends Exception {
-        private AdviceConstructionException(@Nullable String message) {
+        private AdviceConstructionException(String message) {
             super(message);
         }
     }

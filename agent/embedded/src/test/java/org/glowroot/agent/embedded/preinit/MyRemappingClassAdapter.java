@@ -27,7 +27,7 @@ import static org.objectweb.asm.Opcodes.ASM9;
 class MyRemappingClassAdapter extends ClassVisitor {
 
     private final ClassCollector typeCollector;
-    private @Nullable String internalName;
+    private String internalName;
 
     MyRemappingClassAdapter(ClassCollector remapper) {
         super(ASM9);
@@ -35,8 +35,8 @@ class MyRemappingClassAdapter extends ClassVisitor {
     }
 
     @Override
-    public void visit(int version, int access, String internalName, @Nullable String signature,
-            @Nullable String superInternalName, String[] interfaces) {
+    public void visit(int version, int access, String internalName, String signature,
+            String superInternalName, String[] interfaces) {
         this.internalName = internalName;
         typeCollector.setSuperInternalNames(superInternalName);
         typeCollector.setInterfaceTypes(Arrays.asList(interfaces));
@@ -44,7 +44,7 @@ class MyRemappingClassAdapter extends ClassVisitor {
 
     @Override
     public MethodVisitor visitMethod(int access, String name, String descriptor,
-            @Nullable String signature, String /*@Nullable*/ [] exceptions) {
+            String signature, String /*@Nullable*/ [] exceptions) {
 
         ReferencedMethod referencedMethod = ReferencedMethod.create(internalName, name, descriptor);
         MethodCollector methodCollector = new MethodCollector();

@@ -26,14 +26,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-@Mojo(name = "generate", defaultPhase = LifecyclePhase.PROCESS_RESOURCES,
-        requiresDependencyResolution = ResolutionScope.COMPILE, threadSafe = true)
 public class PluginJsonTransformerMojo extends AbstractMojo {
 
-    @Parameter(readonly = true, defaultValue = "${project}")
-    private @Nullable MavenProject project;
+    private MavenProject project;
 
-    @Parameter
     private PluginConfig[] plugins = new PluginConfig[0];
 
     @Override

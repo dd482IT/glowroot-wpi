@@ -53,7 +53,7 @@ public class AlertingDisabledDao implements AlertingDisabledRepository {
     }
 
     @Override
-    public @Nullable Long getAlertingDisabledUntilTime(String agentRollupId) throws Exception {
+    public Long getAlertingDisabledUntilTime(String agentRollupId) throws Exception {
         BoundStatement boundStatement = readPS.bind();
         boundStatement.setString(0, agentRollupId);
         Row row = session.read(boundStatement).one();
@@ -65,7 +65,7 @@ public class AlertingDisabledDao implements AlertingDisabledRepository {
     }
 
     @Override
-    public void setAlertingDisabledUntilTime(String agentRollupId, @Nullable Long disabledUntilTime)
+    public void setAlertingDisabledUntilTime(String agentRollupId, Long disabledUntilTime)
             throws Exception {
         if (disabledUntilTime == null) {
             BoundStatement boundStatement = deletePS.bind();

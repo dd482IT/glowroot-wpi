@@ -43,38 +43,27 @@ public class Log4j2xAspect {
     private static final int TRACE = 600;
     private static final int ALL = Integer.MAX_VALUE;
 
-    @Shim("org.apache.logging.log4j.Logger")
     public interface Logger {
-        @Nullable
         String getName();
     }
 
-    @Shim("org.apache.logging.log4j.Level")
     public interface Level {
         int intLevel();
     }
 
-    @Shim("org.apache.logging.log4j.message.Message")
     public interface Message {
-        @Nullable
         String getFormattedMessage();
     }
 
-    @Pointcut(className = "org.apache.logging.log4j.spi.ExtendedLogger", methodName = "logMessage",
-            methodParameterTypes = {"java.lang.String", "org.apache.logging.log4j.Level",
-                    "org.apache.logging.log4j.Marker", "org.apache.logging.log4j.message.Message",
-                    "java.lang.Throwable"},
-            nestingGroup = "logging", timerName = TIMER_NAME)
     public static class CallAppendersAdvice {
 
         private static final TimerName timerName = Agent.getTimerName(CallAppendersAdvice.class);
 
-        @OnBefore
-        public static LogAdviceTraveler onBefore(ThreadContext context, @BindReceiver Logger logger,
-                @SuppressWarnings("unused") @BindParameter @Nullable String fqcn,
-                @BindParameter @Nullable Level level,
-                @SuppressWarnings("unused") @BindParameter @Nullable Object marker,
-                @BindParameter @Nullable Message message, @BindParameter @Nullable Throwable t) {
+        public static LogAdviceTraveler onBefore(ThreadContext context, Logger logger,
+                @SuppressWarnings("unused") String fqcn,
+                Level level,
+                @SuppressWarnings("unused") Object marker,
+                Message message, Throwable t) {
             String formattedMessage =
                     message == null ? "" : nullToEmpty(message.getFormattedMessage());
             int lvl = level == null ? 0 : level.intLevel();
@@ -93,8 +82,7 @@ public class Log4j2xAspect {
             return new LogAdviceTraveler(traceEntry, lvl, formattedMessage, t);
         }
 
-        @OnAfter
-        public static void onAfter(@BindTraveler LogAdviceTraveler traveler) {
+        public static void onAfter(LogAdviceTraveler traveler) {
             Throwable t = traveler.throwable;
             if (t != null) {
                 // intentionally not passing message since it is already the trace entry message
@@ -110,7 +98,7 @@ public class Log4j2xAspect {
             }
         }
 
-        private static String nullToEmpty(@Nullable String s) {
+        private static String nullToEmpty(String s) {
             return s == null ? "" : s;
         }
 
@@ -143,10 +131,10 @@ public class Log4j2xAspect {
         private final TraceEntry traceEntry;
         private final int level;
         private final String formattedMessage;
-        private final @Nullable Throwable throwable;
+        private final Throwable throwable;
 
         private LogAdviceTraveler(TraceEntry traceEntry, int level, String formattedMessage,
-                @Nullable Throwable throwable) {
+                Throwable throwable) {
             this.traceEntry = traceEntry;
             this.level = level;
             this.formattedMessage = formattedMessage;

@@ -40,14 +40,10 @@ import org.glowroot.agent.plugin.httpclient._.Uris;
 
 public class OkHttpClientAspect {
 
-    @Pointcut(className = "okhttp3.Call", methodName = "execute",
-            methodParameterTypes = {}, nestingGroup = "http-client",
-            timerName = "http client request")
     public static class ExecuteAdvice {
         private static final TimerName timerName = Agent.getTimerName(ExecuteAdvice.class);
-        @OnBefore
-        public static @Nullable TraceEntry onBefore(ThreadContext context,
-                @BindReceiver Call call) {
+        public static TraceEntry onBefore(ThreadContext context,
+                Call call) {
             Request request = call.request();
             if (request == null) {
                 return null;
@@ -68,29 +64,23 @@ public class OkHttpClientAspect {
             return context.startServiceCallEntry("HTTP", method + Uris.stripQueryString(url),
                     MessageSupplier.create("http client request: {}{}", method, url), timerName);
         }
-        @OnReturn
-        public static void onReturn(@BindTraveler @Nullable TraceEntry traceEntry) {
+        public static void onReturn(TraceEntry traceEntry) {
             if (traceEntry != null) {
                 traceEntry.end();
             }
         }
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler @Nullable TraceEntry traceEntry) {
+        public static void onThrow(Throwable t,
+                TraceEntry traceEntry) {
             if (traceEntry != null) {
                 traceEntry.endWithError(t);
             }
         }
     }
 
-    @Pointcut(className = "okhttp3.Call", methodName = "enqueue",
-            methodParameterTypes = {"okhttp3.Callback"}, nestingGroup = "http-client",
-            timerName = "http client request")
     public static class EnqueueAdvice {
         private static final TimerName timerName = Agent.getTimerName(EnqueueAdvice.class);
-        @OnBefore
-        public static @Nullable AsyncTraceEntry onBefore(ThreadContext context,
-                @BindReceiver Call call, @BindParameter ParameterHolder<Callback> callback) {
+        public static AsyncTraceEntry onBefore(ThreadContext context,
+                Call call, ParameterHolder<Callback> callback) {
             Request request = call.request();
             if (request == null) {
                 return null;
@@ -117,15 +107,13 @@ public class OkHttpClientAspect {
             callback.set(createWrapper(context, callback, asyncTraceEntry));
             return asyncTraceEntry;
         }
-        @OnReturn
-        public static void onReturn(@BindTraveler @Nullable AsyncTraceEntry asyncTraceEntry) {
+        public static void onReturn(AsyncTraceEntry asyncTraceEntry) {
             if (asyncTraceEntry != null) {
                 asyncTraceEntry.stopSyncTimer();
             }
         }
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler @Nullable AsyncTraceEntry asyncTraceEntry) {
+        public static void onThrow(Throwable t,
+                AsyncTraceEntry asyncTraceEntry) {
             if (asyncTraceEntry != null) {
                 asyncTraceEntry.stopSyncTimer();
                 asyncTraceEntry.endWithError(t);

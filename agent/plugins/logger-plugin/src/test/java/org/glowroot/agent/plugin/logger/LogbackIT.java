@@ -42,7 +42,6 @@ public class LogbackIT {
         OLD_LOGBACK = Boolean.getBoolean("glowroot.test.oldLogback");
     }
 
-    @BeforeAll
     public static void setUp() throws Exception {
         // unshaded doesn't work because glowroot loads slf4j classes before the Weaver is
         // registered, so the slf4j classes don't have a chance to get woven
@@ -50,7 +49,6 @@ public class LogbackIT {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         // need null check in case assumption is false in setUp()
         if (container != null) {
@@ -58,12 +56,10 @@ public class LogbackIT {
         }
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void testLog() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID,
@@ -90,7 +86,6 @@ public class LogbackIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLogWithThrowable() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID,
@@ -128,7 +123,6 @@ public class LogbackIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLogWithNullThrowable() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID,
@@ -159,7 +153,6 @@ public class LogbackIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLogWithOneParameter() throws Exception {
         // when
         Trace trace = container.execute(ShouldLogWithOneParameter.class);
@@ -180,7 +173,6 @@ public class LogbackIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLogWithOneParameterAndThrowable() throws Exception {
         // when
         Trace trace = container.execute(ShouldLogWithOneParameterAndThrowable.class);
@@ -224,7 +216,6 @@ public class LogbackIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLogWithTwoParameters() throws Exception {
         // when
         Trace trace = container.execute(ShouldLogWithTwoParameters.class);
@@ -245,7 +236,6 @@ public class LogbackIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLogWithMoreThanTwoParameters() throws Exception {
         // when
         Trace trace = container.execute(ShouldLogWithMoreThanTwoParameters.class);
@@ -266,7 +256,6 @@ public class LogbackIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLogWithParametersAndThrowable() throws Exception {
         // when
         Trace trace = container.execute(ShouldLogWithParametersAndThrowable.class);

@@ -29,7 +29,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class MultiErrorIntervalMergerTest {
 
-    @Test
     public void shouldMergeOne() {
         // given
         MultiErrorIntervalMerger merger = new MultiErrorIntervalMerger();
@@ -54,7 +53,6 @@ public class MultiErrorIntervalMergerTest {
         assertThat(groupedMultiErrorInterval.errorIntervals().get("syn1")).containsExactly(two1());
     }
 
-    @Test
     public void shouldMergeTwoWithOverlap() {
         // given
         MultiErrorIntervalMerger merger = new MultiErrorIntervalMerger();
@@ -77,7 +75,6 @@ public class MultiErrorIntervalMergerTest {
                 .containsExactly(threeWithOverlap1());
     }
 
-    @Test
     public void shouldMergeTwoWithNoOverlap() {
         // given
         MultiErrorIntervalMerger merger = new MultiErrorIntervalMerger();

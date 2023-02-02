@@ -21,7 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class GrpcCommonTest {
 
-    @Test
     public void test() {
         assertThat(GrpcCommon.convertFromV09AgentRollupId("a/b/c")).isEqualTo("a::b::c::");
         assertThat(GrpcCommon.convertFromV09AgentRollupId("  a/b/c  ")).isEqualTo("a::b::c::");

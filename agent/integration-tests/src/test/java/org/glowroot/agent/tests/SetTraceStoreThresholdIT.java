@@ -34,22 +34,18 @@ public class SetTraceStoreThresholdIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldNotReadTrace() throws Exception {
         // when
         container.executeNoExpectedTrace(SetLargeTraceStoreThreshold.class);
@@ -57,7 +53,6 @@ public class SetTraceStoreThresholdIT {
         // should not collect trace, verified above by method executeNoExpectedTrace()
     }
 
-    @Test
     public void shouldReadTrace() throws Exception {
         // given
         container.getConfigService().updateTransactionConfig(
@@ -70,7 +65,6 @@ public class SetTraceStoreThresholdIT {
         // should collect trace, verified above by method execute()
     }
 
-    @Test
     public void shouldReadTrace2() throws Exception {
         // given
         container.getConfigService().updateTransactionConfig(

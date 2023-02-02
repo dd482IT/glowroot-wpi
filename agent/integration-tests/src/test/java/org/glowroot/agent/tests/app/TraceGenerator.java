@@ -22,14 +22,13 @@ import org.immutables.value.Value;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
-@Value.Immutable
 public abstract class TraceGenerator {
 
     public abstract String transactionType();
     public abstract String transactionName();
     public abstract String headline();
-    public abstract @Nullable String error();
-    public abstract @Nullable String user();
+    public abstract String error();
+    public abstract String user();
     public abstract Map<String, String> attributes();
 
     void call(boolean active) throws InterruptedException {

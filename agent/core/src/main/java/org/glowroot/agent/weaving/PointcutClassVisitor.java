@@ -35,8 +35,8 @@ import static org.objectweb.asm.Opcodes.INVOKESTATIC;
 class PointcutClassVisitor extends ClassVisitor {
 
     private final ClassWriter cw;
-    private @Nullable String className;
-    private @MonotonicNonNull PointcutMethodVisitor onBeforeMethodVisitor;
+    private String className;
+    private PointcutMethodVisitor onBeforeMethodVisitor;
 
     private boolean constructorPointcut;
 
@@ -54,14 +54,14 @@ class PointcutClassVisitor extends ClassVisitor {
     }
 
     @Override
-    public void visit(int version, int access, String name, @Nullable String signature,
-            @Nullable String superName, String /*@Nullable*/ [] interfaces) {
+    public void visit(int version, int access, String name, String signature,
+            String superName, String /*@Nullable*/ [] interfaces) {
         super.visit(version, access, name, signature, superName, interfaces);
         this.className = name;
     }
 
     @Override
-    public @Nullable AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
+    public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
         AnnotationVisitor av = cw.visitAnnotation(descriptor, visible);
         if (descriptor.equals("Lorg/glowroot/agent/plugin/api/weaving/Pointcut;")) {
             return new PointcutAnnotationVisitor(av);
@@ -71,8 +71,8 @@ class PointcutClassVisitor extends ClassVisitor {
     }
 
     @Override
-    public @Nullable MethodVisitor visitMethod(int access, String name, String descriptor,
-            @Nullable String signature, String /*@Nullable*/ [] exceptions) {
+    public MethodVisitor visitMethod(int access, String name, String descriptor,
+            String signature, String /*@Nullable*/ [] exceptions) {
         if (constructorPointcut) {
             return new PointcutMethodVisitor(
                     cw.visitMethod(access, name, descriptor, signature, exceptions), access, name,
@@ -122,7 +122,7 @@ class PointcutClassVisitor extends ClassVisitor {
         }
 
         @Override
-        public void visit(@Nullable String name, Object value) {
+        public void visit(String name, Object value) {
             if ("methodName".equals(name) && "<init>".equals(value)) {
                 constructorPointcut = true;
             }
@@ -135,11 +135,11 @@ class PointcutClassVisitor extends ClassVisitor {
         private final int access;
         private final String name;
         private final String descriptor;
-        private final @Nullable String signature;
+        private final String signature;
         private final String /*@Nullable*/ [] exceptions;
 
         private PointcutMethodVisitor(MethodVisitor mv, int access, String name,
-                String descriptor, @Nullable String signature, String /*@Nullable*/ [] exceptions) {
+                String descriptor, String signature, String /*@Nullable*/ [] exceptions) {
             super(ASM9, mv);
             this.access = access;
             this.name = name;
@@ -149,7 +149,7 @@ class PointcutClassVisitor extends ClassVisitor {
         }
 
         @Override
-        public @Nullable AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
+        public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
             if (descriptor.equals("Lorg/glowroot/agent/plugin/api/weaving/OnBefore;")) {
                 onBeforeMethodVisitor = this;
             }

@@ -354,7 +354,6 @@ class DownstreamServiceImpl extends DownstreamServiceImplBase {
         }
     }
 
-    @Nullable
     Entries getEntries(String agentId, String traceId) throws Exception {
         AgentResponse responseWrapper = runOnCluster(agentId, CentralRequest.newBuilder()
                 .setEntriesRequest(EntriesRequest.newBuilder()
@@ -372,7 +371,6 @@ class DownstreamServiceImpl extends DownstreamServiceImplBase {
         }
     }
 
-    @Nullable
     Queries getQueries(String agentId, String traceId) throws Exception {
         AgentResponse responseWrapper = runOnCluster(agentId, CentralRequest.newBuilder()
                 .setQueriesRequest(QueriesRequest.newBuilder()
@@ -390,7 +388,6 @@ class DownstreamServiceImpl extends DownstreamServiceImplBase {
         }
     }
 
-    @Nullable
     Profile getMainThreadProfile(String agentId, String traceId) throws Exception {
         AgentResponse responseWrapper = runOnCluster(agentId, CentralRequest.newBuilder()
                 .setMainThreadProfileRequest(MainThreadProfileRequest.newBuilder()
@@ -404,7 +401,6 @@ class DownstreamServiceImpl extends DownstreamServiceImplBase {
         }
     }
 
-    @Nullable
     Profile getAuxThreadProfile(String agentId, String traceId) throws Exception {
         AgentResponse responseWrapper = runOnCluster(agentId, CentralRequest.newBuilder()
                 .setAuxThreadProfileRequest(AuxThreadProfileRequest.newBuilder()
@@ -418,7 +414,6 @@ class DownstreamServiceImpl extends DownstreamServiceImplBase {
         }
     }
 
-    @Nullable
     Trace getFullTrace(String agentId, String traceId) throws Exception {
         AgentResponse responseWrapper = runOnCluster(agentId, CentralRequest.newBuilder()
                 .setFullTraceRequest(FullTraceRequest.newBuilder()
@@ -495,7 +490,7 @@ class DownstreamServiceImpl extends DownstreamServiceImplBase {
                         .expireAfterWrite(1, HOURS)
                         .build();
 
-        private volatile @MonotonicNonNull String agentId;
+        private volatile String agentId;
 
         private final StreamObserver<CentralRequest> requestObserver;
 
@@ -514,7 +509,6 @@ class DownstreamServiceImpl extends DownstreamServiceImplBase {
         }
 
         @Override
-        @OnlyUsedByTests
         public void onCompleted() {
             synchronized (requestObserver) {
                 requestObserver.onCompleted();
@@ -634,23 +628,18 @@ class DownstreamServiceImpl extends DownstreamServiceImplBase {
         }
     }
 
-    @Value.Immutable
-    @Serial.Structural
     interface AgentResult extends Serializable {
 
         Optional<AgentResponse> value();
 
-        @Value.Default
         default boolean timeout() {
             return false;
         }
 
-        @Value.Default
         default boolean interrupted() {
             return false;
         }
 
-        @Value.Default
         default boolean shuttingDown() {
             return false;
         }

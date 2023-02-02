@@ -24,7 +24,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class HttpServicesTest {
 
-    @Test
     public void shouldLogRegularException() {
         // given
         Exception e = new Exception();
@@ -32,7 +31,6 @@ public class HttpServicesTest {
         assertThat(HttpServices.shouldLogException(e)).isTrue();
     }
 
-    @Test
     public void shouldNotLogInterruptedException() {
         // given
         Exception e = new InterruptedException();
@@ -40,7 +38,6 @@ public class HttpServicesTest {
         assertThat(HttpServices.shouldLogException(e)).isFalse();
     }
 
-    @Test
     public void shouldNotLogClosedChannelException() {
         // given
         Exception e = new ClosedChannelException();
@@ -48,7 +45,6 @@ public class HttpServicesTest {
         assertThat(HttpServices.shouldLogException(e)).isFalse();
     }
 
-    @Test
     public void shouldNotLogBrowserDisconnectMessageException() {
         // given
         Exception e =
@@ -57,7 +53,6 @@ public class HttpServicesTest {
         assertThat(HttpServices.shouldLogException(e)).isFalse();
     }
 
-    @Test
     public void shouldLogRegularIOException() {
         // given
         Exception e = new IOException();

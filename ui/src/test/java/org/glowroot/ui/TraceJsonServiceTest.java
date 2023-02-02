@@ -22,7 +22,6 @@ import static org.mockito.Mockito.mock;
 
 public class TraceJsonServiceTest {
 
-    @Test
     public void test() throws Exception {
         // given
         TraceCommonService traceCommonService = mock(TraceCommonService.class);

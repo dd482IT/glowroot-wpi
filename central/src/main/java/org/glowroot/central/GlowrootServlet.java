@@ -54,12 +54,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 // loadOnStartup is needed so that gRPC listener starts right away
-@WebServlet(value = "/*", loadOnStartup = 0)
 @SuppressWarnings("serial")
 public class GlowrootServlet extends HttpServlet {
 
-    private volatile @MonotonicNonNull CentralModule centralModule;
-    private volatile @MonotonicNonNull CommonHandler commonHandler;
+    private volatile CentralModule centralModule;
+    private volatile CommonHandler commonHandler;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -198,7 +197,7 @@ public class GlowrootServlet extends HttpServlet {
         }
 
         @Override
-        public @Nullable String getHeader(CharSequence name) {
+        public String getHeader(CharSequence name) {
             return request.getHeader(name.toString());
         }
 

@@ -125,7 +125,7 @@ public class TraceDaoWithV09Support implements TraceDao {
     }
 
     @Override
-    public @Nullable HeaderPlus readHeaderPlus(String agentId, String traceId) throws Exception {
+    public HeaderPlus readHeaderPlus(String agentId, String traceId) throws Exception {
         HeaderPlus headerPlus = delegate.readHeaderPlus(agentId, traceId);
         if (headerPlus == null && checkV09(agentId, traceId)) {
             headerPlus = delegate.readHeaderPlus(V09Support.convertToV09(agentId), traceId);
@@ -166,7 +166,7 @@ public class TraceDaoWithV09Support implements TraceDao {
     }
 
     @Override
-    public @Nullable Profile readMainThreadProfile(String agentId, String traceId)
+    public Profile readMainThreadProfile(String agentId, String traceId)
             throws Exception {
         Profile profile = delegate.readMainThreadProfile(agentId, traceId);
         if (profile == null && checkV09(agentId, traceId)) {
@@ -176,7 +176,7 @@ public class TraceDaoWithV09Support implements TraceDao {
     }
 
     @Override
-    public @Nullable Profile readAuxThreadProfile(String agentId, String traceId) throws Exception {
+    public Profile readAuxThreadProfile(String agentId, String traceId) throws Exception {
         Profile profile = delegate.readAuxThreadProfile(agentId, traceId);
         if (profile == null && checkV09(agentId, traceId)) {
             profile = delegate.readAuxThreadProfile(V09Support.convertToV09(agentId), traceId);
@@ -330,16 +330,12 @@ public class TraceDaoWithV09Support implements TraceDao {
     }
 
     @Override
-    @OnlyUsedByTests
     public void truncateAll() throws Exception {
         delegate.truncateAll();
     }
 
-    @Value.Immutable
     interface TraceQueryPlan {
-        @Nullable
         TraceQuery queryV09();
-        @Nullable
         TraceQuery queryPostV09();
     }
 

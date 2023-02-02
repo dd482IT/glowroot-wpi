@@ -48,23 +48,17 @@ public class HttpURLConnectionAspect {
     private static final AtomicBoolean outputStreamIssueAlreadyLogged = new AtomicBoolean();
 
     // the field and method names are verbose since they will be mixed in to existing classes
-    @Mixin({"java.net.HttpURLConnection",
-            "sun.net.www.protocol.http.HttpURLConnection$HttpInputStream",
-            "sun.net.www.protocol.http.HttpURLConnection$StreamingOutputStream",
-            "sun.net.www.http.PosterOutputStream",
-            "weblogic.net.http.KeepAliveStream",
-            "weblogic.utils.io.UnsyncByteArrayOutputStream"})
     public static class HasTraceEntryImpl implements HasTraceEntryMixin {
 
-        private transient @Nullable TraceEntry glowroot$traceEntry;
+        private transient TraceEntry glowroot$traceEntry;
 
         @Override
-        public @Nullable TraceEntry glowroot$getTraceEntry() {
+        public TraceEntry glowroot$getTraceEntry() {
             return glowroot$traceEntry;
         }
 
         @Override
-        public void glowroot$setTraceEntry(@Nullable TraceEntry traceEntry) {
+        public void glowroot$setTraceEntry(TraceEntry traceEntry) {
             glowroot$traceEntry = traceEntry;
         }
 
@@ -77,18 +71,17 @@ public class HttpURLConnectionAspect {
     // the method names are verbose since they will be mixed in to existing classes
     public interface HasTraceEntryMixin {
 
-        @Nullable
         TraceEntry glowroot$getTraceEntry();
 
-        void glowroot$setTraceEntry(@Nullable TraceEntry traceEntry);
+        void glowroot$setTraceEntry(TraceEntry traceEntry);
 
         boolean glowroot$hasTraceEntry();
     }
 
     private static class TraceEntryOrTimer {
 
-        private final @Nullable TraceEntry traceEntry;
-        private final @Nullable Timer timer;
+        private final TraceEntry traceEntry;
+        private final Timer timer;
 
         private TraceEntryOrTimer(TraceEntry traceEntry) {
             this.traceEntry = traceEntry;
@@ -117,30 +110,24 @@ public class HttpURLConnectionAspect {
         }
     }
 
-    @Pointcut(className = "java.net.URLConnection",
-            subTypeRestriction = "java.net.HttpURLConnection", methodName = "connect",
-            methodParameterTypes = {}, nestingGroup = "http-client", timerName = "http client")
     public static class ConnectAdvice {
         private static final TimerName timerName = Agent.getTimerName(ConnectAdvice.class);
-        @OnBefore
-        public static @Nullable TraceEntryOrTimer onBefore(ThreadContext threadContext,
-                @BindReceiver HttpURLConnection httpURLConnection) {
+        public static TraceEntryOrTimer onBefore(ThreadContext threadContext,
+                HttpURLConnection httpURLConnection) {
             return onBefore(threadContext, httpURLConnection, false);
         }
-        @OnReturn
-        public static void onReturn(@BindTraveler @Nullable TraceEntryOrTimer entryOrTimer) {
+        public static void onReturn(TraceEntryOrTimer entryOrTimer) {
             if (entryOrTimer != null) {
                 entryOrTimer.onReturn();
             }
         }
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler @Nullable TraceEntryOrTimer entryOrTimer) {
+        public static void onThrow(Throwable t,
+                TraceEntryOrTimer entryOrTimer) {
             if (entryOrTimer != null) {
                 entryOrTimer.onThrow(t);
             }
         }
-        private static @Nullable TraceEntryOrTimer onBefore(ThreadContext threadContext,
+        private static TraceEntryOrTimer onBefore(ThreadContext threadContext,
                 HttpURLConnection httpURLConnection, boolean overrideGetWithPost) {
             if (!(httpURLConnection instanceof HasTraceEntryMixin)) {
                 return null;
@@ -175,19 +162,14 @@ public class HttpURLConnectionAspect {
         }
     }
 
-    @Pointcut(className = "java.net.URLConnection",
-            subTypeRestriction = "java.net.HttpURLConnection", methodName = "getInputStream",
-            methodParameterTypes = {}, nestingGroup = "http-client")
     public static class GetInputStreamAdvice {
-        @OnBefore
-        public static @Nullable TraceEntryOrTimer onBefore(ThreadContext threadContext,
-                @BindReceiver HttpURLConnection httpURLConnection) {
+        public static TraceEntryOrTimer onBefore(ThreadContext threadContext,
+                HttpURLConnection httpURLConnection) {
             return ConnectAdvice.onBefore(threadContext, httpURLConnection, false);
         }
-        @OnReturn
-        public static void onReturn(@BindReturn @Nullable Object returnValue,
-                @BindReceiver HttpURLConnection httpURLConnection,
-                @BindTraveler @Nullable TraceEntryOrTimer entryOrTimer) {
+        public static void onReturn(Object returnValue,
+                HttpURLConnection httpURLConnection,
+                TraceEntryOrTimer entryOrTimer) {
             if (httpURLConnection instanceof HasTraceEntryMixin) {
                 if (returnValue instanceof HasTraceEntryMixin) {
                     TraceEntry traceEntry =
@@ -201,26 +183,20 @@ public class HttpURLConnectionAspect {
             }
             ConnectAdvice.onReturn(entryOrTimer);
         }
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler @Nullable TraceEntryOrTimer entryOrTimer) {
+        public static void onThrow(Throwable t,
+                TraceEntryOrTimer entryOrTimer) {
             ConnectAdvice.onThrow(t, entryOrTimer);
         }
     }
 
-    @Pointcut(className = "java.net.URLConnection",
-            subTypeRestriction = "java.net.HttpURLConnection", methodName = "getOutputStream",
-            methodParameterTypes = {}, nestingGroup = "http-client")
     public static class GetOutputStreamAdvice {
-        @OnBefore
-        public static @Nullable TraceEntryOrTimer onBefore(ThreadContext threadContext,
-                @BindReceiver HttpURLConnection httpURLConnection) {
+        public static TraceEntryOrTimer onBefore(ThreadContext threadContext,
+                HttpURLConnection httpURLConnection) {
             return ConnectAdvice.onBefore(threadContext, httpURLConnection, true);
         }
-        @OnReturn
-        public static void onReturn(@BindReturn @Nullable Object returnValue,
-                @BindReceiver HttpURLConnection httpURLConnection,
-                @BindTraveler @Nullable TraceEntryOrTimer entryOrTimer) {
+        public static void onReturn(Object returnValue,
+                HttpURLConnection httpURLConnection,
+                TraceEntryOrTimer entryOrTimer) {
             if (httpURLConnection instanceof HasTraceEntryMixin) {
                 if (returnValue instanceof HasTraceEntryMixin) {
                     TraceEntry traceEntry =
@@ -234,20 +210,14 @@ public class HttpURLConnectionAspect {
             }
             ConnectAdvice.onReturn(entryOrTimer);
         }
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler @Nullable TraceEntryOrTimer entryOrTimer) {
+        public static void onThrow(Throwable t,
+                TraceEntryOrTimer entryOrTimer) {
             ConnectAdvice.onThrow(t, entryOrTimer);
         }
     }
 
-    @Pointcut(className = "java.io.InputStream",
-            subTypeRestriction = "sun.net.www.protocol.http.HttpURLConnection$HttpInputStream"
-                    + "|weblogic.net.http.KeepAliveStream",
-            methodName = "*", methodParameterTypes = {".."})
     public static class HttpInputStreamAdvice {
-        @OnBefore
-        public static @Nullable Timer onBefore(@BindReceiver InputStream inputStream) {
+        public static Timer onBefore(InputStream inputStream) {
             if (!(inputStream instanceof HasTraceEntryMixin)) {
                 return null;
             }
@@ -257,22 +227,15 @@ public class HttpURLConnectionAspect {
             }
             return traceEntry.extend();
         }
-        @OnAfter
-        public static void onAfter(@BindTraveler @Nullable Timer timer) {
+        public static void onAfter(Timer timer) {
             if (timer != null) {
                 timer.stop();
             }
         }
     }
 
-    @Pointcut(className = "java.io.OutputStream",
-            subTypeRestriction = "sun.net.www.protocol.http.HttpURLConnection$StreamingOutputStream"
-                    + "|sun.net.www.http.PosterOutputStream"
-                    + "|weblogic.utils.io.UnsyncByteArrayOutputStream",
-            methodName = "*", methodParameterTypes = {".."})
     public static class StreamingOutputStreamAdvice {
-        @OnBefore
-        public static @Nullable Timer onBefore(@BindReceiver OutputStream outputStream) {
+        public static Timer onBefore(OutputStream outputStream) {
             if (!(outputStream instanceof HasTraceEntryMixin)) {
                 return null;
             }
@@ -283,8 +246,7 @@ public class HttpURLConnectionAspect {
             }
             return traceEntry.extend();
         }
-        @OnAfter
-        public static void onAfter(@BindTraveler @Nullable Timer timer) {
+        public static void onAfter(Timer timer) {
             if (timer != null) {
                 timer.stop();
             }

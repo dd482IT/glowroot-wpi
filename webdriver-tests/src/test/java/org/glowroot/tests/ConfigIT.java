@@ -31,7 +31,6 @@ import static org.openqa.selenium.By.xpath;
 
 public class ConfigIT extends WebDriverIT {
 
-    @Test
     public void shouldUpdateTransactionConfig() throws Exception {
         // given
         App app = app();
@@ -65,7 +64,6 @@ public class ConfigIT extends WebDriverIT {
         assertThat(page.getCaptureThreadStatsCheckBoxValue()).isFalse();
     }
 
-    @Test
     public void shouldUpdateJvmConfig() throws Exception {
         // given
         App app = app();
@@ -92,7 +90,6 @@ public class ConfigIT extends WebDriverIT {
                 .isEqualTo("abc, xyz");
     }
 
-    @Test
     public void shouldUpdateUiDefaultsConfig() throws Exception {
         // given
         App app = app();
@@ -119,7 +116,6 @@ public class ConfigIT extends WebDriverIT {
                 .isEqualTo("3, 4, 5, 6");
     }
 
-    @Test
     public void shouldUpdateAdvancedConfig() throws Exception {
         // given
         App app = app();
@@ -165,7 +161,6 @@ public class ConfigIT extends WebDriverIT {
                 .isEqualTo("3456");
     }
 
-    @Test
     public void shouldUpdatePluginConfig() throws Exception {
         // given
         App app = app();

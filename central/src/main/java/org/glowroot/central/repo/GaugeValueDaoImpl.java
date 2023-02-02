@@ -321,7 +321,7 @@ public class GaugeValueDaoImpl implements GaugeValueDao {
     //
     // child agent rollups should be processed before their parent agent rollup, since initial
     // parent rollup depends on the 1-minute child rollup
-    public void rollup(String agentRollupId, @Nullable String parentAgentRollupId, boolean leaf)
+    public void rollup(String agentRollupId, String parentAgentRollupId, boolean leaf)
             throws Exception {
 
         List<Integer> ttls = getTTLs();
@@ -352,7 +352,7 @@ public class GaugeValueDaoImpl implements GaugeValueDao {
         return rollupCaptureTimes;
     }
 
-    private void rollupFromChildren(String agentRollupId, @Nullable String parentAgentRollupId,
+    private void rollupFromChildren(String agentRollupId, String parentAgentRollupId,
             int ttl) throws Exception {
         final int rollupLevel = 1;
         List<NeedsRollupFromChildren> needsRollupFromChildrenList = Common
@@ -391,7 +391,7 @@ public class GaugeValueDaoImpl implements GaugeValueDao {
         }
     }
 
-    private void rollup(String agentRollupId, @Nullable String parentAgentRollupId, int rollupLevel,
+    private void rollup(String agentRollupId, String parentAgentRollupId, int rollupLevel,
             int ttl) throws Exception {
         List<RollupConfig> rollupConfigs = configRepository.getRollupConfigs();
         long rollupIntervalMillis = rollupConfigs.get(rollupLevel - 1).intervalMillis();
@@ -529,7 +529,6 @@ public class GaugeValueDaoImpl implements GaugeValueDao {
     }
 
     @Override
-    @OnlyUsedByTests
     public void truncateAll() throws Exception {
         for (int i = 0; i <= configRepository.getRollupConfigs().size(); i++) {
             session.updateSchemaWithRetry("truncate gauge_value_rollup_" + i);
@@ -541,9 +540,6 @@ public class GaugeValueDaoImpl implements GaugeValueDao {
         session.updateSchemaWithRetry("truncate gauge_needs_rollup_from_child");
     }
 
-    @Value.Immutable
-    @Serial.Structural
-    @Styles.AllParameters
     interface NeedsRollupKey extends Serializable {
         String agentRollupId();
         long captureTime();

@@ -23,7 +23,6 @@ import org.objectweb.asm.Type;
 
 import org.glowroot.agent.plugin.api.weaving.Shim;
 
-@Value.Immutable
 abstract class ShimType {
 
     static ShimType create(Shim shim, Class<?> iface) {

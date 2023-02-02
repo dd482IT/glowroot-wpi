@@ -155,14 +155,12 @@ import static org.mockito.Mockito.when;
 
 public class WeaverTest {
 
-    @BeforeEach
     public void before() {
         SomeAspectThreadLocals.resetThreadLocals();
     }
 
     // ===================== @IsEnabled =====================
 
-    @Test
     public void shouldExecuteEnabledAdvice() throws Exception {
         // given
         Misc test = newWovenObject(BasicMisc.class, Misc.class, BasicAdvice.class);
@@ -175,7 +173,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldExecuteEnabledAdviceOnThrow() throws Exception {
         // given
         Misc test = newWovenObject(ThrowingMisc.class, Misc.class, BasicAdvice.class);
@@ -191,7 +188,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldExecuteEnabledAdviceOnOnlyThrow() throws Exception {
         // given
         Misc test = newWovenObject(OnlyThrowingMisc.class, Misc.class, BasicAdvice.class);
@@ -207,7 +203,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldNotExecuteDisabledAdvice() throws Exception {
         // given
         BasicAdvice.disable();
@@ -221,7 +216,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(0);
     }
 
-    @Test
     public void shouldNotExecuteDisabledAdviceOnThrow() throws Exception {
         // given
         BasicAdvice.disable();
@@ -240,7 +234,6 @@ public class WeaverTest {
 
     // ===================== @BindReceiver =====================
 
-    @Test
     public void shouldBindReceiver() throws Exception {
         // given
         Misc test = newWovenObject(BasicMisc.class, Misc.class, BindReceiverAdvice.class);
@@ -254,7 +247,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterReceiver.get()).isEqualTo(test);
     }
 
-    @Test
     public void shouldBindReceiverOnThrow() throws Exception {
         // given
         Misc test = newWovenObject(ThrowingMisc.class, Misc.class, BindReceiverAdvice.class);
@@ -273,7 +265,6 @@ public class WeaverTest {
 
     // ===================== @BindParameter =====================
 
-    @Test
     public void shouldBindParameters() throws Exception {
         // given
         Misc test = newWovenObject(BasicMisc.class, Misc.class, BindParameterAdvice.class);
@@ -288,7 +279,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterParams.get()).isEqualTo(parameters);
     }
 
-    @Test
     public void shouldBindParameterOnThrow() throws Exception {
         // given
         Misc test = newWovenObject(ThrowingMisc.class, Misc.class, BindParameterAdvice.class);
@@ -308,7 +298,6 @@ public class WeaverTest {
 
     // ===================== @BindParameterArray =====================
 
-    @Test
     public void shouldBindParameterArray() throws Exception {
         // given
         Misc test = newWovenObject(BasicMisc.class, Misc.class, BindParameterArrayAdvice.class);
@@ -323,7 +312,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterParams.get()).isEqualTo(parameters);
     }
 
-    @Test
     public void shouldBindParameterArrayOnThrow() throws Exception {
         // given
         Misc test = newWovenObject(ThrowingMisc.class, Misc.class, BindParameterArrayAdvice.class);
@@ -343,7 +331,6 @@ public class WeaverTest {
 
     // ===================== @BindTraveler =====================
 
-    @Test
     public void shouldBindTraveler() throws Exception {
         // given
         Misc test = newWovenObject(BasicMisc.class, Misc.class, BindTravelerAdvice.class);
@@ -355,7 +342,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterTraveler.get()).isEqualTo("a traveler");
     }
 
-    @Test
     public void shouldBindPrimitiveTraveler() throws Exception {
         // given
         Misc test = newWovenObject(BasicMisc.class, Misc.class, BindPrimitiveTravelerAdvice.class);
@@ -367,7 +353,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterTraveler.get()).isEqualTo(3);
     }
 
-    @Test
     public void shouldBindPrimitiveBooleanTraveler() throws Exception {
         // given
         Misc test = newWovenObject(BasicMisc.class, Misc.class,
@@ -380,7 +365,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterTraveler.get()).isEqualTo(true);
     }
 
-    @Test
     public void shouldBindTravelerOnThrow() throws Exception {
         // given
         Misc test = newWovenObject(ThrowingMisc.class, Misc.class, BindTravelerAdvice.class);
@@ -397,7 +381,6 @@ public class WeaverTest {
 
     // ===================== @BindClassMeta =====================
 
-    @Test
     public void shouldBindClassMeta() throws Exception {
         // given
         Misc test = newWovenObject(BasicMisc.class, Misc.class, BindClassMetaAdvice.class,
@@ -418,7 +401,6 @@ public class WeaverTest {
                 .isEqualTo(BasicMisc.class.getName());
     }
 
-    @Test
     public void shouldBindClassMetaOnThrow() throws Exception {
         // given
         Misc test = newWovenObject(ThrowingMisc.class, Misc.class, BindClassMetaAdvice.class,
@@ -444,7 +426,6 @@ public class WeaverTest {
 
     // ===================== @BindMethodMeta =====================
 
-    @Test
     public void shouldBindMethodMeta() throws Exception {
         // given
         Misc test = newWovenObject(BasicMisc.class, Misc.class, BindMethodMetaAdvice.class,
@@ -469,7 +450,6 @@ public class WeaverTest {
                 .isEqualTo(SomeAspectThreadLocals.isEnabledMethodMeta.get());
     }
 
-    @Test
     public void shouldBindMethodMetaOnThrow() throws Exception {
         // given
         Misc test = newWovenObject(ThrowingMisc.class, Misc.class, BindMethodMetaAdvice.class,
@@ -497,7 +477,6 @@ public class WeaverTest {
                 .isEqualTo(SomeAspectThreadLocals.isEnabledMethodMeta.get());
     }
 
-    @Test
     public void shouldBindMethodMetaArrays() throws Exception {
         // given
         Misc test = newWovenObject(ArrayMisc.class, Misc.class, BindMethodMetaArrayAdvice.class,
@@ -522,7 +501,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterMethodMeta.get()).isEqualTo(testMethodMeta);
     }
 
-    @Test
     public void shouldBindMethodMetaReturnArray() throws Exception {
         // given
         Misc test = newWovenObject(ArrayMisc.class, Misc.class,
@@ -544,7 +522,6 @@ public class WeaverTest {
 
     // ===================== @BindReturn =====================
 
-    @Test
     public void shouldBindReturn() throws Exception {
         // given
         Misc test = newWovenObject(BasicMisc.class, Misc.class, BindReturnAdvice.class);
@@ -554,7 +531,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.returnValue.get()).isEqualTo("xyz");
     }
 
-    @Test
     public void shouldBindPrimitiveReturn() throws Exception {
         // given
         Misc test =
@@ -565,7 +541,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.returnValue.get()).isEqualTo(4);
     }
 
-    @Test
     public void shouldBindAutoboxedReturn() throws Exception {
         // given
         Misc test =
@@ -578,7 +553,6 @@ public class WeaverTest {
 
     // ===================== @BindOptionalReturn =====================
 
-    @Test
     public void shouldBindOptionalReturn() throws Exception {
         // given
         Misc test = newWovenObject(BasicMisc.class, Misc.class, BindOptionalReturnAdvice.class,
@@ -590,7 +564,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.optionalReturnValue.get().getValue()).isEqualTo("xyz");
     }
 
-    @Test
     public void shouldBindOptionalVoidReturn() throws Exception {
         // given
         Misc test = newWovenObject(BasicMisc.class, Misc.class, BindOptionalVoidReturnAdvice.class,
@@ -601,7 +574,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.optionalReturnValue.get().isVoid()).isTrue();
     }
 
-    @Test
     public void shouldBindOptionalPrimitiveReturn() throws Exception {
         // given
         Misc test = newWovenObject(PrimitiveMisc.class, Misc.class,
@@ -616,7 +588,6 @@ public class WeaverTest {
 
     // ===================== @BindThrowable =====================
 
-    @Test
     public void shouldBindThrowable() throws Exception {
         // given
         Misc test = newWovenObject(ThrowingMisc.class, Misc.class, BindThrowableAdvice.class);
@@ -632,7 +603,6 @@ public class WeaverTest {
 
     // ===================== @BindMethodName =====================
 
-    @Test
     public void shouldBindMethodName() throws Exception {
         // given
         Misc test = newWovenObject(BasicMisc.class, Misc.class, BindMethodNameAdvice.class);
@@ -648,7 +618,6 @@ public class WeaverTest {
 
     // ===================== change return value =====================
 
-    @Test
     public void shouldChangeReturnValue() throws Exception {
         // given
         Misc test = newWovenObject(BasicMisc.class, Misc.class, ChangeReturnAdvice.class);
@@ -660,7 +629,6 @@ public class WeaverTest {
 
     // ===================== inheritance =====================
 
-    @Test
     public void shouldNotWeaveIfDoesNotOverrideMatch() throws Exception {
         // given
         Misc2 test = newWovenObject(BasicMisc.class, Misc2.class, BasicAdvice.class);
@@ -675,7 +643,6 @@ public class WeaverTest {
 
     // ===================== methodParameters '..' =====================
 
-    @Test
     public void shouldMatchMethodParametersDotDot1() throws Exception {
         // given
         Misc test =
@@ -686,7 +653,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onBeforeCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldNotMatchMethodParametersBadDotDot1() throws Exception {
         // given
         Misc test =
@@ -697,7 +663,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onBeforeCount.get()).isEqualTo(0);
     }
 
-    @Test
     public void shouldMatchMethodParametersDotDot2() throws Exception {
         // given
         Misc test =
@@ -708,7 +673,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onBeforeCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldMatchMethodParametersDotDot3() throws Exception {
         // given
         Misc test =
@@ -721,7 +685,6 @@ public class WeaverTest {
 
     // ===================== @Pointcut.subTypeRestriction =====================
 
-    @Test
     public void shouldExecuteSubTypeRestrictionAdvice() throws Exception {
         // given
         Misc test = newWovenObject(BasicMisc.class, Misc.class, SubTypeRestrictionAdvice.class);
@@ -734,7 +697,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldExecuteSubTypeRestrictionAdvice2() throws Exception {
         // given
         Misc test = newWovenObject(SubBasicMisc.class, Misc.class, SubTypeRestrictionAdvice.class);
@@ -747,7 +709,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldNotExecuteSubTypeRestrictionAdvice() throws Exception {
         // given
         Misc test = newWovenObject(NestingMisc.class, Misc.class, SubTypeRestrictionAdvice.class);
@@ -760,7 +721,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(0);
     }
 
-    @Test
     public void shouldExecuteSubTypeRestrictionWhereMethodNotReImplementedInSubClassAdvice()
             throws Exception {
         // given
@@ -775,7 +735,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldExecuteSubTypeRestrictionWhereMethodNotReImplementedInSubClassAdvice2()
             throws Exception {
         // given
@@ -790,7 +749,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldNotExecuteSubTypeRestrictionWhereMethodNotReImplementedInSubClassAdvice()
             throws Exception {
         // given
@@ -805,7 +763,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(0);
     }
 
-    @Test
     public void shouldExecuteSubTypeRestrictionWhereMethodNotReImplementedInSubSubClassAdvice()
             throws Exception {
         // given
@@ -820,7 +777,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldExecuteSubTypeRestrictionWhereMethodNotReImplementedInSubSubClassAdvice2()
             throws Exception {
         // given
@@ -835,7 +791,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(0);
     }
 
-    @Test
     public void shouldNotExecuteSubTypeRestrictionWhereMethodNotReImplementedInSubSubClassAdvice()
             throws Exception {
         // given
@@ -852,7 +807,6 @@ public class WeaverTest {
 
     // ===================== @Pointcut.superTypeRestriction =====================
 
-    @Test
     public void shouldExecuteSuperTypeRestrictionAdvice() throws Exception {
         // given
         Misc test = newWovenObject(BasicMisc.class, Misc.class, SuperTypeRestrictionAdvice.class);
@@ -865,7 +819,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldExecuteSuperTypeRestrictionAdvice2() throws Exception {
         // given
         Misc test =
@@ -879,7 +832,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldNotExecuteSuperTypeRestrictionAdvice() throws Exception {
         // given
         Misc test = newWovenObject(NestingMisc.class, Misc.class, SuperTypeRestrictionAdvice.class);
@@ -892,7 +844,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(0);
     }
 
-    @Test
     public void shouldNotExecuteSuperTypeRestrictionWhereMethodNotReImplementedInSubClassAdvice()
             throws Exception {
         // given
@@ -907,7 +858,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(0);
     }
 
-    @Test
     public void shouldNotExecuteSuperTypeRestrictionWhereMethodNotReImplementedInSubClassAdvice2()
             throws Exception {
         // given
@@ -922,7 +872,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(0);
     }
 
-    @Test
     public void shouldStillNotExecuteSuperTypeRestrictionWhereMethodNotReImplementedInSubClassAdvice()
             throws Exception {
         // given
@@ -937,7 +886,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(0);
     }
 
-    @Test
     public void shouldExecuteComplexSuperTypeRestrictedPointcut() throws Exception {
         // given
         SubMisc test = newWovenObject(BasicMisc.class, SubMisc.class,
@@ -953,7 +901,6 @@ public class WeaverTest {
 
     // ===================== annotation-based pointcuts =====================
 
-    @Test
     public void shouldExecuteAnnotationBasedPointcut() throws Exception {
         // given
         Misc test = newWovenObject(BasicMisc.class, Misc.class, BasicAnnotationBasedAdvice.class);
@@ -966,7 +913,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldExecuteAnotherAnnotationBasedPointcut() throws Exception {
         // given
         Misc test = newWovenObject(BasicMisc.class, Misc.class, AnotherAnnotationBasedAdvice.class);
@@ -979,7 +925,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldExecuteAnotherAnnotationButWrongBasedPointcut() throws Exception {
         // given
         Misc test = newWovenObject(BasicMisc.class, Misc.class,
@@ -1002,7 +947,6 @@ public class WeaverTest {
     // and so if the dangerous code in the lower priority pointcut throws an exception, need to make
     // sure the @OnAfter of the higher priority pointcut is still called
 
-    @Test
     public void shouldStillCallOnAfterOfHigherPriorityPointcut() throws Exception {
         // given
 
@@ -1045,7 +989,6 @@ public class WeaverTest {
 
     // ===================== @Shim =====================
 
-    @Test
     public void shouldShim() throws Exception {
         // given
         Misc test = newWovenObject(ShimmedMisc.class, Misc.class, Shimmy.class, Shimmy.class);
@@ -1057,7 +1000,6 @@ public class WeaverTest {
 
     // ===================== @Mixin =====================
 
-    @Test
     public void shouldMixinToClass() throws Exception {
         // given
         Misc test = newWovenObject(BasicMisc.class, Misc.class, HasStringClassMixin.class,
@@ -1068,7 +1010,6 @@ public class WeaverTest {
         assertThat(((HasString) test).getString()).isEqualTo("another value");
     }
 
-    @Test
     public void shouldMixinToInterface() throws Exception {
         // given
         Misc test = newWovenObject(BasicMisc.class, Misc.class, HasStringInterfaceMixin.class,
@@ -1079,7 +1020,6 @@ public class WeaverTest {
         assertThat(((HasString) test).getString()).isEqualTo("another value");
     }
 
-    @Test
     public void shouldMixinOnlyOnce() throws Exception {
         // given
         Misc test = newWovenObject(BasicMisc.class, Misc.class, HasStringMultipleMixin.class,
@@ -1090,7 +1030,6 @@ public class WeaverTest {
         assertThat(((HasString) test).getString()).isEqualTo("another value");
     }
 
-    @Test
     public void shouldMixinAndCallInitExactlyOnce() throws Exception {
         // given
         Misc test = newWovenObject(BasicMisc.class, Misc.class, HasStringClassMixin.class,
@@ -1102,7 +1041,6 @@ public class WeaverTest {
 
     // ===================== static pointcuts =====================
 
-    @Test
     public void shouldWeaveStaticMethod() throws Exception {
         // given
         Misc test = newWovenObject(StaticMisc.class, Misc.class, StaticAdvice.class);
@@ -1115,7 +1053,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldNotWeaveStaticSubbedMethod() throws Exception {
         // given
         Misc test = newWovenObject(StaticSubbedMisc.class, Misc.class, StaticAdvice.class);
@@ -1130,7 +1067,6 @@ public class WeaverTest {
 
     // ===================== primitive args =====================
 
-    @Test
     public void shouldWeaveMethodWithPrimitiveArgs() throws Exception {
         // given
         Misc test = newWovenObject(PrimitiveMisc.class, Misc.class, PrimitiveAdvice.class);
@@ -1145,7 +1081,6 @@ public class WeaverTest {
 
     // ===================== wildcard args =====================
 
-    @Test
     public void shouldWeaveMethodWithWildcardArgs() throws Exception {
         // given
         Misc test =
@@ -1157,7 +1092,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onBeforeCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldNotBombWithWithWildcardArg() throws Exception {
         // given
         Misc test = newWovenObject(BasicMisc.class, Misc.class, WildMethodAdvice.class);
@@ -1170,7 +1104,6 @@ public class WeaverTest {
 
     // ===================== type name pattern =====================
 
-    @Test
     public void shouldWeaveTypeWithNamePattern() throws Exception {
         // given
         Misc test = newWovenObject(PrimitiveMisc.class, Misc.class, ClassNamePatternAdvice.class);
@@ -1183,7 +1116,6 @@ public class WeaverTest {
 
     // ===================== autobox args =====================
 
-    @Test
     public void shouldWeaveMethodWithAutoboxArgs() throws Exception {
         // given
         Misc test =
@@ -1196,7 +1128,6 @@ public class WeaverTest {
 
     // ===================== return type matching =====================
 
-    @Test
     public void shouldMatchMethodReturningVoid() throws Exception {
         // given
         Misc test = newWovenObject(BasicMisc.class, Misc.class, MethodReturnVoidAdvice.class);
@@ -1207,7 +1138,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onReturnCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldMatchMethodReturningCharSequence() throws Exception {
         // given
         Misc test =
@@ -1219,7 +1149,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onReturnCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldNotMatchMethodReturningString() throws Exception {
         // given
         Misc test = newWovenObject(BasicMisc.class, Misc.class, MethodReturnStringAdvice.class);
@@ -1230,7 +1159,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onReturnCount.get()).isEqualTo(0);
     }
 
-    @Test
     public void shouldNotMatchMethodBasedOnReturnType() throws Exception {
         // given
         Misc test =
@@ -1242,7 +1170,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onReturnCount.get()).isEqualTo(0);
     }
 
-    @Test
     public void shouldNotMatchMethodBasedOnReturnType2() throws Exception {
         // given
         Misc test =
@@ -1256,7 +1183,6 @@ public class WeaverTest {
 
     // ===================== bridge methods =====================
 
-    @Test
     public void shouldHandleGenericOverride1() throws Exception {
         // given
         @SuppressWarnings("unchecked")
@@ -1274,7 +1200,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldHandleGenericOverride2() throws Exception {
         // given
         @SuppressWarnings("unchecked")
@@ -1292,7 +1217,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldHandleConfusingVisibilityBridge() throws Exception {
         // given
         @SuppressWarnings("unchecked")
@@ -1310,7 +1234,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(0);
     }
 
-    @Test
     public void shouldHandleBridgeCallingSuper() throws Exception {
         // given
         @SuppressWarnings("unchecked")
@@ -1330,7 +1253,6 @@ public class WeaverTest {
 
     // ===================== constructor =====================
 
-    @Test
     public void shouldHandleConstructorPointcut() throws Exception {
         // given
         Misc test = newWovenObject(BasicMisc.class, Misc.class,
@@ -1347,7 +1269,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldVerifyConstructorPointcutsAreNested() throws Exception {
         // given
         Misc test = newWovenObject(BasicMisc.class, Misc.class,
@@ -1366,7 +1287,6 @@ public class WeaverTest {
                 "onBefore", "isEnabled", "onBefore", "onReturn", "onAfter", "onReturn", "onAfter");
     }
 
-    @Test
     public void shouldHandleInheritedMethodFulfillingAnInterface() throws Exception {
         // given
         Misc test = newWovenObject(ExtendsAbstractNotMisc.class, Misc.class, BasicAdvice.class);
@@ -1379,7 +1299,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldNotCrashOnInheritedFinalMethodFulfillingAnInterface() throws Exception {
         // given
         Misc test = newWovenObject(ExtendsAbstractNotMiscWithFinal.class, Misc.class,
@@ -1390,7 +1309,6 @@ public class WeaverTest {
         // do not crash with java.lang.VerifyError
     }
 
-    @Test
     public void shouldHandleInheritedMethod() throws Exception {
         // given
         SuperBasic test = newWovenObject(BasicMisc.class, SuperBasic.class, SuperBasicAdvice.class);
@@ -1403,7 +1321,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldHandleInheritedPublicMethodFromPackagePrivateClass() throws Exception {
         // given
         Misc test = newWovenObject(ExtendsPackagePrivateMisc.class, Misc.class, BasicAdvice.class);
@@ -1416,7 +1333,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldHandleSubInheritedMethod() throws Exception {
         // given
         SuperBasic test = newWovenObject(BasicMisc.class, SuperBasic.class, SuperBasicAdvice.class);
@@ -1429,7 +1345,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldHandleSubInheritedFromClassInBootstrapClassLoader() throws Exception {
         // given
         Exception test =
@@ -1443,7 +1358,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldHandleInnerClassArg() throws Exception {
         // given
         Misc test = newWovenObject(BasicMisc.class, Misc.class, BasicWithInnerClassArgAdvice.class);
@@ -1457,7 +1371,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldHandleInnerClass() throws Exception {
         // given
         Misc test = newWovenObject(BasicMisc.InnerMisc.class, Misc.class,
@@ -1472,7 +1385,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldHandlePointcutWithMultipleMethods() throws Exception {
         // given
         Misc test = newWovenObject(BasicMisc.class, Misc.class, MultipleMethodsAdvice.class);
@@ -1486,7 +1398,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(2);
     }
 
-    @Test
     public void shouldNotTryToWeaveNativeMethods() throws Exception {
         // given
         // when
@@ -1494,7 +1405,6 @@ public class WeaverTest {
         // then should not bomb
     }
 
-    @Test
     public void shouldNotTryToWeaveAbstractMethods() throws Exception {
         // given
         Misc test = newWovenObject(ExtendsAbstractMisc.class, Misc.class, BasicAdvice.class);
@@ -1503,7 +1413,6 @@ public class WeaverTest {
         // then should not bomb
     }
 
-    @Test
     public void shouldNotDisruptInnerTryCatch() throws Exception {
         // given
         Misc test = newWovenObject(InnerTryCatchMisc.class, Misc.class, BasicAdvice.class,
@@ -1514,7 +1423,6 @@ public class WeaverTest {
         assertThat(test.executeWithReturn()).isEqualTo("caught");
     }
 
-    @Test
     public void shouldPayAttentionToStaticModifierMatching() throws Exception {
         // given
         Misc test = newWovenObject(BasicMisc.class, Misc.class, NonMatchingStaticAdvice.class);
@@ -1527,7 +1435,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(0);
     }
 
-    @Test
     public void shouldPayAttentionToPublicAndNonStaticModifierMatching() throws Exception {
         // given
         Misc test =
@@ -1541,7 +1448,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldNotBomb() throws Exception {
         // given
         Misc test = newWovenObject(BasicMisc.class, Misc.class, BrokenAdvice.class);
@@ -1550,7 +1456,6 @@ public class WeaverTest {
         // then should not bomb
     }
 
-    @Test
     public void shouldNotBomb2() throws Exception {
         // given
         Misc test = newWovenObject(AccessibilityMisc.class, Misc.class, BasicAdvice.class);
@@ -1559,7 +1464,6 @@ public class WeaverTest {
         // then should not bomb
     }
 
-    @Test
     // weaving an interface method that references a concrete class that implements that interface
     // is supported
     public void shouldHandleCircularDependency() throws Exception {
@@ -1569,7 +1473,6 @@ public class WeaverTest {
         // then should not bomb
     }
 
-    @Test
     // weaving an interface method that appears twice in a given class hierarchy should only weave
     // the method once
     public void shouldHandleInterfaceThatAppearsTwiceInHierarchy() throws Exception {
@@ -1582,7 +1485,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onBeforeCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldHandleFinalMethodAdvice() throws Exception {
         // given
         // when
@@ -1592,7 +1494,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onBeforeCount.get()).isEqualTo(1);
     }
 
-    @Test
     // test weaving against jdk 1.7 bytecode with stack frames
     public void shouldWeaveBytecodeWithStackFrames() throws Exception {
         Assumptions.assumeFalse(StandardSystemProperty.JAVA_VERSION.value().startsWith("1.6"));
@@ -1601,7 +1502,6 @@ public class WeaverTest {
         test.executeWithReturn();
     }
 
-    @Test
     // test weaving against jdk 1.7 bytecode with stack frames
     public void shouldWeaveBytecodeWithStackFrames2() throws Exception {
         Assumptions.assumeFalse(StandardSystemProperty.JAVA_VERSION.value().startsWith("1.6"));
@@ -1610,7 +1510,6 @@ public class WeaverTest {
         test.executeWithReturn();
     }
 
-    @Test
     // test weaving against jdk 1.7 bytecode with stack frames
     public void shouldWeaveBytecodeWithStackFrames3() throws Exception {
         Assumptions.assumeFalse(StandardSystemProperty.JAVA_VERSION.value().startsWith("1.6"));
@@ -1619,7 +1518,6 @@ public class WeaverTest {
         test.executeWithReturn();
     }
 
-    @Test
     // test weaving against jdk 1.7 bytecode with stack frames
     public void shouldWeaveBytecodeWithStackFrames4() throws Exception {
         Assumptions.assumeFalse(StandardSystemProperty.JAVA_VERSION.value().startsWith("1.6"));
@@ -1628,7 +1526,6 @@ public class WeaverTest {
         test.executeWithReturn();
     }
 
-    @Test
     // test weaving against jdk 1.7 bytecode with stack frames
     public void shouldWeaveBytecodeWithStackFrames5() throws Exception {
         Assumptions.assumeFalse(StandardSystemProperty.JAVA_VERSION.value().startsWith("1.6"));
@@ -1637,7 +1534,6 @@ public class WeaverTest {
         test.executeWithReturn();
     }
 
-    @Test
     // test weaving against jdk 1.7 bytecode with stack frames
     public void shouldWeaveBytecodeWithStackFrames6() throws Exception {
         Assumptions.assumeFalse(StandardSystemProperty.JAVA_VERSION.value().startsWith("1.6"));
@@ -1646,7 +1542,6 @@ public class WeaverTest {
         test.executeWithReturn();
     }
 
-    @Test
     // test weaving against jdk 1.7 bytecode with stack frames
     public void shouldNotBombWithDuplicateFrames() throws Exception {
         // TODO this test only proves something when -target 1.7 (which currently it never is during
@@ -1655,7 +1550,6 @@ public class WeaverTest {
         newWovenObject(DuplicateStackFramesMisc.class, Misc.class, BasicAdvice.class);
     }
 
-    @Test
     public void shouldNotBombWithTroublesomeBytecode() throws Exception {
         // this actually works with -target 1.6 as long as run using 1.7 jvm since it defines the
         // troublesome bytecode at runtime as jdk 1.7 bytecode
@@ -1667,7 +1561,6 @@ public class WeaverTest {
 
     // ===================== test not perfect bytecode =====================
 
-    @Test
     public void shouldExecuteAdviceOnNotPerfectBytecode() throws Exception {
         // given
         LazyDefinedClass implClass = GenerateNotPerfectBytecode.generateNotPerfectBytecode();
@@ -1684,7 +1577,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(3);
     }
 
-    @Test
     public void shouldExecuteAdviceOnMoreNotPerfectBytecode() throws Exception {
         // given
         LazyDefinedClass implClass =
@@ -1700,7 +1592,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldExecuteAdviceOnMoreNotPerfectBytecodeVariant() throws Exception {
         // given
         LazyDefinedClass implClass =
@@ -1716,7 +1607,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldExecuteAdviceOnStillMoreNotPerfectBytecode() throws Exception {
         // given
         LazyDefinedClass implClass =
@@ -1732,7 +1622,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldExecuteAdviceOnHackedConstructorBytecode() throws Exception {
         // given
         LazyDefinedClass implClass =
@@ -1749,7 +1638,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldExecuteAdviceOnMoreHackedConstructorBytecode() throws Exception {
         // given
         LazyDefinedClass implClass =
@@ -1766,7 +1654,6 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldExecuteSingleJumpAdviceOnHackedConstructorBytecode() throws Exception {
         // given
         LazyDefinedClass implClass =
@@ -1789,7 +1676,6 @@ public class WeaverTest {
 
     // ===================== test mutable parameter =====================
 
-    @Test
     public void shouldMutateParameter() throws Exception {
         // given
         Misc test = newWovenObject(ThrowMutatedParamMisc.class, Misc.class,
@@ -1805,7 +1691,6 @@ public class WeaverTest {
         assertThat(param).isEqualTo("one and more / 3");
     }
 
-    @Test
     public void shouldMutateParameterWithMoreFrames() throws Exception {
         // when
         newWovenObject(ThrowMutatedParamMisc.class, Misc.class,

@@ -50,7 +50,6 @@ import org.glowroot.wire.api.model.Proto.OptionalInt32;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-@JsonService
 class InstrumentationConfigJsonService {
 
     private static final Logger logger =
@@ -63,21 +62,20 @@ class InstrumentationConfigJsonService {
 
     private final boolean central;
     private final ConfigRepository configRepository;
-    private final @Nullable LiveWeavingService liveWeavingService;
-    private final @Nullable LiveJvmService liveJvmService;
+    private final LiveWeavingService liveWeavingService;
+    private final LiveJvmService liveJvmService;
 
     InstrumentationConfigJsonService(boolean central, ConfigRepository configRepository,
-            @Nullable LiveWeavingService liveWeavingService,
-            @Nullable LiveJvmService liveJvmService) {
+            LiveWeavingService liveWeavingService,
+            LiveJvmService liveJvmService) {
         this.central = central;
         this.configRepository = configRepository;
         this.liveWeavingService = liveWeavingService;
         this.liveJvmService = liveJvmService;
     }
 
-    @GET(path = "/backend/config/instrumentation", permission = "agent:config:view:instrumentation")
-    String getInstrumentationConfig(@BindAgentId String agentId,
-            @BindRequest InstrumentationConfigRequest request) throws Exception {
+    String getInstrumentationConfig(String agentId,
+            InstrumentationConfigRequest request) throws Exception {
         Optional<String> version = request.version();
         if (version.isPresent()) {
             return getInstrumentationConfigInternal(agentId, version.get());
@@ -106,9 +104,7 @@ class InstrumentationConfigJsonService {
         }
     }
 
-    @GET(path = "/backend/config/preload-classpath-cache",
-            permission = "agent:config:view:instrumentation")
-    void preloadClasspathCache(final @BindAgentId String agentId) throws Exception {
+    void preloadClasspathCache(final String agentId) throws Exception {
         if (liveWeavingService == null) {
             return;
         }
@@ -142,36 +138,28 @@ class InstrumentationConfigJsonService {
         }
     }
 
-    @GET(path = "/backend/config/new-instrumentation-check-agent-connected",
-            permission = "agent:config:edit:instrumentation")
-    String checkAgentConnected(@BindAgentId String agentId) throws Exception {
+    String checkAgentConnected(String agentId) throws Exception {
         checkNotNull(liveJvmService); // agent:config:edit is disabled in offline viewer
         return Boolean.toString(liveJvmService.isAvailable(agentId));
     }
 
-    @GET(path = "/backend/config/matching-class-names",
-            permission = "agent:config:edit:instrumentation")
-    String getMatchingClassNames(@BindAgentId String agentId,
-            @BindRequest ClassNamesRequest request) throws Exception {
+    String getMatchingClassNames(String agentId,
+            ClassNamesRequest request) throws Exception {
         checkNotNull(liveWeavingService); // agent:config:edit is disabled in offline viewer
         return mapper.writeValueAsString(liveWeavingService.getMatchingClassNames(agentId,
                 request.partialClassName(), request.limit()));
     }
 
-    @GET(path = "/backend/config/matching-method-names",
-            permission = "agent:config:edit:instrumentation")
-    String getMatchingMethodNames(@BindAgentId String agentId,
-            @BindRequest MethodNamesRequest request) throws Exception {
+    String getMatchingMethodNames(String agentId,
+            MethodNamesRequest request) throws Exception {
         checkNotNull(liveWeavingService); // agent:config:edit is disabled in offline viewer
         List<String> matchingMethodNames = liveWeavingService.getMatchingMethodNames(agentId,
                 request.className(), request.partialMethodName(), request.limit());
         return mapper.writeValueAsString(matchingMethodNames);
     }
 
-    @GET(path = "/backend/config/method-signatures",
-            permission = "agent:config:edit:instrumentation")
-    String getMethodSignatures(@BindAgentId String agentId,
-            @BindRequest MethodSignaturesRequest request) throws Exception {
+    String getMethodSignatures(String agentId,
+            MethodSignaturesRequest request) throws Exception {
         checkNotNull(liveWeavingService); // agent:config:edit is disabled in offline viewer
         List<MethodSignature> signatures = liveWeavingService.getMethodSignatures(agentId,
                 request.className(), request.methodName());
@@ -182,36 +170,28 @@ class InstrumentationConfigJsonService {
         return mapper.writeValueAsString(methodSignatures);
     }
 
-    @POST(path = "/backend/config/instrumentation/add",
-            permission = "agent:config:edit:instrumentation")
-    String addInstrumentationConfig(@BindAgentId String agentId,
-            @BindRequest InstrumentationConfigDto configDto) throws Exception {
+    String addInstrumentationConfig(String agentId,
+            InstrumentationConfigDto configDto) throws Exception {
         InstrumentationConfig config = configDto.convert();
         configRepository.insertInstrumentationConfig(agentId, config);
         return getInstrumentationConfigInternal(agentId, Versions.getVersion(config));
     }
 
-    @POST(path = "/backend/config/instrumentation/update",
-            permission = "agent:config:edit:instrumentation")
-    String updateInstrumentationConfig(@BindAgentId String agentId,
-            @BindRequest InstrumentationConfigDto configDto) throws Exception {
+    String updateInstrumentationConfig(String agentId,
+            InstrumentationConfigDto configDto) throws Exception {
         InstrumentationConfig config = configDto.convert();
         String version = configDto.version().get();
         configRepository.updateInstrumentationConfig(agentId, config, version);
         return getInstrumentationConfigInternal(agentId, Versions.getVersion(config));
     }
 
-    @POST(path = "/backend/config/instrumentation/remove",
-            permission = "agent:config:edit:instrumentation")
-    void removeInstrumentationConfig(@BindAgentId String agentId,
-            @BindRequest InstrumentationDeleteRequest request) throws Exception {
+    void removeInstrumentationConfig(String agentId,
+            InstrumentationDeleteRequest request) throws Exception {
         configRepository.deleteInstrumentationConfigs(agentId, request.versions());
     }
 
-    @POST(path = "/backend/config/instrumentation/import",
-            permission = "agent:config:edit:instrumentation")
-    void importInstrumentationConfig(@BindAgentId String agentId,
-            @BindRequest InstrumentationImportRequest request) throws Exception {
+    void importInstrumentationConfig(String agentId,
+            InstrumentationImportRequest request) throws Exception {
         List<InstrumentationConfig> configs = Lists.newArrayList();
         for (InstrumentationConfigDto configDto : request.configs()) {
             configs.add(configDto.convert());
@@ -219,8 +199,7 @@ class InstrumentationConfigJsonService {
         configRepository.insertInstrumentationConfigs(agentId, configs);
     }
 
-    @POST(path = "/backend/config/reweave", permission = "agent:config:edit:instrumentation")
-    String reweave(@BindAgentId String agentId) throws Exception {
+    String reweave(String agentId) throws Exception {
         checkNotNull(liveWeavingService); // agent:config:edit is disabled in offline viewer
         int count = liveWeavingService.reweave(agentId);
         return "{\"classes\":" + count + "}";
@@ -274,61 +253,50 @@ class InstrumentationConfigJsonService {
                 && config.getMethodParameterType(0).equals("..");
     }
 
-    @Value.Immutable
     interface InstrumentationConfigRequest {
         Optional<String> version();
     }
 
-    @Value.Immutable
     interface ClassNamesRequest {
         String partialClassName();
         int limit();
     }
 
-    @Value.Immutable
     interface MethodNamesRequest {
         String className();
         String partialMethodName();
         int limit();
     }
 
-    @Value.Immutable
     interface MethodSignaturesRequest {
         String className();
         String methodName();
     }
 
-    @Value.Immutable
     interface InstrumentationListResponse {
         ImmutableList<InstrumentationConfigDto> configs();
         boolean jvmOutOfSync();
         boolean jvmRetransformClassesSupported();
     }
 
-    @Value.Immutable
     interface InstrumentationConfigResponse {
         boolean agentNotConnected();
         InstrumentationConfigDto config();
         ImmutableList<MethodSignatureDto> methodSignatures();
     }
 
-    @Value.Immutable
     interface InstrumentationErrorResponse {
         ImmutableList<String> errors();
     }
 
-    @Value.Immutable
     interface InstrumentationImportRequest {
         ImmutableList<ImmutableInstrumentationConfigDto> configs();
     }
 
-    @Value.Immutable
     interface InstrumentationDeleteRequest {
         List<String> versions();
     }
 
-    @Value.Immutable
-    @JsonInclude(Include.ALWAYS)
     abstract static class InstrumentationConfigDto {
 
         abstract String className();
@@ -341,8 +309,7 @@ class InstrumentationConfigJsonService {
         // also included here to support glowroot central 0.9.16 or newer running agent 0.9.15 or
         // older
         @Deprecated
-        @JsonInclude(Include.NON_NULL)
-        abstract @Nullable String methodDeclaringClassName();
+        abstract String methodDeclaringClassName();
         abstract String methodName();
         abstract String methodAnnotation();
         abstract ImmutableList<String> methodParameterTypes();
@@ -355,11 +322,11 @@ class InstrumentationConfigJsonService {
         abstract String transactionNameTemplate();
         abstract String transactionUserTemplate();
         abstract Map<String, String> transactionAttributeTemplates();
-        abstract @Nullable Integer transactionSlowThresholdMillis();
-        abstract @Nullable AlreadyInTransactionBehavior alreadyInTransactionBehavior();
+        abstract Integer transactionSlowThresholdMillis();
+        abstract AlreadyInTransactionBehavior alreadyInTransactionBehavior();
         abstract boolean transactionOuter();
         abstract String traceEntryMessageTemplate();
-        abstract @Nullable Integer traceEntryStackThresholdMillis();
+        abstract Integer traceEntryStackThresholdMillis();
         abstract boolean traceEntryCaptureSelfNested();
         abstract String timerName();
         abstract String enabledProperty();
@@ -465,8 +432,6 @@ class InstrumentationConfigJsonService {
         }
     }
 
-    @Value.Immutable
-    @JsonInclude(Include.ALWAYS)
     abstract static class MethodSignatureDto {
 
         abstract String name();
@@ -484,7 +449,6 @@ class InstrumentationConfigJsonService {
         }
     }
 
-    @VisibleForTesting
     static class InstrumentationConfigOrdering extends Ordering<InstrumentationConfig> {
         @Override
         public int compare(InstrumentationConfig left, InstrumentationConfig right) {

@@ -116,7 +116,7 @@ public class SchemaUpgrade {
     private final boolean servlet;
 
     private final PreparedStatement insertIntoSchemVersionPS;
-    private final @Nullable Integer initialSchemaVersion;
+    private final Integer initialSchemaVersion;
 
     private boolean reloadCentralConfiguration;
 
@@ -133,7 +133,7 @@ public class SchemaUpgrade {
         initialSchemaVersion = getSchemaVersion(session);
     }
 
-    public @Nullable Integer getInitialSchemaVersion() {
+    public Integer getInitialSchemaVersion() {
         return initialSchemaVersion;
     }
 
@@ -2982,8 +2982,7 @@ public class SchemaUpgrade {
                 .build();
     }
 
-    @VisibleForTesting
-    static @Nullable Set<String> upgradePermissions(Set<String> permissions) {
+    static Set<String> upgradePermissions(Set<String> permissions) {
         Set<String> updatedPermissions = new HashSet<>();
         ListMultimap<String, String> agentPermissions = ArrayListMultimap.create();
         boolean needsUpgrade = false;
@@ -3023,7 +3022,6 @@ public class SchemaUpgrade {
         return updatedPermissions;
     }
 
-    @VisibleForTesting
     static Set<String> upgradePermissions2(Set<String> permissions) {
         Set<String> permissionsToBeAdded = new HashSet<>();
         for (String permission : permissions) {
@@ -3187,7 +3185,7 @@ public class SchemaUpgrade {
         boundStatement.setBytes(i, row.getBytes(i));
     }
 
-    private static @Nullable Integer getSchemaVersion(Session session) throws Exception {
+    private static Integer getSchemaVersion(Session session) throws Exception {
         ResultSet results =
                 session.read("select schema_version from schema_version where one = 1");
         Row row = results.one();
@@ -3204,27 +3202,21 @@ public class SchemaUpgrade {
         return null;
     }
 
-    @Value.Immutable
-    @Styles.AllParameters
     interface AgentRollupIdGaugeNamePair {
         String agentRollupId();
         String gaugeName();
     }
 
-    @Value.Immutable
-    @Styles.AllParameters
     interface AgentRollupIdSyntheticMonitorIdPair {
         String agentRollupId();
         String syntheticMonitorId();
     }
 
-    @Value.Immutable
     interface V09AgentRollup {
         boolean agent();
         boolean hasRollup();
         String agentRollupId();
         String v09AgentRollupId();
-        @Nullable
         String v09ParentAgentRollupId();
     }
 }

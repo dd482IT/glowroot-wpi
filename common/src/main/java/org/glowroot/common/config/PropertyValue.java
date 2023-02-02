@@ -38,17 +38,15 @@ import org.glowroot.wire.api.model.AgentConfigOuterClass.AgentConfig.PluginPrope
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-@JsonSerialize(using = PropertyValueSerializer.class)
-@JsonDeserialize(using = PropertyValueDeserializer.class)
 public class PropertyValue {
 
     // can be boolean, @Nullable Double or @NonNull String
-    private final @Nullable Object value;
-    public PropertyValue(@Nullable Object value) {
+    private final Object value;
+    public PropertyValue(Object value) {
         this.value = value;
     }
 
-    public @Nullable Object value() {
+    public Object value() {
         return value;
     }
 

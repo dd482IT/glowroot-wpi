@@ -64,7 +64,6 @@ class TraceCommonService {
         this.agentDisplayRepository = agentDisplayRepository;
     }
 
-    @Nullable
     String getHeaderJson(String agentId, String traceId, boolean checkLiveTraces) throws Exception {
         if (checkLiveTraces) {
             // check active/pending traces first, and lastly stored traces to make sure that the
@@ -88,7 +87,6 @@ class TraceCommonService {
         return toJsonRepoHeader(agentId, header);
     }
 
-    @Nullable
     String getEntriesJson(String agentId, String traceId, boolean checkLiveTraces)
             throws Exception {
         if (checkLiveTraces) {
@@ -109,7 +107,6 @@ class TraceCommonService {
         return toJson(getStoredEntries(agentId, traceId, new RetryCountdown(checkLiveTraces)));
     }
 
-    @Nullable
     String getQueriesJson(String agentId, String traceId, boolean checkLiveTraces)
             throws Exception {
         if (checkLiveTraces) {
@@ -130,19 +127,16 @@ class TraceCommonService {
         return toJson(getStoredQueries(agentId, traceId, new RetryCountdown(checkLiveTraces)));
     }
 
-    @Nullable
     String getMainThreadProfileJson(String agentId, String traceId, boolean checkLiveTraces)
             throws Exception {
         return toJson(getMainThreadProfile(agentId, traceId, checkLiveTraces));
     }
 
-    @Nullable
     String getAuxThreadProfileJson(String agentId, String traceId, boolean checkLiveTraces)
             throws Exception {
         return toJson(getAuxThreadProfile(agentId, traceId, checkLiveTraces));
     }
 
-    @Nullable
     Profile getMainThreadProfile(String agentId, String traceId, boolean checkLiveTraces)
             throws Exception {
         if (checkLiveTraces) {
@@ -163,7 +157,6 @@ class TraceCommonService {
         return getStoredMainThreadProfile(agentId, traceId, new RetryCountdown(checkLiveTraces));
     }
 
-    @Nullable
     Profile getAuxThreadProfile(String agentId, String traceId, boolean checkLiveTraces)
             throws Exception {
         if (checkLiveTraces) {
@@ -184,7 +177,6 @@ class TraceCommonService {
         return getStoredAuxThreadProfile(agentId, traceId, new RetryCountdown(checkLiveTraces));
     }
 
-    @Nullable
     TraceExport getExport(String agentId, String traceId, boolean checkLiveTraces)
             throws Exception {
         if (checkLiveTraces) {
@@ -239,7 +231,7 @@ class TraceCommonService {
         return builder.build();
     }
 
-    private @Nullable HeaderPlus getStoredHeader(String agentId, String traceId,
+    private HeaderPlus getStoredHeader(String agentId, String traceId,
             RetryCountdown retryCountdown) throws Exception {
         HeaderPlus headerPlus = traceRepository.readHeaderPlus(agentId, traceId);
         while (headerPlus == null && retryCountdown.remaining-- > 0) {
@@ -250,7 +242,7 @@ class TraceCommonService {
         return headerPlus;
     }
 
-    private @Nullable Entries getStoredEntries(String agentId, String traceId,
+    private Entries getStoredEntries(String agentId, String traceId,
             RetryCountdown retryCountdown) throws Exception {
         Entries entries = traceRepository.readEntries(agentId, traceId);
         while (entries == null && retryCountdown.remaining-- > 0) {
@@ -261,7 +253,7 @@ class TraceCommonService {
         return entries;
     }
 
-    private @Nullable Queries getStoredQueries(String agentId, String traceId,
+    private Queries getStoredQueries(String agentId, String traceId,
             RetryCountdown retryCountdown) throws Exception {
         Queries queries = traceRepository.readQueries(agentId, traceId);
         while (queries == null && retryCountdown.remaining-- > 0) {
@@ -272,7 +264,7 @@ class TraceCommonService {
         return queries;
     }
 
-    private @Nullable EntriesAndQueries getStoredEntriesAndQueriesForExport(String agentId,
+    private EntriesAndQueries getStoredEntriesAndQueriesForExport(String agentId,
             String traceId, RetryCountdown retryCountdown) throws Exception {
         EntriesAndQueries entries =
                 traceRepository.readEntriesAndQueriesForExport(agentId, traceId);
@@ -284,7 +276,7 @@ class TraceCommonService {
         return entries;
     }
 
-    private @Nullable Profile getStoredMainThreadProfile(String agentId, String traceId,
+    private Profile getStoredMainThreadProfile(String agentId, String traceId,
             RetryCountdown retryCountdown) throws Exception {
         Profile profile = traceRepository.readMainThreadProfile(agentId, traceId);
         while (profile == null && retryCountdown.remaining-- > 0) {
@@ -295,7 +287,7 @@ class TraceCommonService {
         return profile;
     }
 
-    private @Nullable Profile getStoredAuxThreadProfile(String agentId, String traceId,
+    private Profile getStoredAuxThreadProfile(String agentId, String traceId,
             RetryCountdown retryCountdown) throws Exception {
         Profile profile = traceRepository.readAuxThreadProfile(agentId, traceId);
         while (profile == null && retryCountdown.remaining-- > 0) {
@@ -306,7 +298,7 @@ class TraceCommonService {
         return profile;
     }
 
-    private static @Nullable String toJson(@Nullable Entries entries) throws IOException {
+    private static String toJson(Entries entries) throws IOException {
         if (entries == null) {
             return null;
         }
@@ -325,7 +317,7 @@ class TraceCommonService {
         return sb.toString();
     }
 
-    private static @Nullable String toJson(@Nullable Queries queries) throws IOException {
+    private static String toJson(Queries queries) throws IOException {
         if (queries == null) {
             return null;
         }
@@ -344,8 +336,7 @@ class TraceCommonService {
         return sb.toString();
     }
 
-    @VisibleForTesting
-    static @Nullable String entriesToJson(List<Trace.Entry> entries) throws IOException {
+    static String entriesToJson(List<Trace.Entry> entries) throws IOException {
         if (entries.isEmpty()) {
             return null;
         }
@@ -359,8 +350,7 @@ class TraceCommonService {
         return sb.toString();
     }
 
-    @VisibleForTesting
-    static @Nullable String queriesToJson(List<Aggregate.Query> queries) throws IOException {
+    static String queriesToJson(List<Aggregate.Query> queries) throws IOException {
         if (queries.isEmpty()) {
             return null;
         }
@@ -374,7 +364,7 @@ class TraceCommonService {
         return sb.toString();
     }
 
-    private static @Nullable String sharedQueryTextsToJson(
+    private static String sharedQueryTextsToJson(
             List<Trace.SharedQueryText> sharedQueryTexts) throws IOException {
         if (sharedQueryTexts.isEmpty()) {
             return null;
@@ -446,7 +436,7 @@ class TraceCommonService {
         jg.writeEndArray();
     }
 
-    private static @Nullable String toJson(@Nullable Profile profile) throws IOException {
+    private static String toJson(Profile profile) throws IOException {
         if (profile == null) {
             return null;
         }
@@ -774,20 +764,13 @@ class TraceCommonService {
         }
     }
 
-    @Value.Immutable
-    @Styles.AllParameters
     interface TraceExport {
         String fileName();
         String headerJson();
-        @Nullable
         String entriesJson();
-        @Nullable
         String queriesJson();
-        @Nullable
         String sharedQueryTextsJson();
-        @Nullable
         String mainThreadProfileJson();
-        @Nullable
         String auxThreadProfileJson();
     }
 }

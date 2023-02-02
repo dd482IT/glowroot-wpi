@@ -107,7 +107,7 @@ public class Transaction {
 
     private static final Random random = new Random();
 
-    private volatile @Nullable String traceId;
+    private volatile String traceId;
 
     private final long startTime;
     private final long startTick;
@@ -121,16 +121,15 @@ public class Transaction {
     private volatile String transactionName;
     private volatile int transactionNamePriority = Integer.MIN_VALUE;
 
-    private volatile @Nullable String user;
+    private volatile String user;
     private volatile int userPriority = Integer.MIN_VALUE;
 
     private final Object attributesLock = new Object();
     // lazy loaded to reduce memory when custom attributes are not used
-    @GuardedBy("attributesLock")
-    private @MonotonicNonNull SetMultimap<String, String> attributes;
+    private SetMultimap<String, String> attributes;
 
     // trace-level error
-    private volatile @Nullable ErrorMessage errorMessage;
+    private volatile ErrorMessage errorMessage;
 
     private final int maxTraceEntries;
     private final int maxQueryAggregates;
@@ -142,8 +141,8 @@ public class Transaction {
     private final ConfigService configService;
 
     // stack trace data constructed from profiling
-    private volatile @MonotonicNonNull ThreadProfile mainThreadProfile;
-    private volatile @MonotonicNonNull ThreadProfile auxThreadProfile;
+    private volatile ThreadProfile mainThreadProfile;
+    private volatile ThreadProfile auxThreadProfile;
 
     // overrides general store threshold
     // -1 means don't override the general store threshold
@@ -152,7 +151,7 @@ public class Transaction {
 
     // this is stored in the trace so it is only scheduled a single time, and also so it can be
     // canceled at trace completion
-    private volatile @MonotonicNonNull Cancellable immedateTraceStoreRunnable;
+    private volatile Cancellable immedateTraceStoreRunnable;
 
     private volatile boolean partiallyStored;
 
@@ -174,23 +173,19 @@ public class Transaction {
     private volatile int entryLimitCounter;
     private volatile int extraErrorEntryLimitCounter;
 
-    private volatile @Nullable AtomicInteger throwableFrameLimitCounter;
+    private volatile AtomicInteger throwableFrameLimitCounter;
 
     private final ThreadContextImpl mainThreadContext;
 
-    @GuardedBy("mainThreadContext")
-    private @MonotonicNonNull List<ThreadContextImpl> auxThreadContexts;
-    @GuardedBy("mainThreadContext")
-    private @MonotonicNonNull List<ThreadContextImpl> unmergeableAuxThreadContexts;
-    @GuardedBy("mainThreadContext")
-    private @MonotonicNonNull Set<ThreadContextImpl> unmergedLimitExceededAuxThreadContexts;
+    private List<ThreadContextImpl> auxThreadContexts;
+    private List<ThreadContextImpl> unmergeableAuxThreadContexts;
+    private Set<ThreadContextImpl> unmergedLimitExceededAuxThreadContexts;
 
     private final Object asyncComponentsInitLock = new Object();
-    private volatile @MonotonicNonNull AsyncComponents asyncComponents;
+    private volatile AsyncComponents asyncComponents;
 
     private final Object sharedQueryTextCollectionLock = new Object();
-    @GuardedBy("sharedQueryTextCollectionLock")
-    private @MonotonicNonNull SharedQueryTextCollectionImpl sharedQueryTextCollection;
+    private SharedQueryTextCollectionImpl sharedQueryTextCollection;
 
     private Map<Object, StackTraceElement[]> unreleasedResources = Maps.newConcurrentMap();
 
@@ -200,23 +195,18 @@ public class Transaction {
 
     private final Ticker ticker;
 
-    private @Nullable SelfRemovableEntry transactionEntry;
+    private SelfRemovableEntry transactionEntry;
 
-    @GuardedBy("mainThreadContext")
-    private @MonotonicNonNull RootTimerCollectorImpl alreadyMergedAuxThreadTimers;
-    @GuardedBy("mainThreadContext")
-    private @MonotonicNonNull ThreadStatsCollectorImpl alreadyMergedAuxThreadStats;
-    @GuardedBy("mainThreadContext")
-    private @MonotonicNonNull QueryCollector alreadyMergedAuxQueries;
-    @GuardedBy("mainThreadContext")
-    private @MonotonicNonNull ServiceCallCollector alreadyMergedAuxServiceCalls;
-    @GuardedBy("mainThreadContext")
+    private RootTimerCollectorImpl alreadyMergedAuxThreadTimers;
+    private ThreadStatsCollectorImpl alreadyMergedAuxThreadStats;
+    private QueryCollector alreadyMergedAuxQueries;
+    private ServiceCallCollector alreadyMergedAuxServiceCalls;
     private boolean stopMergingAuxThreadContexts;
 
     Transaction(long startTime, long startTick, String transactionType, String transactionName,
             MessageSupplier messageSupplier, TimerName timerName, boolean captureThreadStats,
             int maxTraceEntries, int maxQueryAggregates, int maxServiceCallAggregates,
-            int maxProfileSamples, @Nullable ThreadAllocatedBytes threadAllocatedBytes,
+            int maxProfileSamples, ThreadAllocatedBytes threadAllocatedBytes,
             CompletionCallback completionCallback, Ticker ticker,
             TransactionRegistry transactionRegistry, TransactionService transactionService,
             ConfigService configService, ThreadContextThreadLocal.Holder threadContextHolder,
@@ -318,12 +308,11 @@ public class Transaction {
         return ((ReadableMessage) ((MessageSupplier) messageSupplier).get()).getDetail();
     }
 
-    @Nullable
     List<StackTraceElement> getLocationStackTrace() {
         return mainThreadContext.getRootEntry().getLocationStackTrace();
     }
 
-    public @Nullable ErrorMessage getErrorMessage() {
+    public ErrorMessage getErrorMessage() {
         // don't prefer the root entry error message since it is likely a more generic error
         // message, e.g. servlet response sendError(500)
         if (errorMessage != null) {
@@ -537,12 +526,11 @@ public class Transaction {
         }
     }
 
-    @Nullable
     ThreadProfile getMainThreadProfile() {
         return mainThreadProfile;
     }
 
-    public @Nullable Profile getMainThreadProfileProtobuf() {
+    public Profile getMainThreadProfileProtobuf() {
         if (mainThreadProfile == null) {
             return null;
         }
@@ -562,12 +550,11 @@ public class Transaction {
         }
     }
 
-    @Nullable
     ThreadProfile getAuxThreadProfile() {
         return auxThreadProfile;
     }
 
-    public @Nullable Profile getAuxThreadProfileProtobuf() {
+    public Profile getAuxThreadProfileProtobuf() {
         if (auxThreadProfile == null) {
             return null;
         }
@@ -583,7 +570,7 @@ public class Transaction {
         return slowThresholdMillis;
     }
 
-    public @Nullable Cancellable getImmedateTraceStoreRunnable() {
+    public Cancellable getImmedateTraceStoreRunnable() {
         return immedateTraceStoreRunnable;
     }
 
@@ -639,7 +626,7 @@ public class Transaction {
         }
     }
 
-    void addAttribute(String name, @Nullable String value) {
+    void addAttribute(String name, String value) {
         synchronized (attributesLock) {
             if (attributes == null) {
                 // no race condition here since only transaction thread calls addAttribute()
@@ -653,7 +640,7 @@ public class Transaction {
         }
     }
 
-    void setError(@Nullable String message, @Nullable Throwable t) {
+    void setError(String message, Throwable t) {
         if (this.errorMessage == null) {
             this.errorMessage = ErrorMessage.create(message, t, getThrowableFrameLimitCounter());
         }
@@ -689,12 +676,11 @@ public class Transaction {
         checkNotNull(transactionEntry).remove();
     }
 
-    @Nullable
-    ThreadContextImpl startAuxThreadContext(@Nullable TraceEntryImpl parentTraceEntry,
-            @Nullable TraceEntryImpl parentThreadContextPriorEntry, TimerName auxTimerName,
+    ThreadContextImpl startAuxThreadContext(TraceEntryImpl parentTraceEntry,
+            TraceEntryImpl parentThreadContextPriorEntry, TimerName auxTimerName,
             long startTick, ThreadContextThreadLocal.Holder threadContextHolder,
-            @Nullable ServletRequestInfo servletRequestInfo,
-            @Nullable ThreadAllocatedBytes threadAllocatedBytes) {
+            ServletRequestInfo servletRequestInfo,
+            ThreadAllocatedBytes threadAllocatedBytes) {
         ThreadContextImpl auxThreadContext;
         synchronized (mainThreadContext) {
             // check completed and add aux thread context inside synchronized block to avoid race
@@ -929,8 +915,6 @@ public class Transaction {
         memoryBarrierWrite();
     }
 
-    @GuardedBy("mainThreadContext")
-    @RequiresNonNull("auxThreadContexts")
     private boolean allowAnotherAuxThreadContextWithTraceEntries() {
         int unmergedCount = auxThreadContexts.size();
         if (unmergeableAuxThreadContexts != null) {
@@ -973,9 +957,6 @@ public class Transaction {
         return true;
     }
 
-    @GuardedBy("mainThreadContext")
-    @EnsuresNonNull({"alreadyMergedAuxThreadTimers", "alreadyMergedAuxThreadStats",
-            "alreadyMergedAuxQueries", "alreadyMergedAuxServiceCalls"})
     private void initAlreadyMergedAuxComponentsIfNeeded() {
         if (alreadyMergedAuxThreadTimers == null) {
             alreadyMergedAuxThreadTimers = new RootTimerCollectorImpl();
@@ -993,9 +974,6 @@ public class Transaction {
         }
     }
 
-    @GuardedBy("mainThreadContext")
-    @RequiresNonNull({"alreadyMergedAuxThreadTimers", "alreadyMergedAuxThreadStats",
-            "alreadyMergedAuxQueries", "alreadyMergedAuxServiceCalls"})
     private void mergeAux(ThreadContextImpl mergeableAuxThreadContext) {
         alreadyMergedAuxThreadTimers.mergeRootTimer(mergeableAuxThreadContext.getRootTimer());
         alreadyMergedAuxThreadStats.mergeThreadStats(mergeableAuxThreadContext.getThreadStats());
@@ -1058,7 +1036,6 @@ public class Transaction {
         }
     }
 
-    @GuardedBy("mainThreadContext")
     private void detachIncompleteAuxThreadContexts() {
         if (auxThreadContexts == null) {
             return;
@@ -1087,8 +1064,6 @@ public class Transaction {
         }
     }
 
-    @GuardedBy("mainThreadContext")
-    @RequiresNonNull("auxThreadContexts")
     private Iterable<ThreadContextImpl> getUnmergedAuxThreadContext() {
         if (unmergeableAuxThreadContexts == null) {
             if (unmergedLimitExceededAuxThreadContexts == null) {
@@ -1104,7 +1079,6 @@ public class Transaction {
         }
     }
 
-    @VisibleForTesting
     static String buildTraceId(long startTime) {
         byte[] bytes = new byte[10];
         random.nextBytes(bytes);
@@ -1112,7 +1086,6 @@ public class Transaction {
         return lowerSixBytesHex(startTime) + BaseEncoding.base16().lowerCase().encode(bytes);
     }
 
-    @VisibleForTesting
     static String lowerSixBytesHex(long startTime) {
         long mask = 1L << 48;
         return Long.toHexString(mask | (startTime & (mask - 1))).substring(1);

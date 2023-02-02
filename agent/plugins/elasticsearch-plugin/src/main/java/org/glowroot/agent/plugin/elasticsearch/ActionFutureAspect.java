@@ -32,12 +32,11 @@ import org.glowroot.agent.plugin.api.weaving.Pointcut;
 public class ActionFutureAspect {
 
     // the field and method names are verbose since they will be mixed in to existing classes
-    @Mixin("org.elasticsearch.action.ActionFuture")
     public static class ActionFutureImpl implements ActionFutureMixin {
 
         private transient volatile boolean glowroot$completed;
-        private transient volatile @Nullable Throwable glowroot$exception;
-        private transient volatile @Nullable AsyncQueryEntry glowroot$asyncQueryEntry;
+        private transient volatile Throwable glowroot$exception;
+        private transient volatile AsyncQueryEntry glowroot$asyncQueryEntry;
 
         @Override
         public void glowroot$setCompleted() {
@@ -55,17 +54,17 @@ public class ActionFutureAspect {
         }
 
         @Override
-        public @Nullable Throwable glowroot$getException() {
+        public Throwable glowroot$getException() {
             return glowroot$exception;
         }
 
         @Override
-        public @Nullable AsyncQueryEntry glowroot$getAsyncQueryEntry() {
+        public AsyncQueryEntry glowroot$getAsyncQueryEntry() {
             return glowroot$asyncQueryEntry;
         }
 
         @Override
-        public void glowroot$setAsyncQueryEntry(@Nullable AsyncQueryEntry asyncQueryEntry) {
+        public void glowroot$setAsyncQueryEntry(AsyncQueryEntry asyncQueryEntry) {
             glowroot$asyncQueryEntry = asyncQueryEntry;
         }
     }
@@ -79,46 +78,34 @@ public class ActionFutureAspect {
 
         void glowroot$setException(Throwable t);
 
-        @Nullable
         Throwable glowroot$getException();
 
-        @Nullable
         AsyncQueryEntry glowroot$getAsyncQueryEntry();
 
-        void glowroot$setAsyncQueryEntry(@Nullable AsyncQueryEntry asyncQueryEntry);
+        void glowroot$setAsyncQueryEntry(AsyncQueryEntry asyncQueryEntry);
     }
 
-    @Pointcut(className = "java.util.concurrent.Future",
-            subTypeRestriction = "org.elasticsearch.action.ActionFuture",
-            methodName = "get", methodParameterTypes = {".."}, suppressionKey = "wait-on-future")
     public static class FutureGetAdvice {
-        @IsEnabled
-        public static boolean isEnabled(@BindReceiver ActionFutureMixin actionFuture) {
+        public static boolean isEnabled(ActionFutureMixin actionFuture) {
             return actionFuture.glowroot$getAsyncQueryEntry() != null;
         }
-        @OnBefore
         public static Timer onBefore(ThreadContext threadContext,
-                @BindReceiver ActionFutureMixin actionFuture) {
+                ActionFutureMixin actionFuture) {
             @SuppressWarnings("nullness") // just checked above in isEnabled()
             @NonNull
             AsyncQueryEntry asyncQueryEntry = actionFuture.glowroot$getAsyncQueryEntry();
             return asyncQueryEntry.extendSyncTimer(threadContext);
         }
-        @OnAfter
-        public static void onAfter(@BindTraveler Timer timer) {
+        public static void onAfter(Timer timer) {
             timer.stop();
         }
     }
 
-    @Pointcut(className = "org.elasticsearch.common.util.concurrent.BaseFuture",
-            subTypeRestriction = "org.elasticsearch.action.ActionFuture",
-            methodName = "setException", methodParameterTypes = {"java.lang.Throwable"})
     public static class FutureSetExceptionAdvice {
         // using @OnBefore instead of @OnReturn to ensure that async trace entry is ended prior to
         // an overall transaction that may be waiting on this future has a chance to end
-        @OnBefore
-        public static void onBefore(@BindReceiver ActionFutureMixin actionFuture,
-                @BindParameter @Nullable Throwable t) {
+        public static void onBefore(ActionFutureMixin actionFuture,
+                Throwable t) {
             if (t == null) {
                 return;
             }
@@ -134,14 +121,10 @@ public class ActionFutureAspect {
         }
     }
 
-    @Pointcut(className = "org.elasticsearch.common.util.concurrent.BaseFuture",
-            subTypeRestriction = "org.elasticsearch.action.ActionFuture",
-            methodName = "set", methodParameterTypes = {"java.lang.Object"})
     public static class FutureSetAdvice {
         // using @OnBefore instead of @OnReturn to ensure that async trace entry is ended prior to
         // an overall transaction that may be waiting on this future has a chance to end
-        @OnBefore
-        public static void onBefore(@BindReceiver ActionFutureMixin actionFuture) {
+        public static void onBefore(ActionFutureMixin actionFuture) {
             // to prevent race condition, setting completed status before getting async query entry,
             // and the converse is done when setting async query entry
             // ok if end() happens to get called twice

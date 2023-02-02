@@ -25,14 +25,13 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 class ClassCollector {
 
-    private @Nullable String superInternalNames;
-    private @Nullable ImmutableList<String> interfaceInternalNames;
-    private @Nullable ImmutableList<String> allSuperInternalNames;
+    private String superInternalNames;
+    private ImmutableList<String> interfaceInternalNames;
+    private ImmutableList<String> allSuperInternalNames;
 
     // map key is the method "name:desc"
     private final Map<String, MethodCollector> methodCollectors = Maps.newHashMap();
 
-    @Nullable
     String getSuperInternalNames() {
         return superInternalNames;
     }
@@ -45,7 +44,6 @@ class ClassCollector {
         return allSuperInternalNames;
     }
 
-    @Nullable
     MethodCollector getMethodCollector(String methodId) {
         return methodCollectors.get(methodId);
     }
@@ -54,7 +52,7 @@ class ClassCollector {
         return methodCollectors.keySet();
     }
 
-    void setSuperInternalNames(@Nullable String superInternalNames) {
+    void setSuperInternalNames(String superInternalNames) {
         this.superInternalNames = superInternalNames;
     }
 

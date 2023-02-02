@@ -31,7 +31,7 @@ import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 
 class IndexHtmlHttpService implements HttpService {
 
-    private static final @Nullable String GOOGLE_ANALYTICS_TRACKING_ID =
+    private static final String GOOGLE_ANALYTICS_TRACKING_ID =
             System.getProperty("glowroot.internal.googleAnalyticsTrackingId");
 
     private final LayoutService layoutService;

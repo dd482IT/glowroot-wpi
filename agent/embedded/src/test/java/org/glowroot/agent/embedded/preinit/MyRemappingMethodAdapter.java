@@ -91,14 +91,14 @@ class MyRemappingMethodAdapter extends LocalVariablesSorter {
     }
 
     @Override
-    public void visitTryCatchBlock(Label start, Label end, Label handler, @Nullable String type) {
+    public void visitTryCatchBlock(Label start, Label end, Label handler, String type) {
         if (type != null) {
             remapper.mapType(type);
         }
     }
 
     @Override
-    public void visitLocalVariable(String name, String descriptor, @Nullable String signature,
+    public void visitLocalVariable(String name, String descriptor, String signature,
             Label start, Label end, int index) {
         remapper.mapDesc(descriptor);
         remapper.mapSignature(signature, true);

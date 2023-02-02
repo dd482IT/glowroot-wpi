@@ -88,7 +88,7 @@ public class ConfigRepositoryImpl implements ConfigRepository {
     private final Object writeLock = new Object();
 
     public ConfigRepositoryImpl(List<File> confDirs, boolean configReadOnly,
-            @Nullable Integer webPortOverride, ConfigService configService,
+            Integer webPortOverride, ConfigService configService,
             PluginCache pluginCache) {
         this.configService = configService;
         this.adminConfigService =
@@ -238,7 +238,7 @@ public class ConfigRepositoryImpl implements ConfigRepository {
     }
 
     @Override
-    public @Nullable UserConfig getUserConfig(String username) {
+    public UserConfig getUserConfig(String username) {
         for (UserConfig config : getUserConfigs()) {
             if (config.username().equals(username)) {
                 return config;
@@ -248,7 +248,7 @@ public class ConfigRepositoryImpl implements ConfigRepository {
     }
 
     @Override
-    public @Nullable UserConfig getUserConfigCaseInsensitive(String username) {
+    public UserConfig getUserConfigCaseInsensitive(String username) {
         for (UserConfig config : getUserConfigs()) {
             if (config.username().equalsIgnoreCase(username)) {
                 return config;
@@ -273,7 +273,7 @@ public class ConfigRepositoryImpl implements ConfigRepository {
     }
 
     @Override
-    public @Nullable RoleConfig getRoleConfig(String name) {
+    public RoleConfig getRoleConfig(String name) {
         for (RoleConfig config : getRoleConfigs()) {
             if (config.name().equals(name)) {
                 return config;
@@ -659,7 +659,7 @@ public class ConfigRepositoryImpl implements ConfigRepository {
     }
 
     @Override
-    public void updateAllConfig(String agentId, AgentConfig config, @Nullable String priorVersion)
+    public void updateAllConfig(String agentId, AgentConfig config, String priorVersion)
             throws Exception {
         ConfigValidation.validatePartOne(config);
         Set<String> validPluginIds = Sets.newHashSet();
@@ -914,7 +914,7 @@ public class ConfigRepositoryImpl implements ConfigRepository {
 
     @Override
     public void updateAllEmbeddedAdminConfig(AllEmbeddedAdminConfig config,
-            @Nullable String priorVersion) throws Exception {
+            String priorVersion) throws Exception {
         synchronized (writeLock) {
             AllEmbeddedAdminConfig existingConfig = adminConfigService.getAllAdminConfig();
             String currVersion = existingConfig.version();
@@ -972,7 +972,7 @@ public class ConfigRepositoryImpl implements ConfigRepository {
 
     @Override
     public void updateAllCentralAdminConfig(AllCentralAdminConfig config,
-            @Nullable String priorVersion) {
+            String priorVersion) {
         throw new UnsupportedOperationException();
     }
 
@@ -1000,7 +1000,6 @@ public class ConfigRepositoryImpl implements ConfigRepository {
         throw new IllegalStateException("Could not find plugin descriptor: " + pluginId);
     }
 
-    @OnlyUsedByTests
     public void resetAdminConfigForTests() throws IOException {
         adminConfigService.resetAdminConfigForTests();
     }

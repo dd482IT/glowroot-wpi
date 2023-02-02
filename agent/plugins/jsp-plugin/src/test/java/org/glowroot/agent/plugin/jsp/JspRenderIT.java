@@ -48,24 +48,20 @@ public class JspRenderIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         // must use javaagent container because org.apache.jasper.servlet.JasperLoader does not
         // delegate to parent (e.g. IsolatedWeavingClassLoader) when loading jsp page classes
         container = JavaagentContainer.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldCaptureJspRendering() throws Exception {
         // when
         Trace trace = container.execute(RenderJsp.class);
@@ -80,7 +76,6 @@ public class JspRenderIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureJspRenderingInTomcat() throws Exception {
         // when
         Trace trace = container.execute(RenderJspInTomcat.class);

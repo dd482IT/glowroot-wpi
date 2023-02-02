@@ -31,31 +31,22 @@ import org.glowroot.agent.plugin.api.weaving.Shim;
 
 public class WebSphereAppStartupAspect {
 
-    @Shim("com.ibm.ws.webcontainer.webapp.WebApp")
     public interface WebAppShim {
-        @Nullable
         String getContextPath();
     }
 
-    @Pointcut(className = "com.ibm.ws.webcontainer.webapp.WebApp",
-            methodName = "commonInitializationFinally|commonInitializationFinish",
-            methodParameterTypes = {"java.util.List"}, nestingGroup = "servlet-startup",
-            timerName = "startup")
     public static class StartAdvice {
         private static final TimerName timerName = Agent.getTimerName(StartAdvice.class);
-        @OnBefore
         public static TraceEntry onBefore(OptionalThreadContext context,
-                @BindReceiver WebAppShim webApp) {
+                WebAppShim webApp) {
             String path = webApp.getContextPath();
             return ContainerStartup.onBeforeCommon(context, path, timerName);
         }
-        @OnReturn
-        public static void onReturn(@BindTraveler TraceEntry traceEntry) {
+        public static void onReturn(TraceEntry traceEntry) {
             traceEntry.end();
         }
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler TraceEntry traceEntry) {
+        public static void onThrow(Throwable t,
+                TraceEntry traceEntry) {
             traceEntry.endWithError(t);
         }
     }

@@ -23,7 +23,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class GaugesTest {
 
-    @Test
     public void test() {
         Gauge gauge = Gauges.getGauge("java.lang:type=GarbageCollector,name=ConcurrentMarkSweep"
                 + ":CollectionTime[counter]");

@@ -28,7 +28,6 @@ public class JdbcDriverIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         // this test only passes when glowroot is shaded, since it is testing that
         // java.sql.DriverManager has been shaded to org.glowroot.agent.sql.DriverManager
@@ -38,7 +37,6 @@ public class JdbcDriverIT {
         container = new JavaagentContainer(null, true, ImmutableList.<String>of());
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         // need null check in case assumption is false in setUp()
         if (container != null) {
@@ -46,12 +44,10 @@ public class JdbcDriverIT {
         }
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldNotTriggerMockJdbcDriverToLoad() throws Exception {
         container.executeNoExpectedTrace(AssertMockDriverNotLoaded.class);
     }

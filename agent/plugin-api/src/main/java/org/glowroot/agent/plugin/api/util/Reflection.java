@@ -27,16 +27,16 @@ public class Reflection {
 
     private Reflection() {}
 
-    public static @Nullable Class<?> getClass(String name, @Nullable ClassLoader loader) {
+    public static Class<?> getClass(String name, ClassLoader loader) {
         return getClass(name, loader, false);
     }
 
-    public static @Nullable Class<?> getClassWithWarnIfNotFound(String name,
-            @Nullable ClassLoader loader) {
+    public static Class<?> getClassWithWarnIfNotFound(String name,
+            ClassLoader loader) {
         return getClass(name, loader, true);
     }
 
-    public static @Nullable Method getMethod(@Nullable Class<?> clazz, String methodName,
+    public static Method getMethod(Class<?> clazz, String methodName,
             Class<?>... parameterTypes) {
         if (clazz == null) {
             return null;
@@ -52,7 +52,7 @@ public class Reflection {
         }
     }
 
-    public static @Nullable Field getDeclaredField(@Nullable Class<?> clazz, String fieldName) {
+    public static Field getDeclaredField(Class<?> clazz, String fieldName) {
         if (clazz == null) {
             return null;
         }
@@ -70,8 +70,8 @@ public class Reflection {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> /*@Nullable*/ T invoke(@Nullable Method method, Object obj,
-            @Nullable Object... args) {
+    public static <T> /*@Nullable*/ T invoke(Method method, Object obj,
+            Object... args) {
         if (method == null) {
             return null;
         }
@@ -85,8 +85,8 @@ public class Reflection {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T invokeWithDefault(@Nullable Method method, Object obj, T defaultValue,
-            @Nullable Object... args) {
+    public static <T> T invokeWithDefault(Method method, Object obj, T defaultValue,
+            Object... args) {
         if (method == null) {
             return defaultValue;
         }
@@ -103,7 +103,7 @@ public class Reflection {
         }
     }
 
-    public static @Nullable Object getFieldValue(@Nullable Field field, Object obj) {
+    public static Object getFieldValue(Field field, Object obj) {
         if (field == null) {
             return null;
         }
@@ -116,7 +116,7 @@ public class Reflection {
         }
     }
 
-    private static @Nullable Class<?> getClass(String name, @Nullable ClassLoader loader,
+    private static Class<?> getClass(String name, ClassLoader loader,
             boolean warnIfNotFound) {
         try {
             return Class.forName(name, false, loader);

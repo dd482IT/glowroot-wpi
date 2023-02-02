@@ -41,24 +41,20 @@ public class ScheduledExecutorServiceIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         // tests only work with javaagent container because they need to weave bootstrap classes
         // that implement Executor and ExecutorService
         container = JavaagentContainer.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldCaptureScheduledRunnable() throws Exception {
         // when
         Trace trace = container.execute(DoScheduledRunnable.class);
@@ -66,7 +62,6 @@ public class ScheduledExecutorServiceIT {
         checkTrace(trace);
     }
 
-    @Test
     public void shouldCaptureScheduledCallable() throws Exception {
         // when
         Trace trace = container.execute(DoScheduledCallable.class);

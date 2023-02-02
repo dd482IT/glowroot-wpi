@@ -52,7 +52,7 @@ class LoggerPlugin {
         return false;
     }
 
-    static String getAbbreviatedLoggerName(@Nullable String loggerName) {
+    static String getAbbreviatedLoggerName(String loggerName) {
         if (loggerName == null) {
             return "null";
         }

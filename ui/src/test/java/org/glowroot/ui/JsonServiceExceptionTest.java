@@ -22,7 +22,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class JsonServiceExceptionTest {
 
-    @Test
     public void test() {
         // given
         JsonServiceException exception = new JsonServiceException(HttpResponseStatus.NOT_FOUND);

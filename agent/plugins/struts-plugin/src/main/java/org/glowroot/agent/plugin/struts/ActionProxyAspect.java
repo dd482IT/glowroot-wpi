@@ -32,7 +32,6 @@ import org.glowroot.agent.plugin.api.weaving.Shim;
 
 public class ActionProxyAspect {
 
-    @Shim("com.opensymphony.xwork2.ActionProxy")
     public interface ActionProxy {
 
         Object getAction();
@@ -40,15 +39,12 @@ public class ActionProxyAspect {
         String getMethod();
     }
 
-    @Pointcut(className = "com.opensymphony.xwork2.ActionProxy", methodName = "execute",
-            methodParameterTypes = {}, nestingGroup = "struts", timerName = "struts action")
     public static class ActionProxyAdvice {
 
         private static final TimerName timerName = Agent.getTimerName(ActionProxyAdvice.class);
 
-        @OnBefore
         public static TraceEntry onBefore(ThreadContext context,
-                @BindReceiver ActionProxy actionProxy) {
+                ActionProxy actionProxy) {
             Class<?> actionClass = actionProxy.getAction().getClass();
             String actionMethod = actionProxy.getMethod();
             String methodName = actionMethod != null ? actionMethod : "execute";
@@ -58,28 +54,21 @@ public class ActionProxyAspect {
                     actionClass.getName(), methodName), timerName);
         }
 
-        @OnReturn
-        public static void onReturn(@BindTraveler TraceEntry traceEntry) {
+        public static void onReturn(TraceEntry traceEntry) {
             traceEntry.end();
         }
 
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler TraceEntry traceEntry) {
+        public static void onThrow(Throwable t,
+                TraceEntry traceEntry) {
             traceEntry.endWithError(t);
         }
     }
 
-    @Pointcut(className = "org.apache.struts.action.Action", methodName = "execute",
-            methodParameterTypes = {"org.apache.struts.action.ActionMapping",
-                    "org.apache.struts.action.ActionForm", ".."},
-            nestingGroup = "struts", timerName = "struts action")
     public static class ActionAdvice {
 
         private static final TimerName timerName = Agent.getTimerName(ActionAdvice.class);
 
-        @OnBefore
-        public static TraceEntry onBefore(ThreadContext context, @BindReceiver Object action) {
+        public static TraceEntry onBefore(ThreadContext context, Object action) {
             Class<?> actionClass = action.getClass();
             context.setTransactionName(actionClass.getSimpleName() + "#execute",
                     Priority.CORE_PLUGIN);
@@ -88,14 +77,12 @@ public class ActionProxyAspect {
                     timerName);
         }
 
-        @OnReturn
-        public static void onReturn(@BindTraveler TraceEntry traceEntry) {
+        public static void onReturn(TraceEntry traceEntry) {
             traceEntry.end();
         }
 
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler TraceEntry traceEntry) {
+        public static void onThrow(Throwable t,
+                TraceEntry traceEntry) {
             traceEntry.endWithError(t);
         }
     }

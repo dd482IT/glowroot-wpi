@@ -146,7 +146,7 @@ public class SyntheticResultDaoImpl implements SyntheticResultDao {
     @Override
     public void store(String agentRollupId, String syntheticMonitorId,
             String syntheticMonitorDisplay, long captureTime, long durationNanos,
-            @Nullable String errorMessage) throws Exception {
+            String errorMessage) throws Exception {
         int ttl = getTTLs().get(0);
         long maxCaptureTime = 0;
         BoundStatement boundStatement = insertResultPS.get(0).bind();
@@ -381,7 +381,6 @@ public class SyntheticResultDaoImpl implements SyntheticResultDao {
         return ttls;
     }
 
-    @OnlyUsedByTests
     void truncateAll() throws Exception {
         for (int i = 0; i < configRepository.getRollupConfigs().size(); i++) {
             session.updateSchemaWithRetry("truncate synthetic_result_rollup_" + i);

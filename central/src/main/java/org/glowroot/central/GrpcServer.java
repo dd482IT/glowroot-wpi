@@ -69,12 +69,12 @@ class GrpcServer {
 
     private final DownstreamServiceImpl downstreamService;
 
-    private final @Nullable Server httpServer;
-    private final @Nullable Server httpsServer;
+    private final Server httpServer;
+    private final Server httpsServer;
 
-    private final @Nullable ExecutorService confDirWatchExecutor;
+    private final ExecutorService confDirWatchExecutor;
 
-    GrpcServer(String bindAddress, @Nullable Integer httpPort, @Nullable Integer httpsPort,
+    GrpcServer(String bindAddress, Integer httpPort, Integer httpsPort,
             File confDir, AgentDisplayDao agentDisplayDao, AgentConfigDao agentConfigDao,
             ActiveAgentDao activeAgentDao, EnvironmentDao environmentDao, HeartbeatDao heartbeatDao,
             AggregateDao aggregateDao, GaugeValueDao gaugeValueDao, TraceDao traceDao,
@@ -112,7 +112,7 @@ class GrpcServer {
     }
 
     private static Server startServer(String bindAddress, int port, boolean https, File confDir,
-            @Nullable ExecutorService confDirWatchExecutor, DownstreamServiceImpl downstreamService,
+            ExecutorService confDirWatchExecutor, DownstreamServiceImpl downstreamService,
             CollectorServiceImpl collectorService) throws IOException {
         NettyServerBuilder builder =
                 NettyServerBuilder.forAddress(new InetSocketAddress(bindAddress, port));

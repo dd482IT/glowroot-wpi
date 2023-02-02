@@ -21,7 +21,7 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 public class Main {
 
-    private static volatile @MonotonicNonNull CentralModule centralModule;
+    private static volatile CentralModule centralModule;
 
     public static void main(String[] args) throws Exception {
         if (args.length == 0) {

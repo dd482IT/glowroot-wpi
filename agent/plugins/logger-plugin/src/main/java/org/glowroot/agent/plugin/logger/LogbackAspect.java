@@ -44,45 +44,31 @@ public class LogbackAspect {
     private static final int TRACE_INT = 5000;
     private static final int ALL_INT = Integer.MIN_VALUE;
 
-    @Shim("ch.qos.logback.classic.spi.ILoggingEvent")
     public interface ILoggingEvent {
 
-        @Shim("ch.qos.logback.classic.Level getLevel()")
-        @Nullable
         Level glowroot$getLevel();
 
-        @Nullable
         String getFormattedMessage();
 
-        @Nullable
         String getLoggerName();
 
-        @Shim("ch.qos.logback.classic.spi.IThrowableProxy getThrowableProxy()")
-        @Nullable
         Object glowroot$getThrowableProxy();
     }
 
-    @Shim("ch.qos.logback.classic.Level")
     public interface Level {
         int toInt();
     }
 
-    @Shim("ch.qos.logback.classic.spi.ThrowableProxy")
     public interface ThrowableProxy {
-        @Nullable
         Throwable getThrowable();
     }
 
-    @Pointcut(className = "ch.qos.logback.classic.Logger", methodName = "callAppenders",
-            methodParameterTypes = {"ch.qos.logback.classic.spi.ILoggingEvent"},
-            nestingGroup = "logging", timerName = TIMER_NAME)
     public static class CallAppendersAdvice {
 
         private static final TimerName timerName = Agent.getTimerName(CallAppendersAdvice.class);
 
-        @OnBefore
-        public static @Nullable LogAdviceTraveler onBefore(ThreadContext context,
-                @BindParameter @Nullable ILoggingEvent loggingEvent) {
+        public static LogAdviceTraveler onBefore(ThreadContext context,
+                ILoggingEvent loggingEvent) {
             if (loggingEvent == null) {
                 return null;
             }
@@ -106,8 +92,7 @@ public class LogbackAspect {
             return new LogAdviceTraveler(traceEntry, lvl, formattedMessage, t);
         }
 
-        @OnAfter
-        public static void onAfter(@BindTraveler @Nullable LogAdviceTraveler traveler) {
+        public static void onAfter(LogAdviceTraveler traveler) {
             if (traveler == null) {
                 return;
             }
@@ -126,23 +111,19 @@ public class LogbackAspect {
             }
         }
 
-        private static String nullToEmpty(@Nullable String s) {
+        private static String nullToEmpty(String s) {
             return s == null ? "" : s;
         }
     }
 
     // this is for logback prior to 0.9.16
-    @Pointcut(className = "ch.qos.logback.classic.Logger", methodName = "callAppenders",
-            methodParameterTypes = {"ch.qos.logback.classic.spi.LoggingEvent"},
-            nestingGroup = "logging", timerName = TIMER_NAME)
     public static class CallAppenders0xAdvice {
 
         private static final TimerName timerName = Agent.getTimerName(CallAppenders0xAdvice.class);
 
-        @OnBefore
-        public static @Nullable LogAdviceTraveler onBefore(ThreadContext context,
-                @BindReceiver Object logger, @BindParameter @Nullable Object loggingEvent,
-                @BindClassMeta LoggingEventInvoker invoker) {
+        public static LogAdviceTraveler onBefore(ThreadContext context,
+                Object logger, Object loggingEvent,
+                LoggingEventInvoker invoker) {
             if (loggingEvent == null) {
                 return null;
             }
@@ -158,8 +139,7 @@ public class LogbackAspect {
             return new LogAdviceTraveler(traceEntry, lvl, formattedMessage, t);
         }
 
-        @OnAfter
-        public static void onAfter(@BindTraveler @Nullable LogAdviceTraveler traveler) {
+        public static void onAfter(LogAdviceTraveler traveler) {
             if (traveler == null) {
                 return;
             }
@@ -184,10 +164,10 @@ public class LogbackAspect {
         private final TraceEntry traceEntry;
         private final int level;
         private final String formattedMessage;
-        private final @Nullable Throwable throwable;
+        private final Throwable throwable;
 
         private LogAdviceTraveler(TraceEntry traceEntry, int level, String formattedMessage,
-                @Nullable Throwable throwable) {
+                Throwable throwable) {
             this.traceEntry = traceEntry;
             this.level = level;
             this.formattedMessage = formattedMessage;
@@ -198,10 +178,10 @@ public class LogbackAspect {
     private static class LogMessageSupplier extends MessageSupplier {
 
         private final int level;
-        private final @Nullable String loggerName;
+        private final String loggerName;
         private final String messageText;
 
-        private LogMessageSupplier(int level, @Nullable String loggerName, String messageText) {
+        private LogMessageSupplier(int level, String loggerName, String messageText) {
             this.level = level;
             this.loggerName = loggerName;
             this.messageText = messageText;

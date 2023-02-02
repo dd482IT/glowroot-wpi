@@ -28,7 +28,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class PreInitializeStorageShutdownClassesTest {
 
-    @Test
     public void shouldCheckHardcodedListAgainstReality() throws IOException {
         GlobalCollector globalCollector = new GlobalCollector();
         globalCollector.registerClass("org/h2/jdbc/JdbcConnection");

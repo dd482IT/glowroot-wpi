@@ -62,7 +62,7 @@ class ConfigServiceImpl implements ConfigService {
 
     @Override
     public void setPluginProperty(String pluginId, String propertyName,
-            @Nullable Double propertyValue) throws Exception {
+            Double propertyValue) throws Exception {
         if (propertyValue == null) {
             updatePluginConfig(pluginId, propertyName,
                     PluginProperty.Value.newBuilder().setDvalNull(true).build());

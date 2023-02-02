@@ -22,10 +22,8 @@ import org.immutables.value.Value;
 
 import org.glowroot.common.util.Versions;
 
-@Value.Immutable
 public abstract class AllCentralAdminConfig {
 
-    @Value.Default
     public ImmutableCentralAdminGeneralConfig general() {
         return ImmutableCentralAdminGeneralConfig.builder().build();
     }
@@ -33,43 +31,34 @@ public abstract class AllCentralAdminConfig {
     public abstract List<ImmutableUserConfig> users();
     public abstract List<ImmutableRoleConfig> roles();
 
-    @Value.Default
     public ImmutableCentralWebConfig web() {
         return ImmutableCentralWebConfig.builder().build();
     }
 
-    @Value.Default
     public ImmutableCentralStorageConfig storage() {
         return ImmutableCentralStorageConfig.builder().build();
     }
 
-    @Value.Default
     public ImmutableSmtpConfig smtp() {
         return ImmutableSmtpConfig.builder().build();
     }
 
-    @Value.Default
     public ImmutableHttpProxyConfig httpProxy() {
         return ImmutableHttpProxyConfig.builder().build();
     }
 
-    @Value.Default
     public ImmutableLdapConfig ldap() {
         return ImmutableLdapConfig.builder().build();
     }
 
-    @Value.Default
     public ImmutablePagerDutyConfig pagerDuty() {
         return ImmutablePagerDutyConfig.builder().build();
     }
 
-    @Value.Default
     public ImmutableSlackConfig slack() {
         return ImmutableSlackConfig.builder().build();
     }
 
-    @Value.Derived
-    @JsonIgnore
     public String version() {
         return Versions.getJsonVersion(this);
     }

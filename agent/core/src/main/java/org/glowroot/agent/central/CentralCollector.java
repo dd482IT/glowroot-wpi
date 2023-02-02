@@ -102,11 +102,11 @@ public class CentralCollector implements Collector {
 
     private final SharedQueryTextLimiter sharedQueryTextLimiter = new SharedQueryTextLimiter();
 
-    private volatile @MonotonicNonNull Environment environment;
+    private volatile Environment environment;
     private volatile int nextAggregateDelayMillis;
 
     public CentralCollector(Map<String, String> properties, String collectorAddress,
-            @Nullable String collectorAuthority, List<File> confDirs, boolean configReadOnly,
+            String collectorAuthority, List<File> confDirs, boolean configReadOnly,
             LiveJvmServiceImpl liveJvmService, LiveWeavingServiceImpl liveWeavingService,
             LiveTraceRepositoryImpl liveTraceRepository, AgentConfigUpdater agentConfigUpdater,
             ConfigService configService) throws Exception {
@@ -271,18 +271,15 @@ public class CentralCollector implements Collector {
         });
     }
 
-    @OnlyUsedByTests
     public void close() throws InterruptedException {
         downstreamServiceObserver.close();
         centralConnection.close();
     }
 
-    @OnlyUsedByTests
     public void awaitClose() throws InterruptedException {
         centralConnection.awaitClose();
     }
 
-    @VisibleForTesting
     static String escapeHostname(String hostname) {
         hostname = hostname.replace("\\", "\\\\");
         if (hostname.startsWith(":")) {
@@ -299,7 +296,6 @@ public class CentralCollector implements Collector {
         return agentRollupId.replaceAll(" */ *", "::").trim() + "::";
     }
 
-    @VisibleForTesting
     static boolean isAgentVersionGreaterThanCentralVersion(String agentVersion,
             String centralVersion) {
         Pattern pattern = Pattern.compile("(\\d+)\\.(\\d+)\\.(\\d+)\\b.*");

@@ -46,13 +46,10 @@ public class ExpensiveCallAspect {
     private static final Exception cause =
             new IllegalStateException("A cause with a different stack trace", nestedCause);
 
-    @Pointcut(className = "org.glowroot.agent.ui.sandbox.ExpensiveCall", methodName = "execute0",
-            methodParameterTypes = {}, timerName = "expensive 0")
     public static class ExpensiveCallAdvice0 {
         private static final TimerName timerName = Agent.getTimerName(ExpensiveCallAdvice0.class);
-        @OnBefore
-        public static QueryEntry onBefore(ThreadContext context, @BindReceiver Object expensiveCall,
-                @BindClassMeta ExpensiveCallInvoker expensiveCallInvoker) {
+        public static QueryEntry onBefore(ThreadContext context, Object expensiveCall,
+                ExpensiveCallInvoker expensiveCallInvoker) {
             // not delegating to onBeforeInternal(), this pointcut returns message supplier with
             // detail
             QueryMessageSupplier messageSupplier =
@@ -71,8 +68,7 @@ public class ExpensiveCallAspect {
             }
             return context.startQueryEntry("EQL", queryText, messageSupplier, timerName);
         }
-        @OnAfter
-        public static void onAfter(ThreadContext context, @BindTraveler QueryEntry query) {
+        public static void onAfter(ThreadContext context, QueryEntry query) {
             query.incrementCurrRow();
             query.incrementCurrRow();
             query.incrementCurrRow();
@@ -86,17 +82,13 @@ public class ExpensiveCallAspect {
         }
     }
 
-    @Pointcut(className = "org.glowroot.agent.ui.sandbox.ExpensiveCall", methodName = "execute1",
-            methodParameterTypes = {}, timerName = "expensive 1")
     public static class ExpensiveCallAdvice1 {
         private static final TimerName timerName = Agent.getTimerName(ExpensiveCallAdvice1.class);
-        @OnBefore
-        public static TraceEntry onBefore(ThreadContext context, @BindReceiver Object expensiveCall,
-                @BindClassMeta ExpensiveCallInvoker expensiveCallInvoker) {
+        public static TraceEntry onBefore(ThreadContext context, Object expensiveCall,
+                ExpensiveCallInvoker expensiveCallInvoker) {
             return onBeforeInternal(context, expensiveCall, expensiveCallInvoker, timerName);
         }
-        @OnAfter
-        public static void onAfter(ThreadContext context, @BindTraveler TraceEntry traceEntry) {
+        public static void onAfter(ThreadContext context, TraceEntry traceEntry) {
             if (traceEntry != null && random.nextDouble() < 0.05) {
                 // TraceEntry.endWithLocationStackTrace() must be called directly from @On.. method
                 // so it can strip back the stack trace to the method picked out by the @Pointcut
@@ -107,17 +99,13 @@ public class ExpensiveCallAspect {
         }
     }
 
-    @Pointcut(className = "org.glowroot.agent.ui.sandbox.ExpensiveCall", methodName = "execute2",
-            methodParameterTypes = {}, timerName = "expensive 2")
     public static class ExpensiveCallAdvice2 {
         private static final TimerName timerName = Agent.getTimerName(ExpensiveCallAdvice2.class);
-        @OnBefore
-        public static TraceEntry onBefore(ThreadContext context, @BindReceiver Object expensiveCall,
-                @BindClassMeta ExpensiveCallInvoker expensiveCallInvoker) {
+        public static TraceEntry onBefore(ThreadContext context, Object expensiveCall,
+                ExpensiveCallInvoker expensiveCallInvoker) {
             return onBeforeInternal(context, expensiveCall, expensiveCallInvoker, timerName);
         }
-        @OnAfter
-        public static void onAfter(ThreadContext context, @BindTraveler TraceEntry traceEntry) {
+        public static void onAfter(ThreadContext context, TraceEntry traceEntry) {
             if (traceEntry != null && random.nextDouble() < 0.05) {
                 // TraceEntry.endWithLocationStackTrace() must be called directly from @On.. method
                 // so it can strip back the stack trace to the method picked out by the @Pointcut
@@ -128,17 +116,13 @@ public class ExpensiveCallAspect {
         }
     }
 
-    @Pointcut(className = "org.glowroot.agent.ui.sandbox.ExpensiveCall", methodName = "execute3",
-            methodParameterTypes = {}, timerName = "expensive 3")
     public static class ExpensiveCallAdvice3 {
         private static final TimerName timerName = Agent.getTimerName(ExpensiveCallAdvice3.class);
-        @OnBefore
-        public static TraceEntry onBefore(ThreadContext context, @BindReceiver Object expensiveCall,
-                @BindClassMeta ExpensiveCallInvoker expensiveCallInvoker) {
+        public static TraceEntry onBefore(ThreadContext context, Object expensiveCall,
+                ExpensiveCallInvoker expensiveCallInvoker) {
             return onBeforeInternal(context, expensiveCall, expensiveCallInvoker, timerName);
         }
-        @OnAfter
-        public static void onAfter(ThreadContext context, @BindTraveler TraceEntry traceEntry) {
+        public static void onAfter(ThreadContext context, TraceEntry traceEntry) {
             if (traceEntry != null && random.nextDouble() < 0.05) {
                 // TraceEntry.endWithLocationStackTrace() must be called directly from @On.. method
                 // so it can strip back the stack trace to the method picked out by the @Pointcut
@@ -149,17 +133,13 @@ public class ExpensiveCallAspect {
         }
     }
 
-    @Pointcut(className = "org.glowroot.agent.ui.sandbox.ExpensiveCall", methodName = "execute4",
-            methodParameterTypes = {}, timerName = "expensive 4")
     public static class ExpensiveCallAdvice4 {
         private static final TimerName timerName = Agent.getTimerName(ExpensiveCallAdvice4.class);
-        @OnBefore
-        public static TraceEntry onBefore(ThreadContext context, @BindReceiver Object expensiveCall,
-                @BindClassMeta ExpensiveCallInvoker expensiveCallInvoker) {
+        public static TraceEntry onBefore(ThreadContext context, Object expensiveCall,
+                ExpensiveCallInvoker expensiveCallInvoker) {
             return onBeforeInternal(context, expensiveCall, expensiveCallInvoker, timerName);
         }
-        @OnAfter
-        public static void onAfter(ThreadContext context, @BindTraveler TraceEntry traceEntry) {
+        public static void onAfter(ThreadContext context, TraceEntry traceEntry) {
             if (traceEntry != null && random.nextDouble() < 0.05) {
                 // TraceEntry.endWithLocationStackTrace() must be called directly from @On.. method
                 // so it can strip back the stack trace to the method picked out by the @Pointcut
@@ -170,17 +150,13 @@ public class ExpensiveCallAspect {
         }
     }
 
-    @Pointcut(className = "org.glowroot.agent.ui.sandbox.ExpensiveCall", methodName = "execute5",
-            methodParameterTypes = {}, timerName = "expensive 5")
     public static class ExpensiveCallAdvice5 {
         private static final TimerName timerName = Agent.getTimerName(ExpensiveCallAdvice5.class);
-        @OnBefore
-        public static TraceEntry onBefore(ThreadContext context, @BindReceiver Object expensiveCall,
-                @BindClassMeta ExpensiveCallInvoker expensiveCallInvoker) {
+        public static TraceEntry onBefore(ThreadContext context, Object expensiveCall,
+                ExpensiveCallInvoker expensiveCallInvoker) {
             return onBeforeInternal(context, expensiveCall, expensiveCallInvoker, timerName);
         }
-        @OnAfter
-        public static void onAfter(ThreadContext context, @BindTraveler TraceEntry traceEntry) {
+        public static void onAfter(ThreadContext context, TraceEntry traceEntry) {
             if (traceEntry != null && random.nextDouble() < 0.05) {
                 // TraceEntry.endWithLocationStackTrace() must be called directly from @On.. method
                 // so it can strip back the stack trace to the method picked out by the @Pointcut
@@ -191,17 +167,13 @@ public class ExpensiveCallAspect {
         }
     }
 
-    @Pointcut(className = "org.glowroot.agent.ui.sandbox.ExpensiveCall", methodName = "execute6",
-            methodParameterTypes = {}, timerName = "expensive 6")
     public static class ExpensiveCallAdvice6 {
         private static final TimerName timerName = Agent.getTimerName(ExpensiveCallAdvice6.class);
-        @OnBefore
-        public static TraceEntry onBefore(ThreadContext context, @BindReceiver Object expensiveCall,
-                @BindClassMeta ExpensiveCallInvoker expensiveCallInvoker) {
+        public static TraceEntry onBefore(ThreadContext context, Object expensiveCall,
+                ExpensiveCallInvoker expensiveCallInvoker) {
             return onBeforeInternal(context, expensiveCall, expensiveCallInvoker, timerName);
         }
-        @OnAfter
-        public static void onAfter(ThreadContext context, @BindTraveler TraceEntry traceEntry) {
+        public static void onAfter(ThreadContext context, TraceEntry traceEntry) {
             if (traceEntry != null && random.nextDouble() < 0.05) {
                 // TraceEntry.endWithLocationStackTrace() must be called directly from @On.. method
                 // so it can strip back the stack trace to the method picked out by the @Pointcut
@@ -212,17 +184,13 @@ public class ExpensiveCallAspect {
         }
     }
 
-    @Pointcut(className = "org.glowroot.agent.ui.sandbox.ExpensiveCall", methodName = "execute7",
-            methodParameterTypes = {}, timerName = "expensive 7")
     public static class ExpensiveCallAdvice7 {
         private static final TimerName timerName = Agent.getTimerName(ExpensiveCallAdvice7.class);
-        @OnBefore
-        public static TraceEntry onBefore(ThreadContext context, @BindReceiver Object expensiveCall,
-                @BindClassMeta ExpensiveCallInvoker expensiveCallInvoker) {
+        public static TraceEntry onBefore(ThreadContext context, Object expensiveCall,
+                ExpensiveCallInvoker expensiveCallInvoker) {
             return onBeforeInternal(context, expensiveCall, expensiveCallInvoker, timerName);
         }
-        @OnAfter
-        public static void onAfter(ThreadContext context, @BindTraveler TraceEntry traceEntry) {
+        public static void onAfter(ThreadContext context, TraceEntry traceEntry) {
             if (traceEntry != null && random.nextDouble() < 0.05) {
                 // TraceEntry.endWithLocationStackTrace() must be called directly from @On.. method
                 // so it can strip back the stack trace to the method picked out by the @Pointcut
@@ -233,17 +201,13 @@ public class ExpensiveCallAspect {
         }
     }
 
-    @Pointcut(className = "org.glowroot.agent.ui.sandbox.ExpensiveCall", methodName = "execute8",
-            methodParameterTypes = {}, timerName = "expensive 8")
     public static class ExpensiveCallAdvice8 {
         private static final TimerName timerName = Agent.getTimerName(ExpensiveCallAdvice8.class);
-        @OnBefore
-        public static TraceEntry onBefore(ThreadContext context, @BindReceiver Object expensiveCall,
-                @BindClassMeta ExpensiveCallInvoker expensiveCallInvoker) {
+        public static TraceEntry onBefore(ThreadContext context, Object expensiveCall,
+                ExpensiveCallInvoker expensiveCallInvoker) {
             return onBeforeInternal(context, expensiveCall, expensiveCallInvoker, timerName);
         }
-        @OnAfter
-        public static void onAfter(ThreadContext context, @BindTraveler TraceEntry traceEntry) {
+        public static void onAfter(ThreadContext context, TraceEntry traceEntry) {
             if (traceEntry != null && random.nextDouble() < 0.05) {
                 // TraceEntry.endWithLocationStackTrace() must be called directly from @On.. method
                 // so it can strip back the stack trace to the method picked out by the @Pointcut
@@ -254,17 +218,13 @@ public class ExpensiveCallAspect {
         }
     }
 
-    @Pointcut(className = "org.glowroot.agent.ui.sandbox.ExpensiveCall", methodName = "execute9",
-            methodParameterTypes = {}, timerName = "expensive 9 really long to test wrapping")
     public static class ExpensiveCallAdvice9 {
         private static final TimerName timerName = Agent.getTimerName(ExpensiveCallAdvice9.class);
-        @OnBefore
-        public static TraceEntry onBefore(ThreadContext context, @BindReceiver Object expensiveCall,
-                @BindClassMeta ExpensiveCallInvoker expensiveCallInvoker) {
+        public static TraceEntry onBefore(ThreadContext context, Object expensiveCall,
+                ExpensiveCallInvoker expensiveCallInvoker) {
             return onBeforeInternal(context, expensiveCall, expensiveCallInvoker, timerName);
         }
-        @OnAfter
-        public static void onAfter(ThreadContext context, @BindTraveler TraceEntry traceEntry) {
+        public static void onAfter(ThreadContext context, TraceEntry traceEntry) {
             if (traceEntry != null && random.nextDouble() < 0.05) {
                 // TraceEntry.endWithLocationStackTrace() must be called directly from @On.. method
                 // so it can strip back the stack trace to the method picked out by the @Pointcut

@@ -43,7 +43,7 @@ class V09Support {
         return agentRollupIds;
     }
 
-    static @Nullable String getParentV09(String agentRollupId) {
+    static String getParentV09(String agentRollupId) {
         int index = agentRollupId.lastIndexOf("::", agentRollupId.length() - 3);
         if (index == -1) {
             return null;
@@ -105,15 +105,11 @@ class V09Support {
         }
     }
 
-    @Value.Immutable
     interface QueryPlan {
-        @Nullable
         Query queryV09();
-        @Nullable
         Query queryPostV09();
     }
 
-    @Value.Immutable
     interface Query {
         String agentRollupId();
         long from();

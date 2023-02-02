@@ -36,99 +36,83 @@ public class ControllerIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithNormalServletMapping() throws Exception {
         shouldCaptureTransactionNameWithNormalServletMapping("", WithNormalServletMapping.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithContextPathAndNormalServletMapping()
             throws Exception {
         shouldCaptureTransactionNameWithNormalServletMapping("/zzz",
                 WithContextPathAndNormalServletMapping.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithNormalServletMappingHittingRoot() throws Exception {
         shouldCaptureTransactionNameWithNormalServletMappingHittingRoot("",
                 WithNormalServletMappingHittingRoot.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithContextPathAndNormalServletMappingHittingRoot()
             throws Exception {
         shouldCaptureTransactionNameWithNormalServletMappingHittingRoot("/zzz",
                 WithContextPathAndNormalServletMappingHittingRoot.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithNestedServletMapping() throws Exception {
         shouldCaptureTransactionNameWithNestedServletMapping("", WithNestedServletMapping.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithContextPathAndNestedServletMapping()
             throws Exception {
         shouldCaptureTransactionNameWithNestedServletMapping("/zzz",
                 WithContextPathAndNestedServletMapping.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithNestedServletMappingHittingRoot() throws Exception {
         shouldCaptureTransactionNameWithNestedServletMappingHittingRoot("",
                 WithNestedServletMappingHittingRoot.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithContextPathAndNestedServletMappingHittingRoot()
             throws Exception {
         shouldCaptureTransactionNameWithNestedServletMappingHittingRoot("/zzz",
                 WithContextPathAndNestedServletMappingHittingRoot.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithLessNormalServletMapping() throws Exception {
         shouldCaptureTransactionNameWithLessNormalServletMapping("",
                 WithLessNormalServletMapping.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithContextPathAndLessNormalServletMapping()
             throws Exception {
         shouldCaptureTransactionNameWithLessNormalServletMapping("/zzz",
                 WithContextPathAndLessNormalServletMapping.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithLessNormalServletMappingHittingRoot()
             throws Exception {
         shouldCaptureTransactionNameWithLessNormalServletMappingHittingRoot("",
                 WithLessNormalServletMappingHittingRoot.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithContextPathAndLessNormalServletMappingHittingRoot()
             throws Exception {
         shouldCaptureTransactionNameWithLessNormalServletMappingHittingRoot("/zzz",
                 WithContextPathAndLessNormalServletMappingHittingRoot.class);
     }
 
-    @Test
     public void shouldCaptureAltTransactionName() throws Exception {
         // given
         container.getConfigService().setPluginProperty("spring", "useAltTransactionNaming", true);
@@ -349,19 +333,14 @@ public class ControllerIT {
         }
     }
 
-    @Controller
-    @RequestMapping("hello")
     public static class TestController {
-        @RequestMapping("echo/{id}")
-        public @ResponseBody String echo() {
+        public String echo() {
             return "";
         }
     }
 
-    @Controller
     public static class RootController {
-        @RequestMapping("")
-        public @ResponseBody String echo() {
+        public String echo() {
             return "";
         }
     }

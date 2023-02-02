@@ -102,7 +102,6 @@ class LayoutService {
         return mapper.writeValueAsString(agentRollupLayout);
     }
 
-    @Nullable
     String getAgentRollupLayoutVersion(Authentication authentication, String agentRollupId)
             throws Exception {
         AgentRollupLayout agentRollupLayout = buildAgentRollupLayout(authentication, agentRollupId);
@@ -112,7 +111,6 @@ class LayoutService {
         return agentRollupLayout.version();
     }
 
-    @Nullable
     AgentRollupLayout buildAgentRollupLayout(Authentication authentication, String agentRollupId)
             throws Exception {
         UiDefaultsConfig uiConfig;
@@ -273,7 +271,7 @@ class LayoutService {
             boolean showNavbarTransaction, boolean showNavbarError, boolean showNavbarJvm,
             boolean showNavbarSyntheticMonitor, boolean showNavbarIncident,
             boolean showNavbarReport, boolean showNavbarConfig,
-            @Nullable AgentRollupLayout embeddedAgentRollup) throws Exception {
+            AgentRollupLayout embeddedAgentRollup) throws Exception {
         List<Long> rollupExpirationMillis = Lists.newArrayList();
         for (long hours : configRepository.getStorageConfig().rollupExpirationHours()) {
             rollupExpirationMillis.add(HOURS.toMillis(hours));
@@ -425,14 +423,12 @@ class LayoutService {
         }
     }
 
-    @Value.Immutable
     interface FilteredTopLevelAgentRollup {
         String id();
         String display();
         boolean disabled(); // user has permission to a child rollup, but not to top rollup
     }
 
-    @Value.Immutable
     interface FilteredChildAgentRollup {
         String id();
         String display(); // this is the child display (not including the top level display)
@@ -441,7 +437,6 @@ class LayoutService {
         List<FilteredChildAgentRollup> children();
     }
 
-    @Value.Immutable
     abstract static class Layout {
 
         abstract boolean central();
@@ -467,15 +462,13 @@ class LayoutService {
         abstract boolean redirectToLogin();
         abstract String defaultTimeZoneId();
         abstract List<String> timeZoneIds();
-        abstract @Nullable AgentRollupLayout embeddedAgentRollup();
+        abstract AgentRollupLayout embeddedAgentRollup();
 
-        @Value.Derived
         public String version() {
             return Versions.getJsonVersion(this);
         }
     }
 
-    @Value.Immutable
     abstract static class AgentRollupLayout {
         abstract String id();
         abstract String topLevelId();
@@ -490,13 +483,11 @@ class LayoutService {
         abstract List<Double> defaultPercentiles();
         abstract List<String> defaultGaugeNames();
 
-        @Value.Derived
         public String version() {
             return Versions.getJsonVersion(this);
         }
     }
 
-    @Value.Immutable
     abstract static class Permissions {
 
         abstract TransactionPermissions transaction();
@@ -512,7 +503,6 @@ class LayoutService {
         }
     }
 
-    @Value.Immutable
     abstract static class TransactionPermissions {
 
         abstract boolean overview();
@@ -526,7 +516,6 @@ class LayoutService {
         }
     }
 
-    @Value.Immutable
     abstract static class ErrorPermissions {
 
         abstract boolean overview();
@@ -537,7 +526,6 @@ class LayoutService {
         }
     }
 
-    @Value.Immutable
     abstract static class JvmPermissions {
 
         abstract boolean gauges();
@@ -557,13 +545,11 @@ class LayoutService {
         }
     }
 
-    @Value.Immutable
     interface ConfigPermissions {
         boolean view();
         EditConfigPermissions edit();
     }
 
-    @Value.Immutable
     interface EditConfigPermissions {
         boolean general();
         boolean transaction();

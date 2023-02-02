@@ -43,23 +43,23 @@ public class LocalContainer implements Container {
     private final File testDir;
     private final boolean deleteTestDirOnClose;
 
-    private volatile @Nullable IsolatedWeavingClassLoader isolatedWeavingClassLoader;
-    private final @Nullable GrpcServerWrapper server;
-    private final @Nullable TraceCollector traceCollector;
+    private volatile IsolatedWeavingClassLoader isolatedWeavingClassLoader;
+    private final GrpcServerWrapper server;
+    private final TraceCollector traceCollector;
     private final GlowrootAgentInit glowrootAgentInit;
-    private final @Nullable ConfigServiceImpl configService;
+    private final ConfigServiceImpl configService;
 
-    private volatile @Nullable Thread executingAppThread;
+    private volatile Thread executingAppThread;
 
     public static LocalContainer create() throws Exception {
         return new LocalContainer(null, false, ImmutableMap.<String, String>of());
     }
 
-    public static LocalContainer create(@Nullable File testDir) throws Exception {
+    public static LocalContainer create(File testDir) throws Exception {
         return new LocalContainer(testDir, false, ImmutableMap.<String, String>of());
     }
 
-    public LocalContainer(@Nullable File testDir, boolean embedded,
+    public LocalContainer(File testDir, boolean embedded,
             Map<String, String> extraProperties) throws Exception {
         if (testDir == null) {
             this.testDir = TempDirs.createTempDir("glowroot-test-dir");
@@ -88,7 +88,7 @@ public class LocalContainer implements Container {
         // ThreadDeathWatcher, which then causes PermGen OOM during maven test
         Executors.newSingleThreadExecutor().submit(new Callable<Void>() {
             @Override
-            public @Nullable Void call() throws Exception {
+            public Void call() throws Exception {
                 ClassLoader loader = Thread.currentThread().getContextClassLoader();
                 Thread.currentThread().setContextClassLoader(isolatedWeavingClassLoader);
                 try {
@@ -193,7 +193,7 @@ public class LocalContainer implements Container {
     }
 
     public Trace executeInternal(Class<? extends AppUnderTest> appClass,
-            @Nullable String transactionType, @Nullable String transactionName) throws Exception {
+            String transactionType, String transactionName) throws Exception {
         checkNotNull(traceCollector);
         executeInternal(appClass);
         Trace trace =

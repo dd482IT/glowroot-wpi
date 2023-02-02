@@ -38,111 +38,93 @@ public class ResourceIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithSimpleServletMapping() throws Exception {
         shouldCaptureTransactionNameWithSimpleServletMapping("", WithSimpleServletMapping.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithSimpleServletMappingWithContextPath()
             throws Exception {
         shouldCaptureTransactionNameWithSimpleServletMapping("/zzz",
                 WithSimpleServletMappingWithContextPath.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithNormalServletMapping() throws Exception {
         shouldCaptureTransactionNameWithNormalServletMapping("", WithNormalServletMapping.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithNormalServletMappingWithContextPath()
             throws Exception {
         shouldCaptureTransactionNameWithNormalServletMapping("/zzz",
                 WithNormalServletMappingWithContextPath.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithNormalServletMappingHittingRoot() throws Exception {
         shouldCaptureTransactionNameWithNormalServletMappingHittingRoot("",
                 WithNormalServletMappingHittingRoot.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithNormalServletMappingHittingRootWithContextPath()
             throws Exception {
         shouldCaptureTransactionNameWithNormalServletMappingHittingRoot("/zzz",
                 WithNormalServletMappingHittingRootWithContextPath.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithNestedServletMapping() throws Exception {
         shouldCaptureTransactionNameWithNestedServletMapping("", WithNestedServletMapping.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithNestedServletMappingWithContextPath()
             throws Exception {
         shouldCaptureTransactionNameWithNestedServletMapping("/zzz",
                 WithNestedServletMappingWithContextPath.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithNestedServletMappingHittingRoot() throws Exception {
         shouldCaptureTransactionNameWithNestedServletMappingHittingRoot("",
                 WithNestedServletMappingHittingRoot.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithNestedServletMappingHittingRootWithContextPath()
             throws Exception {
         shouldCaptureTransactionNameWithNestedServletMappingHittingRoot("/zzz",
                 WithNestedServletMappingHittingRootWithContextPath.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithLessNormalServletMapping() throws Exception {
         shouldCaptureTransactionNameWithLessNormalServletMapping("",
                 WithLessNormalServletMapping.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithLessNormalServletMappingWithContextPath()
             throws Exception {
         shouldCaptureTransactionNameWithLessNormalServletMapping("/zzz",
                 WithLessNormalServletMappingWithContextPath.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithLessNormalServletMappingHittingRoot()
             throws Exception {
         shouldCaptureTransactionNameWithLessNormalServletMappingHittingRoot("",
                 WithLessNormalServletMappingHittingRoot.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithLessNormalServletMappingHittingRootWithContextPath()
             throws Exception {
         shouldCaptureTransactionNameWithLessNormalServletMappingHittingRoot("/zzz",
                 WithLessNormalServletMappingHittingRootWithContextPath.class);
     }
 
-    @Test
     public void shouldCaptureAltTransactionName() throws Exception {
         // given
         container.getConfigService().setPluginProperty("jaxrs", "useAltTransactionNaming", true);
@@ -310,7 +292,6 @@ public class ResourceIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureWhenInterfaceAnnotated() throws Exception {
         // when
         Trace trace = container.execute(WithInterfaceAnnotated.class, "Web");
@@ -328,7 +309,6 @@ public class ResourceIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureSubResource() throws Exception {
         // when
         Trace trace = container.execute(WithSubResource.class, "Web");
@@ -467,32 +447,24 @@ public class ResourceIT {
         }
     }
 
-    @Path("simple")
     public static class SimpleResource {
-        @GET
         public Response echo() {
             return Response.status(200).entity("hi").build();
         }
     }
 
-    @Path("hello")
     public static class HelloResource {
-        @GET
-        @Path("{param}")
-        public Response echo(@PathParam("param") String msg) {
+        public Response echo(String msg) {
             return Response.status(200).entity(msg).build();
         }
     }
 
-    @Path("/")
     public static class RootResource {
-        @GET
         public Response echo() {
             return Response.status(200).build();
         }
     }
 
-    @Path("another")
     public static class AnotherResourceImpl implements AnotherResource {
         private final AnotherResource delegate = new DelegateAnotherResource();
         @Override
@@ -501,7 +473,6 @@ public class ResourceIT {
         }
     }
 
-    @Path("parent")
     public static class ParentResourceImpl implements ParentResource {
         private final ParentResource delegate = new DelegateParentResource();
         @Override
@@ -539,24 +510,18 @@ public class ResourceIT {
     }
 
     public interface AnotherResource {
-        @GET
-        @Path("{param}")
-        Response echo(@PathParam("param") String msg);
+        Response echo(String msg);
     }
 
     public interface ParentResource {
-        @Path("child")
         ChildResource getChildResource();
     }
 
     public interface ChildResource {
-        @Path("grandchild")
         GrandchildResource getGrandchildResource();
     }
 
     public interface GrandchildResource {
-        @GET
-        @Path("{param}")
-        Response echo(@PathParam("param") String msg);
+        Response echo(String msg);
     }
 }

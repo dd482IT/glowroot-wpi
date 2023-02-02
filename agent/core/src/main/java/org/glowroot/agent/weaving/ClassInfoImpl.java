@@ -22,9 +22,9 @@ import org.glowroot.agent.plugin.api.ClassInfo;
 public class ClassInfoImpl implements ClassInfo {
 
     private final String name;
-    private final @Nullable ClassLoader loader;
+    private final ClassLoader loader;
 
-    public ClassInfoImpl(String name, @Nullable ClassLoader loader) {
+    public ClassInfoImpl(String name, ClassLoader loader) {
         this.name = name;
         this.loader = loader;
     }
@@ -33,7 +33,7 @@ public class ClassInfoImpl implements ClassInfo {
         return name;
     }
 
-    public @Nullable ClassLoader getLoader() {
+    public ClassLoader getLoader() {
         return loader;
     }
 }

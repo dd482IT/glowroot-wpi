@@ -43,7 +43,6 @@ public class SyntheticResultDaoIT {
     private static ExecutorService asyncExecutor;
     private static SyntheticResultDaoImpl syntheticResultDao;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         SharedSetupRunListener.startCassandra();
         clusterManager = ClusterManager.create();
@@ -64,7 +63,6 @@ public class SyntheticResultDaoIT {
                 Clock.systemClock());
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         asyncExecutor.shutdown();
         session.close();
@@ -73,7 +71,6 @@ public class SyntheticResultDaoIT {
         SharedSetupRunListener.stopCassandra();
     }
 
-    @Test
     public void shouldRollup() throws Exception {
         syntheticResultDao.truncateAll();
         syntheticResultDao.store("one", "11223344", "login page", 60001, SECONDS.toNanos(1), null);

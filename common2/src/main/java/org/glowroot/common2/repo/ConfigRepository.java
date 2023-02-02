@@ -92,14 +92,12 @@ public interface ConfigRepository {
 
     List<GaugeConfig> getGaugeConfigs(String agentId) throws Exception;
 
-    @Nullable
     GaugeConfig getGaugeConfig(String agentId, String version) throws Exception;
 
     // central supports synthetic monitor configs on rollups
     List<SyntheticMonitorConfig> getSyntheticMonitorConfigs(String agentRollupId) throws Exception;
 
     // central supports synthetic monitor configs on rollups
-    @Nullable
     SyntheticMonitorConfig getSyntheticMonitorConfig(String agentRollupId,
             String syntheticMonitorId) throws Exception;
 
@@ -107,17 +105,14 @@ public interface ConfigRepository {
     List<AlertConfig> getAlertConfigs(String agentRollupId) throws Exception;
 
     // central supports alert configs on rollups
-    @Nullable
     AlertConfig getAlertConfig(String agentRollupId, String version) throws Exception;
 
     List<PluginConfig> getPluginConfigs(String agentId) throws Exception;
 
-    @Nullable
     PluginConfig getPluginConfig(String agentId, String pluginId) throws Exception;
 
     List<InstrumentationConfig> getInstrumentationConfigs(String agentId) throws Exception;
 
-    @Nullable
     InstrumentationConfig getInstrumentationConfig(String agentId, String version) throws Exception;
 
     AgentConfig getAllConfig(String agentId) throws Exception;
@@ -128,17 +123,14 @@ public interface ConfigRepository {
 
     List<UserConfig> getUserConfigs() throws Exception;
 
-    @Nullable
     UserConfig getUserConfig(String username) throws Exception;
 
-    @Nullable
     UserConfig getUserConfigCaseInsensitive(String username) throws Exception;
 
     boolean namedUsersExist() throws Exception;
 
     List<RoleConfig> getRoleConfigs() throws Exception;
 
-    @Nullable
     RoleConfig getRoleConfig(String name) throws Exception;
 
     WebConfig getWebConfig() throws Exception;
@@ -230,7 +222,7 @@ public interface ConfigRepository {
     void updateAdvancedConfig(String agentRollupId, AdvancedConfig config, String priorVersion)
             throws Exception;
 
-    void updateAllConfig(String agentId, AgentConfig config, @Nullable String priorVersion)
+    void updateAllConfig(String agentId, AgentConfig config, String priorVersion)
             throws Exception;
 
     void updateEmbeddedAdminGeneralConfig(EmbeddedAdminGeneralConfig config, String priorVersion)
@@ -274,10 +266,10 @@ public interface ConfigRepository {
     void updateHealthchecksIoConfig(HealthchecksIoConfig healthchecksIoConfig, String priorVersion)
             throws Exception;
 
-    void updateAllEmbeddedAdminConfig(AllEmbeddedAdminConfig config, @Nullable String priorVersion)
+    void updateAllEmbeddedAdminConfig(AllEmbeddedAdminConfig config, String priorVersion)
             throws Exception;
 
-    void updateAllCentralAdminConfig(AllCentralAdminConfig config, @Nullable String priorVersion)
+    void updateAllCentralAdminConfig(AllCentralAdminConfig config, String priorVersion)
             throws Exception;
 
     long getGaugeCollectionIntervalMillis();
@@ -286,8 +278,6 @@ public interface ConfigRepository {
 
     LazySecretKey getLazySecretKey() throws Exception;
 
-    @Value.Immutable
-    @Styles.AllParameters
     abstract class RollupConfig {
 
         public abstract long intervalMillis();

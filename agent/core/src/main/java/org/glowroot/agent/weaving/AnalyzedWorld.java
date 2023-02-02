@@ -56,7 +56,7 @@ public class AnalyzedWorld {
 
     private static final AtomicReference<Exception> findLoadedClassMethodException = new AtomicReference<>();
 
-    private static final @Nullable Method findLoadedClassMethod = getFindLoadedClassMethod();
+    private static final Method findLoadedClassMethod = getFindLoadedClassMethod();
 
     private static Method getFindLoadedClassMethod() {
         try {
@@ -95,11 +95,11 @@ public class AnalyzedWorld {
     private final ImmutableList<MixinType> mixinTypes;
 
     // only null for tests
-    private final @Nullable PreloadSomeSuperTypesCache preloadSomeSuperTypesCache;
+    private final PreloadSomeSuperTypesCache preloadSomeSuperTypesCache;
 
     public AnalyzedWorld(Supplier<List<Advice>> advisors, List<ShimType> shimTypes,
             List<MixinType> mixinTypes,
-            @Nullable PreloadSomeSuperTypesCache preloadSomeSuperTypesCache) {
+            PreloadSomeSuperTypesCache preloadSomeSuperTypesCache) {
         this.advisors = advisors;
         this.shimTypes = ImmutableList.copyOf(shimTypes);
         this.mixinTypes = ImmutableList.copyOf(mixinTypes);
@@ -132,7 +132,7 @@ public class AnalyzedWorld {
         }
     }
 
-    void add(AnalyzedClass analyzedClass, @Nullable ClassLoader loader) {
+    void add(AnalyzedClass analyzedClass, ClassLoader loader) {
         ConcurrentMap<String, AnalyzedClass> loaderAnalyzedClasses = getAnalyzedClasses(loader);
         loaderAnalyzedClasses.put(analyzedClass.name(), analyzedClass);
     }
@@ -140,8 +140,8 @@ public class AnalyzedWorld {
     // it's ok if there are duplicates in the returned list (e.g. an interface that appears twice
     // in a type hierarchy), it's rare, dups don't cause an issue for callers, and so it doesn't
     // seem worth the (minor) performance hit to de-dup every time
-    List<AnalyzedClass> getAnalyzedHierarchy(@Nullable String className,
-            @Nullable ClassLoader loader, String subClassName, ParseContext parseContext) {
+    List<AnalyzedClass> getAnalyzedHierarchy(String className,
+            ClassLoader loader, String subClassName, ParseContext parseContext) {
         if (className == null || className.equals("java.lang.Object")) {
             return ImmutableList.of();
         }
@@ -149,7 +149,7 @@ public class AnalyzedWorld {
     }
 
     static List<Advice> mergeInstrumentationAnnotations(List<Advice> advisors, byte[] classBytes,
-            @Nullable ClassLoader loader, String className) {
+            ClassLoader loader, String className) {
         byte[] marker = "Lorg/glowroot/agent/api/Instrumentation$".getBytes(UTF_8);
         if (Bytes.indexOf(classBytes, marker) == -1) {
             return advisors;
@@ -184,7 +184,7 @@ public class AnalyzedWorld {
     // it's ok if there are duplicates in the returned list (e.g. an interface that appears twice
     // in a type hierarchy), it's rare, dups don't cause an issue for callers, and so it doesn't
     // seem worth the (minor) performance hit to de-dup every time
-    private List<AnalyzedClass> getSuperClasses(String className, @Nullable ClassLoader loader,
+    private List<AnalyzedClass> getSuperClasses(String className, ClassLoader loader,
             String subClassName, ParseContext parseContext) {
         AnalyzedClassAndLoader analyzedClassAndLoader;
         try {
@@ -214,16 +214,13 @@ public class AnalyzedWorld {
         return superTypes;
     }
 
-    @Styles.AllParameters
-    @Value.Immutable
     interface AnalyzedClassAndLoader {
         AnalyzedClass analyzedClass();
-        @Nullable
         ClassLoader analyzedClassLoader();
     }
 
     private AnalyzedClassAndLoader getOrCreateAnalyzedClass(String className,
-            @Nullable ClassLoader loader, String subClassName)
+            ClassLoader loader, String subClassName)
             throws ClassNotFoundException, IOException {
         ConcurrentMap<String, AnalyzedClass> loaderAnalyzedClasses =
                 getAnalyzedClasses(loader);
@@ -247,7 +244,7 @@ public class AnalyzedWorld {
         return ImmutableAnalyzedClassAndLoader.of(analyzedClass, analyzedClassLoader);
     }
 
-    private List<Class<?>> getClassesWithReweavableAdvice(@Nullable ClassLoader loader,
+    private List<Class<?>> getClassesWithReweavableAdvice(ClassLoader loader,
             boolean remove) {
         List<Class<?>> classes = Lists.newArrayList();
         ConcurrentMap<String, AnalyzedClass> loaderAnalyzedClasses = getAnalyzedClasses(loader);
@@ -268,7 +265,7 @@ public class AnalyzedWorld {
         return classes;
     }
 
-    private AnalyzedClass createAnalyzedClass(String className, @Nullable ClassLoader loader)
+    private AnalyzedClass createAnalyzedClass(String className, ClassLoader loader)
             throws ClassNotFoundException, IOException {
         String path = ClassNames.toInternalName(className) + ".class";
         URL url;
@@ -303,7 +300,7 @@ public class AnalyzedWorld {
         return classAnalyzer.getAnalyzedClass();
     }
 
-    private @Nullable AnalyzedClass tryToReuseFromParentLoader(String className,
+    private AnalyzedClass tryToReuseFromParentLoader(String className,
             ClassLoader originalLoader, String path, URL url) {
         ClassLoader loader = originalLoader;
         while (loader != null) {
@@ -335,7 +332,7 @@ public class AnalyzedWorld {
     // plan B covers some class loaders like
     // org.codehaus.groovy.runtime.callsite.CallSiteClassLoader that delegate loadClass() to some
     // other loader where the type may have already been loaded
-    private AnalyzedClass createAnalyzedClassPlanB(String className, @Nullable ClassLoader loader)
+    private AnalyzedClass createAnalyzedClassPlanB(String className, ClassLoader loader)
             throws ClassNotFoundException {
         Class<?> clazz = Class.forName(className, false, loader);
         AnalyzedClass analyzedClass = getAnalyzedClasses(clazz.getClassLoader()).get(className);
@@ -363,7 +360,7 @@ public class AnalyzedWorld {
         return analyzedClass;
     }
 
-    private ConcurrentMap<String, AnalyzedClass> getAnalyzedClasses(@Nullable ClassLoader loader) {
+    private ConcurrentMap<String, AnalyzedClass> getAnalyzedClasses(ClassLoader loader) {
         if (loader == null) {
             return bootstrapLoaderWorld;
         } else {
@@ -397,7 +394,7 @@ public class AnalyzedWorld {
         return analyzedClass;
     }
 
-    private @Nullable ClassLoader getAnalyzedLoader(String className, @Nullable ClassLoader loader,
+    private ClassLoader getAnalyzedLoader(String className, ClassLoader loader,
             String subClassName) {
         if (loader == null) {
             return null;
@@ -545,7 +542,7 @@ public class AnalyzedWorld {
                 .build();
     }
 
-    private static @Nullable Method getTargetMethod(Method bridgeMethod, Class<?> clazz) {
+    private static Method getTargetMethod(Method bridgeMethod, Class<?> clazz) {
         List<Method> possibleTargetMethods = getPossibleTargetMethods(bridgeMethod, clazz);
         if (possibleTargetMethods.isEmpty()) {
             logger.warn("could not find any target for bridge method: {}", bridgeMethod);
@@ -586,11 +583,9 @@ public class AnalyzedWorld {
         return matchingAdvisors;
     }
 
-    @Value.Immutable
-    @Styles.AllParameters
     abstract static class ParseContext {
         abstract String className();
-        abstract @Nullable CodeSource codeSource();
+        abstract CodeSource codeSource();
         // toString() is used in logger warning construction
         @Override
         public String toString() {

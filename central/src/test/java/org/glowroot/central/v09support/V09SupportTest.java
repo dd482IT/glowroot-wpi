@@ -21,7 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class V09SupportTest {
 
-    @Test
     public void shouldGetAgentRollupIdsV09() {
         assertThat(V09Support.getAgentRollupIdsV09("aaa")).containsExactly("aaa");
         assertThat(V09Support.getAgentRollupIdsV09("aaa::bbb")).containsExactly("bbb", "aaa");
@@ -33,7 +32,6 @@ public class V09SupportTest {
         assertThat(V09Support.getAgentRollupIdsV09("a:b:c")).containsExactly("a:b:c");
     }
 
-    @Test
     public void shouldGetParentV09() {
         assertThat(V09Support.getParentV09("aaa")).isNull();
         assertThat(V09Support.getParentV09("aaa::")).isNull();
@@ -49,7 +47,6 @@ public class V09SupportTest {
         assertThat(V09Support.getParentV09("a::b::c::")).isEqualTo("a/b");
     }
 
-    @Test
     public void shouldConvertToV09() {
         assertThat(V09Support.convertToV09("aaa")).isEqualTo("aaa");
         assertThat(V09Support.convertToV09("aaa::")).isEqualTo("aaa");

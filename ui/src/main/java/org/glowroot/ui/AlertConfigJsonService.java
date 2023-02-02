@@ -66,12 +66,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static java.util.concurrent.TimeUnit.DAYS;
 
-@JsonService
 class AlertConfigJsonService {
 
     private static final ObjectMapper mapper = ObjectMappers.create();
 
-    @VisibleForTesting
     static final Ordering<AlertListItem> orderingByName = new Ordering<AlertListItem>() {
         @Override
         public int compare(AlertListItem left, AlertListItem right) {
@@ -82,14 +80,14 @@ class AlertConfigJsonService {
     private final ConfigRepository configRepository;
     private final AlertingDisabledRepository alertingDisableRepository;
     private final GaugeValueRepository gaugeValueRepository;
-    private final @Nullable SyntheticResultRepository syntheticResultRepository;
+    private final SyntheticResultRepository syntheticResultRepository;
     private final Clock clock;
     private final boolean central;
 
     AlertConfigJsonService(ConfigRepository configRepository,
             AlertingDisabledRepository alertingDisableRepository,
             GaugeValueRepository gaugeValueRepository,
-            @Nullable SyntheticResultRepository syntheticResultRepository, Clock clock,
+            SyntheticResultRepository syntheticResultRepository, Clock clock,
             boolean central) {
         this.configRepository = configRepository;
         this.alertingDisableRepository = alertingDisableRepository;
@@ -100,9 +98,8 @@ class AlertConfigJsonService {
     }
 
     // central supports alert configs on rollups
-    @GET(path = "/backend/config/alerts", permission = "agent:config:view:alert")
-    String getAlert(@BindAgentRollupId String agentRollupId,
-            @BindRequest AlertConfigRequest request) throws Exception {
+    String getAlert(String agentRollupId,
+            AlertConfigRequest request) throws Exception {
         Optional<String> version = request.version();
         if (version.isPresent()) {
             AlertConfig alertConfig = configRepository.getAlertConfig(agentRollupId, version.get());
@@ -116,14 +113,12 @@ class AlertConfigJsonService {
     }
 
     // central supports alert configs on rollups
-    @GET(path = "/backend/config/alert-dropdowns", permission = "agent:config:view:alert")
-    String getAlertDropdowns(@BindAgentRollupId String agentRollupId) throws Exception {
+    String getAlertDropdowns(String agentRollupId) throws Exception {
         return getAlertResponse(agentRollupId, null);
     }
 
     // central supports alert configs on rollups
-    @POST(path = "/backend/config/alerts/add", permission = "agent:config:edit:alerts")
-    String addAlert(@BindAgentRollupId String agentRollupId, @BindRequest AlertConfigDto configDto)
+    String addAlert(String agentRollupId, AlertConfigDto configDto)
             throws Exception {
         validate(configDto);
         AlertConfig alertConfig = configDto.toProto();
@@ -132,9 +127,8 @@ class AlertConfigJsonService {
     }
 
     // central supports alert configs on rollups
-    @POST(path = "/backend/config/alerts/update", permission = "agent:config:edit:alerts")
-    String updateAlert(@BindAgentRollupId String agentRollupId,
-            @BindRequest AlertConfigDto configDto) throws Exception {
+    String updateAlert(String agentRollupId,
+            AlertConfigDto configDto) throws Exception {
         validate(configDto);
         AlertConfig alertConfig = configDto.toProto();
         configRepository.updateAlertConfig(agentRollupId, alertConfig, configDto.version().get());
@@ -142,29 +136,26 @@ class AlertConfigJsonService {
     }
 
     // central supports alert configs on rollups
-    @POST(path = "/backend/config/alerts/remove", permission = "agent:config:edit:alerts")
-    void removeAlert(@BindAgentRollupId String agentRollupId,
-            @BindRequest AlertConfigRequest request) throws Exception {
+    void removeAlert(String agentRollupId,
+            AlertConfigRequest request) throws Exception {
         configRepository.deleteAlertConfig(agentRollupId, request.version().get());
     }
 
     // central supports alert configs on rollups
-    @POST(path = "/backend/config/disable-alerting", permission = "agent:config:edit:alerts")
-    String disableAlerting(@BindAgentRollupId String agentRollupId,
-            @BindRequest DisableAlertingRequest request) throws Exception {
+    String disableAlerting(String agentRollupId,
+            DisableAlertingRequest request) throws Exception {
         alertingDisableRepository.setAlertingDisabledUntilTime(agentRollupId,
                 clock.currentTimeMillis() + request.disableForNextMillis());
         return getAlertList(agentRollupId);
     }
 
     // central supports alert configs on rollups
-    @POST(path = "/backend/config/re-enable-alerting", permission = "agent:config:edit:alerts")
-    String reEnableAlerting(@BindAgentRollupId String agentRollupId) throws Exception {
+    String reEnableAlerting(String agentRollupId) throws Exception {
         alertingDisableRepository.setAlertingDisabledUntilTime(agentRollupId, null);
         return getAlertList(agentRollupId);
     }
 
-    private String getAlertResponse(String agentRollupId, @Nullable AlertConfig alertConfig)
+    private String getAlertResponse(String agentRollupId, AlertConfig alertConfig)
             throws Exception {
         ImmutableAlertConfigResponse.Builder builder = ImmutableAlertConfigResponse.builder();
         if (alertConfig != null) {
@@ -234,7 +225,7 @@ class AlertConfigJsonService {
     // syntheticResultRepository is null for embedded
     static String getConditionDisplay(String agentRollupId, AlertCondition alertCondition,
             long currentOrResolveTime, ConfigRepository configRepository,
-            @Nullable SyntheticResultRepository syntheticResultRepository) throws Exception {
+            SyntheticResultRepository syntheticResultRepository) throws Exception {
         switch (alertCondition.getValCase()) {
             case METRIC_CONDITION:
                 return getConditionDisplay(alertCondition.getMetricCondition());
@@ -386,29 +377,22 @@ class AlertConfigJsonService {
         return sb.toString();
     }
 
-    @Value.Immutable
     interface AlertConfigRequest {
         Optional<String> version();
     }
 
-    @Value.Immutable
     interface AlertListResponse {
         List<AlertListItem> alerts();
-        @Nullable
         Long disabledForNextMillis();
     }
 
-    @Value.Immutable
     interface AlertListItem {
         String version();
         String display();
     }
 
-    @Value.Immutable
     interface AlertConfigResponse {
-        @Nullable
         AlertConfigDto config();
-        @Nullable
         String heading();
         List<Gauge> gauges();
         List<SyntheticMonitorItem> syntheticMonitors();
@@ -416,33 +400,27 @@ class AlertConfigJsonService {
         List<SlackWebhookItem> slackWebhooks(); // not exposing webhook url itself
     }
 
-    @Value.Immutable
-    @Styles.AllParameters
     interface SyntheticMonitorItem {
         String id();
         String display();
     }
 
-    @Value.Immutable
-    @Styles.AllParameters
     interface SlackWebhookItem {
         String id();
         String display();
     }
 
-    @Value.Immutable
     interface DisableAlertingRequest {
         long disableForNextMillis();
     }
 
-    @Value.Immutable
     abstract static class AlertConfigDto {
 
         abstract AlertConditionDto condition();
         abstract AlertSeverity severity();
-        abstract @Nullable ImmutableEmailNotificationDto emailNotification();
-        abstract @Nullable ImmutablePagerDutyNotificationDto pagerDutyNotification();
-        abstract @Nullable ImmutableSlackNotificationDto slackNotification();
+        abstract ImmutableEmailNotificationDto emailNotification();
+        abstract ImmutablePagerDutyNotificationDto pagerDutyNotification();
+        abstract ImmutableSlackNotificationDto slackNotification();
 
         abstract Optional<String> version(); // absent for insert operations
 
@@ -651,54 +629,40 @@ class AlertConfigJsonService {
                     .build();
         }
 
-        @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY,
-                property = "conditionType")
-        @JsonSubTypes({@Type(value = ImmutableMetricConditionDto.class, name = "metric"),
-                @Type(value = ImmutableSyntheticMonitorConditionDto.class,
-                        name = "synthetic-monitor"),
-                @Type(value = ImmutableHeartbeatConditionDto.class, name = "heartbeat")})
         public interface AlertConditionDto {}
 
-        @Value.Immutable
         public abstract static class MetricConditionDto implements AlertConditionDto {
             abstract String metric();
-            abstract @Nullable String transactionType();
-            abstract @Nullable String transactionName();
-            abstract @Nullable Double percentile();
-            abstract @Nullable String errorMessageFilter();
+            abstract String transactionType();
+            abstract String transactionName();
+            abstract Double percentile();
+            abstract String errorMessageFilter();
             abstract double threshold();
-            @Value.Default
-            @JsonInclude(value = Include.NON_EMPTY)
             boolean lowerBoundThreshold() {
                 return false;
             }
             abstract int timePeriodSeconds();
-            abstract @Nullable Long minTransactionCount();
+            abstract Long minTransactionCount();
         }
 
-        @Value.Immutable
         public interface SyntheticMonitorConditionDto extends AlertConditionDto {
             String syntheticMonitorId();
             int thresholdMillis();
             int consecutiveCount();
         }
 
-        @Value.Immutable
         public interface HeartbeatConditionDto extends AlertConditionDto {
             int timePeriodSeconds();
         }
 
-        @Value.Immutable
         public interface EmailNotificationDto {
             List<String> emailAddresses();
         }
 
-        @Value.Immutable
         public interface PagerDutyNotificationDto {
             String pagerDutyIntegrationKey();
         }
 
-        @Value.Immutable
         public interface SlackNotificationDto {
             String slackWebhookId();
             List<String> slackChannels();

@@ -30,7 +30,7 @@ public class VoidReturn implements OptionalReturn {
     private VoidReturn() {}
 
     @Override
-    public @Nullable Object getValue() {
+    public Object getValue() {
         return null;
     }
 

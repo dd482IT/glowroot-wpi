@@ -21,6 +21,5 @@ import org.glowroot.wire.api.model.CollectorServiceOuterClass.InitMessage.Enviro
 
 public interface EnvironmentRepository {
 
-    @Nullable
     Environment read(String agentId) throws Exception;
 }

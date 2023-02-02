@@ -21,20 +21,16 @@ import org.immutables.value.Value;
 import org.glowroot.common.ConfigDefaults;
 import org.glowroot.wire.api.model.AgentConfigOuterClass.AgentConfig;
 
-@Value.Immutable
 public abstract class UiDefaultsConfig {
 
-    @Value.Default
     public String defaultTransactionType() {
         return ConfigDefaults.UI_DEFAULTS_TRANSACTION_TYPE;
     }
 
-    @Value.Default
     public ImmutableList<Double> defaultPercentiles() {
         return ConfigDefaults.UI_DEFAULTS_PERCENTILES;
     }
 
-    @Value.Default
     public ImmutableList<String> defaultGaugeNames() {
         return ConfigDefaults.UI_DEFAULTS_GAUGE_NAMES;
     }

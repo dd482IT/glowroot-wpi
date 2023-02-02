@@ -24,7 +24,7 @@ import org.glowroot.agent.plugin.api.checker.Nullable;
 // micro-optimized list for bind parameters
 public class BindParameterList implements Iterable</*@Nullable*/ Object> {
 
-    private @Nullable Object[] parameters;
+    private Object[] parameters;
     private int size;
 
     public static BindParameterList copyOf(BindParameterList bindParameterList) {
@@ -35,7 +35,7 @@ public class BindParameterList implements Iterable</*@Nullable*/ Object> {
         parameters = new Object[capacity];
     }
 
-    private BindParameterList(@Nullable Object[] parameters, int size) {
+    private BindParameterList(Object[] parameters, int size) {
         if (parameters.length == size) {
             this.parameters = parameters.clone();
         } else {
@@ -47,7 +47,7 @@ public class BindParameterList implements Iterable</*@Nullable*/ Object> {
         this.size = size;
     }
 
-    public void set(int i, @Nullable Object parameter) {
+    public void set(int i, Object parameter) {
         int capacity = parameters.length;
         if (i >= capacity) {
             // using same capacity increase formula as ArrayList
@@ -92,7 +92,7 @@ public class BindParameterList implements Iterable</*@Nullable*/ Object> {
         }
 
         @Override
-        public @Nullable Object next() {
+        public Object next() {
             if (i < size) {
                 return parameters[i++];
             } else {

@@ -60,7 +60,6 @@ import org.glowroot.wire.api.model.Proto.OptionalInt32;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.netty.handler.codec.http.HttpResponseStatus.PRECONDITION_FAILED;
 
-@JsonService
 class ConfigJsonService {
 
     private static final ObjectMapper mapper = ObjectMappers.create();
@@ -79,14 +78,12 @@ class ConfigJsonService {
         this.configRepository = configRepository;
     }
 
-    @GET(path = "/backend/config/general", permission = "agent:config:view:general")
-    String getGeneralConfig(@BindAgentRollupId String agentRollupId) throws Exception {
+    String getGeneralConfig(String agentRollupId) throws Exception {
         GeneralConfig config = configRepository.getGeneralConfig(agentRollupId);
         return mapper.writeValueAsString(GeneralConfigDto.create(config, agentRollupId));
     }
 
-    @GET(path = "/backend/config/transaction", permission = "agent:config:view:transaction")
-    String getTransactionConfig(@BindAgentId String agentId) throws Exception {
+    String getTransactionConfig(String agentId) throws Exception {
         TransactionConfig config = configRepository.getTransactionConfig(agentId);
         Set<String> transactionTypes = Sets.newTreeSet();
         transactionTypes.addAll(transactionTypeRepository.read(agentId));
@@ -101,15 +98,13 @@ class ConfigJsonService {
                 .build());
     }
 
-    @GET(path = "/backend/config/jvm", permission = "agent:config:view:jvm")
-    String getJvmConfig(@BindAgentId String agentId) throws Exception {
+    String getJvmConfig(String agentId) throws Exception {
         JvmConfig config = configRepository.getJvmConfig(agentId);
         return mapper.writeValueAsString(JvmConfigDto.create(config));
     }
 
     // central supports ui defaults config on rollups
-    @GET(path = "/backend/config/ui-defaults", permission = "agent:config:view:uiDefaults")
-    String getUiDefaultsConfig(@BindAgentRollupId String agentRollupId) throws Exception {
+    String getUiDefaultsConfig(String agentRollupId) throws Exception {
         UiDefaultsConfig config = configRepository.getUiDefaultsConfig(agentRollupId);
         Set<String> transactionTypes = Sets.newTreeSet();
         transactionTypes.addAll(transactionTypeRepository.read(agentRollupId));
@@ -123,8 +118,7 @@ class ConfigJsonService {
                 .build());
     }
 
-    @GET(path = "/backend/config/plugins", permission = "agent:config:view:plugin")
-    String getPluginConfig(@BindAgentId String agentId, @BindRequest PluginConfigRequest request)
+    String getPluginConfig(String agentId, PluginConfigRequest request)
             throws Exception {
         Optional<String> pluginId = request.pluginId();
         if (pluginId.isPresent()) {
@@ -145,14 +139,12 @@ class ConfigJsonService {
     }
 
     // central supports advanced config on rollups (maxQueryAggregates and maxServiceCallAggregates)
-    @GET(path = "/backend/config/advanced", permission = "agent:config:view:advanced")
-    String getAdvancedConfig(@BindAgentRollupId String agentRollupId) throws Exception {
+    String getAdvancedConfig(String agentRollupId) throws Exception {
         AdvancedConfig config = configRepository.getAdvancedConfig(agentRollupId);
         return mapper.writeValueAsString(AdvancedConfigDto.create(config));
     }
 
-    @GET(path = "/backend/config/json", permission = "agent:config:view")
-    String getAllConfig(@BindAgentId String agentId) throws Exception {
+    String getAllConfig(String agentId) throws Exception {
         AgentConfig config = configRepository.getAllConfig(agentId);
         ObjectNode configRootNode = mapper.valueToTree(AllConfigDto.create(config));
         ObjectMappers.stripEmptyContainerNodes(configRootNode);
@@ -169,9 +161,8 @@ class ConfigJsonService {
         return sb.toString();
     }
 
-    @POST(path = "/backend/config/general", permission = "agent:config:edit:general")
-    String updateGeneralConfig(@BindAgentRollupId String agentRollupId,
-            @BindRequest GeneralConfigDto configDto) throws Exception {
+    String updateGeneralConfig(String agentRollupId,
+            GeneralConfigDto configDto) throws Exception {
         try {
             configRepository.updateGeneralConfig(agentRollupId, configDto.convert(),
                     configDto.version());
@@ -181,9 +172,8 @@ class ConfigJsonService {
         return getGeneralConfig(agentRollupId);
     }
 
-    @POST(path = "/backend/config/transaction", permission = "agent:config:edit:transaction")
-    String updateTransactionConfig(@BindAgentId String agentId,
-            @BindRequest TransactionConfigDto configDto) throws Exception {
+    String updateTransactionConfig(String agentId,
+            TransactionConfigDto configDto) throws Exception {
         try {
             configRepository.updateTransactionConfig(agentId, configDto.convert(),
                     configDto.version());
@@ -193,8 +183,7 @@ class ConfigJsonService {
         return getTransactionConfig(agentId);
     }
 
-    @POST(path = "/backend/config/jvm", permission = "agent:config:edit:jvm")
-    String updateJvmConfig(@BindAgentId String agentId, @BindRequest JvmConfigDto configDto)
+    String updateJvmConfig(String agentId, JvmConfigDto configDto)
             throws Exception {
         try {
             configRepository.updateJvmConfig(agentId, configDto.convert(), configDto.version());
@@ -205,9 +194,8 @@ class ConfigJsonService {
     }
 
     // central supports ui defaults config on rollups
-    @POST(path = "/backend/config/ui-defaults", permission = "agent:config:edit:uiDefaults")
-    String updateUiDefaultsConfig(@BindAgentRollupId String agentRollupId,
-            @BindRequest UiDefaultsConfigDto configDto) throws Exception {
+    String updateUiDefaultsConfig(String agentRollupId,
+            UiDefaultsConfigDto configDto) throws Exception {
         try {
             configRepository.updateUiDefaultsConfig(agentRollupId, configDto.convert(),
                     configDto.version());
@@ -217,8 +205,7 @@ class ConfigJsonService {
         return getUiDefaultsConfig(agentRollupId);
     }
 
-    @POST(path = "/backend/config/plugins", permission = "agent:config:edit:plugins")
-    String updatePluginConfig(@BindAgentId String agentId, @BindRequest PluginUpdateRequest request)
+    String updatePluginConfig(String agentId, PluginUpdateRequest request)
             throws Exception {
         String pluginId = request.pluginId();
         if (pluginId.equals("jdbc")) {
@@ -252,9 +239,8 @@ class ConfigJsonService {
     }
 
     // central supports advanced config on rollups (maxQueryAggregates and maxServiceCallAggregates)
-    @POST(path = "/backend/config/advanced", permission = "agent:config:edit:advanced")
-    String updateAdvancedConfig(@BindAgentRollupId String agentRollupId,
-            @BindRequest AdvancedConfigDto configDto) throws Exception {
+    String updateAdvancedConfig(String agentRollupId,
+            AdvancedConfigDto configDto) throws Exception {
         try {
             configRepository.updateAdvancedConfig(agentRollupId, configDto.convert(),
                     configDto.version());
@@ -264,8 +250,7 @@ class ConfigJsonService {
         return getAdvancedConfig(agentRollupId);
     }
 
-    @POST(path = "/backend/config/json", permission = "agent:config:edit")
-    String updateAllConfig(@BindAgentId String agentId, @BindRequest AllConfigDto config)
+    String updateAllConfig(String agentId, AllConfigDto config)
             throws Exception {
         try {
             configRepository.updateAllConfig(agentId, config.toProto(), config.version());
@@ -283,7 +268,7 @@ class ConfigJsonService {
         return mapper.writeValueAsString(PluginConfigDto.create(config));
     }
 
-    private static @Nullable String getFirstInvalidJdbcPluginRegularExpressions(
+    private static String getFirstInvalidJdbcPluginRegularExpressions(
             List<ImmutablePluginPropertyDto> properties) {
         for (PluginPropertyDto property : properties) {
             if (property.name().equals("captureBindParametersIncludes")
@@ -305,12 +290,10 @@ class ConfigJsonService {
         return OptionalInt32.newBuilder().setValue(value).build();
     }
 
-    @Value.Immutable
     interface PluginConfigRequest {
         Optional<String> pluginId();
     }
 
-    @Value.Immutable
     interface PluginResponse {
         String id();
         String name();
@@ -320,11 +303,10 @@ class ConfigJsonService {
     // these DTOs are only different from underlying config objects in that they contain the version
     // attribute, and that they have no default attribute values
 
-    @Value.Immutable
     abstract static class GeneralConfigDto {
 
         abstract String display();
-        abstract @Nullable String defaultDisplay(); // only used in response
+        abstract String defaultDisplay(); // only used in response
         abstract String version();
 
         private GeneralConfig convert() {
@@ -343,14 +325,12 @@ class ConfigJsonService {
         }
     }
 
-    @Value.Immutable
     interface TransactionConfigResponse {
         ImmutableTransactionConfigDto config();
         String defaultTransactionType();
         List<String> allTransactionTypes();
     }
 
-    @Value.Immutable
     abstract static class TransactionConfigDto {
 
         abstract int slowThresholdMillis();
@@ -386,8 +366,6 @@ class ConfigJsonService {
         }
     }
 
-    @Value.Immutable
-    @Styles.AllParameters
     abstract static class SlowThresholdOverrideDto {
 
         abstract String transactionType();
@@ -435,7 +413,6 @@ class ConfigJsonService {
         }
     }
 
-    @Value.Immutable
     abstract static class JvmConfigDto {
 
         abstract ImmutableList<String> maskSystemProperties();
@@ -458,7 +435,6 @@ class ConfigJsonService {
         }
     }
 
-    @Value.Immutable
     interface PluginUpdateRequest {
         String pluginId();
         List<ImmutablePluginPropertyDto> properties();
@@ -466,7 +442,6 @@ class ConfigJsonService {
     }
 
     // only used in response
-    @Value.Immutable
     abstract static class PluginConfigDto {
 
         abstract String name();
@@ -485,15 +460,14 @@ class ConfigJsonService {
     }
 
     // only used in response
-    @Value.Immutable
     abstract static class PluginPropertyDto {
 
         abstract String name();
         abstract PropertyType type();
-        abstract @Nullable JsonNode value();
-        abstract @Nullable String label();
-        abstract @Nullable String checkboxLabel();
-        abstract @Nullable String description();
+        abstract JsonNode value();
+        abstract String label();
+        abstract String checkboxLabel();
+        abstract String description();
 
         private PluginProperty convert() {
             return PluginProperty.newBuilder()
@@ -557,7 +531,7 @@ class ConfigJsonService {
             }
         }
 
-        private static @Nullable JsonNode getPropertyValue(PluginProperty.Value value) {
+        private static JsonNode getPropertyValue(PluginProperty.Value value) {
             PluginProperty.Value.ValCase valCase = value.getValCase();
             switch (valCase) {
                 case BVAL:
@@ -584,7 +558,6 @@ class ConfigJsonService {
         BOOLEAN, DOUBLE, STRING, LIST;
     }
 
-    @Value.Immutable
     abstract static class AdvancedConfigDto {
 
         abstract int immediatePartialStoreThresholdSeconds();
@@ -630,14 +603,12 @@ class ConfigJsonService {
         }
     }
 
-    @Value.Immutable
     interface UiDefaultsConfigResponse {
         ImmutableUiDefaultsConfigDto config();
         List<String> allTransactionTypes();
         List<Gauge> allGauges();
     }
 
-    @Value.Immutable
     abstract static class UiDefaultsConfigDto {
 
         abstract String defaultTransactionType();

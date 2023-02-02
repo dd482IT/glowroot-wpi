@@ -54,7 +54,7 @@ class DetailCapture {
     }
 
     private static Map<String, Object> captureHeaders(List<Pattern> capturePatterns,
-            @Nullable Headers headers, List<Pattern> maskPatterns) {
+            Headers headers, List<Pattern> maskPatterns) {
         if (headers == null) {
             return Collections.emptyMap();
         }
@@ -84,7 +84,7 @@ class DetailCapture {
         return ImmutableMap.copyOf(headersMap);
     }
 
-    static @Nullable String captureRequestRemoteAddr(HttpExchange exchange) {
+    static String captureRequestRemoteAddr(HttpExchange exchange) {
         if (JavaHttpServerPluginProperties.captureRequestRemoteAddr()) {
             return getRemoteAddr(exchange.getRemoteAddress());
         } else {
@@ -92,7 +92,7 @@ class DetailCapture {
         }
     }
 
-    private static @Nullable String getRemoteAddr(@Nullable InetSocketAddress remoteAddress) {
+    private static String getRemoteAddr(InetSocketAddress remoteAddress) {
         if (remoteAddress != null && remoteAddress.getAddress() != null) {
             return remoteAddress.getAddress().getHostAddress();
         } else {
@@ -100,7 +100,7 @@ class DetailCapture {
         }
     }
 
-    static @Nullable String captureRequestRemoteHost(HttpExchange exchange) {
+    static String captureRequestRemoteHost(HttpExchange exchange) {
         if (JavaHttpServerPluginProperties.captureRequestRemoteHost()) {
             return getRemoteHost(exchange.getRemoteAddress());
         } else {
@@ -108,7 +108,7 @@ class DetailCapture {
         }
     }
 
-    private static @Nullable String getRemoteHost(@Nullable InetSocketAddress remoteAddress) {
+    private static String getRemoteHost(InetSocketAddress remoteAddress) {
         if (remoteAddress != null) {
             return remoteAddress.getHostName();
         } else {

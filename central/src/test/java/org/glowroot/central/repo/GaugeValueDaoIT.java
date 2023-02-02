@@ -46,7 +46,6 @@ public class GaugeValueDaoIT {
     private static AgentConfigDao agentConfigDao;
     private static GaugeValueDao gaugeValueDao;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         SharedSetupRunListener.startCassandra();
         clusterManager = ClusterManager.create();
@@ -67,7 +66,6 @@ public class GaugeValueDaoIT {
                         Clock.systemClock()));
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         asyncExecutor.shutdown();
         session.close();
@@ -76,7 +74,6 @@ public class GaugeValueDaoIT {
         SharedSetupRunListener.stopCassandra();
     }
 
-    @Test
     public void shouldRollup() throws Exception {
         gaugeValueDao.truncateAll();
         gaugeValueDao.store("one", createData(60013));
@@ -107,7 +104,6 @@ public class GaugeValueDaoIT {
         assertThat(gaugeValues.get(0).getWeight()).isEqualTo(2);
     }
 
-    @Test
     public void shouldRollupFromChildren() throws Exception {
         gaugeValueDao.truncateAll();
         gaugeValueDao.store("the parent::one", createData(60013));
@@ -128,7 +124,6 @@ public class GaugeValueDaoIT {
         assertThat(gaugeValues.get(0).getWeight()).isEqualTo(2);
     }
 
-    @Test
     public void shouldRollupFromGrandChildren() throws Exception {
         gaugeValueDao.truncateAll();
         gaugeValueDao.store("the gp::the parent::one", createData(60013));

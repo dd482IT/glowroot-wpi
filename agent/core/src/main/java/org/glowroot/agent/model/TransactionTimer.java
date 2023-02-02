@@ -33,8 +33,6 @@ public interface TransactionTimer {
 
     TransactionTimerSnapshot getSnapshot();
 
-    @Value.Immutable
-    @Styles.AllParameters
     interface TransactionTimerSnapshot {
         long totalNanos();
         long count();

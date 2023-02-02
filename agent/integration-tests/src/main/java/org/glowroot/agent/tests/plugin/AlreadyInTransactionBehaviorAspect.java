@@ -31,29 +31,23 @@ import org.glowroot.agent.plugin.api.weaving.Pointcut;
 
 public class AlreadyInTransactionBehaviorAspect {
 
-    @Pointcut(className = "org.glowroot.agent.tests.app.AlreadyInTransactionBehaviorObject",
-            methodName = "call", methodParameterTypes = {"java.lang.String"},
-            timerName = "already in transaction behavior one")
     public static class LevelOneAdvice {
 
         private static final TimerName timerName = Agent.getTimerName(LevelOneAdvice.class);
 
-        @OnBefore
         public static TraceEntry onBefore(OptionalThreadContext context,
-                @BindParameter String arg) {
+                String arg) {
             return context.startTransaction("Test new", "abc",
                     MessageSupplier.create("message: {}", arg), timerName,
                     AlreadyInTransactionBehavior.valueOf(arg));
         }
 
-        @OnReturn
-        public static void onReturn(@BindTraveler TraceEntry traceEntry) {
+        public static void onReturn(TraceEntry traceEntry) {
             traceEntry.end();
         }
 
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler TraceEntry traceEntry) {
+        public static void onThrow(Throwable t,
+                TraceEntry traceEntry) {
             traceEntry.endWithError(t);
         }
     }

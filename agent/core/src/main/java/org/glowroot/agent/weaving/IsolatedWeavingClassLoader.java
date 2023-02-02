@@ -42,7 +42,6 @@ import org.glowroot.common.util.OnlyUsedByTests;
 // the placement of this code in the main Glowroot code base (and not inside of the tests folder) is
 // not ideal, but the alternative is to create a separate artifact (or at least classifier) for this
 // small amount of code, which also seems to be not ideal
-@OnlyUsedByTests
 public class IsolatedWeavingClassLoader extends ClassLoader {
 
     private static final Logger logger = LoggerFactory.getLogger(IsolatedWeavingClassLoader.class);
@@ -54,7 +53,7 @@ public class IsolatedWeavingClassLoader extends ClassLoader {
 
     private final Map<String, byte[]> manualClasses = Maps.newConcurrentMap();
 
-    private volatile @MonotonicNonNull Weaver weaver;
+    private volatile Weaver weaver;
 
     @SuppressWarnings("nullness:type.argument.type.incompatible")
     private final ThreadLocal<Boolean> inWeaving = new ThreadLocal<Boolean>() {
@@ -137,12 +136,12 @@ public class IsolatedWeavingClassLoader extends ClassLoader {
     }
 
     @Override
-    protected @Nullable Package getPackage(String name) {
+    protected Package getPackage(String name) {
         return packages.get(name);
     }
 
     public Class<?> weaveAndDefineClass(String name, byte[] bytes,
-            @Nullable CodeSource codeSource) {
+            CodeSource codeSource) {
         byte[] wovenBytes = weaveClass(name, bytes);
         String packageName = Reflection.getPackageName(name);
         if (!packages.containsKey(packageName)) {

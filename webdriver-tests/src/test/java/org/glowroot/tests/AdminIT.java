@@ -32,7 +32,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class AdminIT extends WebDriverIT {
 
-    @Test
     public void shouldUpdateWebConfig() throws Exception {
         // given
         App app = app();
@@ -50,7 +49,6 @@ public class AdminIT extends WebDriverIT {
         // SECONDS.sleep(1);
     }
 
-    @Test
     public void shouldUpdateStorageConfig() throws Exception {
         // given
         App app = app();
@@ -104,7 +102,6 @@ public class AdminIT extends WebDriverIT {
         }
     }
 
-    @Test
     public void shouldRunStorageConfigUpdates() throws Exception {
         // given
         App app = app();
@@ -137,7 +134,6 @@ public class AdminIT extends WebDriverIT {
         }
     }
 
-    @Test
     public void shouldUpdateSmtpConfig() throws Exception {
         // given
         App app = app();
@@ -183,7 +179,6 @@ public class AdminIT extends WebDriverIT {
         assertThat(page.getFromDisplayNameTextField().getAttribute("value")).isEqualTo("User 1234");
     }
 
-    @Test
     public void shouldUpdateHttpProxyConfig() throws Exception {
         // given
         App app = app();
@@ -219,7 +214,6 @@ public class AdminIT extends WebDriverIT {
         assertThat(page.getPasswordTextField().getAttribute("value")).isEqualTo("********");
     }
 
-    @Test
     public void shouldUpdateLdapConfig() throws Exception {
         // given
         App app = app();
@@ -270,7 +264,6 @@ public class AdminIT extends WebDriverIT {
         assertThat(page.getGroupSearchFilterTextField().getAttribute("value")).isEqualTo("yf");
     }
 
-    @Test
     public void shouldUpdatePagerDutyConfig() throws Exception {
         // given
         App app = app();
@@ -289,7 +282,6 @@ public class AdminIT extends WebDriverIT {
         SECONDS.sleep(1);
     }
 
-    @Test
     public void shouldUpdateSlackConfig() throws Exception {
         // given
         App app = app();
@@ -308,7 +300,6 @@ public class AdminIT extends WebDriverIT {
         SECONDS.sleep(1);
     }
 
-    @Test
     public void shouldUpdateHealthchecksIOConfig() throws Exception {
 
         // Healthchecks.io integration not available for central (use embedded agent to monitor

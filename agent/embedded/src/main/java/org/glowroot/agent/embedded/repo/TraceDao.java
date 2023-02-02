@@ -267,24 +267,24 @@ public class TraceDao implements TraceRepository {
     }
 
     @Override
-    public @Nullable HeaderPlus readHeaderPlus(String agentId, String traceId) throws Exception {
+    public HeaderPlus readHeaderPlus(String agentId, String traceId) throws Exception {
         return dataSource.queryAtMostOne(new TraceHeaderQuery(traceId));
     }
 
     @Override
-    public @Nullable Entries readEntries(String agentId, String traceId) throws Exception {
+    public Entries readEntries(String agentId, String traceId) throws Exception {
         return dataSource.query(new EntriesQuery(traceId));
     }
 
     @Override
-    public @Nullable Queries readQueries(String agentId, String traceId) throws Exception {
+    public Queries readQueries(String agentId, String traceId) throws Exception {
         return dataSource.query(new QueriesQuery(traceId));
     }
 
     // since this is only used by export, SharedQueryTexts are always returned with fullTrace
     // (never with truncatedText/truncatedEndText/fullTraceSha1)
     @Override
-    public @Nullable EntriesAndQueries readEntriesAndQueriesForExport(String agentId,
+    public EntriesAndQueries readEntriesAndQueriesForExport(String agentId,
             String traceId) throws Exception {
         EntriesAndQueries entriesAndQueries = dataSource.query(new EntriesAndQueriesQuery(traceId));
         if (entriesAndQueries == null) {
@@ -298,7 +298,7 @@ public class TraceDao implements TraceRepository {
     }
 
     @Override
-    public @Nullable Profile readMainThreadProfile(String agentId, String traceId)
+    public Profile readMainThreadProfile(String agentId, String traceId)
             throws Exception {
         Long cappedId = dataSource.queryForOptionalLong(
                 "select main_thread_profile_capped_id from trace where id = ?", traceId);
@@ -310,7 +310,7 @@ public class TraceDao implements TraceRepository {
     }
 
     @Override
-    public @Nullable Profile readAuxThreadProfile(String agentId, String traceId) throws Exception {
+    public Profile readAuxThreadProfile(String agentId, String traceId) throws Exception {
         Long cappedId = dataSource.queryForOptionalLong(
                 "select aux_thread_profile_capped_id from trace where id = ?", traceId);
         if (cappedId == null) {
@@ -465,11 +465,11 @@ public class TraceDao implements TraceRepository {
 
         private final String traceId;
         private final Trace.Header header;
-        private final @Nullable Long entriesCappedId;
-        private final @Nullable Long queriesCappedId;
-        private final @Nullable Long sharedQueryTextsCappedId;
-        private final @Nullable Long mainThreadProfileId;
-        private final @Nullable Long auxThreadProfileId;
+        private final Long entriesCappedId;
+        private final Long queriesCappedId;
+        private final Long sharedQueryTextsCappedId;
+        private final Long mainThreadProfileId;
+        private final Long auxThreadProfileId;
 
         private TraceMerge(Trace trace) throws IOException {
             this.traceId = trace.getId();
@@ -700,7 +700,7 @@ public class TraceDao implements TraceRepository {
         }
 
         @Override
-        public @Nullable Entries processResultSet(ResultSet resultSet) throws Exception {
+        public Entries processResultSet(ResultSet resultSet) throws Exception {
             if (!resultSet.next()) {
                 return null;
             }
@@ -725,7 +725,7 @@ public class TraceDao implements TraceRepository {
         }
 
         @Override
-        public @Nullable Entries valueIfDataSourceClosed() {
+        public Entries valueIfDataSourceClosed() {
             return null;
         }
     }
@@ -749,7 +749,7 @@ public class TraceDao implements TraceRepository {
         }
 
         @Override
-        public @Nullable Queries processResultSet(ResultSet resultSet) throws Exception {
+        public Queries processResultSet(ResultSet resultSet) throws Exception {
             if (!resultSet.next()) {
                 return null;
             }
@@ -774,7 +774,7 @@ public class TraceDao implements TraceRepository {
         }
 
         @Override
-        public @Nullable Queries valueIfDataSourceClosed() {
+        public Queries valueIfDataSourceClosed() {
             return null;
         }
     }
@@ -799,7 +799,7 @@ public class TraceDao implements TraceRepository {
         }
 
         @Override
-        public @Nullable EntriesAndQueries processResultSet(ResultSet resultSet) throws Exception {
+        public EntriesAndQueries processResultSet(ResultSet resultSet) throws Exception {
             if (!resultSet.next()) {
                 return null;
             }
@@ -830,7 +830,7 @@ public class TraceDao implements TraceRepository {
         }
 
         @Override
-        public @Nullable EntriesAndQueries valueIfDataSourceClosed() {
+        public EntriesAndQueries valueIfDataSourceClosed() {
             return null;
         }
     }

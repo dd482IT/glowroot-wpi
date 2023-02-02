@@ -97,7 +97,6 @@ class ConfigFile {
         ConfigFileUtil.writeToFileIfNeeded(file, rootObjectNode, keyOrder, readOnly);
     }
 
-    @OnlyUsedByTests
     void delete() throws IOException {
         if (!file.delete()) {
             throw new IOException("Could not delete file: " + file.getCanonicalPath());
@@ -115,7 +114,7 @@ class ConfigFile {
         return rootObjectNode;
     }
 
-    private static @Nullable File getConfigDefaultFile(List<File> confDirs) {
+    private static File getConfigDefaultFile(List<File> confDirs) {
         for (File confDir : confDirs) {
             File defaultFile = new File(confDir, "config-default.json");
             if (defaultFile.exists()) {

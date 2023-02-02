@@ -94,7 +94,7 @@ class AdminConfigFile {
         return rootObjectNode;
     }
 
-    private static @Nullable File getAdminConfigDefaultFile(List<File> confDirs) {
+    private static File getAdminConfigDefaultFile(List<File> confDirs) {
         for (File confDir : confDirs) {
             File defaultFile = new File(confDir, "admin-default.json");
             if (defaultFile.exists()) {

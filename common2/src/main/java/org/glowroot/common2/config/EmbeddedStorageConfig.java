@@ -21,7 +21,6 @@ import org.immutables.value.Value;
 
 import org.glowroot.common.util.Versions;
 
-@Value.Immutable
 public abstract class EmbeddedStorageConfig implements StorageConfig {
 
     // 2 days, 2 weeks, 3 months, 3 months
@@ -36,56 +35,43 @@ public abstract class EmbeddedStorageConfig implements StorageConfig {
     // currently aggregate expiration should be at least as big as trace expiration
     // errors/messages page depends on this for calculating error rate when using the filter
     @Override
-    @Value.Default
     public ImmutableList<Integer> rollupExpirationHours() {
         return DEFAULT_ROLLUP_EXPIRATION_HOURS;
     }
 
     @Override
-    @JsonIgnore
-    @Value.Derived
     public ImmutableList<Integer> queryAndServiceCallRollupExpirationHours() {
         return rollupExpirationHours();
     }
 
     @Override
-    @JsonIgnore
-    @Value.Derived
     public ImmutableList<Integer> profileRollupExpirationHours() {
         return rollupExpirationHours();
     }
 
     @Override
-    @Value.Default
     public int traceExpirationHours() {
         // 2 weeks
         return 24 * 14;
     }
 
-    @Value.Default
     public int fullQueryTextExpirationHours() {
         // 2 weeks
         return 24 * 14;
     }
 
-    @Value.Default
     public ImmutableList<Integer> rollupCappedDatabaseSizesMb() {
         return DEFAULT_CAPPED_DATABASE_SIZES_MB;
     }
 
-    @Value.Default
     public int traceCappedDatabaseSizeMb() {
         return 500;
     }
 
-    @Value.Derived
-    @JsonIgnore
     public String version() {
         return Versions.getJsonVersion(this);
     }
 
-    @Value.Derived
-    @JsonIgnore
     public boolean hasListIssues() {
         return rollupExpirationHours().size() != DEFAULT_ROLLUP_EXPIRATION_HOURS.size()
                 || rollupCappedDatabaseSizesMb().size() != DEFAULT_CAPPED_DATABASE_SIZES_MB.size();

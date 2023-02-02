@@ -40,18 +40,18 @@ class AuxThreadContextImpl implements AuxThreadContext {
 
     private final Transaction transaction;
     // null when parent is a limit exceeded auxiliary thread context, to prevent retaining parent
-    private final @Nullable TraceEntryImpl parentTraceEntry;
+    private final TraceEntryImpl parentTraceEntry;
     // null when parent is a limit exceeded auxiliary thread context, to prevent retaining parent
-    private final @Nullable TraceEntryImpl parentThreadContextPriorEntry;
-    private final @Nullable ServletRequestInfo servletRequestInfo;
-    private final @Nullable ImmutableList<StackTraceElement> locationStackTrace;
+    private final TraceEntryImpl parentThreadContextPriorEntry;
+    private final ServletRequestInfo servletRequestInfo;
+    private final ImmutableList<StackTraceElement> locationStackTrace;
     private final TransactionRegistry transactionRegistry;
     private final TransactionService transactionService;
 
-    AuxThreadContextImpl(Transaction transaction, @Nullable TraceEntryImpl parentTraceEntry,
-            @Nullable TraceEntryImpl parentThreadContextPriorEntry,
-            @Nullable ServletRequestInfo servletRequestInfo,
-            @Nullable ImmutableList<StackTraceElement> locationStackTrace,
+    AuxThreadContextImpl(Transaction transaction, TraceEntryImpl parentTraceEntry,
+            TraceEntryImpl parentThreadContextPriorEntry,
+            ServletRequestInfo servletRequestInfo,
+            ImmutableList<StackTraceElement> locationStackTrace,
             TransactionRegistry transactionRegistry, TransactionService transactionService) {
         this.transaction = transaction;
         this.parentTraceEntry = parentTraceEntry;
@@ -124,7 +124,7 @@ class AuxThreadContextImpl implements AuxThreadContext {
         return rootEntry;
     }
 
-    private static Object getThreadContextDisplay(@Nullable TraceEntryImpl parentTraceEntry) {
+    private static Object getThreadContextDisplay(TraceEntryImpl parentTraceEntry) {
         if (parentTraceEntry == null) {
             return "null (aux thread context limit exceeded)";
         } else {

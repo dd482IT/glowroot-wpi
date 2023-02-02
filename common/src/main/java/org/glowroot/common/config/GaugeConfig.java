@@ -23,7 +23,6 @@ import org.immutables.value.Value;
 import org.glowroot.common.util.Styles;
 import org.glowroot.wire.api.model.AgentConfigOuterClass.AgentConfig;
 
-@Value.Immutable
 public abstract class GaugeConfig {
 
     public abstract String mbeanObjectName();
@@ -52,14 +51,10 @@ public abstract class GaugeConfig {
         return builder.build();
     }
 
-    @Value.Immutable
-    @Styles.AllParameters
     public abstract static class MBeanAttribute {
 
         public abstract String name();
 
-        @Value.Default
-        @JsonInclude(Include.NON_EMPTY)
         public boolean counter() {
             return false;
         }

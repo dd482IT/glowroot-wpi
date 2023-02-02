@@ -159,7 +159,7 @@ public class QueryCollector {
         }
     }
 
-    public @Nullable String getFullQueryText(String fullQueryTextSha1) {
+    public String getFullQueryText(String fullQueryTextSha1) {
         for (Map.Entry<String, Map<String, MutableQuery>> entry : queries.entrySet()) {
             for (String fullQueryText : entry.getValue().keySet()) {
                 if (fullQueryText.length() <= Constants.AGGREGATE_QUERY_TEXT_TRUNCATE) {

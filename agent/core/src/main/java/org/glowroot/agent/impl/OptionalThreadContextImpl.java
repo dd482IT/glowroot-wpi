@@ -45,7 +45,7 @@ class OptionalThreadContextImpl implements ThreadContextPlus {
     private int rootNestingGroupId;
     private int rootSuppressionKeyId;
 
-    private @MonotonicNonNull ThreadContextPlus threadContext;
+    private ThreadContextPlus threadContext;
 
     private final TransactionService transactionService;
     private final ThreadContextThreadLocal.Holder threadContextHolder;
@@ -215,28 +215,28 @@ class OptionalThreadContextImpl implements ThreadContextPlus {
     }
 
     @Override
-    public void setTransactionType(@Nullable String transactionType, int priority) {
+    public void setTransactionType(String transactionType, int priority) {
         if (threadContext != null) {
             threadContext.setTransactionType(transactionType, priority);
         }
     }
 
     @Override
-    public void setTransactionName(@Nullable String transactionName, int priority) {
+    public void setTransactionName(String transactionName, int priority) {
         if (threadContext != null) {
             threadContext.setTransactionName(transactionName, priority);
         }
     }
 
     @Override
-    public void setTransactionUser(@Nullable String user, int priority) {
+    public void setTransactionUser(String user, int priority) {
         if (threadContext != null) {
             threadContext.setTransactionUser(user, priority);
         }
     }
 
     @Override
-    public void addTransactionAttribute(String name, @Nullable String value) {
+    public void addTransactionAttribute(String name, String value) {
         if (threadContext != null) {
             threadContext.addTransactionAttribute(name, value);
         }
@@ -257,14 +257,14 @@ class OptionalThreadContextImpl implements ThreadContextPlus {
     }
 
     @Override
-    public void setTransactionError(@Nullable String message) {
+    public void setTransactionError(String message) {
         if (threadContext != null) {
             threadContext.setTransactionError(message);
         }
     }
 
     @Override
-    public void setTransactionError(@Nullable String message, @Nullable Throwable t) {
+    public void setTransactionError(String message, Throwable t) {
         if (threadContext != null) {
             threadContext.setTransactionError(message, t);
         }
@@ -278,14 +278,14 @@ class OptionalThreadContextImpl implements ThreadContextPlus {
     }
 
     @Override
-    public void addErrorEntry(@Nullable String message) {
+    public void addErrorEntry(String message) {
         if (threadContext != null) {
             threadContext.addErrorEntry(message);
         }
     }
 
     @Override
-    public void addErrorEntry(@Nullable String message, Throwable t) {
+    public void addErrorEntry(String message, Throwable t) {
         if (threadContext != null) {
             threadContext.addErrorEntry(message, t);
         }
@@ -306,7 +306,7 @@ class OptionalThreadContextImpl implements ThreadContextPlus {
     }
 
     @Override
-    public @Nullable ServletRequestInfo getServletRequestInfo() {
+    public ServletRequestInfo getServletRequestInfo() {
         if (threadContext != null) {
             return threadContext.getServletRequestInfo();
         }
@@ -314,7 +314,7 @@ class OptionalThreadContextImpl implements ThreadContextPlus {
     }
 
     @Override
-    public void setServletRequestInfo(@Nullable ServletRequestInfo servletRequestInfo) {
+    public void setServletRequestInfo(ServletRequestInfo servletRequestInfo) {
         if (threadContext != null) {
             threadContext.setServletRequestInfo(servletRequestInfo);
         }

@@ -24,7 +24,6 @@ import org.glowroot.common.util.Versions;
 
 import static java.util.concurrent.TimeUnit.HOURS;
 
-@Value.Immutable
 public abstract class CentralStorageConfig implements StorageConfig {
 
     // 30-min data is extra valuable because it allows daily reports in (almost) any time zone
@@ -42,32 +41,26 @@ public abstract class CentralStorageConfig implements StorageConfig {
     // currently aggregate expiration should be at least as big as trace expiration
     // errors/messages page depends on this for calculating error rate when using the filter
     @Override
-    @Value.Default
     public ImmutableList<Integer> rollupExpirationHours() {
         return DEFAULT_ROLLUP_EXPIRATION_HOURS;
     }
 
     @Override
-    @Value.Default
     public ImmutableList<Integer> queryAndServiceCallRollupExpirationHours() {
         return DEFAULT_DETAIL_ROLLUP_EXPIRATION_HOURS;
     }
 
     @Override
-    @Value.Default
     public ImmutableList<Integer> profileRollupExpirationHours() {
         return DEFAULT_DETAIL_ROLLUP_EXPIRATION_HOURS;
     }
 
     @Override
-    @Value.Default
     public int traceExpirationHours() {
         // 2 weeks
         return 24 * 14;
     }
 
-    @Value.Derived
-    @JsonIgnore
     public String version() {
         return Versions.getJsonVersion(this);
     }
@@ -80,8 +73,6 @@ public abstract class CentralStorageConfig implements StorageConfig {
                         .size();
     }
 
-    @Value.Derived
-    @JsonIgnore
     public int getMaxRollupHours() {
         int maxRollupExpirationHours = 0;
         for (int expirationHours : rollupExpirationHours()) {
@@ -94,14 +85,10 @@ public abstract class CentralStorageConfig implements StorageConfig {
         return maxRollupExpirationHours;
     }
 
-    @Value.Derived
-    @JsonIgnore
     public int getMaxRollupTTL() {
         return Ints.saturatedCast(HOURS.toSeconds(getMaxRollupHours()));
     }
 
-    @Value.Derived
-    @JsonIgnore
     public int getTraceTTL() {
         return Ints.saturatedCast(HOURS.toSeconds(traceExpirationHours()));
     }

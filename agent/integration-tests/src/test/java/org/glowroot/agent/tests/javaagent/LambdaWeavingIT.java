@@ -31,25 +31,20 @@ public class LambdaWeavingIT {
 
     protected static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = JavaagentContainer.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
     // works on Java 8, fails on Java 9+ due to lambda classes no longer being passed to
     // ClassFileTransformer :-(
-    @Test
-    @Disabled
     public void shouldExerciseBootstrapWeaving() throws Exception {
         // when
         Trace trace = container.execute(ShouldExerciseLambdaWeaving.class);

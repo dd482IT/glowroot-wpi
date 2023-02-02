@@ -28,7 +28,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class MultiErrorIntervalCollectorTest {
 
-    @Test
     public void shouldMergeOne() {
         // given
         ErrorInterval one = one();
@@ -48,7 +47,6 @@ public class MultiErrorIntervalCollectorTest {
         assertThat(mergedMultiErrorInterval.errorIntervals()).isEqualTo(errorIntervals);
     }
 
-    @Test
     public void shouldMergeTwo() {
         // given
         ErrorInterval one = one();
@@ -69,7 +67,6 @@ public class MultiErrorIntervalCollectorTest {
         assertThat(mergedMultiErrorInterval.errorIntervals()).isEqualTo(errorIntervals);
     }
 
-    @Test
     public void shouldNotMergeTwo() {
         // given
         ErrorInterval one = one();

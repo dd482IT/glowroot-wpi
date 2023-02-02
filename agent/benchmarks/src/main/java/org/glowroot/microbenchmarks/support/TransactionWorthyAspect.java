@@ -29,28 +29,22 @@ import org.glowroot.agent.plugin.api.weaving.Pointcut;
 
 public class TransactionWorthyAspect {
 
-    @Pointcut(className = "org.glowroot.microbenchmarks.core.support.TransactionWorthy",
-            methodName = "doSomethingTransactionWorthy", methodParameterTypes = {},
-            timerName = "transaction worthy")
     public static class TransactionWorthyAdvice {
 
         private static final TimerName timerName =
                 Agent.getTimerName(TransactionWorthyAdvice.class);
 
-        @OnBefore
         public static TraceEntry onBefore(OptionalThreadContext context) {
             return context.startTransaction("Microbenchmark", "transaction worthy",
                     MessageSupplier.create("transaction worthy"), timerName);
         }
 
-        @OnReturn
-        public static void onReturn(@BindTraveler TraceEntry traceEntry) {
+        public static void onReturn(TraceEntry traceEntry) {
             traceEntry.end();
         }
 
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler TraceEntry traceEntry) {
+        public static void onThrow(Throwable t,
+                TraceEntry traceEntry) {
             traceEntry.endWithError(t);
         }
     }

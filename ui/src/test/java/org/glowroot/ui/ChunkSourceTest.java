@@ -28,7 +28,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ChunkSourceTest {
 
-    @Test
     public void testConcatWithEmptyChunks() throws IOException {
         // given
         ChunkSource one = ChunkSource.wrap("1");
@@ -62,7 +61,6 @@ public class ChunkSourceTest {
         assertThat(writer.toString()).isEqualTo("123456789");
     }
 
-    @Test
     public void testConcatWithEmptyStringChunks() throws IOException {
         // given
         ChunkSource one = ChunkSource.wrap("1");

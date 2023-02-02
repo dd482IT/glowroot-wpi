@@ -51,7 +51,7 @@ class HeapHistogramTool {
     }
 
     static HeapHistogram runPriorToJava8(long pid, boolean allowAttachSelf,
-            @Nullable File glowrootJarFile) throws Exception {
+            File glowrootJarFile) throws Exception {
         return JvmTool.run(pid, "heapHisto", new HeapHistogramProcessor(), allowAttachSelf,
                 glowrootJarFile);
     }

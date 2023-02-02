@@ -38,7 +38,6 @@ public class Tickers {
         return tick2 - tick1 >= 0;
     }
 
-    @VisibleForTesting
     static Ticker getTicker(boolean dummyTicker) {
         if (dummyTicker) {
             return new DummyTicker();

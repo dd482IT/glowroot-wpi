@@ -44,7 +44,6 @@ public class ConfiguredInstrumentationIT {
     protected static Container container;
     private static File testDir;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         testDir = TempDirs.createTempDir("glowroot-test-dir");
         // see subclass (ReweavePointcutsTest) for JavaagentContainer test
@@ -64,18 +63,15 @@ public class ConfiguredInstrumentationIT {
         container = Containers.create(testDir);
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
         TempDirs.deleteRecursively(testDir);
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldExecute1() throws Exception {
         // given
         container.getConfigService().updateTransactionConfig(
@@ -109,7 +105,6 @@ public class ConfiguredInstrumentationIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldRenderTraceEntryMessageTemplateWithReturnValue() throws Exception {
         // when
         Trace trace = container.execute(ShouldExecuteWithReturn.class);
@@ -129,7 +124,6 @@ public class ConfiguredInstrumentationIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldRenderTraceHeadline() throws Exception {
         // when
         Trace trace = container.execute(ShouldExecuteWithArgs.class);

@@ -126,7 +126,7 @@ public interface ThreadContext {
      * 
      * If there is no current transaction then this method does nothing.
      */
-    void setTransactionType(@Nullable String transactionType, int priority);
+    void setTransactionType(String transactionType, int priority);
 
     /**
      * Set the transaction name that is used for aggregation.
@@ -141,7 +141,7 @@ public interface ThreadContext {
      * 
      * If there is no current transaction then this method does nothing.
      */
-    void setTransactionName(@Nullable String transactionName, int priority);
+    void setTransactionName(String transactionName, int priority);
 
     /**
      * Sets the user attribute on the transaction. This attribute is shared across all plugins, and
@@ -170,7 +170,7 @@ public interface ThreadContext {
      * 
      * If there is no current transaction then this method does nothing.
      */
-    void setTransactionUser(@Nullable String user, int priority);
+    void setTransactionUser(String user, int priority);
 
     /**
      * Adds an attribute on the current transaction with the specified {@code name} and
@@ -185,7 +185,7 @@ public interface ThreadContext {
      * 
      * {@code null} values are normalized to the empty string.
      */
-    void addTransactionAttribute(String name, @Nullable String value);
+    void addTransactionAttribute(String name, String value);
 
     /**
      * Overrides the default slow trace threshold (Configuration &gt; General &gt; Slow trace
@@ -239,7 +239,7 @@ public interface ThreadContext {
      * 
      * If there is no current transaction then this method does nothing.
      */
-    void setTransactionError(@Nullable String message);
+    void setTransactionError(String message);
 
     /**
      * Marks the transaction as an error with the given message. Normally transactions are only
@@ -261,7 +261,7 @@ public interface ThreadContext {
      * 
      * If there is no current transaction then this method does nothing.
      */
-    void setTransactionError(@Nullable String message, @Nullable Throwable t);
+    void setTransactionError(String message, Throwable t);
 
     /**
      * Adds a trace entry with the specified error message and total time of zero. It does not set
@@ -291,7 +291,7 @@ public interface ThreadContext {
      * 
      * If there is no current transaction then this method does nothing.
      */
-    void addErrorEntry(@Nullable String message);
+    void addErrorEntry(String message);
 
     /**
      * Adds a trace entry with the specified error message and total time of zero. It does not set
@@ -308,14 +308,13 @@ public interface ThreadContext {
      * 
      * If there is no current transaction then this method does nothing.
      */
-    void addErrorEntry(@Nullable String message, Throwable t);
+    void addErrorEntry(String message, Throwable t);
 
     // this is for tracking down resource leaks
     void trackResourceAcquired(Object resource, boolean withLocationStackTrace);
 
     void trackResourceReleased(Object resource);
 
-    @Nullable
     ServletRequestInfo getServletRequestInfo();
 
     /**
@@ -323,7 +322,7 @@ public interface ThreadContext {
      * 
      * This method should only ever be used by the servlet plugin.
      */
-    void setServletRequestInfo(@Nullable ServletRequestInfo servletRequestInfo);
+    void setServletRequestInfo(ServletRequestInfo servletRequestInfo);
 
     interface ServletRequestInfo {
         String getMethod();
@@ -331,7 +330,6 @@ public interface ThreadContext {
         String getServletPath();
         // getPathInfo() returns null when the servlet is mapped to "/" (not "/*") and therefore it
         // is replacing the default servlet and in this case getServletPath() returns the full path
-        @Nullable
         String getPathInfo();
         String getUri();
         void addJaxRsPart(String part); // should only ever be used by the jaxrs plugin

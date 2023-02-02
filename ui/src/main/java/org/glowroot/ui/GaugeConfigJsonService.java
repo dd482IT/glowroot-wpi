@@ -46,7 +46,6 @@ import org.glowroot.wire.api.model.DownstreamServiceOuterClass.MBeanMeta;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.netty.handler.codec.http.HttpResponseStatus.CONFLICT;
 
-@JsonService
 class GaugeConfigJsonService {
 
     private static final Logger logger = LoggerFactory.getLogger(GaugeConfigJsonService.class);
@@ -63,16 +62,15 @@ class GaugeConfigJsonService {
     };
 
     private final ConfigRepository configRepository;
-    private final @Nullable LiveJvmService liveJvmService;
+    private final LiveJvmService liveJvmService;
 
     GaugeConfigJsonService(ConfigRepository configRepository,
-            @Nullable LiveJvmService liveJvmService) {
+            LiveJvmService liveJvmService) {
         this.configRepository = configRepository;
         this.liveJvmService = liveJvmService;
     }
 
-    @GET(path = "/backend/config/gauges", permission = "agent:config:view:gauge")
-    String getGaugeConfig(@BindAgentId String agentId, @BindRequest GaugeConfigRequest request)
+    String getGaugeConfig(String agentId, GaugeConfigRequest request)
             throws Exception {
         Optional<String> version = request.version();
         if (version.isPresent()) {
@@ -94,16 +92,13 @@ class GaugeConfigJsonService {
         }
     }
 
-    @GET(path = "/backend/config/new-gauge-check-agent-connected",
-            permission = "agent:config:edit:gauges")
-    String checkAgentConnected(@BindAgentId String agentId) throws Exception {
+    String checkAgentConnected(String agentId) throws Exception {
         checkNotNull(liveJvmService); // agent:config:edit is disabled in offline viewer
         return Boolean.toString(liveJvmService.isAvailable(agentId));
     }
 
-    @GET(path = "/backend/config/matching-mbean-objects", permission = "agent:config:edit:gauges")
-    String getMatchingMBeanObjects(@BindAgentId String agentId,
-            @BindRequest MBeanObjectNameRequest request) throws Exception {
+    String getMatchingMBeanObjects(String agentId,
+            MBeanObjectNameRequest request) throws Exception {
         checkNotNull(liveJvmService); // agent:config:edit is disabled in offline viewer
         try {
             return mapper.writeValueAsString(liveJvmService.getMatchingMBeanObjectNames(agentId,
@@ -114,9 +109,8 @@ class GaugeConfigJsonService {
         }
     }
 
-    @GET(path = "/backend/config/mbean-attributes", permission = "agent:config:edit:gauges")
-    String getMBeanAttributes(@BindAgentId String agentId,
-            @BindRequest MBeanAttributeNamesRequest request) throws Exception {
+    String getMBeanAttributes(String agentId,
+            MBeanAttributeNamesRequest request) throws Exception {
         checkNotNull(liveJvmService); // agent:config:edit is disabled in offline viewer
         boolean duplicateMBean = false;
         for (GaugeConfig gaugeConfig : configRepository.getGaugeConfigs(agentId)) {
@@ -136,8 +130,7 @@ class GaugeConfigJsonService {
                 .build());
     }
 
-    @POST(path = "/backend/config/gauges/add", permission = "agent:config:edit:gauges")
-    String addGauge(@BindAgentId String agentId, @BindRequest GaugeConfigDto gaugeConfigDto)
+    String addGauge(String agentId, GaugeConfigDto gaugeConfigDto)
             throws Exception {
         GaugeConfig gaugeConfig = gaugeConfigDto.convert();
         try {
@@ -150,8 +143,7 @@ class GaugeConfigJsonService {
         return getGaugeResponse(agentId, gaugeConfig);
     }
 
-    @POST(path = "/backend/config/gauges/update", permission = "agent:config:edit:gauges")
-    String updateGauge(@BindAgentId String agentId, @BindRequest GaugeConfigDto gaugeConfigDto)
+    String updateGauge(String agentId, GaugeConfigDto gaugeConfigDto)
             throws Exception {
         GaugeConfig gaugeConfig = gaugeConfigDto.convert();
         String version = gaugeConfigDto.version().get();
@@ -165,8 +157,7 @@ class GaugeConfigJsonService {
         return getGaugeResponse(agentId, gaugeConfig);
     }
 
-    @POST(path = "/backend/config/gauges/remove", permission = "agent:config:edit:gauges")
-    void removeGauge(@BindAgentId String agentId, @BindRequest GaugeConfigRequest request)
+    void removeGauge(String agentId, GaugeConfigRequest request)
             throws Exception {
         configRepository.deleteGaugeConfig(agentId, request.version().get());
     }
@@ -198,31 +189,25 @@ class GaugeConfigJsonService {
         return mapper.writeValueAsString(builder.build());
     }
 
-    @Value.Immutable
     interface GaugeConfigWithWarningMessages {
         GaugeConfigDto config();
         ImmutableList<String> warningMessages();
     }
 
-    @Value.Immutable
     interface GaugeConfigRequest {
         Optional<String> version();
     }
 
-    @Value.Immutable
     interface MBeanObjectNameRequest {
         String partialObjectName();
         int limit();
     }
 
-    @Value.Immutable
     interface MBeanAttributeNamesRequest {
         String objectName();
-        @Nullable
         String gaugeVersion();
     }
 
-    @Value.Immutable
     interface MBeanAttributeNamesResponse {
         boolean noMatchFoundForPattern();
         boolean noMatchFoundForNonPattern();
@@ -230,7 +215,6 @@ class GaugeConfigJsonService {
         ImmutableList<String> mbeanAttributes();
     }
 
-    @Value.Immutable
     interface GaugeResponse {
         GaugeConfigDto config();
         boolean agentNotConnected();
@@ -239,10 +223,9 @@ class GaugeConfigJsonService {
         ImmutableList<String> mbeanAvailableAttributeNames();
     }
 
-    @Value.Immutable
     abstract static class GaugeConfigDto {
 
-        abstract @Nullable String display(); // only used in response
+        abstract String display(); // only used in response
         abstract List<String> displayPath(); // only used in response
         abstract String mbeanObjectName();
         abstract ImmutableList<ImmutableMBeanAttributeDto> mbeanAttributes();
@@ -272,8 +255,6 @@ class GaugeConfigJsonService {
         }
     }
 
-    @Value.Immutable
-    @Styles.AllParameters
     abstract static class MBeanAttributeDto {
 
         abstract String name();

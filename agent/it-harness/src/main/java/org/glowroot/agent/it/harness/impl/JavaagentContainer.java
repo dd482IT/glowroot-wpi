@@ -75,23 +75,23 @@ public class JavaagentContainer implements Container {
 
     private final ServerSocket heartbeatListenerSocket;
     private final ExecutorService heartbeatListenerExecutor;
-    private final @Nullable GrpcServerWrapper server;
+    private final GrpcServerWrapper server;
     private final ExecutorService executor;
     private final ManagedChannel channel;
-    private final @Nullable TraceCollector traceCollector;
+    private final TraceCollector traceCollector;
     private final JavaagentServiceBlockingStub javaagentService;
     private final ExecutorService consolePipeExecutor;
     private final Future<?> consolePipeFuture;
     private final Process process;
     private final ConsoleOutputPipe consoleOutputPipe;
-    private final @Nullable ConfigServiceImpl configService;
+    private final ConfigServiceImpl configService;
     private final Thread shutdownHook;
 
     public static JavaagentContainer create() throws Exception {
         return new JavaagentContainer(null, false, ImmutableList.<String>of());
     }
 
-    public static JavaagentContainer create(@Nullable File testDir) throws Exception {
+    public static JavaagentContainer create(File testDir) throws Exception {
         return new JavaagentContainer(testDir, false, ImmutableList.<String>of());
     }
 
@@ -100,7 +100,7 @@ public class JavaagentContainer implements Container {
         return new JavaagentContainer(null, false, extraJvmArgs);
     }
 
-    public JavaagentContainer(@Nullable File testDir, boolean embedded, List<String> extraJvmArgs)
+    public JavaagentContainer(File testDir, boolean embedded, List<String> extraJvmArgs)
             throws Exception {
         if (testDir == null) {
             this.testDir = TempDirs.createTempDir("glowroot-test-dir");
@@ -299,7 +299,7 @@ public class JavaagentContainer implements Container {
     }
 
     private Trace executeInternal(Class<? extends AppUnderTest> appClass,
-            @Nullable String transactionType, @Nullable String transactionName) throws Exception {
+            String transactionType, String transactionName) throws Exception {
         checkNotNull(traceCollector);
         executeInternal(appClass);
         // extra long wait time is needed for StackOverflowOOMIT on slow travis ci machines since it

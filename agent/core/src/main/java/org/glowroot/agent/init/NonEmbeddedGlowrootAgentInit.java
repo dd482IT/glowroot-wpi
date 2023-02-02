@@ -55,31 +55,31 @@ public class NonEmbeddedGlowrootAgentInit implements GlowrootAgentInit {
     private static final Logger logger =
             LoggerFactory.getLogger(NonEmbeddedGlowrootAgentInit.class);
 
-    private final @Nullable String collectorAddress;
-    private final @Nullable String collectorAuthority;
-    private final @Nullable Class<? extends Collector> customCollectorClass;
+    private final String collectorAddress;
+    private final String collectorAuthority;
+    private final Class<? extends Collector> customCollectorClass;
 
-    private volatile @MonotonicNonNull CollectorLogbackAppender collectorLogbackAppender;
-    private volatile @MonotonicNonNull AgentModule agentModule;
-    private volatile @MonotonicNonNull CentralCollector centralCollector;
+    private volatile CollectorLogbackAppender collectorLogbackAppender;
+    private volatile AgentModule agentModule;
+    private volatile CentralCollector centralCollector;
 
-    private volatile @MonotonicNonNull ScheduledExecutorService backgroundExecutor;
+    private volatile ScheduledExecutorService backgroundExecutor;
 
-    private volatile @MonotonicNonNull Closeable agentDirLockCloseable;
+    private volatile Closeable agentDirLockCloseable;
 
-    public NonEmbeddedGlowrootAgentInit(@Nullable String collectorAddress,
-            @Nullable String collectorAuthority,
-            @Nullable Class<? extends Collector> customCollectorClass) {
+    public NonEmbeddedGlowrootAgentInit(String collectorAddress,
+            String collectorAuthority,
+            Class<? extends Collector> customCollectorClass) {
         this.collectorAddress = collectorAddress;
         this.collectorAuthority = collectorAuthority;
         this.customCollectorClass = customCollectorClass;
     }
 
     @Override
-    public void init(@Nullable File pluginsDir, final List<File> confDirs, File logDir, File tmpDir,
-            final @Nullable File glowrootJarFile, final Map<String, String> properties,
-            final @Nullable Instrumentation instrumentation,
-            @Nullable PreCheckClassFileTransformer preCheckClassFileTransformer,
+    public void init(File pluginsDir, final List<File> confDirs, File logDir, File tmpDir,
+            final File glowrootJarFile, final Map<String, String> properties,
+            final Instrumentation instrumentation,
+            PreCheckClassFileTransformer preCheckClassFileTransformer,
             final String glowrootVersion, Closeable agentDirLockCloseable) throws Exception {
 
         this.agentDirLockCloseable = agentDirLockCloseable;
@@ -106,7 +106,7 @@ public class NonEmbeddedGlowrootAgentInit implements GlowrootAgentInit {
                 glowrootJarFile, tmpDir, preCheckClassFileTransformer);
         OnEnteringMain onEnteringMain = new OnEnteringMain() {
             @Override
-            public void run(@Nullable String mainClass) throws Exception {
+            public void run(String mainClass) throws Exception {
                 // TODO report checker framework issue that occurs without checkNotNull
                 checkNotNull(agentModule);
                 backgroundExecutor = Executors.newScheduledThreadPool(2,
@@ -157,14 +157,12 @@ public class NonEmbeddedGlowrootAgentInit implements GlowrootAgentInit {
     }
 
     @Override
-    @OnlyUsedByTests
     public void initConfigForTests() throws IOException {
         AgentModule agentModule = checkNotNull(this.agentModule);
         agentModule.getConfigService().initConfigForTests();
     }
 
     @Override
-    @OnlyUsedByTests
     public void resetConfigForTests() throws Exception {
         AgentModule agentModule = checkNotNull(this.agentModule);
         agentModule.getConfigService().resetConfigForTests();
@@ -172,7 +170,6 @@ public class NonEmbeddedGlowrootAgentInit implements GlowrootAgentInit {
     }
 
     @Override
-    @OnlyUsedByTests
     public void close() throws Exception {
         checkNotNull(agentModule).close();
         if (centralCollector != null) {
@@ -190,7 +187,6 @@ public class NonEmbeddedGlowrootAgentInit implements GlowrootAgentInit {
     }
 
     @Override
-    @OnlyUsedByTests
     public void awaitClose() throws Exception {
         if (centralCollector != null) {
             centralCollector.awaitClose();

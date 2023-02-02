@@ -70,7 +70,6 @@ import org.glowroot.wire.api.model.ProfileOuterClass.Profile;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-@JsonService
 class TransactionJsonService {
 
     private static final double NANOSECONDS_PER_MILLISECOND = 1000000.0;
@@ -95,9 +94,8 @@ class TransactionJsonService {
         this.clock = clock;
     }
 
-    @GET(path = "/backend/transaction/average", permission = "agent:transaction:overview")
-    String getOverview(@BindAgentRollupId String agentRollupId,
-            @BindRequest TransactionDataRequest request, @BindAutoRefresh boolean autoRefresh)
+    String getOverview(String agentRollupId,
+            TransactionDataRequest request, boolean autoRefresh)
             throws Exception {
         AggregateQuery query = toChartQuery(request, DataKind.GENERAL);
         long liveCaptureTime = clock.currentTimeMillis();
@@ -145,9 +143,8 @@ class TransactionJsonService {
         return sb.toString();
     }
 
-    @GET(path = "/backend/transaction/percentiles", permission = "agent:transaction:overview")
-    String getPercentiles(@BindAgentRollupId String agentRollupId,
-            @BindRequest TransactionPercentileRequest request, @BindAutoRefresh boolean autoRefresh)
+    String getPercentiles(String agentRollupId,
+            TransactionPercentileRequest request, boolean autoRefresh)
             throws Exception {
         AggregateQuery query = toChartQuery(request, DataKind.GENERAL);
         long liveCaptureTime = clock.currentTimeMillis();
@@ -186,9 +183,8 @@ class TransactionJsonService {
         return sb.toString();
     }
 
-    @GET(path = "/backend/transaction/throughput", permission = "agent:transaction:overview")
-    String getThroughput(@BindAgentRollupId String agentRollupId,
-            @BindRequest TransactionDataRequest request, @BindAutoRefresh boolean autoRefresh)
+    String getThroughput(String agentRollupId,
+            TransactionDataRequest request, boolean autoRefresh)
             throws Exception {
         AggregateQuery query = toChartQuery(request, DataKind.GENERAL);
         long liveCaptureTime = clock.currentTimeMillis();
@@ -234,9 +230,8 @@ class TransactionJsonService {
         return sb.toString();
     }
 
-    @GET(path = "/backend/transaction/queries", permission = "agent:transaction:queries")
-    String getQueries(@BindAgentRollupId String agentRollupId,
-            @BindRequest TransactionDataRequest request) throws Exception {
+    String getQueries(String agentRollupId,
+            TransactionDataRequest request) throws Exception {
         AggregateQuery query = toQuery(request, DataKind.QUERY);
         QueryCollector queryCollector =
                 transactionCommonService.getMergedQueries(agentRollupId, query);
@@ -275,9 +270,8 @@ class TransactionJsonService {
         return sb.toString();
     }
 
-    @GET(path = "/backend/transaction/full-query-text", permission = "agent:transaction:queries")
-    String getQueryText(@BindAgentRollupId String agentRollupId,
-            @BindRequest FullQueryTextRequest request) throws Exception {
+    String getQueryText(String agentRollupId,
+            FullQueryTextRequest request) throws Exception {
         String fullQueryText =
                 transactionCommonService.readFullQueryText(agentRollupId, request.fullTextSha1());
         StringBuilder sb = new StringBuilder();
@@ -296,9 +290,8 @@ class TransactionJsonService {
         return sb.toString();
     }
 
-    @GET(path = "/backend/transaction/service-calls", permission = "agent:transaction:serviceCalls")
-    String getServiceCalls(@BindAgentRollupId String agentRollupId,
-            @BindRequest TransactionDataRequest request) throws Exception {
+    String getServiceCalls(String agentRollupId,
+            TransactionDataRequest request) throws Exception {
         AggregateQuery query = toQuery(request, DataKind.SERVICE_CALL);
         ServiceCallCollector serviceCallCollector =
                 transactionCommonService.getMergedServiceCalls(agentRollupId, query);
@@ -345,9 +338,8 @@ class TransactionJsonService {
         return sb.toString();
     }
 
-    @GET(path = "/backend/transaction/profile", permission = "agent:transaction:threadProfile")
-    String getProfile(@BindAgentRollupId String agentRollupId,
-            @BindRequest TransactionProfileRequest request) throws Exception {
+    String getProfile(String agentRollupId,
+            TransactionProfileRequest request) throws Exception {
         AggregateQuery query = toQuery(request, DataKind.PROFILE);
         ProfileCollector profileCollector =
                 transactionCommonService.getMergedProfile(agentRollupId, query, request.auxiliary(),
@@ -418,9 +410,8 @@ class TransactionJsonService {
         return sb.toString();
     }
 
-    @GET(path = "/backend/transaction/summaries", permission = "agent:transaction:overview")
-    String getSummaries(@BindAgentRollupId String agentRollupId,
-            @BindRequest TransactionSummaryRequest request, @BindAutoRefresh boolean autoRefresh)
+    String getSummaries(String agentRollupId,
+            TransactionSummaryRequest request, boolean autoRefresh)
             throws Exception {
         SummaryQuery query = ImmutableSummaryQuery.builder()
                 .transactionType(request.transactionType())
@@ -465,9 +456,8 @@ class TransactionJsonService {
         return sb.toString();
     }
 
-    @GET(path = "/backend/transaction/flame-graph", permission = "agent:transaction:threadProfile")
-    String getFlameGraph(@BindAgentRollupId String agentRollupId,
-            @BindRequest FlameGraphRequest request) throws Exception {
+    String getFlameGraph(String agentRollupId,
+            FlameGraphRequest request) throws Exception {
         AggregateQuery query = toQuery(request, DataKind.PROFILE);
         ProfileCollector profileCollector =
                 transactionCommonService.getMergedProfile(agentRollupId, query, request.auxiliary(),
@@ -488,9 +478,8 @@ class TransactionJsonService {
         return profile.toFlameGraphJson();
     }
 
-    @GET(path = "/backend/transaction/traces/flame-graph", permission = "agent:trace")
-    String getTraceFlameGraph(@BindAgentId String agentId,
-            @BindRequest TraceFlameGraphRequest request) throws Exception {
+    String getTraceFlameGraph(String agentId,
+            TraceFlameGraphRequest request) throws Exception {
         Profile profile;
         if (request.auxiliary()) {
             profile = traceCommonService.getAuxThreadProfile(agentId, request.traceId(),
@@ -884,7 +873,6 @@ class TransactionJsonService {
         }
     }
 
-    @Value.Immutable
     interface TransactionSummaryRequest {
         String transactionType();
         long from();
@@ -895,27 +883,22 @@ class TransactionJsonService {
 
     interface RequestBase {
         String transactionType();
-        @Nullable
         String transactionName();
         long from();
         long to();
     }
 
-    @Value.Immutable
     interface TransactionDataRequest extends RequestBase {}
 
-    @Value.Immutable
     interface TransactionPercentileRequest extends RequestBase {
         // singular because this is used in query string
         ImmutableList<Double> percentile();
     }
 
-    @Value.Immutable
     interface FullQueryTextRequest {
         String fullTextSha1();
     }
 
-    @Value.Immutable
     interface TransactionProfileRequest extends RequestBase {
         boolean auxiliary();
         // intentionally not plural since maps from query string
@@ -925,7 +908,6 @@ class TransactionJsonService {
         double truncateBranchPercentage();
     }
 
-    @Value.Immutable
     interface FlameGraphRequest extends RequestBase {
         boolean auxiliary();
         // intentionally not plural since maps from query string
@@ -935,7 +917,6 @@ class TransactionJsonService {
         double truncateBranchPercentage();
     }
 
-    @Value.Immutable
     abstract static class TraceFlameGraphRequest {
         abstract String traceId();
         abstract boolean auxiliary();
@@ -944,25 +925,20 @@ class TransactionJsonService {
         // intentionally not plural since maps from query string
         abstract ImmutableList<String> exclude();
         abstract double truncateBranchPercentage();
-        @Value.Default
         boolean checkLiveTraces() {
             return false;
         }
     }
 
-    @Value.Immutable
     interface Query {
         String queryType();
         String truncatedQueryText();
-        @Nullable
         String fullQueryTextSha1();
         double totalDurationNanos();
         long executionCount();
-        @Nullable
         Long totalRows();
     }
 
-    @Value.Immutable
     interface ServiceCall {
         String type();
         String text();
@@ -970,13 +946,11 @@ class TransactionJsonService {
         long executionCount();
     }
 
-    @Value.Immutable
     interface PercentileData {
         ImmutableList<DataSeries> dataSeriesList();
         PercentileMergedAggregate mergedAggregate();
     }
 
-    @Value.Immutable
     interface PercentileMergedAggregate {
         long transactionCount();
         // aggregates use double instead of long to avoid (unlikely) 292 year nanosecond rollover

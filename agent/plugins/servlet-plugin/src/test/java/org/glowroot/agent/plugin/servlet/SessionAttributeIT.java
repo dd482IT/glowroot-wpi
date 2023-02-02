@@ -48,22 +48,18 @@ public class SessionAttributeIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void testHasSessionAttribute() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureSessionAttributes",
@@ -76,7 +72,6 @@ public class SessionAttributeIT {
         assertThat(getUpdatedSessionAttributes(trace)).isNull();
     }
 
-    @Test
     public void testHasSessionAttributeWithoutTrimmedAttributeName() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureSessionAttributes",
@@ -89,7 +84,6 @@ public class SessionAttributeIT {
         assertThat(getUpdatedSessionAttributes(trace)).isNull();
     }
 
-    @Test
     public void testHasSessionAttributeUsingWildcard() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureSessionAttributes",
@@ -102,7 +96,6 @@ public class SessionAttributeIT {
         assertThat(getUpdatedSessionAttributes(trace)).isNull();
     }
 
-    @Test
     public void testHasSessionAttributeUsingWildcardPlusOther() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureSessionAttributes",
@@ -116,7 +109,6 @@ public class SessionAttributeIT {
         assertThat(getUpdatedSessionAttributes(trace)).isNull();
     }
 
-    @Test
     public void testHasSessionAttributeNotReadable() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureSessionAttributes",
@@ -128,7 +120,6 @@ public class SessionAttributeIT {
         assertThat(getUpdatedSessionAttributes(trace)).isNull();
     }
 
-    @Test
     public void testSetSessionAttribute() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureSessionAttributes",
@@ -142,7 +133,6 @@ public class SessionAttributeIT {
         assertThat(getUpdatedSessionAttributes(trace).get("testattr")).isEqualTo("val");
     }
 
-    @Test
     public void testSetSessionAttributeUsingWildcard() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureSessionAttributes",
@@ -155,7 +145,6 @@ public class SessionAttributeIT {
         assertThat(getUpdatedSessionAttributes(trace).get("testattr")).isEqualTo("val");
     }
 
-    @Test
     public void testSetSessionAttributeUsingWildcardAndOther() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureSessionAttributes",
@@ -168,7 +157,6 @@ public class SessionAttributeIT {
         assertThat(getUpdatedSessionAttributes(trace).get("testattr")).isEqualTo("val");
     }
 
-    @Test
     public void testSetSessionAttributeNotReadable() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureSessionAttributes",
@@ -180,7 +168,6 @@ public class SessionAttributeIT {
         assertThat(getUpdatedSessionAttributes(trace)).isNull();
     }
 
-    @Test
     public void testSetSessionAttributeNull() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureSessionAttributes",
@@ -193,7 +180,6 @@ public class SessionAttributeIT {
         assertThat(getUpdatedSessionAttributes(trace).containsValue("testattr")).isFalse();
     }
 
-    @Test
     public void testHasNestedSessionAttributePath() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureSessionAttributes",
@@ -207,7 +193,6 @@ public class SessionAttributeIT {
         assertThat(getUpdatedSessionAttributes(trace)).isNull();
     }
 
-    @Test
     public void testSetNestedSessionAttributePath() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureSessionAttributes",
@@ -221,7 +206,6 @@ public class SessionAttributeIT {
         assertThat(getUpdatedSessionAttributes(trace).get("one.amap.x")).isEqualTo("y");
     }
 
-    @Test
     public void testHasMissingSessionAttribute() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureSessionAttributes",
@@ -233,7 +217,6 @@ public class SessionAttributeIT {
         assertThat(getUpdatedSessionAttributes(trace)).isNull();
     }
 
-    @Test
     public void testHasMissingNestedSessionAttributePath() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureSessionAttributes",
@@ -245,7 +228,6 @@ public class SessionAttributeIT {
         assertThat(getUpdatedSessionAttributes(trace)).isNull();
     }
 
-    @Test
     public void testHasNestedSessionAttributePath2() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureSessionAttributes",
@@ -261,7 +243,6 @@ public class SessionAttributeIT {
         assertThat(getUpdatedSessionAttributes(trace)).isNull();
     }
 
-    @Test
     public void testSetNestedSessionAttributePath2() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureSessionAttributes",
@@ -277,7 +258,6 @@ public class SessionAttributeIT {
         assertThat(getUpdatedSessionAttributes(trace).get("one.another")).isEqualTo("3");
     }
 
-    @Test
     public void testSetNestedSessionAttributeToNull() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureSessionAttributes",
@@ -292,7 +272,6 @@ public class SessionAttributeIT {
         assertThat(getUpdatedSessionAttributes(trace).get("one")).isNull();
     }
 
-    @Test
     public void testSetSessionAttributeToNull() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureSessionAttributes",
@@ -307,7 +286,6 @@ public class SessionAttributeIT {
         assertThat(getUpdatedSessionAttributes(trace).get("one.two")).isNull();
     }
 
-    @Test
     public void testHasBadSessionAttribute() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureSessionAttributes",
@@ -321,7 +299,6 @@ public class SessionAttributeIT {
         assertThat(getUpdatedSessionAttributes(trace)).isNull();
     }
 
-    @Test
     public void testSetBadSessionAttribute() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureSessionAttributes",
@@ -336,7 +313,6 @@ public class SessionAttributeIT {
         assertThat(getUpdatedSessionAttributes(trace).get("one")).isEmpty();
     }
 
-    @Test
     public void testHasMissingSessionAttribute2() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureSessionAttributes",
@@ -348,7 +324,6 @@ public class SessionAttributeIT {
         assertThat(getUpdatedSessionAttributes(trace)).isNull();
     }
 
-    @Test
     public void testHasMissingNestedSessionAttributePath2() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureSessionAttributes",
@@ -360,7 +335,6 @@ public class SessionAttributeIT {
         assertThat(getUpdatedSessionAttributes(trace)).isNull();
     }
 
-    @Test
     public void testGetBadAttributeNames() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureSessionAttributes",
@@ -372,7 +346,6 @@ public class SessionAttributeIT {
         assertThat(getUpdatedSessionAttributes(trace)).isNull();
     }
 
-    @Test
     public void testHasHttpSession() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureSessionAttributes",
@@ -386,7 +359,6 @@ public class SessionAttributeIT {
         assertThat(getUpdatedSessionAttributes(trace)).isNull();
     }
 
-    @Test
     public void testHasNoHttpSession() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureSessionAttributes",
@@ -399,7 +371,6 @@ public class SessionAttributeIT {
         assertThat(getUpdatedSessionAttributes(trace)).isNull();
     }
 
-    @Test
     public void testCreateHttpSession() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureSessionAttributes",
@@ -412,7 +383,6 @@ public class SessionAttributeIT {
         assertThat(getUpdatedSessionAttributes(trace).get("::id")).isEqualTo("123456789");
     }
 
-    @Test
     public void testCreateHttpSessionTrue() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureSessionAttributes",
@@ -425,7 +395,6 @@ public class SessionAttributeIT {
         assertThat(getUpdatedSessionAttributes(trace).get("::id")).isEqualTo("123456789");
     }
 
-    @Test
     public void testCreateHttpSessionFalse() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureSessionAttributes",
@@ -438,7 +407,6 @@ public class SessionAttributeIT {
         assertThat(getUpdatedSessionAttributes(trace)).isNull();
     }
 
-    @Test
     public void testChangeHttpSession() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureSessionAttributes",
@@ -451,7 +419,6 @@ public class SessionAttributeIT {
         assertThat(getUpdatedSessionAttributes(trace).get("::id")).isEqualTo("abcdef");
     }
 
-    @Test
     public void testCreateAndChangeHttpSession() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureSessionAttributes",

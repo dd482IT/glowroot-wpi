@@ -26,38 +26,28 @@ import org.glowroot.agent.plugin.api.weaving.Pointcut;
 
 public class TimerWorthyAspect {
 
-    @Pointcut(className = "org.glowroot.microbenchmarks.core.support.TimerWorthy",
-            methodName = "doSomethingTimerWorthy", methodParameterTypes = {},
-            timerName = "timer worthy")
     public static class TimerWorthyAdvice {
 
         private static final TimerName timerName = Agent.getTimerName(TimerWorthyAdvice.class);
 
-        @OnBefore
         public static Timer onBefore(ThreadContext context) {
             return context.startTimer(timerName);
         }
 
-        @OnAfter
-        public static void onAfter(@BindTraveler Timer timer) {
+        public static void onAfter(Timer timer) {
             timer.stop();
         }
     }
 
-    @Pointcut(className = "org.glowroot.microbenchmarks.core.support.TimerWorthy",
-            methodName = "doSomethingTimerWorthyB", methodParameterTypes = {},
-            timerName = "timer worthy B")
     public static class TimerWorthyAdviceB {
 
         private static final TimerName timerName = Agent.getTimerName(TimerWorthyAdviceB.class);
 
-        @OnBefore
         public static Timer onBefore(ThreadContext context) {
             return context.startTimer(timerName);
         }
 
-        @OnAfter
-        public static void onAfter(@BindTraveler Timer timer) {
+        public static void onAfter(Timer timer) {
             timer.stop();
         }
     }

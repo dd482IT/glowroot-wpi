@@ -91,8 +91,6 @@ class GaugeNameDao {
         rowInsertedInThePastDay.invalidateAll();
     }
 
-    @Value.Immutable
-    @Styles.AllParameters
     interface GaugeNameRow {
         long captureTime();
         String gaugeName();

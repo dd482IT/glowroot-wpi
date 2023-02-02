@@ -36,7 +36,7 @@ public class AccessibilityMisc implements Misc {
         @Override
         public void execute1() {}
         @Override
-        public @Nullable String executeWithReturn() {
+        public String executeWithReturn() {
             return null;
         }
         @Override

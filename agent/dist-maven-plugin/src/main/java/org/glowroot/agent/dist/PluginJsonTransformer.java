@@ -86,7 +86,7 @@ class PluginJsonTransformer {
         return pluginDescriptors;
     }
 
-    private static @Nullable String getGlowrootPluginJson(Artifact artifact) throws IOException {
+    private static String getGlowrootPluginJson(Artifact artifact) throws IOException {
         File artifactFile = artifact.getFile();
         if (!artifactFile.exists()) {
             return null;
@@ -143,7 +143,7 @@ class PluginJsonTransformer {
         validateProperties(pluginConfig, pluginDescriptor);
     }
 
-    private @Nullable PluginDescriptor getPlugin(PluginConfig pluginConfig,
+    private PluginDescriptor getPlugin(PluginConfig pluginConfig,
             List<PluginDescriptor> pluginDescriptors) {
         for (PluginDescriptor pluginDescriptor : pluginDescriptors) {
             if (pluginDescriptor.id().equals(pluginConfig.getId())) {
@@ -189,7 +189,7 @@ class PluginJsonTransformer {
         return PluginDescriptor.writeValue(updatedPlugins);
     }
 
-    private @Nullable PluginConfig getPluginConfig(String id) {
+    private PluginConfig getPluginConfig(String id) {
         for (PluginConfig pluginConfig : pluginConfigs) {
             if (id.equals(pluginConfig.getId())) {
                 return pluginConfig;
@@ -237,7 +237,7 @@ class PluginJsonTransformer {
         }
     }
 
-    private @Nullable PropertyConfig getPropertyConfig(@Nullable PluginConfig pluginConfig,
+    private PropertyConfig getPropertyConfig(PluginConfig pluginConfig,
             String name) {
         if (pluginConfig == null) {
             return null;
@@ -255,7 +255,7 @@ class PluginJsonTransformer {
         private final String name;
         private final String label;
         private final PropertyValue.PropertyType type;
-        private @Nullable PropertyValue defaultValue;
+        private PropertyValue defaultValue;
         private String description;
 
         private PropertyDescriptorOverlay(PropertyDescriptor base) {

@@ -35,8 +35,6 @@ public interface GaugeValueRepository {
     long getOldestCaptureTime(String agentRollupId, String gaugeName, int rollupLevel)
             throws Exception;
 
-    @Value.Immutable
-    @Styles.AllParameters
     public interface Gauge {
         String name();
         String display();

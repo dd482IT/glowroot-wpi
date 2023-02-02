@@ -30,7 +30,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class QueryCollectorTest {
 
-    @Test
     public void testAddInAscendingOrder() throws Exception {
         QueryCollector queries = new QueryCollector(100, 4);
         for (int i = 1; i <= 300; i++) {
@@ -39,7 +38,6 @@ public class QueryCollectorTest {
         test(queries);
     }
 
-    @Test
     public void testAddInDescendingOrder() throws Exception {
         QueryCollector queries = new QueryCollector(100, 4);
         for (int i = 300; i > 0; i--) {

@@ -35,41 +35,34 @@ public class RestControllerIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithNormalServletMappingHittingRest() throws Exception {
         shouldCaptureTransactionNameWithNormalServletMappingHittingRest("",
                 WithNormalServletMappingHittingRest.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithNormalServletMappingHittingAbc() throws Exception {
         shouldCaptureTransactionNameWithNormalServletMappingHittingAbc("",
                 WithNormalServletMappingHittingAbc.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithContextPathAndNormalServletMappingHittingRest()
             throws Exception {
         shouldCaptureTransactionNameWithNormalServletMappingHittingRest("/zzz",
                 WithContextPathAndNormalServletMappingHittingRest.class);
     }
 
-    @Test
     public void shouldCaptureTransactionNameWithContextPathAndNormalServletMappingHittingAbc()
             throws Exception {
         shouldCaptureTransactionNameWithNormalServletMappingHittingAbc("/zzz",
@@ -143,17 +136,13 @@ public class RestControllerIT {
         }
     }
 
-    @RestController
     public static class TestRestController {
-        @RequestMapping("rest")
         public String rest() {
             return "";
         }
     }
 
-    @RestController
     public static class TestRestWithPropertyController {
-        @RequestMapping("${abc.path:abc}")
         public String abc() {
             return "";
         }

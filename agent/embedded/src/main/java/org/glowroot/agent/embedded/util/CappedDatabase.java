@@ -74,10 +74,8 @@ public class CappedDatabase {
 
     private final File file;
     private final Object lock = new Object();
-    @GuardedBy("lock")
     private final CappedDatabaseOutputStream out;
     private final Thread shutdownHookThread;
-    @GuardedBy("lock")
     private RandomAccessFile inFile;
     private volatile boolean closed = false;
 
@@ -85,7 +83,7 @@ public class CappedDatabase {
     private final Map<String, CappedDatabaseStats> statsByType = Maps.newHashMap();
 
     public CappedDatabase(File file, int requestedSizeKb,
-            @Nullable ScheduledExecutorService scheduledExecutor, Ticker ticker)
+            ScheduledExecutorService scheduledExecutor, Ticker ticker)
             throws IOException {
         this.file = file;
         this.ticker = ticker;
@@ -124,7 +122,6 @@ public class CappedDatabase {
         return stats;
     }
 
-    @OnlyUsedByTests
     long write(final ByteSource byteSource, String type) throws IOException {
         return write(type, new Copier() {
             @Override
@@ -230,7 +227,6 @@ public class CappedDatabase {
         return messages;
     }
 
-    @OnlyUsedByTests
     CharSource read(long cappedId) {
         return new CappedBlockCharSource(cappedId);
     }
@@ -254,7 +250,6 @@ public class CappedDatabase {
         }
     }
 
-    @OnlyUsedByTests
     public void close() throws IOException {
         synchronized (lock) {
             closed = true;
@@ -280,7 +275,6 @@ public class CappedDatabase {
         }
     }
 
-    @OnlyUsedByTests
     private class CappedBlockCharSource extends CharSource {
 
         private final long cappedId;

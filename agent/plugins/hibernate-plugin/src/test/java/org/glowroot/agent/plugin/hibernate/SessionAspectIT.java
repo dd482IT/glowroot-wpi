@@ -34,22 +34,18 @@ public class SessionAspectIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldCaptureCriteriaQuery() throws Exception {
         // when
         Trace trace = container.execute(CriteriaQuery.class);
@@ -64,7 +60,6 @@ public class SessionAspectIT {
 
     // TODO add unit test for jpa criteria query
 
-    @Test
     public void shouldCaptureSave() throws Exception {
         // when
         Trace trace = container.execute(SessionSave.class);
@@ -75,7 +70,6 @@ public class SessionAspectIT {
         assertThat(timers.get(0).getName()).isEqualTo("hibernate save");
     }
 
-    @Test
     public void shouldCaptureSaveTwoArg() throws Exception {
         // when
         Trace trace = container.execute(SessionSaveTwoArg.class);
@@ -86,7 +80,6 @@ public class SessionAspectIT {
         assertThat(timers.get(0).getName()).isEqualTo("hibernate save");
     }
 
-    @Test
     public void shouldCaptureSaveOrUpdate() throws Exception {
         // when
         Trace trace = container.execute(SessionSaveOrUpdate.class);
@@ -97,7 +90,6 @@ public class SessionAspectIT {
         assertThat(timers.get(0).getName()).isEqualTo("hibernate saveOrUpdate");
     }
 
-    @Test
     public void shouldCaptureSaveOrUpdateTwoArg() throws Exception {
         // when
         Trace trace = container.execute(SessionSaveOrUpdateTwoArg.class);
@@ -108,7 +100,6 @@ public class SessionAspectIT {
         assertThat(timers.get(0).getName()).isEqualTo("hibernate saveOrUpdate");
     }
 
-    @Test
     public void shouldCaptureUpdate() throws Exception {
         // when
         Trace trace = container.execute(SessionUpdate.class);
@@ -119,7 +110,6 @@ public class SessionAspectIT {
         assertThat(timers.get(0).getName()).isEqualTo("hibernate update");
     }
 
-    @Test
     public void shouldCaptureUpdateTwoArg() throws Exception {
         // when
         Trace trace = container.execute(SessionUpdateTwoArg.class);
@@ -130,7 +120,6 @@ public class SessionAspectIT {
         assertThat(timers.get(0).getName()).isEqualTo("hibernate update");
     }
 
-    @Test
     public void shouldCaptureMergeCommand() throws Exception {
         // when
         Trace trace = container.execute(SessionMerge.class);
@@ -141,7 +130,6 @@ public class SessionAspectIT {
         assertThat(timers.get(0).getName()).isEqualTo("hibernate merge");
     }
 
-    @Test
     public void shouldCaptureMergeCommandTwoArg() throws Exception {
         // when
         Trace trace = container.execute(SessionMergeTwoArg.class);
@@ -152,7 +140,6 @@ public class SessionAspectIT {
         assertThat(timers.get(0).getName()).isEqualTo("hibernate merge");
     }
 
-    @Test
     public void shouldCapturePersistCommand() throws Exception {
         // when
         Trace trace = container.execute(SessionPersist.class);
@@ -163,7 +150,6 @@ public class SessionAspectIT {
         assertThat(timers.get(0).getName()).isEqualTo("hibernate persist");
     }
 
-    @Test
     public void shouldCapturePersistCommandTwoArg() throws Exception {
         // when
         Trace trace = container.execute(SessionPersistTwoArg.class);
@@ -174,7 +160,6 @@ public class SessionAspectIT {
         assertThat(timers.get(0).getName()).isEqualTo("hibernate persist");
     }
 
-    @Test
     public void shouldCaptureDelete() throws Exception {
         // when
         Trace trace = container.execute(SessionDelete.class);
@@ -185,7 +170,6 @@ public class SessionAspectIT {
         assertThat(timers.get(0).getName()).isEqualTo("hibernate delete");
     }
 
-    @Test
     public void shouldCaptureDeleteTwoArg() throws Exception {
         // when
         Trace trace = container.execute(SessionDeleteTwoArg.class);
@@ -196,7 +180,6 @@ public class SessionAspectIT {
         assertThat(timers.get(0).getName()).isEqualTo("hibernate delete");
     }
 
-    @Test
     public void shouldCaptureSessionFlush() throws Exception {
         // when
         Trace trace = container.execute(SessionFlush.class);
@@ -211,7 +194,6 @@ public class SessionAspectIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureTransactionCommit() throws Exception {
         // when
         Trace trace = container.execute(TransactionCommit.class);
@@ -226,7 +208,6 @@ public class SessionAspectIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureTransactionRollback() throws Exception {
         // when
         Trace trace = container.execute(TransactionRollback.class);

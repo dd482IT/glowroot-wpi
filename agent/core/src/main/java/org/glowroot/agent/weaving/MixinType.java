@@ -22,7 +22,6 @@ import org.objectweb.asm.Type;
 
 import org.glowroot.agent.weaving.PluginDetail.MixinClass;
 
-@Value.Immutable
 abstract class MixinType {
 
     static MixinType create(MixinClass mixinClass) {
@@ -36,6 +35,6 @@ abstract class MixinType {
 
     abstract ImmutableList<String> targets();
     abstract ImmutableList<Type> interfaces();
-    abstract @Nullable String initMethodName();
+    abstract String initMethodName();
     abstract byte[] implementationBytes();
 }

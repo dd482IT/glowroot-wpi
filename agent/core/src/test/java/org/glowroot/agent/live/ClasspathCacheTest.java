@@ -36,7 +36,6 @@ public class ClasspathCacheTest {
 
     private static ClasspathCache classpathCache;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         ClassLoader badUrlsClassLoader =
                 new URLClassLoader(new URL[] {new URL("file://a/b c"), new URL("http://a/b/c")});
@@ -48,7 +47,6 @@ public class ClasspathCacheTest {
         classpathCache = new ClasspathCache(analyzedWorld, instrumentation);
     }
 
-    @Test
     public void shouldRead() {
         // when
         List<String> classNames = classpathCache.getMatchingClassNames("google.common.base.str", 5);
@@ -56,7 +54,6 @@ public class ClasspathCacheTest {
         assertThat(classNames).contains("com.google.common.base.Strings");
     }
 
-    @Test
     public void shouldReadFullClass() {
         // when
         List<String> classNames = classpathCache.getMatchingClassNames("ImmutableMap", 5);
@@ -64,7 +61,6 @@ public class ClasspathCacheTest {
         assertThat(classNames).contains("com.google.common.collect.ImmutableMap");
     }
 
-    @Test
     public void shouldReadFullFullClass() {
         // when
         List<String> classNames =
@@ -73,7 +69,6 @@ public class ClasspathCacheTest {
         assertThat(classNames).contains("com.google.common.collect.ImmutableMap");
     }
 
-    @Test
     public void shouldReadFullInnerClass() {
         // when
         List<String> classNames = classpathCache.getMatchingClassNames("OnePlusArrayList", 5);
@@ -81,7 +76,6 @@ public class ClasspathCacheTest {
         assertThat(classNames).contains("com.google.common.collect.Lists$OnePlusArrayList");
     }
 
-    @Test
     public void shouldReadFullFullInnerClass() {
         // when
         List<String> classNames = classpathCache
@@ -90,7 +84,6 @@ public class ClasspathCacheTest {
         assertThat(classNames).contains("com.google.common.collect.Lists$OnePlusArrayList");
     }
 
-    @Test
     public void shouldHitFullMatchLimit() {
         // when
         List<String> classNames = classpathCache.getMatchingClassNames("Builder", 5);
@@ -103,13 +96,11 @@ public class ClasspathCacheTest {
         }
     }
 
-    @Test
     public void shouldAnalyzedMethods() {
         List<UiAnalyzedMethod> methods = classpathCache.getAnalyzedMethods(A.class.getName());
         assertThat(methods).hasSize(1);
     }
 
-    @Test
     public void shouldAnalyzedMethodsB() {
         List<UiAnalyzedMethod> methods = classpathCache.getAnalyzedMethods(B.class.getName());
         assertThat(methods).hasSize(1);

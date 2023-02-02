@@ -39,22 +39,18 @@ public class Log4j2xMarkerIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void testLog() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID,
@@ -81,7 +77,6 @@ public class Log4j2xMarkerIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLogWithThrowable() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID,
@@ -117,7 +112,6 @@ public class Log4j2xMarkerIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLogWithNullThrowable() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID,
@@ -146,7 +140,6 @@ public class Log4j2xMarkerIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLogWithOneParameter() throws Exception {
         // when
         Trace trace = container.execute(ShouldLogWithOneParameter.class);
@@ -167,7 +160,6 @@ public class Log4j2xMarkerIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLogWithOneParameterAndThrowable() throws Exception {
         // when
         Trace trace = container.execute(ShouldLogWithOneParameterAndThrowable.class);
@@ -199,7 +191,6 @@ public class Log4j2xMarkerIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLogWithTwoParameters() throws Exception {
         // when
         Trace trace = container.execute(ShouldLogWithTwoParameters.class);
@@ -220,7 +211,6 @@ public class Log4j2xMarkerIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLogWithMoreThanTwoParameters() throws Exception {
         // when
         Trace trace = container.execute(ShouldLogWithMoreThanTwoParameters.class);
@@ -241,7 +231,6 @@ public class Log4j2xMarkerIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLogWithParametersAndThrowable() throws Exception {
         // when
         Trace trace = container.execute(ShouldLogWithParametersAndThrowable.class);

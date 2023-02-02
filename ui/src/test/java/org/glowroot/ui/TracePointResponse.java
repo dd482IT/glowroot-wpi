@@ -28,10 +28,9 @@ class TracePointResponse {
     private final List<RawPoint> errorPoints;
     private final List<RawPoint> activePoints;
 
-    @JsonCreator
-    private TracePointResponse(@JsonProperty("normalPoints") List<RawPoint> normalPoints,
-            @JsonProperty("errorPoints") List<RawPoint> errorPoints,
-            @JsonProperty("activePoints") List<RawPoint> activePoints) throws JsonMappingException {
+    private TracePointResponse(List<RawPoint> normalPoints,
+            List<RawPoint> errorPoints,
+            List<RawPoint> activePoints) throws JsonMappingException {
         this.normalPoints = normalPoints;
         this.errorPoints = errorPoints;
         this.activePoints = activePoints;
@@ -55,7 +54,6 @@ class TracePointResponse {
         private final double totalMillis;
         private final String id;
 
-        @JsonCreator
         RawPoint(ArrayNode point) {
             captureTime = point.get(0).asLong();
             totalMillis = point.get(1).asDouble();

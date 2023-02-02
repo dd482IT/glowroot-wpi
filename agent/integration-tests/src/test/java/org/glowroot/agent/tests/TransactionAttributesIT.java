@@ -34,22 +34,18 @@ public class TransactionAttributesIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldReadTraceAttributesInAlphaOrder() throws Exception {
         // when
         Trace trace = container.execute(ShouldGenerateTraceWithNestedEntries.class);

@@ -34,7 +34,7 @@ public class Java9 {
 
     private static final Logger logger = LoggerFactory.getLogger(Java9.class);
 
-    private static final @Nullable Java9 instance;
+    private static final Java9 instance;
 
     private final Method getModuleMethod;
     private final Object glowrootModule;

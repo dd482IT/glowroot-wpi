@@ -45,22 +45,18 @@ public class JmsPluginIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldReceiveMessage() throws Exception {
         Trace trace = container.execute(ReceiveMessage.class);
         Trace.Header header = trace.getHeader();
@@ -69,7 +65,6 @@ public class JmsPluginIT {
         assertThat(header.getHeadline()).isEqualTo("JMS Message: TestMessageListener");
     }
 
-    @Test
     public void shouldSendMessage() throws Exception {
         Trace trace = container.execute(SendMessage.class);
         List<Trace.Timer> nestedTimers =

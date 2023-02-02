@@ -40,45 +40,45 @@ class LiveTraceRepositoryImpl implements LiveTraceRepository {
     }
 
     @Override
-    public @Nullable Entries getEntries(String agentId, String traceId) throws Exception {
+    public Entries getEntries(String agentId, String traceId) throws Exception {
         return downstreamService.getEntries(agentId, traceId);
     }
 
     @Override
-    public @Nullable Queries getQueries(String agentId, String traceId) throws Exception {
+    public Queries getQueries(String agentId, String traceId) throws Exception {
         return downstreamService.getQueries(agentId, traceId);
     }
 
     @Override
-    public @Nullable Profile getMainThreadProfile(String agentId, String traceId) throws Exception {
+    public Profile getMainThreadProfile(String agentId, String traceId) throws Exception {
         return downstreamService.getMainThreadProfile(agentId, traceId);
     }
 
     @Override
-    public @Nullable Profile getAuxThreadProfile(String agentId, String traceId) throws Exception {
+    public Profile getAuxThreadProfile(String agentId, String traceId) throws Exception {
         return downstreamService.getAuxThreadProfile(agentId, traceId);
     }
 
     @Override
-    public @Nullable Trace getFullTrace(String agentId, String traceId) throws Exception {
+    public Trace getFullTrace(String agentId, String traceId) throws Exception {
         return downstreamService.getFullTrace(agentId, traceId);
     }
 
     @Override
-    public int getMatchingTraceCount(String transactionType, @Nullable String transactionName) {
+    public int getMatchingTraceCount(String transactionType, String transactionName) {
         return 0;
     }
 
     @Override
     public List<TracePoint> getMatchingActiveTracePoints(TraceKind traceKind,
-            String transactionType, @Nullable String transactionName, TracePointFilter filter,
+            String transactionType, String transactionName, TracePointFilter filter,
             int limit, long captureTime, long captureTick) {
         return ImmutableList.of();
     }
 
     @Override
     public List<TracePoint> getMatchingPendingPoints(TraceKind traceKind, String transactionType,
-            @Nullable String transactionName, TracePointFilter filter, long captureTime) {
+            String transactionName, TracePointFilter filter, long captureTime) {
         return ImmutableList.of();
     }
 

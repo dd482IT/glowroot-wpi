@@ -464,7 +464,7 @@ public abstract class ClusterManager {
         }
 
         @Override
-        public @Nullable V get(K key) {
+        public V get(K key) {
             return cache.get(key);
         }
 
@@ -508,7 +508,7 @@ public abstract class ClusterManager {
         private NonClusterDistributedExecutionMapImpl() {}
 
         @Override
-        public @Nullable V get(K key) {
+        public V get(K key) {
             return cache.get(key);
         }
 
@@ -568,8 +568,8 @@ public abstract class ClusterManager {
         private volatile boolean logStackTrace;
 
         @Override
-        public void accept(Address address, @Nullable Optional<V> value,
-                @Nullable Throwable throwable) {
+        public void accept(Address address, Optional<V> value,
+                Throwable throwable) {
             if (throwable != null) {
                 logger.warn("received error from {}: {}", address, throwable.getMessage(),
                         throwable);

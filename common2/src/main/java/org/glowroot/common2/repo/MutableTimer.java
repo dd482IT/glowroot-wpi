@@ -49,27 +49,22 @@ public class MutableTimer {
         this.childTimers = Lists.newArrayList(nestedTimers);
     }
 
-    @UsedByJsonSerialization
     public String getName() {
         return name;
     }
 
-    @UsedByJsonSerialization
     public boolean isExtended() {
         return extended;
     }
 
-    @UsedByJsonSerialization
     public double getTotalNanos() {
         return totalNanos;
     }
 
-    @UsedByJsonSerialization
     public long getCount() {
         return count;
     }
 
-    @UsedByJsonSerialization
     public List<MutableTimer> getChildTimers() {
         return childTimers;
     }

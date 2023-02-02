@@ -34,7 +34,6 @@ public class EnvironmentDaoIT {
     private static Session session;
     private static EnvironmentDao environmentDao;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         SharedSetupRunListener.startCassandra();
         cluster = Clusters.newCluster();
@@ -44,19 +43,16 @@ public class EnvironmentDaoIT {
         environmentDao = new EnvironmentDao(session);
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         session.close();
         cluster.close();
         SharedSetupRunListener.stopCassandra();
     }
 
-    @BeforeEach
     public void before() throws Exception {
         session.updateSchemaWithRetry("truncate environment");
     }
 
-    @Test
     public void shouldStoreEnvironment() throws Exception {
         // given
         Environment environment = Environment.newBuilder()

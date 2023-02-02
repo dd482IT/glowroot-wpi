@@ -38,22 +38,18 @@ public class Log4jIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void testLog() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID,
@@ -85,7 +81,6 @@ public class Log4jIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLogWithThrowable() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID,
@@ -133,7 +128,6 @@ public class Log4jIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLogWithNullThrowable() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID,
@@ -171,7 +165,6 @@ public class Log4jIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLogWithPriority() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID,
@@ -203,7 +196,6 @@ public class Log4jIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLogWithPriorityAndThrowable() throws Exception {
         // when
         Trace trace = container.execute(ShouldLogWithPriorityAndThrowable.class);
@@ -250,7 +242,6 @@ public class Log4jIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLogWithPriorityAndNullThrowable() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID,
@@ -288,7 +279,6 @@ public class Log4jIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLocalizedLog() throws Exception {
         // when
         Trace trace = container.execute(ShouldLocalizedLog.class);
@@ -335,7 +325,6 @@ public class Log4jIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLocalizedLogWithNullThrowable() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID,
@@ -373,7 +362,6 @@ public class Log4jIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLocalizedLogWithParameters() throws Exception {
         // when
         Trace trace = container.execute(ShouldLocalizedLogWithParameters.class);
@@ -420,7 +408,6 @@ public class Log4jIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLocalizedLogWithEmptyParameters() throws Exception {
         // when
         Trace trace = container.execute(ShouldLocalizedLogWithEmptyParameters.class);
@@ -467,7 +454,6 @@ public class Log4jIT {
         assertThat(i.hasNext()).isFalse();
     }
 
-    @Test
     public void testLocalizedLogWithParametersAndNullThrowable() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID,

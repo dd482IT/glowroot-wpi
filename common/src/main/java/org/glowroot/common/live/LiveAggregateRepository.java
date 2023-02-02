@@ -50,16 +50,12 @@ public interface LiveAggregateRepository {
 
     Set<String> getTransactionTypes(String agentId);
 
-    @Nullable
     LiveResult<OverviewAggregate> getOverviewAggregates(String agentId, AggregateQuery query);
 
-    @Nullable
     LiveResult<PercentileAggregate> getPercentileAggregates(String agentId, AggregateQuery query);
 
-    @Nullable
     LiveResult<ThroughputAggregate> getThroughputAggregates(String agentId, AggregateQuery query);
 
-    @Nullable
     String getFullQueryText(String agentRollupId, String fullQueryTextSha1);
 
     long mergeInQueries(String agentId, AggregateQuery query, QueryCollector collector)
@@ -75,7 +71,6 @@ public interface LiveAggregateRepository {
 
     void clearInMemoryData();
 
-    @Value.Immutable
     public interface SummaryQuery {
         String transactionType();
         long from();
@@ -83,17 +78,14 @@ public interface LiveAggregateRepository {
         int rollupLevel();
     }
 
-    @Value.Immutable
     public interface AggregateQuery {
         String transactionType();
-        @Nullable
         String transactionName();
         long from();
         long to();
         int rollupLevel();
     }
 
-    @Value.Immutable
     public interface OverviewAggregate {
         long captureTime();
         // aggregates use double instead of long to avoid (unlikely) 292 year nanosecond rollover
@@ -104,16 +96,13 @@ public interface LiveAggregateRepository {
         Aggregate.ThreadStats mainThreadStats();
         // cannot use Aggregate. /*@Nullable*/ Timer because Immutables needs to be able to see the
         // annotation
-        @Nullable
         Timer auxThreadRootTimer();
         // cannot use Aggregate. /*@Nullable*/ ThreadStats because Immutables needs to be able to
         // see the annotation
-        @Nullable
         ThreadStats auxThreadStats();
         List<Aggregate.Timer> asyncTimers();
     }
 
-    @Value.Immutable
     public interface PercentileAggregate {
         long captureTime();
         // aggregates use double instead of long to avoid (unlikely) 292 year nanosecond rollover
@@ -122,11 +111,9 @@ public interface LiveAggregateRepository {
         Aggregate.Histogram durationNanosHistogram();
     }
 
-    @Value.Immutable
     public interface ThroughputAggregate {
         long captureTime();
         long transactionCount();
-        @Nullable
         Long errorCount(); // null for data inserted prior to glowroot central 0.9.18
     }
 
@@ -181,25 +168,25 @@ public interface LiveAggregateRepository {
         }
 
         @Override
-        public @Nullable LiveResult<OverviewAggregate> getOverviewAggregates(String agentId,
+        public LiveResult<OverviewAggregate> getOverviewAggregates(String agentId,
                 AggregateQuery query) {
             return null;
         }
 
         @Override
-        public @Nullable LiveResult<PercentileAggregate> getPercentileAggregates(String agentId,
+        public LiveResult<PercentileAggregate> getPercentileAggregates(String agentId,
                 AggregateQuery query) {
             return null;
         }
 
         @Override
-        public @Nullable LiveResult<ThroughputAggregate> getThroughputAggregates(String agentId,
+        public LiveResult<ThroughputAggregate> getThroughputAggregates(String agentId,
                 AggregateQuery query) {
             return null;
         }
 
         @Override
-        public @Nullable String getFullQueryText(String agentRollupId, String fullQueryTextSha1) {
+        public String getFullQueryText(String agentRollupId, String fullQueryTextSha1) {
             return null;
         }
 

@@ -44,7 +44,6 @@ import org.glowroot.ui.TransactionJsonService.TransactionDataRequest;
 
 import static java.util.concurrent.TimeUnit.HOURS;
 
-@JsonService
 class TracePointJsonService {
 
     private static final int NANOSECONDS_PER_MILLISECOND = 1000000;
@@ -55,11 +54,11 @@ class TracePointJsonService {
     private final LiveTraceRepository liveTraceRepository;
     private final ConfigRepository configRepository;
     // null in the central ui (due to shading issue, and not needed in the central ui anyways)
-    private final @Nullable Ticker ticker;
+    private final Ticker ticker;
     private final Clock clock;
 
     TracePointJsonService(TraceRepository traceRepository, LiveTraceRepository liveTraceRepository,
-            ConfigRepository configRepository, @Nullable Ticker ticker, Clock clock) {
+            ConfigRepository configRepository, Ticker ticker, Clock clock) {
         this.traceRepository = traceRepository;
         this.liveTraceRepository = liveTraceRepository;
         this.configRepository = configRepository;
@@ -67,9 +66,8 @@ class TracePointJsonService {
         this.clock = clock;
     }
 
-    @GET(path = "/backend/transaction/trace-count", permission = "agent:transaction:traces")
-    String getTransactionTraceCount(@BindAgentRollupId String agentRollupId,
-            @BindRequest TransactionDataRequest request) throws Exception {
+    String getTransactionTraceCount(String agentRollupId,
+            TransactionDataRequest request) throws Exception {
         TraceQuery query = ImmutableTraceQuery.builder()
                 .transactionType(request.transactionType())
                 .transactionName(request.transactionName())
@@ -85,21 +83,18 @@ class TracePointJsonService {
         return Long.toString(traceCount);
     }
 
-    @GET(path = "/backend/error/trace-count", permission = "agent:error:traces")
-    String getErrorTraceCount(@BindAgentRollupId String agentRollupId,
-            @BindRequest TraceQuery query) throws Exception {
+    String getErrorTraceCount(String agentRollupId,
+            TraceQuery query) throws Exception {
         return Long.toString(traceRepository.readErrorCount(agentRollupId, query));
     }
 
-    @GET(path = "/backend/transaction/points", permission = "agent:transaction:traces")
-    String getTransactionPoints(@BindAgentRollupId String agentRollupId,
-            @BindRequest TracePointRequest request) throws Exception {
+    String getTransactionPoints(String agentRollupId,
+            TracePointRequest request) throws Exception {
         return getPoints(TraceKind.SLOW, agentRollupId, request);
     }
 
-    @GET(path = "/backend/error/points", permission = "agent:error:traces")
-    String getErrorPoints(@BindAgentRollupId String agentRollupId,
-            @BindRequest TracePointRequest request) throws Exception {
+    String getErrorPoints(String agentRollupId,
+            TracePointRequest request) throws Exception {
         return getPoints(TraceKind.ERROR, agentRollupId, request);
     }
 
@@ -328,24 +323,23 @@ class TracePointJsonService {
     }
 
     // same as TracePointQuery but with milliseconds instead of nanoseconds
-    @Value.Immutable
     public abstract static class TracePointRequest {
 
         public abstract String transactionType();
-        public abstract @Nullable String transactionName();
+        public abstract String transactionName();
         public abstract long from();
         public abstract long to();
         public abstract double durationMillisLow();
-        public abstract @Nullable Double durationMillisHigh();
-        public abstract @Nullable StringComparator headlineComparator();
-        public abstract @Nullable String headline();
-        public abstract @Nullable StringComparator errorMessageComparator();
-        public abstract @Nullable String errorMessage();
-        public abstract @Nullable StringComparator userComparator();
-        public abstract @Nullable String user();
-        public abstract @Nullable String attributeName();
-        public abstract @Nullable StringComparator attributeValueComparator();
-        public abstract @Nullable String attributeValue();
+        public abstract Double durationMillisHigh();
+        public abstract StringComparator headlineComparator();
+        public abstract String headline();
+        public abstract StringComparator errorMessageComparator();
+        public abstract String errorMessage();
+        public abstract StringComparator userComparator();
+        public abstract String user();
+        public abstract String attributeName();
+        public abstract StringComparator attributeValueComparator();
+        public abstract String attributeValue();
 
         public abstract int limit();
     }

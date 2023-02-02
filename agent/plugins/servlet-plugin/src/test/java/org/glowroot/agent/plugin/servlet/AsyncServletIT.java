@@ -48,48 +48,39 @@ public class AsyncServletIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         // async servlet test relies on executor plugin, which only works under javaagent
         container = JavaagentContainer.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void testAsyncServlet() throws Exception {
         testAsyncServlet("", InvokeAsync.class);
     }
 
-    @Test
     public void testAsyncServletWithContextPath() throws Exception {
         testAsyncServlet("/zzz", InvokeAsyncWithContextPath.class);
     }
 
-    @Test
     public void testAsyncServlet2() throws Exception {
         testAsyncServlet2("", InvokeAsync2.class);
     }
 
-    @Test
     public void testAsyncServlet2WithContextPath() throws Exception {
         testAsyncServlet2("/zzz", InvokeAsync2WithContextPath.class);
     }
 
-    @Test
     public void testAsyncServletWithDispatch() throws Exception {
         testAsyncServletWithDispatch("", InvokeAsyncWithDispatch.class);
     }
 
-    @Test
     public void testAsyncServletWithDispatchWithContextPath() throws Exception {
         testAsyncServletWithDispatch("/zzz", InvokeAsyncWithDispatchWithContextPath.class);
     }
@@ -330,7 +321,6 @@ public class AsyncServletIT {
         }
     }
 
-    @WebServlet(value = "/async", asyncSupported = true, loadOnStartup = 0)
     @SuppressWarnings("serial")
     public static class AsyncServlet extends HttpServlet {
 
@@ -364,7 +354,6 @@ public class AsyncServletIT {
         }
     }
 
-    @WebServlet(value = "/async2", asyncSupported = true, loadOnStartup = 0)
     @SuppressWarnings("serial")
     public static class AsyncServlet2 extends HttpServlet {
 
@@ -398,7 +387,6 @@ public class AsyncServletIT {
         }
     }
 
-    @WebServlet(value = "/async3", asyncSupported = true, loadOnStartup = 0)
     @SuppressWarnings("serial")
     public static class AsyncServletWithDispatch extends HttpServlet {
 
@@ -431,7 +419,6 @@ public class AsyncServletIT {
         }
     }
 
-    @WebServlet(value = "/async-forward", loadOnStartup = 0)
     @SuppressWarnings("serial")
     public static class SimpleServlet extends HttpServlet {
 

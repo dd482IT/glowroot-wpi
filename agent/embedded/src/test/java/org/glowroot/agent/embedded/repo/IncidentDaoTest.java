@@ -45,7 +45,6 @@ public class IncidentDaoTest {
     private DataSource dataSource;
     private IncidentDao incidentDao;
 
-    @BeforeEach
     public void beforeEachTest() throws Exception {
         dataSource = new DataSource();
         if (dataSource.tableExists("incident")) {
@@ -54,12 +53,10 @@ public class IncidentDaoTest {
         incidentDao = new IncidentDao(dataSource);
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         dataSource.close();
     }
 
-    @Test
     public void shouldNotExist() throws Exception {
         AlertCondition alertCondition = AlertCondition.newBuilder()
                 .setMetricCondition(MetricCondition.newBuilder()
@@ -75,7 +72,6 @@ public class IncidentDaoTest {
                 .isNull();
     }
 
-    @Test
     public void shouldExistAfterInsert() throws Exception {
         // given
         AlertCondition alertCondition = AlertCondition.newBuilder()
@@ -110,7 +106,6 @@ public class IncidentDaoTest {
         assertThat(openIncident.openTime()).isEqualTo(123);
     }
 
-    @Test
     public void shouldNotBeOpenAfterClose() throws Exception {
         // given
         AlertCondition alertCondition = AlertCondition.newBuilder()
@@ -134,7 +129,6 @@ public class IncidentDaoTest {
                 .isNull();
     }
 
-    @Test
     public void shouldBeClosedAfterClose() throws Exception {
         // given
         AlertCondition alertCondition = AlertCondition.newBuilder()
@@ -153,7 +147,6 @@ public class IncidentDaoTest {
         assertThat(resolvedIncidents.get(0).condition()).isEqualTo(alertCondition);
     }
 
-    @Test
     public void shouldReadAll() throws Exception {
         // given
         AlertCondition alertCondition = AlertCondition.newBuilder()

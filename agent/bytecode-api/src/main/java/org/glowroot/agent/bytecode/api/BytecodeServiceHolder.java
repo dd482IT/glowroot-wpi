@@ -19,7 +19,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class BytecodeServiceHolder {
 
-    private static volatile @Nullable BytecodeService service;
+    private static volatile BytecodeService service;
 
     private static volatile boolean glowrootFailedToStart;
 

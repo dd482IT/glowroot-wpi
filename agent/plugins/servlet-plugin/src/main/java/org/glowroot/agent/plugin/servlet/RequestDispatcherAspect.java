@@ -35,18 +35,17 @@ import org.glowroot.agent.plugin.api.weaving.Pointcut;
 public class RequestDispatcherAspect {
 
     // the field and method names are verbose since they will be mixed in to existing classes
-    @Mixin("javax.servlet.RequestDispatcher")
     public abstract static class RequestDispatcherImpl implements RequestDispatcherMixin {
 
-        private transient @Nullable String glowroot$path;
+        private transient String glowroot$path;
 
         @Override
-        public @Nullable String glowroot$getPath() {
+        public String glowroot$getPath() {
             return glowroot$path;
         }
 
         @Override
-        public void glowroot$setPath(@Nullable String path) {
+        public void glowroot$setPath(String path) {
             glowroot$path = path;
         }
     }
@@ -54,19 +53,14 @@ public class RequestDispatcherAspect {
     // the method names are verbose since they will be mixed in to existing classes
     public interface RequestDispatcherMixin {
 
-        @Nullable
         String glowroot$getPath();
 
-        void glowroot$setPath(@Nullable String path);
+        void glowroot$setPath(String path);
     }
 
-    @Pointcut(className = "javax.servlet.ServletRequest|javax.servlet.ServletContext",
-            methodName = "getRequestDispatcher|getNamedDispatcher",
-            methodParameterTypes = {"java.lang.String"}, nestingGroup = "servlet-inner-call")
     public static class GetParameterAdvice {
-        @OnReturn
-        public static void onReturn(@BindReturn @Nullable RequestDispatcherMixin requestDispatcher,
-                @BindParameter @Nullable String path) {
+        public static void onReturn(RequestDispatcherMixin requestDispatcher,
+                String path) {
             if (requestDispatcher == null) {
                 // seems nothing sensible to do here other than ignore
                 return;
@@ -75,25 +69,18 @@ public class RequestDispatcherAspect {
         }
     }
 
-    @Pointcut(className = "javax.servlet.RequestDispatcher", methodName = "forward|include",
-            methodParameterTypes = {"javax.servlet.ServletRequest",
-                    "javax.servlet.ServletResponse"},
-            nestingGroup = "servlet-dispatch", timerName = "servlet dispatch")
     public static class DispatchAdvice {
         private static final TimerName timerName = Agent.getTimerName(DispatchAdvice.class);
-        @OnBefore
         public static TraceEntry onBefore(ThreadContext context,
-                @BindReceiver RequestDispatcherMixin requestDispatcher) {
+                RequestDispatcherMixin requestDispatcher) {
             return context.startTraceEntry(MessageSupplier.create("servlet dispatch: {}",
                     requestDispatcher.glowroot$getPath()), timerName);
         }
-        @OnReturn
-        public static void onReturn(@BindTraveler TraceEntry traceEntry) {
+        public static void onReturn(TraceEntry traceEntry) {
             traceEntry.end();
         }
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler TraceEntry traceEntry) {
+        public static void onThrow(Throwable t,
+                TraceEntry traceEntry) {
             traceEntry.endWithError(t);
         }
     }

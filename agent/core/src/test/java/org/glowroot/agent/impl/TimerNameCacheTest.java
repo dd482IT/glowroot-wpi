@@ -25,7 +25,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class TimerNameCacheTest {
 
-    @Test
     public void testNullClass() {
         // given
         TimerNameCache timerNameCache = new TimerNameCache();
@@ -35,7 +34,6 @@ public class TimerNameCacheTest {
         assertThat(((TimerNameImpl) timerName).name()).isEqualTo("unknown");
     }
 
-    @Test
     public void testClassWithoutPointcutAnnotation() {
         // given
         TimerNameCache timerNameCache = new TimerNameCache();
@@ -45,7 +43,6 @@ public class TimerNameCacheTest {
         assertThat(((TimerNameImpl) timerName).name()).isEqualTo("unknown");
     }
 
-    @Test
     public void testClassWithEmptyTimerName() {
         // given
         TimerNameCache timerNameCache = new TimerNameCache();
@@ -55,7 +52,6 @@ public class TimerNameCacheTest {
         assertThat(((TimerNameImpl) timerName).name()).isEqualTo("unknown");
     }
 
-    @Test
     public void testNormal() {
         // given
         TimerNameCache timerNameCache = new TimerNameCache();
@@ -67,9 +63,7 @@ public class TimerNameCacheTest {
 
     private static class A {}
 
-    @Pointcut(className = "x", methodName = "y", methodParameterTypes = {})
     private static class B {}
 
-    @Pointcut(className = "x", methodName = "y", methodParameterTypes = {}, timerName = "z")
     private static class C {}
 }

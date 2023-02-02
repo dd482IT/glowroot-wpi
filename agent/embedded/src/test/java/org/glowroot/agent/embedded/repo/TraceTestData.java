@@ -24,7 +24,6 @@ import org.glowroot.wire.api.model.TraceOuterClass.Trace;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
-@Styles.Private
 class TraceTestData {
 
     static TraceReader createTraceReader() {

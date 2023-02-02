@@ -28,22 +28,16 @@ import org.openjdk.jmh.annotations.State;
 
 import org.glowroot.microbenchmarks.support.TransactionWorthy;
 
-@BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.MICROSECONDS)
-@State(Scope.Thread)
 public class TransactionBenchmark {
 
-    @Param
     private PointcutType pointcutType;
 
     private TransactionWorthy transactionWorthy;
 
-    @Setup
     public void setup() {
         transactionWorthy = new TransactionWorthy();
     }
 
-    @Benchmark
     public void execute() throws Exception {
         switch (pointcutType) {
             case API:

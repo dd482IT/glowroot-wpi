@@ -97,7 +97,6 @@ class MultiErrorIntervalMerger {
                 .build();
     }
 
-    @Value.Immutable
     public interface GroupedMultiErrorInterval {
 
         long from();

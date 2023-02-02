@@ -78,7 +78,7 @@ public class LiveJvmServiceImpl implements LiveJvmService {
     private static final String HOT_SPOT_DIAGNOSTIC_MBEAN_NAME =
             "com.sun.management:type=HotSpotDiagnostic";
 
-    private static final @Nullable Long PROCESS_ID =
+    private static final Long PROCESS_ID =
             parseProcessId(ManagementFactory.getRuntimeMXBean().getName());
 
     private static final ImmutableSet<String> numericAttributeTypes =
@@ -89,13 +89,13 @@ public class LiveJvmServiceImpl implements LiveJvmService {
     private final ThreadDumpService threadDumpService;
     private final Availability threadAllocatedBytesAvailability;
     private final ConfigService configService;
-    private final @Nullable File glowrootJarFile;
+    private final File glowrootJarFile;
     private final Clock clock;
 
     public LiveJvmServiceImpl(LazyPlatformMBeanServer lazyPlatformMBeanServer,
             TransactionRegistry transactionRegistry, TraceCollector traceCollector,
             Availability threadAllocatedBytesAvailability, ConfigService configService,
-            @Nullable File glowrootJarFile, Clock clock) {
+            File glowrootJarFile, Clock clock) {
         this.lazyPlatformMBeanServer = lazyPlatformMBeanServer;
         threadDumpService = new ThreadDumpService(transactionRegistry, traceCollector);
         this.threadAllocatedBytesAvailability = threadAllocatedBytesAvailability;
@@ -351,12 +351,11 @@ public class LiveJvmServiceImpl implements LiveJvmService {
         return attributes;
     }
 
-    public static @Nullable Long getProcessId() {
+    public static Long getProcessId() {
         return PROCESS_ID;
     }
 
-    @VisibleForTesting
-    static @Nullable Long parseProcessId(String runtimeName) {
+    static Long parseProcessId(String runtimeName) {
         int index = runtimeName.indexOf('@');
         if (index > 0) {
             String pid = runtimeName.substring(0, index);
@@ -411,7 +410,7 @@ public class LiveJvmServiceImpl implements LiveJvmService {
     // see list of allowed attribute value types:
     // http://docs.oracle.com/javase/7/docs/api/javax/management/openmbean/OpenType.html
     // #ALLOWED_CLASSNAMES_LIST
-    private static MBeanDump.MBeanValue getMBeanAttributeValue(@Nullable Object value) {
+    private static MBeanDump.MBeanValue getMBeanAttributeValue(Object value) {
         if (value == null) {
             return MBeanDump.MBeanValue.newBuilder()
                     .setNull(true)

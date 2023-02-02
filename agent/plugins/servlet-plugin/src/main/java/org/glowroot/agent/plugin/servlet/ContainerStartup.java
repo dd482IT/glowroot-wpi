@@ -33,7 +33,7 @@ public class ContainerStartup {
 
     private ContainerStartup() {}
 
-    static TraceEntry onBeforeCommon(OptionalThreadContext context, @Nullable String path,
+    static TraceEntry onBeforeCommon(OptionalThreadContext context, String path,
             TimerName timerName) {
         initPlatformMBeanServer();
         String transactionName;

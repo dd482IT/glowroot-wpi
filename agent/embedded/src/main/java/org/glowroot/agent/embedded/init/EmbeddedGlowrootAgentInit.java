@@ -43,24 +43,24 @@ class EmbeddedGlowrootAgentInit implements GlowrootAgentInit {
 
     private final File dataDir;
     private final boolean offlineViewer;
-    private final @Nullable Class<? extends Collector> collectorProxyClass;
+    private final Class<? extends Collector> collectorProxyClass;
 
-    private volatile @MonotonicNonNull Closeable agentDirLockCloseable;
+    private volatile Closeable agentDirLockCloseable;
 
     EmbeddedGlowrootAgentInit(File dataDir, boolean offlineViewer,
-            @Nullable Class<? extends Collector> collectorProxyClass) {
+            Class<? extends Collector> collectorProxyClass) {
         this.dataDir = dataDir;
         this.offlineViewer = offlineViewer;
         this.collectorProxyClass = collectorProxyClass;
     }
 
-    private @MonotonicNonNull EmbeddedAgentModule embeddedAgentModule;
+    private EmbeddedAgentModule embeddedAgentModule;
 
     @Override
-    public void init(@Nullable File pluginsDir, final List<File> confDirs, File logDir, File tmpDir,
-            final @Nullable File glowrootJarFile, final Map<String, String> properties,
-            final @Nullable Instrumentation instrumentation,
-            @Nullable PreCheckClassFileTransformer preCheckClassFileTransformer,
+    public void init(File pluginsDir, final List<File> confDirs, File logDir, File tmpDir,
+            final File glowrootJarFile, final Map<String, String> properties,
+            final Instrumentation instrumentation,
+            PreCheckClassFileTransformer preCheckClassFileTransformer,
             final String glowrootVersion, Closeable agentDirLockCloseable) throws Exception {
 
         this.agentDirLockCloseable = agentDirLockCloseable;
@@ -71,7 +71,7 @@ class EmbeddedGlowrootAgentInit implements GlowrootAgentInit {
                 glowrootVersion, offlineViewer);
         OnEnteringMain onEnteringMain = new OnEnteringMain() {
             @Override
-            public void run(@Nullable String mainClass) throws Exception {
+            public void run(String mainClass) throws Exception {
                 NettyInit.run();
                 // TODO report checker framework issue that occurs without checkNotNull
                 checkNotNull(embeddedAgentModule);
@@ -107,7 +107,6 @@ class EmbeddedGlowrootAgentInit implements GlowrootAgentInit {
     }
 
     @Override
-    @OnlyUsedByTests
     public void initConfigForTests() throws IOException {
         EmbeddedAgentModule embeddedAgentModule = checkNotNull(this.embeddedAgentModule);
         AgentModule agentModule = embeddedAgentModule.getAgentModule();
@@ -115,7 +114,6 @@ class EmbeddedGlowrootAgentInit implements GlowrootAgentInit {
     }
 
     @Override
-    @OnlyUsedByTests
     public void resetConfigForTests() throws Exception {
         EmbeddedAgentModule embeddedAgentModule = checkNotNull(this.embeddedAgentModule);
         AgentModule agentModule = embeddedAgentModule.getAgentModule();
@@ -125,7 +123,6 @@ class EmbeddedGlowrootAgentInit implements GlowrootAgentInit {
     }
 
     @Override
-    @OnlyUsedByTests
     public void close() throws Exception {
         checkNotNull(embeddedAgentModule).close();
         // and unlock the agent directory
@@ -133,6 +130,5 @@ class EmbeddedGlowrootAgentInit implements GlowrootAgentInit {
     }
 
     @Override
-    @OnlyUsedByTests
     public void awaitClose() {}
 }

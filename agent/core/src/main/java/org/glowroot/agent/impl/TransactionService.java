@@ -58,9 +58,9 @@ public class TransactionService implements ConfigListener {
     private int maxProfileSamples;
 
     // intentionally not volatile for small optimization
-    private @MonotonicNonNull TransactionProcessor transactionProcessor;
+    private TransactionProcessor transactionProcessor;
     // intentionally not volatile for small optimization
-    private @Nullable ThreadAllocatedBytes threadAllocatedBytes;
+    private ThreadAllocatedBytes threadAllocatedBytes;
 
     public static TransactionService create(TransactionRegistry transactionRegistry,
             ConfigService configService, TimerNameCache timerNameCache, Ticker ticker,
@@ -85,7 +85,7 @@ public class TransactionService implements ConfigListener {
         transactionCompletionCallback.processStartupTransaction(transactionProcessor);
     }
 
-    public void setThreadAllocatedBytes(@Nullable ThreadAllocatedBytes threadAllocatedBytes) {
+    public void setThreadAllocatedBytes(ThreadAllocatedBytes threadAllocatedBytes) {
         this.threadAllocatedBytes = threadAllocatedBytes;
     }
 
@@ -107,11 +107,10 @@ public class TransactionService implements ConfigListener {
         return transaction.getMainThreadContext().getRootEntry();
     }
 
-    @Nullable
     ThreadContextImpl startAuxThreadContextInternal(Transaction transaction,
-            @Nullable TraceEntryImpl parentTraceEntry,
-            @Nullable TraceEntryImpl parentThreadContextPriorEntry,
-            @Nullable ServletRequestInfo servletRequestInfo,
+            TraceEntryImpl parentTraceEntry,
+            TraceEntryImpl parentThreadContextPriorEntry,
+            ServletRequestInfo servletRequestInfo,
             ThreadContextThreadLocal.Holder threadContextHolder) {
         long startTick = ticker.read();
         TimerName auxThreadTimerName = timerNameCache.getAuxThreadTimerName();

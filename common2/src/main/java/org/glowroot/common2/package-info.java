@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-@Styles.Standard
 package org.glowroot.common2;
 
 import org.glowroot.common.util.Styles;

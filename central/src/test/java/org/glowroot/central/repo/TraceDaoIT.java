@@ -56,7 +56,6 @@ public class TraceDaoIT {
     private static ClusterManager clusterManager;
     private static TraceDao traceDao;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         SharedSetupRunListener.startCassandra();
         cluster = Clusters.newCluster();
@@ -75,7 +74,6 @@ public class TraceDaoIT {
                         configRepository, clock));
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         clusterManager.close();
         session.close();
@@ -83,13 +81,10 @@ public class TraceDaoIT {
         SharedSetupRunListener.stopCassandra();
     }
 
-    @BeforeEach
     public void beforeEachTest() throws Exception {
         traceDao.truncateAll();
     }
 
-    @ParameterizedTest
-    @ValueSource(booleans = {false, true})
     public void shouldReadTrace(boolean partial) throws Exception {
         Trace trace = TraceTestData.createTrace(partial);
         traceDao.store(AGENT_ID, trace);
@@ -117,8 +112,6 @@ public class TraceDaoIT {
         assertThat(header2.getUser()).isEqualTo(trace.getHeader().getUser());
     }
 
-    @ParameterizedTest
-    @ValueSource(booleans = {false, true})
     public void shouldReadTraceWithDurationNanosQualifier(boolean partial) throws Exception {
         // given
         Trace trace = TraceTestData.createTrace(partial);
@@ -140,8 +133,6 @@ public class TraceDaoIT {
         assertThat(queryResult.records()).hasSize(1);
     }
 
-    @ParameterizedTest
-    @ValueSource(booleans = {false, true})
     public void shouldNotReadTraceWithHighDurationNanosQualifier(boolean partial) throws Exception {
         // given
         Trace trace = TraceTestData.createTrace(partial);
@@ -163,8 +154,6 @@ public class TraceDaoIT {
         assertThat(queryResult.records()).isEmpty();
     }
 
-    @ParameterizedTest
-    @ValueSource(booleans = {false, true})
     public void shouldNotReadTraceWithLowDurationNanosQualifier(boolean partial) throws Exception {
         // given
         Trace trace = TraceTestData.createTrace(partial);
@@ -186,8 +175,6 @@ public class TraceDaoIT {
         assertThat(queryResult.records()).isEmpty();
     }
 
-    @ParameterizedTest
-    @ValueSource(booleans = {false, true})
     public void shouldReadTraceWithAttributeQualifier(boolean partial) throws Exception {
         // given
         Trace trace = TraceTestData.createTrace(partial);
@@ -211,8 +198,6 @@ public class TraceDaoIT {
         assertThat(queryResult.records()).hasSize(1);
     }
 
-    @ParameterizedTest
-    @ValueSource(booleans = {false, true})
     public void shouldReadTraceWithAttributeQualifier2(boolean partial) throws Exception {
         // given
         Trace trace = TraceTestData.createTrace(partial);
@@ -236,8 +221,6 @@ public class TraceDaoIT {
         assertThat(queryResult.records()).hasSize(1);
     }
 
-    @ParameterizedTest
-    @ValueSource(booleans = {false, true})
     public void shouldReadTraceWithAttributeQualifier3(boolean partial) throws Exception {
         // given
         Trace trace = TraceTestData.createTrace(partial);
@@ -261,8 +244,6 @@ public class TraceDaoIT {
         assertThat(queryResult.records()).hasSize(1);
     }
 
-    @ParameterizedTest
-    @ValueSource(booleans = {false, true})
     public void shouldNotReadTraceWithNonMatchingAttributeQualifier(boolean partial) throws Exception {
         // given
         Trace trace = TraceTestData.createTrace(partial);
@@ -286,8 +267,6 @@ public class TraceDaoIT {
         assertThat(queryResult.records()).isEmpty();
     }
 
-    @ParameterizedTest
-    @ValueSource(booleans = {false, true})
     public void shouldNotReadTraceWithNonMatchingAttributeQualifier2(boolean partial) throws Exception {
         // given
         Trace trace = TraceTestData.createTrace(partial);
@@ -311,7 +290,6 @@ public class TraceDaoIT {
         assertThat(queryResult.records()).isEmpty();
     }
 
-    @Test
     public void shouldReadTraceError() throws Exception {
         // given
         Trace trace = TraceTestData.createTrace(false); // partial records are not inserted into
@@ -335,7 +313,6 @@ public class TraceDaoIT {
         assertThat(count).isEqualTo(1);
     }
 
-    @Test
     public void shouldReadTraceErrorCaseInsensitive() throws Exception {
         // given
         Trace trace = TraceTestData.createTrace(false); // partial records are not inserted into

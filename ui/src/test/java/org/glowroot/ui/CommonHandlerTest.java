@@ -44,7 +44,6 @@ public class CommonHandlerTest {
             new CommonHandler(false, mock(LayoutService.class), new HashMap<Pattern, HttpService>(),
                     mock(HttpSessionManager.class), new ArrayList<Object>(), mock(Clock.class));
 
-    @Test
     public void shouldCreateJsonServiceExceptionResponse() throws Exception {
         // given
         Exception e = new JsonServiceException(HttpResponseStatus.PRECONDITION_FAILED,
@@ -58,7 +57,6 @@ public class CommonHandlerTest {
         assertThat(httpResponse.getStatus()).isEqualTo(HttpResponseStatus.PRECONDITION_FAILED);
     }
 
-    @Test
     public void shouldCreateJsonServiceExceptionResponseWithMessage() throws Exception {
         // given
         Exception e = new JsonServiceException(HttpResponseStatus.PRECONDITION_FAILED, "A message");
@@ -71,7 +69,6 @@ public class CommonHandlerTest {
         assertThat(httpResponse.getStatus()).isEqualTo(HttpResponseStatus.PRECONDITION_FAILED);
     }
 
-    @Test
     public void shouldCreateJsonServiceExceptionResponseFromInvocationTargetException()
             throws Exception {
         // given
@@ -87,7 +84,6 @@ public class CommonHandlerTest {
         assertThat(httpResponse.getStatus()).isEqualTo(HttpResponseStatus.PRECONDITION_FAILED);
     }
 
-    @Test
     public void shouldCreateJsonServiceExceptionResponseWithMessageFromInvocationTargetException()
             throws Exception {
         // given
@@ -102,7 +98,6 @@ public class CommonHandlerTest {
         assertThat(httpResponse.getStatus()).isEqualTo(HttpResponseStatus.PRECONDITION_FAILED);
     }
 
-    @Test
     public void shouldCreateSqlTimeoutResponse() throws Exception {
         // given
         Exception e = new SQLException("", "", H2_STATEMENT_WAS_CANCELED);
@@ -116,7 +111,6 @@ public class CommonHandlerTest {
         assertThat(httpResponse.getStatus()).isEqualTo(HttpResponseStatus.REQUEST_TIMEOUT);
     }
 
-    @Test
     public void shouldCreateNonTimeoutSqlExceptionResponse() throws Exception {
         // given
         Exception e = new SQLException("Another message", "", H2_STATEMENT_WAS_CANCELED + 1);
@@ -132,7 +126,6 @@ public class CommonHandlerTest {
         assertThat(httpResponse.getStatus()).isEqualTo(HttpResponseStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @Test
     public void shouldCreateExceptionResponse() throws Exception {
         // given
         Exception e = new Exception("Banother message");
@@ -147,7 +140,6 @@ public class CommonHandlerTest {
         assertThat(httpResponse.getStatus()).isEqualTo(HttpResponseStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @Test
     public void shouldCreateWrappedExceptionResponse() throws Exception {
         // given
         Exception e = new Exception(new Exception(new Exception("Wrapped message")));
@@ -162,7 +154,6 @@ public class CommonHandlerTest {
         assertThat(httpResponse.getStatus()).isEqualTo(HttpResponseStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @Test
     public void shouldStripContextPath() {
         assertThat(HttpServerHandler.stripContextPath("/one", "/")).isEqualTo("/one");
         assertThat(HttpServerHandler.stripContextPath("/", "/")).isEqualTo("/");

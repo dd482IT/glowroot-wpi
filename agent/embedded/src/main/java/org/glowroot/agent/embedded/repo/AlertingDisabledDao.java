@@ -46,12 +46,12 @@ public class AlertingDisabledDao implements AlertingDisabledRepository {
     }
 
     @Override
-    public @Nullable Long getAlertingDisabledUntilTime(String agentRollupId) throws Exception {
+    public Long getAlertingDisabledUntilTime(String agentRollupId) throws Exception {
         return dataSource.queryForOptionalLong("select disabled_until_time from alerting_disabled");
     }
 
     @Override
-    public void setAlertingDisabledUntilTime(String agentRollupId, @Nullable Long disabledUntilTime)
+    public void setAlertingDisabledUntilTime(String agentRollupId, Long disabledUntilTime)
             throws SQLException {
         dataSource.update(new AlertingDisabledBinder(disabledUntilTime));
     }
@@ -71,9 +71,9 @@ public class AlertingDisabledDao implements AlertingDisabledRepository {
 
     private static class AlertingDisabledBinder implements JdbcUpdate {
 
-        private final @Nullable Long disabledUntilTime;
+        private final Long disabledUntilTime;
 
-        private AlertingDisabledBinder(@Nullable Long disabledUntilTime) {
+        private AlertingDisabledBinder(Long disabledUntilTime) {
             this.disabledUntilTime = disabledUntilTime;
         }
 

@@ -24,19 +24,14 @@ import org.immutables.value.Value;
 
 import org.glowroot.common.util.Versions;
 
-@Value.Immutable
 public abstract class SlackConfig {
 
-    @JsonInclude(Include.NON_EMPTY)
     public abstract List<ImmutableSlackWebhook> webhooks();
 
-    @Value.Derived
-    @JsonIgnore
     public String version() {
         return Versions.getJsonVersion(this);
     }
 
-    @Value.Immutable
     public interface SlackWebhook {
         String id();
         String url();

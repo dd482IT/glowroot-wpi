@@ -150,7 +150,6 @@ class SyntheticMonitorService implements Runnable {
 
     private final CloseableHttpAsyncClient asyncHttpClient;
 
-    @GuardedBy("syncHttpClientHolder")
     private volatile SyncHttpClientHolder syncHttpClientHolder;
     private final Object syncHttpClientHolderLock = new Object();
 
@@ -265,10 +264,6 @@ class SyntheticMonitorService implements Runnable {
         asyncHttpClient.close();
     }
 
-    @Instrumentation.Transaction(transactionType = "Background",
-            transactionName = "Outer synthetic monitor loop",
-            traceHeadline = "Outer synthetic monitor loop",
-            timer = "outer synthetic monitor loop")
     private void runInternal() throws Exception {
         for (AgentRollup agentRollup : activeAgentDao
                 .readRecentlyActiveAgentRollups(DAYS.toMillis(7))) {
@@ -338,19 +333,12 @@ class SyntheticMonitorService implements Runnable {
         }
     }
 
-    @Instrumentation.Transaction(transactionType = "Background",
-            transactionName = "Synthetic monitor", traceHeadline = "Synthetic monitor: {{0.id}}",
-            timer = "synthetic monitor",
-            alreadyInTransactionBehavior = AlreadyInTransactionBehavior.CAPTURE_NEW_TRANSACTION)
     private void runPing(AgentRollup agentRollup, SyntheticMonitorConfig syntheticMonitorConfig,
             List<AlertConfig> alertConfigs) throws Exception {
         runSyntheticMonitor(agentRollup, syntheticMonitorConfig, alertConfigs,
                 () -> runPing(syntheticMonitorConfig.getPingUrl()));
     }
 
-    @Instrumentation.Transaction(transactionType = "Background",
-            transactionName = "Synthetic monitor", traceHeadline = "Synthetic monitor: {{0.id}}",
-            timer = "synthetic monitor")
     private void runJava(AgentRollup agentRollup, SyntheticMonitorConfig syntheticMonitorConfig,
             List<AlertConfig> alertConfigs) throws Exception {
         Matcher matcher = encryptedPattern.matcher(syntheticMonitorConfig.getJavaSource());
@@ -624,7 +612,7 @@ class SyntheticMonitorService implements Runnable {
 
     private void sendAlertOnErrorIfStatusChanged(AgentRollup agentRollup,
             SyntheticMonitorConfig syntheticMonitorConfig, List<AlertConfig> alertConfigs,
-            @Nullable String errorMessage, long captureTime) throws Exception {
+            String errorMessage, long captureTime) throws Exception {
         for (AlertConfig alertConfig : alertConfigs) {
             AlertCondition alertCondition = alertConfig.getCondition();
             SyntheticMonitorCondition condition = alertCondition.getSyntheticMonitorCondition();
@@ -636,7 +624,7 @@ class SyntheticMonitorService implements Runnable {
     private void sendAlertIfStatusChanged(AgentRollup agentRollup,
             SyntheticMonitorConfig syntheticMonitorConfig, AlertConfig alertConfig,
             SyntheticMonitorCondition condition, long endTime, boolean currentlyTriggered,
-            @Nullable String errorMessage) throws Exception {
+            String errorMessage) throws Exception {
         AlertCondition alertCondition = alertConfig.getCondition();
         OpenIncident openIncident = incidentDao.readOpenIncident(agentRollup.id(), alertCondition,
                 alertConfig.getSeverity());
@@ -678,7 +666,7 @@ class SyntheticMonitorService implements Runnable {
     private void sendAlert(String agentRollupId, String agentRollupDisplay,
             SyntheticMonitorConfig syntheticMonitorConfig, AlertConfig alertConfig,
             SyntheticMonitorCondition condition, long endTime, boolean ok,
-            @Nullable String errorMessage) throws Exception {
+            String errorMessage) throws Exception {
         // subject is the same between initial and ok messages so they will be threaded by gmail
         String subject = MoreConfigDefaults.getDisplayOrDefault(syntheticMonitorConfig);
         StringBuilder sb = new StringBuilder();
@@ -755,15 +743,11 @@ class SyntheticMonitorService implements Runnable {
         return obj;
     }
 
-    @Value.Immutable
-    @Styles.AllParameters
     interface SyncHttpClientHolder {
         CloseableHttpClient syncHttpClient();
         HttpProxyConfig httpProxyConfig();
     }
 
-    @Value.Immutable
-    @Styles.AllParameters
     interface SyntheticMonitorUniqueKey {
         String agentRollupId();
         String syntheticMonitorId();
@@ -778,11 +762,9 @@ class SyntheticMonitorService implements Runnable {
         }
     }
 
-    @Value.Immutable
     interface SyntheticRunResult {
         long captureTime();
         long durationNanos();
-        @Nullable
         Throwable throwable();
     }
 

@@ -25,8 +25,8 @@ import org.glowroot.agent.plugin.play.Play2xAspect.HandlerDef;
 
 public class PlayInvoker {
 
-    private final @Nullable Method pathMethod;
-    private final @Nullable Field actionField;
+    private final Method pathMethod;
+    private final Field actionField;
 
     public PlayInvoker(ClassInfo classInfo) {
         Class<?> handlerDefClass =
@@ -36,12 +36,10 @@ public class PlayInvoker {
         actionField = Reflection.getDeclaredField(requestClass, "action");
     }
 
-    @Nullable
     String path(HandlerDef handlerDef) {
         return Reflection.invoke(pathMethod, handlerDef);
     }
 
-    @Nullable
     String getAction(Object request) {
         return (String) Reflection.getFieldValue(actionField, request);
     }

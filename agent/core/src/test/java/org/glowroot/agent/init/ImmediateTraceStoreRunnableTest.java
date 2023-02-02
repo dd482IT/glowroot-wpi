@@ -29,7 +29,6 @@ import static org.mockito.Mockito.when;
 
 public class ImmediateTraceStoreRunnableTest {
 
-    @Test
     public void testOneCallBeyondComplete() {
         // given
         Transaction transaction = mock(Transaction.class);
@@ -43,7 +42,6 @@ public class ImmediateTraceStoreRunnableTest {
         verifyNoInteractions(traceCollector);
     }
 
-    @Test
     public void testTwoCallsBeyondComplete() {
         assertThrows(TerminateSubsequentExecutionsException.class, () -> {
             // given

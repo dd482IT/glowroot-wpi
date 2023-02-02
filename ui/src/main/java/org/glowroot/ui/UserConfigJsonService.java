@@ -42,7 +42,6 @@ import org.glowroot.common2.repo.ConfigRepository.UserNotFoundException;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.netty.handler.codec.http.HttpResponseStatus.CONFLICT;
 
-@JsonService
 class UserConfigJsonService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserConfigJsonService.class);
@@ -61,8 +60,7 @@ class UserConfigJsonService {
         this.configRepository = configRepository;
     }
 
-    @GET(path = "/backend/admin/users", permission = "admin:view:user")
-    String getUserConfig(@BindRequest UserConfigRequest request) throws Exception {
+    String getUserConfig(UserConfigRequest request) throws Exception {
         Optional<String> username = request.username();
         if (username.isPresent()) {
             return getUserConfigInternal(username.get());
@@ -77,7 +75,6 @@ class UserConfigJsonService {
         }
     }
 
-    @GET(path = "/backend/admin/all-role-names", permission = "admin:edit:user")
     String getAllRoleNames() throws Exception {
         return mapper.writeValueAsString(ImmutableAllRolesResponse.builder()
                 .allRoles(getAllRoleNamesInternal())
@@ -85,8 +82,7 @@ class UserConfigJsonService {
                 .build());
     }
 
-    @POST(path = "/backend/admin/users/add", permission = "admin:edit:user")
-    String addUser(@BindRequest UserConfigDto userConfigDto) throws Exception {
+    String addUser(UserConfigDto userConfigDto) throws Exception {
         UserConfig userConfig = userConfigDto.convert(null);
         try {
             configRepository.insertUserConfig(userConfig);
@@ -98,8 +94,7 @@ class UserConfigJsonService {
         return getUserConfigInternal(userConfig.username());
     }
 
-    @POST(path = "/backend/admin/users/update", permission = "admin:edit:user")
-    String updateUser(@BindRequest UserConfigDto userConfigDto) throws Exception {
+    String updateUser(UserConfigDto userConfigDto) throws Exception {
         UserConfig existingUserConfig = configRepository.getUserConfig(userConfigDto.username());
         if (existingUserConfig == null) {
             throw new UserNotFoundException();
@@ -116,8 +111,7 @@ class UserConfigJsonService {
         return getUserConfigInternal(userConfig.username());
     }
 
-    @POST(path = "/backend/admin/users/remove", permission = "admin:edit:user")
-    String removeUser(@BindRequest UserConfigRequest request) throws Exception {
+    String removeUser(UserConfigRequest request) throws Exception {
         try {
             configRepository.deleteUserConfig(request.username().get());
         } catch (CannotDeleteLastUserException e) {
@@ -147,38 +141,33 @@ class UserConfigJsonService {
         return roleNames;
     }
 
-    @Value.Immutable
     interface UserConfigRequest {
         Optional<String> username();
     }
 
-    @Value.Immutable
     interface UserConfigResponse {
         UserConfigDto config();
         ImmutableList<String> allRoles();
         boolean ldapAvailable();
     }
 
-    @Value.Immutable
     interface AllRolesResponse {
         ImmutableList<String> allRoles();
         boolean ldapAvailable();
     }
 
-    @Value.Immutable
     abstract static class UserConfigDto {
 
         abstract String username();
         abstract boolean ldap();
         // only used in request
-        @Value.Default
         String newPassword() {
             return "";
         }
         abstract ImmutableList<String> roles();
         abstract Optional<String> version(); // absent for insert operations
 
-        private UserConfig convert(@Nullable UserConfig existingUserConfig)
+        private UserConfig convert(UserConfig existingUserConfig)
                 throws GeneralSecurityException {
             String passwordHash;
             String newPassword = newPassword();

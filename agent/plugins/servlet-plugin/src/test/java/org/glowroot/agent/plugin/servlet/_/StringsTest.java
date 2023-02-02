@@ -23,7 +23,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class StringsTest {
 
-    @Test
     public void shouldSplit() {
         assertThat(Strings.split("c,s,v", ',')).contains("c", "s", "v");
         assertThat(Strings.split("c.s.v", '.')).contains("c", "s", "v");

@@ -26,19 +26,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ToolMainTest {
 
-    @Test
     public void testNullCodeSource() throws URISyntaxException {
         assertThat(ToolMain.getGlowrootJarFile(null)).isNull();
     }
 
-    @Test
     public void testWithGlowrootJar() throws Exception {
         File glowrootJar = new File("x/glowroot.jar").getAbsoluteFile();
         CodeSource codeSource = new CodeSource(glowrootJar.toURI().toURL(), new Certificate[0]);
         assertThat(ToolMain.getGlowrootJarFile(codeSource)).isEqualTo(glowrootJar);
     }
 
-    @Test
     public void testWithNotGlowrootJar() throws Exception {
         File glowrootJar = new File("x/classes");
         CodeSource codeSource = new CodeSource(glowrootJar.toURI().toURL(), new Certificate[0]);

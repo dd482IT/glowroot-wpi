@@ -41,12 +41,12 @@ public class Directories {
     // cannot use guava CharMatcher as that triggers loading of jul (org.glowroot.agent.jul.Logger)
     private static final String RESERVED_CHARACTERS = "<>:\"/\\|?*";
 
-    private final @Nullable File glowrootJarFile;
+    private final File glowrootJarFile;
     private final File glowrootDir;
-    private final @Nullable File pluginsDir;
+    private final File pluginsDir;
     private final List<File> confDirs;
 
-    private final @Nullable Closeable agentDirLockCloseable;
+    private final Closeable agentDirLockCloseable;
 
     private final File logDir;
     private final File tmpDir;
@@ -54,10 +54,10 @@ public class Directories {
     // these are needed for getDataDir()
     private final Properties rootProperties;
     private final boolean multiDir;
-    private final @Nullable String agentId;
+    private final String agentId;
     private final Helper helper;
 
-    public Directories(@Nullable File glowrootJarFile) throws Exception {
+    public Directories(File glowrootJarFile) throws Exception {
         this.glowrootJarFile = glowrootJarFile;
         glowrootDir = getGlowrootDir(glowrootJarFile);
 
@@ -149,7 +149,6 @@ public class Directories {
         Collections.reverse(confDirs);
     }
 
-    @OnlyUsedByTests
     Directories(File testDir, @SuppressWarnings("unused") boolean dummy) throws Exception {
         glowrootJarFile = null;
         glowrootDir = testDir;
@@ -168,7 +167,7 @@ public class Directories {
         return multiDir && agentId == null;
     }
 
-    public @Nullable File getGlowrootJarFile() {
+    public File getGlowrootJarFile() {
         return glowrootJarFile;
     }
 
@@ -176,7 +175,6 @@ public class Directories {
         return glowrootDir;
     }
 
-    @Nullable
     File getPluginsDir() {
         return pluginsDir;
     }
@@ -197,16 +195,14 @@ public class Directories {
         return tmpDir;
     }
 
-    public @Nullable Closeable getAgentDirLockCloseable() {
+    public Closeable getAgentDirLockCloseable() {
         return agentDirLockCloseable;
     }
 
-    @Nullable
     File getEmbeddedCollectorJarFile() {
         return getEmbeddedCollectorJarFile(glowrootJarFile);
     }
 
-    @Nullable
     File getCentralCollectorHttpsJarFile(String normalizedOsName) {
         if (glowrootJarFile == null) {
             return null;
@@ -220,7 +216,6 @@ public class Directories {
         return jarFile.exists() ? jarFile : null;
     }
 
-    @Nullable
     File getLoggingLogstashJarFile() {
         if (glowrootJarFile == null) {
             return null;
@@ -246,7 +241,7 @@ public class Directories {
         return dataDir.exists();
     }
 
-    static @Nullable File getEmbeddedCollectorJarFile(@Nullable File glowrootJarFile) {
+    static File getEmbeddedCollectorJarFile(File glowrootJarFile) {
         if (glowrootJarFile == null) {
             return null;
         }
@@ -258,7 +253,7 @@ public class Directories {
         return jarFile.exists() ? jarFile : null;
     }
 
-    private static File getGlowrootDir(@Nullable File glowrootJarFile) {
+    private static File getGlowrootDir(File glowrootJarFile) {
         String testDirPath = System.getProperty("glowroot.test.dir");
         if (testDirPath != null && !testDirPath.isEmpty()) {
             return new File(testDirPath);
@@ -275,7 +270,7 @@ public class Directories {
         return glowrootDir;
     }
 
-    private static @Nullable File getExplicitDir(String shortName, Properties rootProperties) {
+    private static File getExplicitDir(String shortName, Properties rootProperties) {
         String explicitDirPath = getProperty(shortName + ".dir", rootProperties);
         if (explicitDirPath == null) {
             return null;
@@ -284,7 +279,7 @@ public class Directories {
         }
     }
 
-    private static @Nullable String getProperty(String name, Properties rootProperties) {
+    private static String getProperty(String name, Properties rootProperties) {
         String value = normalizePropertyValue(System.getProperty("glowroot." + name));
         if (value != null) {
             return value;
@@ -296,7 +291,7 @@ public class Directories {
         return null;
     }
 
-    private static @Nullable String normalizePropertyValue(@Nullable String propertyValue) {
+    private static String normalizePropertyValue(String propertyValue) {
         if (propertyValue == null) {
             return null;
         }
@@ -304,7 +299,6 @@ public class Directories {
         return trimmed.isEmpty() ? null : trimmed;
     }
 
-    @VisibleForTesting
     private static File safelyNamedDir(File parentDir, String name) throws IOException {
         String safeName = makeSafeDirName(name, true);
         File dir = new File(parentDir, safeName);
@@ -323,7 +317,6 @@ public class Directories {
         return dir;
     }
 
-    @VisibleForTesting
     static String makeSafeDirName(String name, boolean newFormat) {
         StringBuilder safeName = new StringBuilder(name.length());
         int numTrailingDots = 0;
@@ -360,20 +353,20 @@ public class Directories {
 
         private final File glowrootDir;
         private final boolean multiDir;
-        private final @Nullable String agentIdBeforeNumber;
-        private final @Nullable Integer agentNumber;
+        private final String agentIdBeforeNumber;
+        private final Integer agentNumber;
 
-        private @MonotonicNonNull File defaultBaseDir;
+        private File defaultBaseDir;
 
-        private Helper(File glowrootDir, boolean multiDir, @Nullable String agentIdBeforeNumber,
-                @Nullable Integer agentNumber) {
+        private Helper(File glowrootDir, boolean multiDir, String agentIdBeforeNumber,
+                Integer agentNumber) {
             this.glowrootDir = glowrootDir;
             this.multiDir = multiDir;
             this.agentIdBeforeNumber = agentIdBeforeNumber;
             this.agentNumber = agentNumber;
         }
 
-        private File getDir(@Nullable File explicitDir, String name) throws IOException {
+        private File getDir(File explicitDir, String name) throws IOException {
             if (explicitDir == null) {
                 return new File(getDefaultBaseDir(), name);
             } else if (multiDir && agentIdBeforeNumber != null) {

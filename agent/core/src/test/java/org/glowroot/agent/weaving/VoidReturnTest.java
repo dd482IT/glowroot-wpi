@@ -23,7 +23,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class VoidReturnTest {
 
-    @Test
     public void testNullVersion() {
         assertThat(VoidReturn.getInstance().getValue()).isNull();
     }

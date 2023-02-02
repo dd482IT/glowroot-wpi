@@ -27,7 +27,6 @@ import static org.mockito.Mockito.when;
 
 public class VersionTest {
 
-    @Test
     public void testWithNullManifest() {
         // when
         String version = Version.getVersion((Manifest) null);
@@ -35,7 +34,6 @@ public class VersionTest {
         assertThat(version).isEqualTo("unknown");
     }
 
-    @Test
     public void testWithNoImplementationVersion() {
         // given
         Manifest manifest = mock(Manifest.class);
@@ -47,7 +45,6 @@ public class VersionTest {
         assertThat(version).isEqualTo("unknown");
     }
 
-    @Test
     public void testWithNonSnapshotVersion() {
         // given
         Manifest manifest = mock(Manifest.class);
@@ -60,7 +57,6 @@ public class VersionTest {
         assertThat(version).isEqualTo("0.1.2");
     }
 
-    @Test
     public void testWithSnapshotVersion() {
         // given
         Manifest manifest = mock(Manifest.class);
@@ -76,7 +72,6 @@ public class VersionTest {
         assertThat(version).isEqualTo("0.1.2-SNAPSHOT, commit 0123456789, built xyz");
     }
 
-    @Test
     public void testWithNoneBuildCommit() {
         // given
         Manifest manifest = mock(Manifest.class);
@@ -91,7 +86,6 @@ public class VersionTest {
         assertThat(version).isEqualTo("0.1.2-SNAPSHOT, built xyz");
     }
 
-    @Test
     public void testWithInvalidBuildCommit() {
         // given
         Manifest manifest = mock(Manifest.class);
@@ -106,7 +100,6 @@ public class VersionTest {
         assertThat(version).isEqualTo("0.1.2-SNAPSHOT, built xyz");
     }
 
-    @Test
     public void testWithMissingBuildTime() {
         // given
         Manifest manifest = mock(Manifest.class);
@@ -120,7 +113,6 @@ public class VersionTest {
         assertThat(version).isEqualTo("0.1.2-SNAPSHOT");
     }
 
-    @Test
     public void testWithInvalidBuildCommitAndMissingBuildTime() {
         // given
         Manifest manifest = mock(Manifest.class);
@@ -134,7 +126,6 @@ public class VersionTest {
         assertThat(version).isEqualTo("0.1.2-SNAPSHOT");
     }
 
-    @Test
     public void testClassWithNoClassFile() throws IOException {
         assertThat(Version.getManifest(long.class)).isNull();
     }

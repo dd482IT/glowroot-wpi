@@ -63,7 +63,7 @@ public class Glowroot {
      * 
      * If there is no current transaction then this method does nothing.
      */
-    public static void setTransactionType(@Nullable String transactionType) {
+    public static void setTransactionType(String transactionType) {
         service.setTransactionType(transactionType);
     }
 
@@ -72,7 +72,7 @@ public class Glowroot {
      * 
      * If there is no current transaction then this method does nothing.
      */
-    public static void setTransactionName(@Nullable String transactionName) {
+    public static void setTransactionName(String transactionName) {
         service.setTransactionName(transactionName);
     }
 
@@ -81,7 +81,7 @@ public class Glowroot {
      * 
      * If there is no current transaction then this method does nothing.
      */
-    public static void setTransactionUser(@Nullable String user) {
+    public static void setTransactionUser(String user) {
         service.setTransactionUser(user);
     }
 
@@ -98,7 +98,7 @@ public class Glowroot {
      * 
      * {@code null} values are normalized to the empty string.
      */
-    public static void addTransactionAttribute(String name, @Nullable String value) {
+    public static void addTransactionAttribute(String name, String value) {
         service.addTransactionAttribute(name, value);
     }
 

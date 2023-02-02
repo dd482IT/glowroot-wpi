@@ -48,7 +48,6 @@ public class OverallSummaryCollector {
         lastCaptureTime = Math.max(lastCaptureTime, captureTime);
     }
 
-    @Value.Immutable
     public interface OverallSummary {
         // aggregates use double instead of long to avoid (unlikely) 292 year nanosecond rollover
         double totalDurationNanos();

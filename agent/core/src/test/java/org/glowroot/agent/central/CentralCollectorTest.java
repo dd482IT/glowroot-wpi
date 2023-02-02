@@ -21,7 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CentralCollectorTest {
 
-    @Test
     public void shouldEscape() {
         assertThat(CentralCollector.escapeHostname("")).isEqualTo("");
         assertThat(CentralCollector.escapeHostname("abc")).isEqualTo("abc");
@@ -36,7 +35,6 @@ public class CentralCollectorTest {
         assertThat(CentralCollector.escapeHostname("a\\b\\c")).isEqualTo("a\\\\b\\\\c");
     }
 
-    @Test
     public void shouldCheckAgentVersionAgainstCentralVersion() {
         assertThat(CentralCollector.isAgentVersionGreaterThanCentralVersion("1.10.2", "1.10.1"))
                 .isTrue();

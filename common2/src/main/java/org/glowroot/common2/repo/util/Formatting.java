@@ -36,7 +36,6 @@ public class Formatting {
     }
 
     // this mimics the javascript function of same name in gauge-values.js
-    @VisibleForTesting
     static String displaySixDigitsOfPrecision(double value, Locale locale) {
         NumberFormat format = NumberFormat.getInstance(locale);
         format.setMaximumFractionDigits(20);
@@ -49,7 +48,6 @@ public class Formatting {
     }
 
     // this mimics the javascript function of same name in handlebars-rendering.js
-    @VisibleForTesting
     static String formatBytes(long bytes, Locale locale) {
         if (bytes == 0) {
             // no unit needed

@@ -19,8 +19,7 @@ import org.glowroot.agent.plugin.api.checker.Nullable;
 
 public interface ParameterHolder<T> {
 
-    @Nullable
     T get();
 
-    void set(@Nullable T value);
+    void set(T value);
 }

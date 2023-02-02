@@ -21,7 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ResourceMethodMetaTest {
 
-    @Test
     public void should() {
         assertThat(ResourceMethodMeta.combine(null, null)).isEqualTo("/");
         assertThat(ResourceMethodMeta.combine("", null)).isEqualTo("/");

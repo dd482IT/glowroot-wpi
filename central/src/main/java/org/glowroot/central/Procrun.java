@@ -21,7 +21,7 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 // see http://commons.apache.org/proper/commons-daemon/procrun.html
 public class Procrun {
 
-    private static volatile @MonotonicNonNull CentralModule centralModule;
+    private static volatile CentralModule centralModule;
 
     private Procrun() {}
 

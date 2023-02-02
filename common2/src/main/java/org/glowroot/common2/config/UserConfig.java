@@ -23,27 +23,20 @@ import org.immutables.value.Value;
 
 import org.glowroot.common.util.Versions;
 
-@Value.Immutable
 public abstract class UserConfig {
 
     public abstract String username();
 
-    @Value.Default
-    @JsonInclude(Include.NON_EMPTY)
     public String passwordHash() {
         return "";
     }
 
-    @Value.Default
-    @JsonInclude(Include.NON_EMPTY)
     public boolean ldap() {
         return false;
     }
 
     public abstract ImmutableSet<String> roles();
 
-    @Value.Derived
-    @JsonIgnore
     public String version() {
         return Versions.getJsonVersion(this);
     }

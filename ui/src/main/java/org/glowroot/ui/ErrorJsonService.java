@@ -56,7 +56,6 @@ import org.glowroot.common2.repo.TraceRepository.TraceQuery;
 import org.glowroot.common2.repo.util.RollupLevelService;
 import org.glowroot.common2.repo.util.RollupLevelService.DataKind;
 
-@JsonService
 class ErrorJsonService {
 
     private static final ObjectMapper mapper;
@@ -84,9 +83,8 @@ class ErrorJsonService {
         this.clock = clock;
     }
 
-    @GET(path = "/backend/error/messages", permission = "agent:error:overview")
-    String getData(@BindAgentRollupId String agentRollupId,
-            @BindRequest ErrorMessageRequest request, @BindAutoRefresh boolean autoRefresh)
+    String getData(String agentRollupId,
+            ErrorMessageRequest request, boolean autoRefresh)
             throws Exception {
         TraceQuery query = ImmutableTraceQuery.builder()
                 .transactionType(request.transactionType())
@@ -172,9 +170,8 @@ class ErrorJsonService {
         return sb.toString();
     }
 
-    @GET(path = "/backend/error/summaries", permission = "agent:error:overview")
-    String getSummaries(@BindAgentRollupId String agentRollupId,
-            @BindRequest ErrorSummaryRequest request, @BindAutoRefresh boolean autoRefresh)
+    String getSummaries(String agentRollupId,
+            ErrorSummaryRequest request, boolean autoRefresh)
             throws Exception {
         SummaryQuery query = ImmutableSummaryQuery.builder()
                 .transactionType(request.transactionType())
@@ -285,15 +282,12 @@ class ErrorJsonService {
         }
     }
 
-    @Value.Immutable
-    @Styles.AllParameters
     interface ErrorPoint {
         long captureTime();
         long errorCount();
         long transactionCount();
     }
 
-    @Value.Immutable
     interface ErrorSummaryRequest {
         String transactionType();
         long from();
@@ -302,10 +296,8 @@ class ErrorJsonService {
         int limit();
     }
 
-    @Value.Immutable
     interface ErrorMessageRequest {
         String transactionType();
-        @Nullable
         String transactionName();
         long from();
         long to();

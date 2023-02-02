@@ -31,14 +31,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class Weaver8Test {
 
-    @BeforeEach
     public void before() {
         SomeAspectThreadLocals.resetThreadLocals();
     }
 
     // ===================== default methods =====================
 
-    @Test
     public void shouldExecuteDefaultMethodAdvice() throws Exception {
         // given
         DefaultMethodMiscBridge test = WeaverTest.newWovenObject(DefaultMethodMiscImpl.class,
@@ -52,7 +50,6 @@ public class Weaver8Test {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldExecuteDefaultMethodAdvice2() throws Exception {
         // given
         DefaultMethodMiscBridge test = WeaverTest.newWovenObject(DefaultMethodSubMiscImpl.class,
@@ -68,7 +65,6 @@ public class Weaver8Test {
 
     // the three tests below document less than ideal behavior around weaving default methods
 
-    @Test
     public void shouldNotWeaveDefaultMethodAdvice() throws Exception {
         // given
         DefaultMethodMiscBridge2 test =
@@ -83,7 +79,6 @@ public class Weaver8Test {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(0);
     }
 
-    @Test
     public void shouldWeaveIterableNonDefaultMethod() throws Exception {
         // given
         Iterable<?> test = WeaverTest.newWovenObject(ExtendsDefaultMethodAbstractNotIterable.class,
@@ -97,7 +92,6 @@ public class Weaver8Test {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(1);
     }
 
-    @Test
     public void shouldNotWeaveIterableDefaultMethod() throws Exception {
         // given
         Iterable<?> test = WeaverTest.newWovenObject(ExtendsDefaultMethodAbstractNotIterable.class,

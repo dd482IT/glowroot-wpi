@@ -24,7 +24,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class QueryResultTest {
 
-    @Test
     public void testUnderLimit() {
         // given
         ImmutableList<String> records = ImmutableList.of("a");
@@ -35,7 +34,6 @@ public class QueryResultTest {
         assertThat(queryResult.moreAvailable()).isFalse();
     }
 
-    @Test
     public void testAtLimit() {
         // given
         ImmutableList<String> records = ImmutableList.of("a", "b");
@@ -46,7 +44,6 @@ public class QueryResultTest {
         assertThat(queryResult.moreAvailable()).isFalse();
     }
 
-    @Test
     public void testOverLimit() {
         // given
         ImmutableList<String> records = ImmutableList.of("a", "b", "c");

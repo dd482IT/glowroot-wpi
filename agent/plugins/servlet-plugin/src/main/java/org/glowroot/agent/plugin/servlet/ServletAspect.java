@@ -57,24 +57,18 @@ import org.glowroot.agent.plugin.servlet._.Strings;
 // this plugin is careful not to rely on request or session objects being thread-safe
 public class ServletAspect {
 
-    @Pointcut(className = "javax.servlet.Servlet", methodName = "service",
-            methodParameterTypes = {"javax.servlet.ServletRequest",
-                    "javax.servlet.ServletResponse"},
-            nestingGroup = "outer-servlet-or-filter", timerName = "http request")
     public static class ServiceAdvice {
         private static final TimerName timerName = Agent.getTimerName(ServiceAdvice.class);
-        @OnBefore
-        public static @Nullable TraceEntry onBefore(OptionalThreadContext context,
-                @BindParameter @Nullable ServletRequest req,
-                @BindClassMeta RequestInvoker requestInvoker) {
+        public static TraceEntry onBefore(OptionalThreadContext context,
+                ServletRequest req,
+                RequestInvoker requestInvoker) {
             return onBeforeCommon(context, req, null, requestInvoker);
         }
-        @OnReturn
         public static void onReturn(OptionalThreadContext context,
-                @BindTraveler @Nullable TraceEntry traceEntry,
-                @SuppressWarnings("unused") @BindParameter @Nullable ServletRequest req,
-                @BindParameter @Nullable ServletResponse res,
-                @BindClassMeta ResponseInvoker responseInvoker) {
+                TraceEntry traceEntry,
+                @SuppressWarnings("unused") ServletRequest req,
+                ServletResponse res,
+                ResponseInvoker responseInvoker) {
             if (traceEntry == null) {
                 return;
             }
@@ -98,11 +92,10 @@ public class ServletAspect {
             }
             context.setServletRequestInfo(null);
         }
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t, OptionalThreadContext context,
-                @BindTraveler @Nullable TraceEntry traceEntry,
-                @SuppressWarnings("unused") @BindParameter @Nullable ServletRequest req,
-                @BindParameter @Nullable ServletResponse res) {
+        public static void onThrow(Throwable t, OptionalThreadContext context,
+                TraceEntry traceEntry,
+                @SuppressWarnings("unused") ServletRequest req,
+                ServletResponse res) {
             if (traceEntry == null) {
                 return;
             }
@@ -121,8 +114,8 @@ public class ServletAspect {
             traceEntry.endWithError(t);
             context.setServletRequestInfo(null);
         }
-        private static @Nullable TraceEntry onBeforeCommon(OptionalThreadContext context,
-                @Nullable ServletRequest req, @Nullable String transactionTypeOverride,
+        private static TraceEntry onBeforeCommon(OptionalThreadContext context,
+                ServletRequest req, String transactionTypeOverride,
                 RequestInvoker requestInvoker) {
             if (context.getServletRequestInfo() != null) {
                 return null;
@@ -207,114 +200,81 @@ public class ServletAspect {
         }
     }
 
-    @Pointcut(className = "javax.servlet.Filter", methodName = "doFilter",
-            methodParameterTypes = {"javax.servlet.ServletRequest", "javax.servlet.ServletResponse",
-                    "javax.servlet.FilterChain"},
-            nestingGroup = "outer-servlet-or-filter", timerName = "http request")
     public static class DoFilterAdvice {
-        @OnBefore
-        public static @Nullable TraceEntry onBefore(OptionalThreadContext context,
-                @BindParameter @Nullable ServletRequest req,
-                @BindClassMeta RequestInvoker requestInvoker) {
+        public static TraceEntry onBefore(OptionalThreadContext context,
+                ServletRequest req,
+                RequestInvoker requestInvoker) {
             return ServiceAdvice.onBeforeCommon(context, req, null, requestInvoker);
         }
-        @OnReturn
         public static void onReturn(OptionalThreadContext context,
-                @BindTraveler @Nullable TraceEntry traceEntry,
-                @BindParameter @Nullable ServletRequest req,
-                @BindParameter @Nullable ServletResponse res,
-                @BindClassMeta ResponseInvoker responseInvoker) {
+                TraceEntry traceEntry,
+                ServletRequest req,
+                ServletResponse res,
+                ResponseInvoker responseInvoker) {
             ServiceAdvice.onReturn(context, traceEntry, req, res, responseInvoker);
         }
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t, OptionalThreadContext context,
-                @BindTraveler @Nullable TraceEntry traceEntry,
-                @BindParameter @Nullable ServletRequest req,
-                @BindParameter @Nullable ServletResponse res) {
+        public static void onThrow(Throwable t, OptionalThreadContext context,
+                TraceEntry traceEntry,
+                ServletRequest req,
+                ServletResponse res) {
             ServiceAdvice.onThrow(t, context, traceEntry, req, res);
         }
     }
 
-    @Pointcut(className = "org.eclipse.jetty.server.Handler"
-            + "|wiremock.org.eclipse.jetty.server.Handler",
-            subTypeRestriction = "/(?!org\\.eclipse\\.jetty.)"
-                    + "(?!wiremock.org\\.eclipse\\.jetty.).*/",
-            methodName = "handle",
-            methodParameterTypes = {"java.lang.String",
-                    "org.eclipse.jetty.server.Request|wiremock.org.eclipse.jetty.server.Request",
-                    "javax.servlet.http.HttpServletRequest",
-                    "javax.servlet.http.HttpServletResponse"},
-            nestingGroup = "outer-servlet-or-filter", timerName = "http request")
     public static class JettyHandlerAdvice {
-        @OnBefore
-        public static @Nullable TraceEntry onBefore(OptionalThreadContext context,
-                @SuppressWarnings("unused") @BindParameter @Nullable String target,
-                @SuppressWarnings("unused") @BindParameter @Nullable Object baseRequest,
-                @BindParameter @Nullable ServletRequest req,
-                @BindClassMeta RequestInvoker requestInvoker) {
+        public static TraceEntry onBefore(OptionalThreadContext context,
+                @SuppressWarnings("unused") String target,
+                @SuppressWarnings("unused") Object baseRequest,
+                ServletRequest req,
+                RequestInvoker requestInvoker) {
             return ServiceAdvice.onBeforeCommon(context, req, null, requestInvoker);
         }
-        @OnReturn
         public static void onReturn(OptionalThreadContext context,
-                @BindTraveler @Nullable TraceEntry traceEntry,
-                @SuppressWarnings("unused") @BindParameter @Nullable String target,
-                @SuppressWarnings("unused") @BindParameter @Nullable Object baseRequest,
-                @BindParameter @Nullable ServletRequest req,
-                @BindParameter @Nullable ServletResponse res,
-                @BindClassMeta ResponseInvoker responseInvoker) {
+                TraceEntry traceEntry,
+                @SuppressWarnings("unused") String target,
+                @SuppressWarnings("unused") Object baseRequest,
+                ServletRequest req,
+                ServletResponse res,
+                ResponseInvoker responseInvoker) {
             ServiceAdvice.onReturn(context, traceEntry, req, res, responseInvoker);
         }
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t, OptionalThreadContext context,
-                @BindTraveler @Nullable TraceEntry traceEntry,
-                @SuppressWarnings("unused") @BindParameter @Nullable String target,
-                @SuppressWarnings("unused") @BindParameter @Nullable Object baseRequest,
-                @BindParameter @Nullable ServletRequest req,
-                @BindParameter @Nullable ServletResponse res) {
+        public static void onThrow(Throwable t, OptionalThreadContext context,
+                TraceEntry traceEntry,
+                @SuppressWarnings("unused") String target,
+                @SuppressWarnings("unused") Object baseRequest,
+                ServletRequest req,
+                ServletResponse res) {
             ServiceAdvice.onThrow(t, context, traceEntry, req, res);
         }
     }
 
     // this pointcut makes sure to only set the transaction type to WireMock if WireMock is the
     // first servlet encountered
-    @Pointcut(className = "javax.servlet.Servlet",
-            subTypeRestriction = "com.github.tomakehurst.wiremock.jetty9"
-                    + ".JettyHandlerDispatchingServlet",
-            methodName = "service",
-            methodParameterTypes = {"javax.servlet.ServletRequest",
-                    "javax.servlet.ServletResponse"},
-            nestingGroup = "outer-servlet-or-filter", timerName = "http request", order = -1)
     public static class WireMockAdvice {
-        @OnBefore
-        public static @Nullable TraceEntry onBefore(OptionalThreadContext context,
-                @BindParameter @Nullable ServletRequest req,
-                @BindClassMeta RequestInvoker requestInvoker) {
+        public static TraceEntry onBefore(OptionalThreadContext context,
+                ServletRequest req,
+                RequestInvoker requestInvoker) {
             return ServiceAdvice.onBeforeCommon(context, req, "WireMock", requestInvoker);
         }
-        @OnReturn
         public static void onReturn(OptionalThreadContext context,
-                @BindTraveler @Nullable TraceEntry traceEntry,
-                @BindParameter @Nullable ServletRequest req,
-                @BindParameter @Nullable ServletResponse res,
-                @BindClassMeta ResponseInvoker responseInvoker) {
+                TraceEntry traceEntry,
+                ServletRequest req,
+                ServletResponse res,
+                ResponseInvoker responseInvoker) {
             ServiceAdvice.onReturn(context, traceEntry, req, res, responseInvoker);
         }
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t, OptionalThreadContext context,
-                @BindTraveler @Nullable TraceEntry traceEntry,
-                @BindParameter @Nullable ServletRequest req,
-                @BindParameter @Nullable ServletResponse res) {
+        public static void onThrow(Throwable t, OptionalThreadContext context,
+                TraceEntry traceEntry,
+                ServletRequest req,
+                ServletResponse res) {
             ServiceAdvice.onThrow(t, context, traceEntry, req, res);
         }
     }
 
-    @Pointcut(className = "javax.servlet.http.HttpServletResponse", methodName = "sendError",
-            methodParameterTypes = {"int", ".."}, nestingGroup = "servlet-inner-call")
     public static class SendErrorAdvice {
         // wait until after because sendError throws IllegalStateException if the response has
         // already been committed
-        @OnAfter
-        public static void onAfter(ThreadContext context, @BindParameter int statusCode) {
+        public static void onAfter(ThreadContext context, int statusCode) {
             ServletMessageSupplier messageSupplier =
                     (ServletMessageSupplier) context.getServletRequestInfo();
             if (messageSupplier != null) {
@@ -336,16 +296,13 @@ public class ServletAspect {
         }
     }
 
-    @Pointcut(className = "javax.servlet.http.HttpServletResponse", methodName = "sendRedirect",
-            methodParameterTypes = {"java.lang.String"}, nestingGroup = "servlet-inner-call")
     public static class SendRedirectAdvice {
         // wait until after because sendError throws IllegalStateException if the response has
         // already been committed
-        @OnAfter
         public static void onAfter(ThreadContext context,
-                @BindReceiver HttpServletResponse response,
-                @BindParameter @Nullable String location,
-                @BindClassMeta ResponseInvoker responseInvoker) {
+                HttpServletResponse response,
+                String location,
+                ResponseInvoker responseInvoker) {
             ServletMessageSupplier messageSupplier =
                     (ServletMessageSupplier) context.getServletRequestInfo();
             if (messageSupplier != null) {
@@ -362,13 +319,10 @@ public class ServletAspect {
         }
     }
 
-    @Pointcut(className = "javax.servlet.http.HttpServletResponse", methodName = "setStatus",
-            methodParameterTypes = {"int", ".."}, nestingGroup = "servlet-inner-call")
     public static class SetStatusAdvice {
         // wait until after because sendError throws IllegalStateException if the response has
         // already been committed
-        @OnAfter
-        public static void onAfter(ThreadContext context, @BindParameter int statusCode) {
+        public static void onAfter(ThreadContext context, int statusCode) {
             ServletMessageSupplier messageSupplier =
                     (ServletMessageSupplier) context.getServletRequestInfo();
             if (messageSupplier != null) {
@@ -385,12 +339,8 @@ public class ServletAspect {
         }
     }
 
-    @Pointcut(className = "javax.servlet.http.HttpServletRequest", methodName = "getUserPrincipal",
-            methodParameterTypes = {}, methodReturnType = "java.security.Principal",
-            nestingGroup = "servlet-inner-call")
     public static class GetUserPrincipalAdvice {
-        @OnReturn
-        public static void onReturn(@BindReturn @Nullable Principal principal,
+        public static void onReturn(Principal principal,
                 ThreadContext context) {
             if (principal != null) {
                 context.setTransactionUser(principal.getName(), Priority.CORE_PLUGIN);
@@ -398,11 +348,8 @@ public class ServletAspect {
         }
     }
 
-    @Pointcut(className = "javax.servlet.http.HttpServletRequest", methodName = "getSession",
-            methodParameterTypes = {}, nestingGroup = "servlet-inner-call")
     public static class GetSessionAdvice {
-        @OnReturn
-        public static void onReturn(@BindReturn @Nullable HttpSession session,
+        public static void onReturn(HttpSession session,
                 ThreadContext context) {
             if (session == null) {
                 return;
@@ -421,20 +368,14 @@ public class ServletAspect {
         }
     }
 
-    @Pointcut(className = "javax.servlet.http.HttpServletRequest", methodName = "getSession",
-            methodParameterTypes = {"boolean"}, nestingGroup = "servlet-inner-call")
     public static class GetSessionOneArgAdvice {
-        @OnReturn
-        public static void onReturn(@BindReturn @Nullable HttpSession session,
+        public static void onReturn(HttpSession session,
                 ThreadContext context) {
             GetSessionAdvice.onReturn(session, context);
         }
     }
 
-    @Pointcut(className = "javax.servlet.Servlet", methodName = "init",
-            methodParameterTypes = {"javax.servlet.ServletConfig"})
     public static class ServiceInitAdvice {
-        @OnBefore
         public static void onBefore() {
             ContainerStartup.initPlatformMBeanServer();
         }

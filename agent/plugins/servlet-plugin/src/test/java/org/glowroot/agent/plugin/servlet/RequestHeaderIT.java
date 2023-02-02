@@ -46,22 +46,18 @@ public class RequestHeaderIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void testStandardRequestHeaders() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureRequestHeaders",
@@ -78,7 +74,6 @@ public class RequestHeaderIT {
         assertThat(requestHeaders.get("Extra")).isNull();
     }
 
-    @Test
     public void testStandardRequestHeadersLowercase() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureRequestHeaders",
@@ -95,7 +90,6 @@ public class RequestHeaderIT {
         assertThat(requestHeaders.get("extra")).isNull();
     }
 
-    @Test
     public void testLotsOfRequestHeaders() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureRequestHeaders",
@@ -114,7 +108,6 @@ public class RequestHeaderIT {
         assertThat(requestHeaders.get("Three")).isNull();
     }
 
-    @Test
     public void testBadRequestHeaders() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureRequestHeaders",
@@ -129,7 +122,6 @@ public class RequestHeaderIT {
         assertThat(requestHeaders).isNull();
     }
 
-    @Test
     public void testBadRequestHeaders2() throws Exception {
         // given
         container.getConfigService().setPluginProperty(PLUGIN_ID, "captureRequestHeaders",

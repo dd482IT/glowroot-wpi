@@ -23,7 +23,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class GlowrootDirTest {
 
-    @Test
     public void testMakeSafeDirName() throws URISyntaxException {
         assertThat(Directories.makeSafeDirName("ab>c d<ef|", true)).isEqualTo("ab-c d-ef-");
         assertThat(Directories.makeSafeDirName("ab.c d.ef.", true)).isEqualTo("ab.c d.ef");

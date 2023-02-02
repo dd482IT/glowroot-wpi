@@ -104,8 +104,6 @@ class TransactionTypeDao implements TransactionTypeRepository {
         return futures;
     }
 
-    @Value.Immutable
-    @Styles.AllParameters
     interface TransactionTypeKey {
         String agentRollupId();
         String transactionType();

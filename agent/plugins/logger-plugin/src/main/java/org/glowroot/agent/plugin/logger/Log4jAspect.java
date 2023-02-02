@@ -43,31 +43,23 @@ public class Log4jAspect {
     private static final int DEBUG_INT = 10000;
     private static final int ALL_INT = Integer.MIN_VALUE;
 
-    @Shim("org.apache.log4j.Category")
     public interface Logger {
 
-        @Nullable
         String getName();
     }
 
-    @Shim("org.apache.log4j.Priority")
     public interface Level {
         int toInt();
     }
 
-    @Pointcut(className = "org.apache.log4j.Category", methodName = "forcedLog",
-            methodParameterTypes = {"java.lang.String", "org.apache.log4j.Priority",
-                    "java.lang.Object", "java.lang.Throwable"},
-            nestingGroup = "logging", timerName = TIMER_NAME)
     public static class ForcedLogAdvice {
 
         private static final TimerName timerName = Agent.getTimerName(ForcedLogAdvice.class);
 
-        @OnBefore
         @SuppressWarnings("unused")
-        public static TraceEntry onBefore(ThreadContext context, @BindReceiver Logger logger,
-                @BindParameter @Nullable String fqcn, @BindParameter @Nullable Level level,
-                @BindParameter @Nullable Object message, @BindParameter @Nullable Throwable t) {
+        public static TraceEntry onBefore(ThreadContext context, Logger logger,
+                String fqcn, Level level,
+                Object message, Throwable t) {
             String messageText = String.valueOf(message);
             int lvl = level == null ? 0 : level.toInt();
             if (LoggerPlugin.markTraceAsError(lvl >= ERROR_INT, lvl >= WARN_INT, t != null)) {
@@ -77,11 +69,10 @@ public class Log4jAspect {
                     new LogMessageSupplier(lvl, logger.getName(), messageText), timerName);
         }
 
-        @OnAfter
         @SuppressWarnings("unused")
-        public static void onAfter(@BindTraveler TraceEntry traceEntry,
-                @BindParameter @Nullable String fqcn, @BindParameter @Nullable Level level,
-                @BindParameter @Nullable Object message, @BindParameter @Nullable Throwable t) {
+        public static void onAfter(TraceEntry traceEntry,
+                String fqcn, Level level,
+                Object message, Throwable t) {
             int lvl = level == null ? 0 : level.toInt();
             if (t != null) {
                 // intentionally not passing message since it is already the trace entry message
@@ -101,10 +92,10 @@ public class Log4jAspect {
     private static class LogMessageSupplier extends MessageSupplier {
 
         private final int level;
-        private final @Nullable String loggerName;
+        private final String loggerName;
         private final String messageText;
 
-        private LogMessageSupplier(int level, @Nullable String loggerName, String messageText) {
+        private LogMessageSupplier(int level, String loggerName, String messageText) {
             this.level = level;
             this.loggerName = loggerName;
             this.messageText = messageText;

@@ -22,30 +22,27 @@ import org.glowroot.agent.plugin.api.weaving.MixinInit;
 
 public class MixinAspect {
 
-    @Mixin("java.lang.Runnable")
     public static class RunnableImpl implements RunnableMixin {
 
-        private transient @Nullable String string;
+        private transient String string;
 
-        @MixinInit
         private void initHasString() {
             string = "a string";
         }
 
         @Override
-        public @Nullable String getString() {
+        public String getString() {
             return string;
         }
 
         @Override
-        public void setString(@Nullable String string) {
+        public void setString(String string) {
             this.string = string;
         }
     }
 
     public interface RunnableMixin {
-        @Nullable
         String getString();
-        void setString(@Nullable String string);
+        void setString(String string);
     }
 }

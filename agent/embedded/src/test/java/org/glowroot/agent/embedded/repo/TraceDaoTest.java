@@ -54,7 +54,6 @@ public class TraceDaoTest {
     private static CappedDatabase cappedDatabase;
     private static TraceDao traceDao;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         dataSource = new DataSource();
         if (dataSource.tableExists("trace")) {
@@ -68,7 +67,6 @@ public class TraceDaoTest {
                 mock(FullQueryTextDao.class), mock(TraceAttributeNameDao.class));
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         scheduledExecutor.shutdownNow();
         dataSource.close();
@@ -76,13 +74,11 @@ public class TraceDaoTest {
         cappedFile.delete();
     }
 
-    @BeforeEach
     public void beforeEachTest() throws Exception {
         dataSource.execute("truncate table trace");
         dataSource.execute("truncate table trace_attribute");
     }
 
-    @Test
     public void shouldReadTrace() throws Exception {
         // given
         Trace.Header header = TraceTestData.createTraceHeader();
@@ -111,7 +107,6 @@ public class TraceDaoTest {
         assertThat(header2.getUser()).isEqualTo(header.getUser());
     }
 
-    @Test
     public void shouldReadTraceWithDurationNanosQualifier() throws Exception {
         // given
         Trace.Header header = TraceTestData.createTraceHeader();
@@ -133,7 +128,6 @@ public class TraceDaoTest {
         assertThat(queryResult.records()).hasSize(1);
     }
 
-    @Test
     public void shouldNotReadTraceWithHighDurationNanosQualifier() throws Exception {
         // given
         Trace.Header header = TraceTestData.createTraceHeader();
@@ -155,7 +149,6 @@ public class TraceDaoTest {
         assertThat(queryResult.records()).isEmpty();
     }
 
-    @Test
     public void shouldNotReadTraceWithLowDurationNanosQualifier() throws Exception {
         // given
         Trace.Header header = TraceTestData.createTraceHeader();
@@ -177,7 +170,6 @@ public class TraceDaoTest {
         assertThat(queryResult.records()).isEmpty();
     }
 
-    @Test
     public void shouldReadTraceWithAttributeQualifier() throws Exception {
         // given
         traceDao.store(TraceTestData.createTraceReader());
@@ -200,7 +192,6 @@ public class TraceDaoTest {
         assertThat(queryResult.records()).hasSize(1);
     }
 
-    @Test
     public void shouldReadTraceWithAttributeQualifier2() throws Exception {
         // given
         traceDao.store(TraceTestData.createTraceReader());
@@ -223,7 +214,6 @@ public class TraceDaoTest {
         assertThat(queryResult.records()).hasSize(1);
     }
 
-    @Test
     public void shouldReadTraceWithAttributeQualifier3() throws Exception {
         // given
         traceDao.store(TraceTestData.createTraceReader());
@@ -246,7 +236,6 @@ public class TraceDaoTest {
         assertThat(queryResult.records()).hasSize(1);
     }
 
-    @Test
     public void shouldNotReadTraceWithNonMatchingAttributeQualifier() throws Exception {
         // given
         traceDao.store(TraceTestData.createTraceReader());
@@ -269,7 +258,6 @@ public class TraceDaoTest {
         assertThat(queryResult.records()).isEmpty();
     }
 
-    @Test
     public void shouldNotReadTraceWithNonMatchingAttributeQualifier2() throws Exception {
         // given
         traceDao.store(TraceTestData.createTraceReader());
@@ -292,7 +280,6 @@ public class TraceDaoTest {
         assertThat(queryResult.records()).isEmpty();
     }
 
-    @Test
     public void shouldReadTraceError() throws Exception {
         // given
         Trace.Header header = TraceTestData.createTraceHeader();
@@ -314,7 +301,6 @@ public class TraceDaoTest {
         assertThat(count).isEqualTo(1);
     }
 
-    @Test
     public void shouldNotReadTraceError() throws Exception {
         // given
         Trace.Header header = TraceTestData.createTraceHeader();
@@ -336,7 +322,6 @@ public class TraceDaoTest {
         assertThat(count).isEqualTo(0);
     }
 
-    @Test
     public void shouldReadTraceErrorCaseInsensitive() throws Exception {
         // given
         Trace.Header header = TraceTestData.createTraceHeader();
@@ -358,7 +343,6 @@ public class TraceDaoTest {
         assertThat(count).isEqualTo(1);
     }
 
-    @Test
     public void shouldDeletedTrace() throws Exception {
         // given
         TraceReader traceReader = TraceTestData.createTraceReader();

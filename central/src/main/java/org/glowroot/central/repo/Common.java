@@ -166,8 +166,8 @@ class Common {
     // if insert after deleting present rollup then possible for error to occur in between
     // and insert would never happen
     static void postRollup(String agentRollupId, long captureTime, Set<String> keys,
-            Set<UUID> uniquenessKeysForDeletion, @Nullable Long nextRollupIntervalMillis,
-            @Nullable PreparedStatement insertNeedsRollup, PreparedStatement deleteNeedsRollup,
+            Set<UUID> uniquenessKeysForDeletion, Long nextRollupIntervalMillis,
+            PreparedStatement insertNeedsRollup, PreparedStatement deleteNeedsRollup,
             int needsRollupAdjustedTTL, Session session) throws Exception {
         if (nextRollupIntervalMillis != null) {
             checkNotNull(insertNeedsRollup);

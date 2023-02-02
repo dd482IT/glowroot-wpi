@@ -54,7 +54,6 @@ class MetricService {
         this.rollupLevelService = rollupLevelService;
     }
 
-    @Nullable
     Number getMetricValue(String agentRollupId, MetricCondition metricCondition, long startTime,
             long endTime) throws Exception {
         String metric = metricCondition.getMetric();
@@ -84,8 +83,8 @@ class MetricService {
         }
     }
 
-    private @Nullable Double getTransactionDurationPercentile(String agentRollupId,
-            String transactionType, @Nullable String transactionName, double percentile,
+    private Double getTransactionDurationPercentile(String agentRollupId,
+            String transactionType, String transactionName, double percentile,
             long startTime, long endTime) throws Exception {
         int rollupLevel =
                 rollupLevelService.getRollupLevelForView(startTime, endTime, DataKind.GENERAL);
@@ -110,8 +109,8 @@ class MetricService {
                 / NANOSECONDS_PER_MILLISECOND;
     }
 
-    private @Nullable Double getTransactionAverage(String agentRollupId, String transactionType,
-            @Nullable String transactionName, long startTime, long endTime) throws Exception {
+    private Double getTransactionAverage(String agentRollupId, String transactionType,
+            String transactionName, long startTime, long endTime) throws Exception {
         List<OverviewAggregate> aggregates = getOverviewAggregates(agentRollupId, transactionType,
                 transactionName, startTime, endTime);
         if (aggregates.isEmpty()) {
@@ -130,7 +129,7 @@ class MetricService {
     }
 
     public long getTransactionCount(String agentRollupId, String transactionType,
-            @Nullable String transactionName, long startTime, long endTime) throws Exception {
+            String transactionName, long startTime, long endTime) throws Exception {
         List<ThroughputAggregate> throughputAggregates = getThroughputAggregates(agentRollupId,
                 transactionType, transactionName, startTime, endTime);
         long totalTransactionCount = 0;
@@ -140,8 +139,8 @@ class MetricService {
         return totalTransactionCount;
     }
 
-    private @Nullable Double getErrorRate(String agentRollupId, String transactionType,
-            @Nullable String transactionName, long startTime, long endTime) throws Exception {
+    private Double getErrorRate(String agentRollupId, String transactionType,
+            String transactionName, long startTime, long endTime) throws Exception {
         List<ThroughputAggregate> aggregates = getThroughputAggregates(agentRollupId,
                 transactionType, transactionName, startTime, endTime);
         if (aggregates.isEmpty()) {
@@ -160,7 +159,7 @@ class MetricService {
     }
 
     private long getErrorCount(String agentRollupId, String transactionType,
-            @Nullable String transactionName, @Nullable String errorMessageFilter, long startTime,
+            String transactionName, String errorMessageFilter, long startTime,
             long endTime) throws Exception {
         if (errorMessageFilter == null) {
             List<ThroughputAggregate> aggregates = getThroughputAggregates(agentRollupId,
@@ -183,7 +182,7 @@ class MetricService {
         }
     }
 
-    private @Nullable Double getGaugeValue(String agentRollupId, String gaugeName,
+    private Double getGaugeValue(String agentRollupId, String gaugeName,
             long startTime, long endTime) throws Exception {
         int rollupLevel = rollupLevelService.getGaugeRollupLevelForView(startTime, endTime,
                 agentRollupId.endsWith("::"));
@@ -206,7 +205,7 @@ class MetricService {
     }
 
     private List<ThroughputAggregate> getThroughputAggregates(String agentRollupId,
-            String transactionType, @Nullable String transactionName, long startTime, long endTime)
+            String transactionType, String transactionName, long startTime, long endTime)
             throws Exception {
         int rollupLevel =
                 rollupLevelService.getRollupLevelForView(startTime, endTime, DataKind.GENERAL);
@@ -222,7 +221,7 @@ class MetricService {
     }
 
     private List<OverviewAggregate> getOverviewAggregates(String agentRollupId,
-            String transactionType, @Nullable String transactionName, long startTime, long endTime)
+            String transactionType, String transactionName, long startTime, long endTime)
             throws Exception {
         int rollupLevel =
                 rollupLevelService.getRollupLevelForView(startTime, endTime, DataKind.GENERAL);

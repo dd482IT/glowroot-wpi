@@ -24,14 +24,14 @@ import org.glowroot.agent.plugin.api.QueryEntry;
 // addresses that must be navigated)
 public abstract class QueryEntryBase implements QueryEntry {
 
-    private final @Nullable QueryData queryData;
+    private final QueryData queryData;
 
     // row numbers start at 1
     private long currRow = -1;
 
     private long maxRow;
 
-    protected QueryEntryBase(@Nullable QueryData queryData, long startTick,
+    protected QueryEntryBase(QueryData queryData, long startTick,
             long queryExecutionCount) {
         this.queryData = queryData;
         // see special case for queryExecutionCount -1 in TraceEntryImpl.createCompletedErrorEntry()
@@ -111,11 +111,11 @@ public abstract class QueryEntryBase implements QueryEntry {
         return maxRow;
     }
 
-    protected @Nullable QueryData getQueryData() {
+    protected QueryData getQueryData() {
         return queryData;
     }
 
-    protected @Nullable String getQueryText() {
+    protected String getQueryText() {
         return queryData == null ? null : queryData.getQueryText();
     }
 }

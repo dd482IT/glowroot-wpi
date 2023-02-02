@@ -30,7 +30,6 @@ public interface ActiveAgentRepository {
 
     List<AgentRollup> readActiveAgentRollups(long from, long to) throws Exception;
 
-    @Value.Immutable
     interface TopLevelAgentRollup { // used for dropdown display
         String id();
         String display();
@@ -38,7 +37,6 @@ public interface ActiveAgentRepository {
 
     // used for dropdown display
     // used for rollup work and for agent dropdown in role config and report
-    @Value.Immutable
     interface AgentRollup {
         String id();
         // when returned from readActiveChildAgentRollups (for use in child agent dropdown), this is

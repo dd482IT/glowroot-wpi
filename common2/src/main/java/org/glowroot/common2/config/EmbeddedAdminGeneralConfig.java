@@ -22,7 +22,6 @@ import org.immutables.value.Value;
 
 import org.glowroot.common.util.Versions;
 
-@Value.Immutable
 public abstract class EmbeddedAdminGeneralConfig {
 
     private static final String DEFAULT_AGENT_DISPLAY_NAME;
@@ -33,21 +32,15 @@ public abstract class EmbeddedAdminGeneralConfig {
         DEFAULT_AGENT_DISPLAY_NAME = System.getProperty("glowroot.agent.id", "");
     }
 
-    @Value.Default
-    @JsonInclude(Include.NON_EMPTY)
     public String agentDisplayName() {
         return "";
     }
 
-    @Value.Derived
-    @JsonIgnore
     public String agentDisplayNameOrDefault() {
         String agentDisplayName = agentDisplayName();
         return agentDisplayName.isEmpty() ? DEFAULT_AGENT_DISPLAY_NAME : agentDisplayName;
     }
 
-    @Value.Derived
-    @JsonIgnore
     public String version() {
         return Versions.getJsonVersion(this);
     }

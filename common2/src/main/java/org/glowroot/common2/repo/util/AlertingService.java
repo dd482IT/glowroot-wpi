@@ -421,7 +421,7 @@ public class AlertingService {
     // org.glowroot.common.repo.util.LazySecretKey.SymmetricEncryptionKeyMissingException
     public static void sendEmail(String centralDisplay, String agentRollupDisplay, String subject,
             List<String> emailAddresses, String messageText, SmtpConfig smtpConfig,
-            @Nullable String passwordOverride, LazySecretKey lazySecretKey, MailService mailService)
+            String passwordOverride, LazySecretKey lazySecretKey, MailService mailService)
             throws Exception {
         Session session = createMailSession(smtpConfig, passwordOverride, lazySecretKey);
         Message message = new MimeMessage(session);
@@ -510,7 +510,7 @@ public class AlertingService {
     // AdminJsonService.sentTestEmail() without possibility of throwing
     // org.glowroot.common.repo.util.LazySecretKey.SymmetricEncryptionKeyMissingException
     private static Session createMailSession(SmtpConfig smtpConfig,
-            @Nullable String passwordOverride, LazySecretKey lazySecretKey) throws Exception {
+            String passwordOverride, LazySecretKey lazySecretKey) throws Exception {
         Properties props = new Properties();
         props.put("mail.smtp.host", smtpConfig.host());
         ConnectionSecurity connectionSecurity = smtpConfig.connectionSecurity();
@@ -543,7 +543,7 @@ public class AlertingService {
         return Session.getInstance(props, authenticator);
     }
 
-    private static String getPassword(SmtpConfig smtpConfig, @Nullable String passwordOverride,
+    private static String getPassword(SmtpConfig smtpConfig, String passwordOverride,
             LazySecretKey lazySecretKey) throws Exception {
         if (passwordOverride != null) {
             return passwordOverride;
@@ -555,8 +555,6 @@ public class AlertingService {
         return Encryption.decrypt(password, lazySecretKey);
     }
 
-    @Value.Immutable
-    @Serial.Structural
     public interface IncidentKey extends Serializable {
         String agentRollupId();
         AlertCondition condition();

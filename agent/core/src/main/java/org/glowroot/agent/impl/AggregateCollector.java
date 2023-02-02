@@ -51,10 +51,9 @@ import org.glowroot.wire.api.model.AggregateOuterClass.Aggregate;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-@Styles.Private
 class AggregateCollector {
 
-    private final @Nullable String transactionName;
+    private final String transactionName;
     // aggregates use double instead of long to avoid (unlikely) 292 year nanosecond rollover
     private double totalDurationNanos;
     private double totalCpuNanos;
@@ -70,18 +69,18 @@ class AggregateCollector {
     private final QueryCollector queries;
     private final ServiceCallCollector serviceCalls;
     // lazy instantiated to reduce memory footprint
-    private @MonotonicNonNull MutableAggregateTimer auxThreadRootTimer;
-    private @MonotonicNonNull ThreadStatsCollectorImpl auxThreadStats;
-    private @MonotonicNonNull RootTimerCollectorImpl asyncTimers;
-    private @MonotonicNonNull MutableProfile mainThreadProfile;
-    private @MonotonicNonNull MutableProfile auxThreadProfile;
+    private MutableAggregateTimer auxThreadRootTimer;
+    private ThreadStatsCollectorImpl auxThreadStats;
+    private RootTimerCollectorImpl asyncTimers;
+    private MutableProfile mainThreadProfile;
+    private MutableProfile auxThreadProfile;
 
     // lock is primarily for visibility (there is almost no contention since written via a single
     // thread and flushed afterwards via a different thread, with potential concurrent access by the
     // UI for "live" data when running the embedded collector)
     private final Object lock = new Object();
 
-    AggregateCollector(@Nullable String transactionName, int maxQueryAggregates,
+    AggregateCollector(String transactionName, int maxQueryAggregates,
             int maxServiceCallAggregates) {
         this.transactionName = transactionName;
 
@@ -251,7 +250,6 @@ class AggregateCollector {
         }
     }
 
-    @Nullable
     String getFullQueryText(String fullQueryTextSha1) {
         if (queries == null) {
             return null;

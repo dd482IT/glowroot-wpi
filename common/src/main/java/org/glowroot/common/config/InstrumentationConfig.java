@@ -36,31 +36,22 @@ import org.glowroot.wire.api.model.AgentConfigOuterClass.AgentConfig.Instrumenta
 import org.glowroot.wire.api.model.AgentConfigOuterClass.AgentConfig.InstrumentationConfig.MethodModifier;
 import org.glowroot.wire.api.model.Proto.OptionalInt32;
 
-@Value.Immutable
 public abstract class InstrumentationConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(InstrumentationConfig.class);
 
-    @Value.Default
-    @JsonInclude(Include.NON_EMPTY)
     public String className() {
         return "";
     }
 
-    @Value.Default
-    @JsonInclude(Include.NON_EMPTY)
     public String classAnnotation() {
         return "";
     }
 
-    @Value.Default
-    @JsonInclude(Include.NON_EMPTY)
     public String subTypeRestriction() {
         return "";
     }
 
-    @Value.Default
-    @JsonInclude(Include.NON_EMPTY)
     public String superTypeRestriction() {
         return "";
     }
@@ -68,20 +59,14 @@ public abstract class InstrumentationConfig {
     // pointcuts with methodDeclaringClassName are no longer supported in 0.9.16, but included here
     // to help with transitioning of old instrumentation config
     @Deprecated
-    @Value.Default
-    @JsonInclude(Include.NON_EMPTY)
     public String methodDeclaringClassName() {
         return "";
     }
 
-    @Value.Default
-    @JsonInclude(Include.NON_EMPTY)
     public String methodName() {
         return "";
     }
 
-    @Value.Default
-    @JsonInclude(Include.NON_EMPTY)
     public String methodAnnotation() {
         return "";
     }
@@ -89,62 +74,44 @@ public abstract class InstrumentationConfig {
     // empty methodParameterTypes means match no-arg methods only
     public abstract ImmutableList<String> methodParameterTypes();
 
-    @Value.Default
-    @JsonInclude(Include.NON_EMPTY)
     public String methodReturnType() {
         return "";
     }
 
     // currently unused, but will have a purpose someday, e.g. to capture all public methods
-    @JsonInclude(Include.NON_EMPTY)
     public abstract ImmutableList<MethodModifier> methodModifiers();
 
-    @Value.Default
-    @JsonInclude(Include.NON_EMPTY)
     public String nestingGroup() {
         return "";
     }
 
-    @Value.Default
-    @JsonInclude(Include.NON_EMPTY)
     public int order() {
         return 0;
     }
 
     public abstract CaptureKind captureKind();
 
-    @Value.Default
-    @JsonInclude(Include.NON_EMPTY)
     public String transactionType() {
         return "";
     }
 
-    @Value.Default
-    @JsonInclude(Include.NON_EMPTY)
     public String transactionNameTemplate() {
         return "";
     }
 
-    @Value.Default
-    @JsonInclude(Include.NON_EMPTY)
     public String transactionUserTemplate() {
         return "";
     }
 
-    @JsonInclude(Include.NON_EMPTY)
     public abstract Map<String, String> transactionAttributeTemplates();
 
     // need to write zero since it is treated different from null
-    @JsonInclude(Include.NON_NULL)
-    public abstract @Nullable Integer transactionSlowThresholdMillis();
+    public abstract Integer transactionSlowThresholdMillis();
 
-    @JsonInclude(Include.NON_NULL)
-    public abstract @Nullable AlreadyInTransactionBehavior alreadyInTransactionBehavior();
+    public abstract AlreadyInTransactionBehavior alreadyInTransactionBehavior();
 
     // corrected for data prior to 0.10.10
-    @JsonIgnore
-    @Value.Derived
-    public @Nullable AlreadyInTransactionBehavior alreadyInTransactionBehaviorCorrected() {
+    public AlreadyInTransactionBehavior alreadyInTransactionBehaviorCorrected() {
         if (captureKind() == CaptureKind.TRANSACTION) {
             return MoreObjects.firstNonNull(alreadyInTransactionBehavior(),
                     AlreadyInTransactionBehavior.CAPTURE_TRACE_ENTRY);
@@ -153,69 +120,48 @@ public abstract class InstrumentationConfig {
         }
     }
 
-    @Value.Default
-    @JsonInclude(Include.NON_EMPTY)
     public boolean transactionOuter() {
         return false;
     }
 
-    @Value.Default
-    @JsonInclude(Include.NON_EMPTY)
     public String traceEntryMessageTemplate() {
         return "";
     }
 
     // need to write zero since it is treated different from null
-    @JsonInclude(Include.NON_NULL)
-    public abstract @Nullable Integer traceEntryStackThresholdMillis();
+    public abstract Integer traceEntryStackThresholdMillis();
 
-    @Value.Default
-    @JsonInclude(Include.NON_EMPTY)
     public boolean traceEntryCaptureSelfNested() {
         return false;
     }
 
-    @Value.Default
-    @JsonInclude(Include.NON_EMPTY)
     public String timerName() {
         return "";
     }
 
     // this is only for plugin authors (to be used in glowroot.plugin.json)
-    @Value.Default
-    @JsonInclude(Include.NON_EMPTY)
     public String enabledProperty() {
         return "";
     }
 
     // this is only for plugin authors (to be used in glowroot.plugin.json)
-    @Value.Default
-    @JsonInclude(Include.NON_EMPTY)
     public String traceEntryEnabledProperty() {
         return "";
     }
 
-    @JsonIgnore
-    @Value.Derived
     public boolean isTimerOrGreater() {
         return captureKind() == CaptureKind.TIMER || captureKind() == CaptureKind.TRACE_ENTRY
                 || captureKind() == CaptureKind.TRANSACTION;
     }
 
-    @JsonIgnore
-    @Value.Derived
     public boolean isTraceEntryOrGreater() {
         return captureKind() == CaptureKind.TRACE_ENTRY || captureKind() == CaptureKind.TRANSACTION;
     }
 
-    @JsonIgnore
-    @Value.Derived
     public boolean isTransaction() {
         return captureKind() == CaptureKind.TRANSACTION;
     }
 
-    @JsonIgnore
-    @Value.Derived
     public ImmutableList<String> validationErrors() {
         List<String> errors = Lists.newArrayList();
         if (className().isEmpty() && classAnnotation().isEmpty()) {

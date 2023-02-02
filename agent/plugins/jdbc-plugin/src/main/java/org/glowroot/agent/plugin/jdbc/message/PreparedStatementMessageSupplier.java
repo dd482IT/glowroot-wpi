@@ -66,10 +66,10 @@ public class PreparedStatementMessageSupplier extends QueryMessageSupplier {
     }
 
     // cannot use ImmutableList for parameters since it can contain null elements
-    private final @Nullable BindParameterList parameters;
+    private final BindParameterList parameters;
     private final String queryText;
 
-    public PreparedStatementMessageSupplier(@Nullable BindParameterList parameters,
+    public PreparedStatementMessageSupplier(BindParameterList parameters,
             String queryText) {
         this.parameters = parameters;
         this.queryText = queryText;

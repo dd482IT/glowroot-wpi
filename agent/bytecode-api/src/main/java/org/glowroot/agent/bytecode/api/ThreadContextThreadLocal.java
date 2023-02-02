@@ -39,11 +39,11 @@ public class ThreadContextThreadLocal {
         }
     };
 
-    public @Nullable ThreadContextPlus get() {
+    public ThreadContextPlus get() {
         return threadLocal.get().value;
     }
 
-    public void set(@Nullable ThreadContextPlus value) {
+    public void set(ThreadContextPlus value) {
         threadLocal.get().value = value;
     }
 
@@ -53,15 +53,15 @@ public class ThreadContextThreadLocal {
 
     public static class Holder {
 
-        private @Nullable ThreadContextPlus value;
+        private ThreadContextPlus value;
 
         private Holder() {}
 
-        public @Nullable ThreadContextPlus get() {
+        public ThreadContextPlus get() {
             return value;
         }
 
-        public void set(@Nullable ThreadContextPlus value) {
+        public void set(ThreadContextPlus value) {
             this.value = value;
         }
     }

@@ -24,12 +24,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ThreadAllocatedBytesTest {
 
-    @BeforeEach
     public void beforeEach() {
         Assumptions.assumeFalse(StandardSystemProperty.JAVA_VM_NAME.value().equals("IBM J9 VM"));
     }
 
-    @Test
     public void testIsSupportedReturnsNull() throws Exception {
         // given
         Class<?> sunThreadMXBeanClass = Class.forName("com.sun.management.ThreadMXBean");
@@ -42,7 +40,6 @@ public class ThreadAllocatedBytesTest {
                 "ThreadMXBean.isThreadAllocatedMemorySupported() unexpectedly returned null");
     }
 
-    @Test
     public void testIsSupportedReturnsFalse() throws Exception {
         // given
         Class<?> sunThreadMXBeanClass = Class.forName("com.sun.management.ThreadMXBean");

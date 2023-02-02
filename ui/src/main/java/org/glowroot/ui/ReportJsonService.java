@@ -76,7 +76,6 @@ import static com.google.common.base.Preconditions.checkState;
 import static java.util.concurrent.TimeUnit.DAYS;
 import static java.util.concurrent.TimeUnit.HOURS;
 
-@JsonService
 class ReportJsonService {
 
     private static final double NANOSECONDS_PER_MILLISECOND = 1000000.0;
@@ -112,9 +111,8 @@ class ReportJsonService {
         this.executor = executor;
     }
 
-    @GET(path = "/backend/report/agent-rollups", permission = "")
-    String getAllAgentRollups(@BindRequest AgentRollupReportRequest request,
-            @BindAuthentication Authentication authentication) throws Exception {
+    String getAllAgentRollups(AgentRollupReportRequest request,
+            Authentication authentication) throws Exception {
         TimeZone timeZone = TimeZone.getTimeZone(request.timeZoneId());
         FromToPair fromToPair = parseDates(request.fromDate(), request.toDate(), timeZone);
         Date from = fromToPair.from();
@@ -130,9 +128,8 @@ class ReportJsonService {
     }
 
     // permission is checked based on agentRollupIds in the request
-    @GET(path = "/backend/report/transaction-types-and-gauges", permission = "")
-    String getAllGauges(@BindRequest TransactionTypesAndGaugesRequest request,
-            @BindAuthentication Authentication authentication) throws Exception {
+    String getAllGauges(TransactionTypesAndGaugesRequest request,
+            Authentication authentication) throws Exception {
         checkPermissions(request.agentRollupIds(), "agent:transaction:overview", authentication);
         checkPermissions(request.agentRollupIds(), "agent:jvm:gauges", authentication);
 
@@ -162,9 +159,8 @@ class ReportJsonService {
     }
 
     // permission is checked based on agentRollupIds in the request
-    @GET(path = "/backend/report", permission = "")
-    String getReport(final @BindRequest ReportRequest request,
-            @BindAuthentication Authentication authentication) throws Exception {
+    String getReport(final ReportRequest request,
+            Authentication authentication) throws Exception {
         String metric = request.metric();
         if (metric.startsWith("transaction:")) {
             checkPermissions(request.agentRollupIds(), "agent:transaction:overview",
@@ -565,7 +561,6 @@ class ReportJsonService {
         return captureTime - getRollupIntervalMillis(rollup, timeZone, captureTime) / 2;
     }
 
-    @VisibleForTesting
     static long getRollupIntervalMillis(ROLLUP rollup, TimeZone timeZone, long captureTime) {
         Calendar calendar;
         switch (rollup) {
@@ -591,7 +586,6 @@ class ReportJsonService {
         }
     }
 
-    @Value.Immutable
     interface FilteredAgentRollup {
         String id();
         String display();
@@ -599,14 +593,12 @@ class ReportJsonService {
         List<FilteredAgentRollup> children();
     }
 
-    @Value.Immutable
     interface AgentRollupReportRequest {
         String fromDate();
         String toDate();
         String timeZoneId();
     }
 
-    @Value.Immutable
     interface TransactionTypesAndGaugesRequest {
         List<String> agentRollupIds();
         String fromDate();
@@ -614,22 +606,17 @@ class ReportJsonService {
         String timeZoneId();
     }
 
-    @Value.Immutable
     interface TransactionTypesAndGaugesReponse {
         List<String> transactionTypes();
         List<Gauge> gauges();
     }
 
-    @Value.Immutable
     interface ReportRequest {
         List<String> agentRollupIds();
 
         String metric();
-        @Nullable
         String transactionType();
-        @Nullable
         String transactionName();
-        @Nullable
         Double percentile();
 
         String fromDate();
@@ -638,7 +625,6 @@ class ReportJsonService {
         String timeZoneId();
     }
 
-    @Value.Immutable
     interface FromToPair {
         Date from();
         Date to();
@@ -648,14 +634,12 @@ class ReportJsonService {
         HOURLY, DAILY, WEEKLY, MONTHLY
     }
 
-    @VisibleForTesting
     static class RollupCaptureTimeFn implements Function<Long, Long> {
 
         private final ROLLUP rollup;
         private final TimeZone timeZone;
         private final int baseDayOfWeek;
 
-        @VisibleForTesting
         RollupCaptureTimeFn(ROLLUP rollup, TimeZone timeZone, String baseCaptureTime)
                 throws ParseException {
             this.rollup = rollup;
@@ -729,9 +713,7 @@ class ReportJsonService {
     // glowroot central prior to 0.9.18 (when error_count was added to the
     // aggregate_*_throughput_rollup_* tables)
     private interface ThroughputAggregateFn {
-        @Nullable
         Double getValue(ThroughputAggregate aggregate, long rollupIntervalMillis);
-        @Nullable
         Double getOverall();
     }
 
@@ -740,13 +722,13 @@ class ReportJsonService {
         private long transactionCount;
 
         @Override
-        public @Nullable Double getValue(ThroughputAggregate aggregate, long rollupIntervalMillis) {
+        public Double getValue(ThroughputAggregate aggregate, long rollupIntervalMillis) {
             transactionCount += aggregate.transactionCount();
             return (double) aggregate.transactionCount();
         }
 
         @Override
-        public @Nullable Double getOverall() {
+        public Double getOverall() {
             return (double) transactionCount;
         }
     }
@@ -758,7 +740,7 @@ class ReportJsonService {
         private long transactionCount;
 
         @Override
-        public @Nullable Double getValue(ThroughputAggregate aggregate, long rollupIntervalMillis) {
+        public Double getValue(ThroughputAggregate aggregate, long rollupIntervalMillis) {
             Long errorCount = aggregate.errorCount();
             if (errorCount == null) {
                 return null;
@@ -770,7 +752,7 @@ class ReportJsonService {
         }
 
         @Override
-        public @Nullable Double getOverall() {
+        public Double getOverall() {
             return hasErrorRate ? (100.0 * errorCount) / transactionCount : null;
         }
     }
@@ -781,7 +763,7 @@ class ReportJsonService {
         private long errorCount;
 
         @Override
-        public @Nullable Double getValue(ThroughputAggregate aggregate, long rollupIntervalMillis) {
+        public Double getValue(ThroughputAggregate aggregate, long rollupIntervalMillis) {
             Long errorCount = aggregate.errorCount();
             if (errorCount == null) {
                 return null;
@@ -792,7 +774,7 @@ class ReportJsonService {
         }
 
         @Override
-        public @Nullable Double getOverall() {
+        public Double getOverall() {
             return hasErrorCount ? (double) errorCount : null;
         }
     }

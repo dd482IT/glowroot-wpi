@@ -61,8 +61,7 @@ public class ThreadAllocatedBytes {
         return createInternal(supported, sunThreadMXBeanClass);
     }
 
-    @VisibleForTesting
-    static OptionalService<ThreadAllocatedBytes> createInternal(@Nullable Boolean supported,
+    static OptionalService<ThreadAllocatedBytes> createInternal(Boolean supported,
             Class<?> sunThreadMXBeanClass) throws Exception {
         if (supported == null) {
             return OptionalService.unavailable(

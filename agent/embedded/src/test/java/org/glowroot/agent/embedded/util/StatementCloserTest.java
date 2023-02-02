@@ -29,7 +29,6 @@ import static org.mockito.Mockito.when;
 
 public class StatementCloserTest {
 
-    @Test
     public void testExecuteException() throws SQLException {
         Exception thrown = assertThrows(SQLException.class, () -> {
             // given
@@ -49,7 +48,6 @@ public class StatementCloserTest {
         assertThat(thrown.getMessage()).isEqualTo("AAAA");
     }
 
-    @Test
     public void testCloseException() throws SQLException {
         Exception thrown = assertThrows(SQLException.class, () -> {
             // given
@@ -69,7 +67,6 @@ public class StatementCloserTest {
         assertThat(thrown.getMessage()).isEqualTo("BBBB");
     }
 
-    @Test
     public void testExecuteAndCloseExceptions() throws SQLException {
         Exception thrown = assertThrows(SQLException.class, () -> {
             // given

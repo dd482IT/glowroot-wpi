@@ -32,7 +32,6 @@ public class StackOverflowOOMIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         // need memory limited javaagent
         if (JavaVersion.isJ9Jvm()) {
@@ -43,17 +42,14 @@ public class StackOverflowOOMIT {
         }
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void testCausedBy() throws Exception {
         // given
         // when

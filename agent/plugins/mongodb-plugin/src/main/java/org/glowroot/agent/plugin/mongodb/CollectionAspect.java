@@ -56,33 +56,23 @@ public class CollectionAspect {
         });
     }
 
-    @Shim("com.mongodb.client.MongoCollection")
     public interface MongoCollection {
 
-        @Shim("com.mongodb.MongoNamespace getNamespace()")
-        @Nullable
         Object getNamespace();
     }
 
-    @Shim("com.mongodb.DBCollection")
     public interface DBCollection {
 
-        @Nullable
         String getFullName();
     }
 
     // TODO add MongoCollection.watch()
-    @Pointcut(className = "com.mongodb.client.MongoCollection",
-            methodName = "count*|distinct|findOneAnd*|mapReduce|bulkWrite|insert*|delete*"
-                    + "|replace|update*|drop*|create*|list*|rename*",
-            methodParameterTypes = {".."}, nestingGroup = "mongodb", timerName = "mongodb query")
     public static class MongoCollectionAdvice {
 
         private static final TimerName timerName = Agent.getTimerName(MongoCollectionAdvice.class);
 
-        @OnBefore
-        public static @Nullable QueryEntry onBefore(ThreadContext context,
-                @BindReceiver MongoCollection collection, @BindMethodName String methodName) {
+        public static QueryEntry onBefore(ThreadContext context,
+                MongoCollection collection, String methodName) {
             Object namespace = collection.getNamespace();
             if (namespace == null) {
                 return null;
@@ -92,31 +82,26 @@ public class CollectionAspect {
                     QueryMessageSupplier.create("mongodb query: "), timerName);
         }
 
-        @OnReturn
-        public static void onReturn(@BindTraveler @Nullable QueryEntry queryEntry) {
+        public static void onReturn(QueryEntry queryEntry) {
             if (queryEntry != null) {
                 queryEntry.endWithLocationStackTrace(stackTraceThresholdMillis, MILLISECONDS);
             }
         }
 
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler @Nullable QueryEntry queryEntry) {
+        public static void onThrow(Throwable t,
+                QueryEntry queryEntry) {
             if (queryEntry != null) {
                 queryEntry.endWithError(t);
             }
         }
     }
 
-    @Pointcut(className = "com.mongodb.client.MongoCollection", methodName = "find|aggregate",
-            methodParameterTypes = {".."}, nestingGroup = "mongodb", timerName = "mongodb query")
     public static class MongoFindAdvice {
 
         private static final TimerName timerName = Agent.getTimerName(MongoCollectionAdvice.class);
 
-        @OnBefore
-        public static @Nullable QueryEntry onBefore(ThreadContext context,
-                @BindReceiver MongoCollection collection, @BindMethodName String methodName) {
+        public static QueryEntry onBefore(ThreadContext context,
+                MongoCollection collection, String methodName) {
             Object namespace = collection.getNamespace();
             if (namespace == null) {
                 return null;
@@ -126,9 +111,8 @@ public class CollectionAspect {
                     QueryMessageSupplier.create("mongodb query: "), timerName);
         }
 
-        @OnReturn
-        public static void onReturn(@BindReturn MongoIterableMixin mongoIterable,
-                @BindTraveler @Nullable QueryEntry queryEntry) {
+        public static void onReturn(MongoIterableMixin mongoIterable,
+                QueryEntry queryEntry) {
             if (queryEntry != null) {
                 if (mongoIterable != null) {
                     mongoIterable.glowroot$setQueryEntry(queryEntry);
@@ -137,9 +121,8 @@ public class CollectionAspect {
             }
         }
 
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler @Nullable QueryEntry queryEntry) {
+        public static void onThrow(Throwable t,
+                QueryEntry queryEntry) {
             if (queryEntry != null) {
                 queryEntry.endWithError(t);
             }
@@ -147,17 +130,12 @@ public class CollectionAspect {
     }
 
     // mongodb driver legacy API (prior to 3.7.0)
-    @Pointcut(className = "com.mongodb.DBCollection",
-            methodName = "count|getCount|distinct|find*|aggregate|group|mapReduce|insert|remove"
-                    + "|save|update*|drop*|create*|ensure*|rename*",
-            methodParameterTypes = {".."}, nestingGroup = "mongodb", timerName = "mongodb query")
     public static class DBCollectionAdvice {
 
         private static final TimerName timerName = Agent.getTimerName(DBCollectionAdvice.class);
 
-        @OnBefore
-        public static @Nullable QueryEntry onBefore(ThreadContext context,
-                @BindReceiver DBCollection collection, @BindMethodName String methodName) {
+        public static QueryEntry onBefore(ThreadContext context,
+                DBCollection collection, String methodName) {
             if (methodName.equals("getCount")) {
                 methodName = "count";
             }
@@ -166,16 +144,14 @@ public class CollectionAspect {
                     QueryMessageSupplier.create("mongodb query: "), timerName);
         }
 
-        @OnReturn
-        public static void onReturn(@BindTraveler @Nullable QueryEntry queryEntry) {
+        public static void onReturn(QueryEntry queryEntry) {
             if (queryEntry != null) {
                 queryEntry.endWithLocationStackTrace(stackTraceThresholdMillis, MILLISECONDS);
             }
         }
 
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler @Nullable QueryEntry queryEntry) {
+        public static void onThrow(Throwable t,
+                QueryEntry queryEntry) {
             if (queryEntry != null) {
                 queryEntry.endWithError(t);
             }

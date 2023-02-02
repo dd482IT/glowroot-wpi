@@ -32,11 +32,11 @@ public class StatementMirror {
     //
     // ok for this field to be non-volatile since it is only temporary storage for a single thread
     // while that thread is adding batches into the statement and executing it
-    private @Nullable List<String> batchedSql;
+    private List<String> batchedSql;
 
     // ok for this field to be non-volatile since it is only temporary storage for a single thread
     // while that thread is adding batches into the statement and executing it
-    private @Nullable QueryEntry lastQueryEntry;
+    private QueryEntry lastQueryEntry;
 
     void addBatch(String sql) {
         // synchronization isn't an issue here as this method is called only by
@@ -59,7 +59,6 @@ public class StatementMirror {
         batchedSql = null;
     }
 
-    @Nullable
     QueryEntry getLastQueryEntry() {
         return lastQueryEntry;
     }

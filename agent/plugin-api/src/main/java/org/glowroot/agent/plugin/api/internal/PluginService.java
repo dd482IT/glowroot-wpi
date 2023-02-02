@@ -38,8 +38,7 @@ public interface PluginService {
 
     <K, V> Map<K, V> toImmutableMap(Map<K, V> map);
 
-    @Nullable
-    Object getBeanValue(@Nullable Object obj, List<String> path) throws Exception;
+    Object getBeanValue(Object obj, List<String> path) throws Exception;
 
     Map<String, String> getBeanPropertiesAsText(Object obj);
 }

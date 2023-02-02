@@ -43,24 +43,20 @@ public class ForkJoinPoolIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         // tests only work with javaagent container because they need to weave bootstrap classes
         // that implement ForkJoinPool
         container = JavaagentContainer.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldCaptureSubmitCallable() throws Exception {
         // when
         Trace trace = container.execute(DoPoolSubmitCallable.class);
@@ -68,7 +64,6 @@ public class ForkJoinPoolIT {
         checkTrace(trace);
     }
 
-    @Test
     public void shouldCaptureSubmitRunnable() throws Exception {
         // when
         Trace trace = container.execute(DoPoolSubmitRunnable.class);
@@ -76,7 +71,6 @@ public class ForkJoinPoolIT {
         checkTrace(trace);
     }
 
-    @Test
     public void shouldCaptureSubmitRunnableWithReturnValue() throws Exception {
         // when
         Trace trace = container.execute(DoPoolSubmitRunnableWithReturnValue.class);
@@ -84,7 +78,6 @@ public class ForkJoinPoolIT {
         checkTrace(trace);
     }
 
-    @Test
     public void shouldCaptureSubmitForkJoinTask() throws Exception {
         // when
         Trace trace = container.execute(DoPoolSubmitForkJoinTask.class);
@@ -92,7 +85,6 @@ public class ForkJoinPoolIT {
         checkTrace(trace);
     }
 
-    @Test
     public void shouldCaptureSubmitCallableAsForkJoinTask() throws Exception {
         // when
         Trace trace = container.execute(DoPoolSubmitCallableAsForkJoinTask.class);
@@ -100,7 +92,6 @@ public class ForkJoinPoolIT {
         checkTrace(trace);
     }
 
-    @Test
     public void shouldCaptureSubmitRunnableAsForkJoinTask() throws Exception {
         // when
         Trace trace = container.execute(DoPoolSubmitRunnableAsForkJoinTask.class);
@@ -108,7 +99,6 @@ public class ForkJoinPoolIT {
         checkTrace(trace);
     }
 
-    @Test
     public void shouldCaptureSubmitRunnableAsForkJoinTaskWithReturnValue() throws Exception {
         // when
         Trace trace = container.execute(DoPoolSubmitRunnableAsForkJoinTaskWithReturnValue.class);
@@ -116,7 +106,6 @@ public class ForkJoinPoolIT {
         checkTrace(trace);
     }
 
-    @Test
     public void shouldCaptureExecuteRunnable() throws Exception {
         // when
         Trace trace = container.execute(DoPoolExecuteRunnable.class);
@@ -124,7 +113,6 @@ public class ForkJoinPoolIT {
         checkTrace(trace);
     }
 
-    @Test
     public void shouldCaptureExecuteForkJoinTask() throws Exception {
         // when
         Trace trace = container.execute(DoPoolExecuteForkJoinTask.class);
@@ -132,7 +120,6 @@ public class ForkJoinPoolIT {
         checkTrace(trace);
     }
 
-    @Test
     public void shouldCaptureInvokeForkJoinTask() throws Exception {
         // when
         Trace trace = container.execute(DoPoolInvokeForkJoinTask.class);
@@ -140,7 +127,6 @@ public class ForkJoinPoolIT {
         checkTrace(trace);
     }
 
-    @Test
     public void shouldCaptureInvokeAll() throws Exception {
         // when
         Trace trace = container.execute(DoPoolInvokeAll.class);

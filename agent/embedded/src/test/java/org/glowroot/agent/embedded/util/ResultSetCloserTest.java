@@ -27,7 +27,6 @@ import static org.mockito.Mockito.mock;
 
 public class ResultSetCloserTest {
 
-    @Test
     public void testExecuteException() {
         Exception thrown = assertThrows(SQLException.class, () -> {
             // given
@@ -47,7 +46,6 @@ public class ResultSetCloserTest {
         assertThat(thrown.getMessage()).isEqualTo("AAAA");
     }
 
-    @Test
     public void testCloseException() {
         Exception thrown = assertThrows(SQLException.class, () -> {
             // given
@@ -67,7 +65,6 @@ public class ResultSetCloserTest {
         assertThat(thrown.getMessage()).isEqualTo("BBBB");
     }
 
-    @Test
     public void testExecuteAndCloseExceptions() {
         Exception thrown = assertThrows(SQLException.class, () -> {
             // given

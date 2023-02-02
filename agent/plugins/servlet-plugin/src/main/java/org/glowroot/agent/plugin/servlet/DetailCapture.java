@@ -93,7 +93,6 @@ public class DetailCapture {
                 map.put(name, "****");
                 continue;
             }
-            @Nullable
             String[] values = request.getParameterValues(name);
             if (values != null) {
                 set(map, name, values);
@@ -144,7 +143,7 @@ public class DetailCapture {
         return ImmutableMap.copyOf(requestHeaders);
     }
 
-    public static @Nullable RequestHostAndPortDetail captureRequestHostAndPortDetail(
+    public static RequestHostAndPortDetail captureRequestHostAndPortDetail(
             HttpServletRequest request, RequestInvoker requestInvoker) {
         if (ServletPluginProperties.captureSomeRequestHostAndPortDetail()) {
             RequestHostAndPortDetail requestHostAndPortDetail = new RequestHostAndPortDetail();

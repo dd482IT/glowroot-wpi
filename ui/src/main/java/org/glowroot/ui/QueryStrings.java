@@ -90,7 +90,7 @@ class QueryStrings {
         return Class.forName(immutableClassName, false, clazz.getClassLoader());
     }
 
-    private static @Nullable Object parseString(String str, Class<?> targetClass) {
+    private static Object parseString(String str, Class<?> targetClass) {
         if (targetClass == String.class) {
             return str;
         } else if (isInteger(targetClass)) {

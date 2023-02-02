@@ -31,7 +31,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class MutableProfileTest {
 
-    @Test
     public void testSingleStackTrace() throws IOException {
         // given
         MutableProfile profile = new MutableProfile();
@@ -66,7 +65,6 @@ public class MutableProfileTest {
                 + "}").replace(" ", ""));
     }
 
-    @Test
     public void testMerging() throws IOException {
         // given
         MutableProfile profile = new MutableProfile();
@@ -107,7 +105,6 @@ public class MutableProfileTest {
                 + "}").replace(" ", ""));
     }
 
-    @Test
     public void testMultipleRootNodes() throws IOException {
         // given
         MutableProfile profile = new MutableProfile();

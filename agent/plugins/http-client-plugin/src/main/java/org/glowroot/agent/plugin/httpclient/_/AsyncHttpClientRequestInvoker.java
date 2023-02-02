@@ -27,8 +27,8 @@ public class AsyncHttpClientRequestInvoker {
 
     private static final Logger logger = Logger.getLogger(AsyncHttpClientRequestInvoker.class);
 
-    private final @Nullable Method getUrlMethod;
-    private final @Nullable Method getURIMethod;
+    private final Method getUrlMethod;
+    private final Method getURIMethod;
 
     public AsyncHttpClientRequestInvoker(ClassInfo classInfo) {
         Class<?> requestClass = Reflection

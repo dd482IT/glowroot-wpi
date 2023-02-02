@@ -100,7 +100,7 @@ class WeavingClassVisitor extends ClassVisitor {
     private static final AtomicLong metaHolderCounter = new AtomicLong();
 
     private final ClassWriter cw;
-    private final @Nullable ClassLoader loader;
+    private final ClassLoader loader;
 
     private final boolean frames;
     private final boolean noLongerNeedToWeaveMainMethods;
@@ -117,17 +117,17 @@ class WeavingClassVisitor extends ClassVisitor {
 
     private final Set<String> shimMethods;
 
-    private @MonotonicNonNull Type type;
+    private Type type;
 
     // these are for handling class and method metas
     private final Set<Type> classMetaTypes = Sets.newHashSet();
     private final Set<MethodMetaGroup> methodMetaGroups = Sets.newHashSet();
-    private @MonotonicNonNull String metaHolderInternalName;
+    private String metaHolderInternalName;
     private int methodMetaCounter;
 
     private final Set<Advice> usedAdvisors = Sets.newHashSet();
 
-    public WeavingClassVisitor(ClassWriter cw, @Nullable ClassLoader loader, boolean frames,
+    public WeavingClassVisitor(ClassWriter cw, ClassLoader loader, boolean frames,
             boolean noLongerNeedToWeaveMainMethods, AnalyzedClass analyzedClass,
             boolean isClassLoader, List<AnalyzedMethod> methodsThatOnlyNowFulfillAdvice,
             List<ShimType> shimTypes, List<MixinType> mixinTypes,
@@ -168,8 +168,8 @@ class WeavingClassVisitor extends ClassVisitor {
     }
 
     @Override
-    public void visit(int version, int access, String internalName, @Nullable String signature,
-            @Nullable String superInternalName,
+    public void visit(int version, int access, String internalName, String signature,
+            String superInternalName,
             String /*@Nullable*/ [] interfaceInternalNamesNullable) {
 
         type = Type.getObjectType(internalName);
@@ -186,8 +186,8 @@ class WeavingClassVisitor extends ClassVisitor {
     }
 
     @Override
-    public @Nullable MethodVisitor visitMethod(int access, String name, String descriptor,
-            @Nullable String signature, String /*@Nullable*/ [] exceptions) {
+    public MethodVisitor visitMethod(int access, String name, String descriptor,
+            String signature, String /*@Nullable*/ [] exceptions) {
         checkNotNull(type);
         if (isAbstractOrNativeOrSynthetic(access)) {
             // don't try to weave abstract, native and synthetic methods
@@ -299,7 +299,6 @@ class WeavingClassVisitor extends ClassVisitor {
         cw.visitEnd();
     }
 
-    @RequiresNonNull({"type", "metaHolderInternalName"})
     private void handleMetaHolders() {
         if (loader == null) {
             initializeBoostrapMetaHolders();
@@ -313,7 +312,6 @@ class WeavingClassVisitor extends ClassVisitor {
         }
     }
 
-    @RequiresNonNull({"type", "metaHolderInternalName"})
     private void initializeBoostrapMetaHolders() {
         for (Type classMetaType : classMetaTypes) {
             String classMetaInternalName = classMetaType.getInternalName();
@@ -334,7 +332,6 @@ class WeavingClassVisitor extends ClassVisitor {
         }
     }
 
-    @RequiresNonNull({"type", "metaHolderInternalName", "loader"})
     private void generateMetaHolder() throws Exception {
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS + ClassWriter.COMPUTE_FRAMES);
         cw.visit(V1_5, ACC_PUBLIC + ACC_SUPER, metaHolderInternalName, null, "java/lang/Object",
@@ -511,9 +508,8 @@ class WeavingClassVisitor extends ClassVisitor {
         return name.equals("<init>") && !mixinTypes.isEmpty();
     }
 
-    @RequiresNonNull("type")
     private MethodVisitor visitInitWithMixins(int access, String name, String descriptor,
-            @Nullable String signature, String /*@Nullable*/ [] exceptions,
+            String signature, String /*@Nullable*/ [] exceptions,
             List<Advice> matchingAdvisors) {
         MethodVisitor mv = cw.visitMethod(access, name, descriptor, signature, exceptions);
         mv = new InitMixins(mv, access, name, descriptor, mixinTypes, type);
@@ -526,14 +522,12 @@ class WeavingClassVisitor extends ClassVisitor {
         return newWeavingMethodVisitor(access, name, descriptor, matchingAdvisors, mv);
     }
 
-    @RequiresNonNull("type")
     private MethodVisitor visitMethodWithAdvice(MethodVisitor mv, int access, String name,
             String descriptor, List<Advice> matchingAdvisors) {
         // FIXME remove superseded advisors
         return newWeavingMethodVisitor(access, name, descriptor, matchingAdvisors, mv);
     }
 
-    @RequiresNonNull("type")
     private WeavingMethodVisitor newWeavingMethodVisitor(int access, String name, String descriptor,
             List<Advice> matchingAdvisors, MethodVisitor mv) {
         Integer methodMetaUniqueNum = collectMetasAtMethod(matchingAdvisors, name, descriptor);
@@ -542,7 +536,7 @@ class WeavingClassVisitor extends ClassVisitor {
                 matchingAdvisors, metaHolderInternalName, methodMetaUniqueNum, loader == null);
     }
 
-    private @Nullable Integer collectMetasAtMethod(Iterable<Advice> matchingAdvisors,
+    private Integer collectMetasAtMethod(Iterable<Advice> matchingAdvisors,
             String methodName, String methodDesc) {
         Set<Type> methodMetaTypes = Sets.newHashSet();
         for (Advice matchingAdvice : matchingAdvisors) {
@@ -568,7 +562,6 @@ class WeavingClassVisitor extends ClassVisitor {
         return methodMetaUniqueNum;
     }
 
-    @RequiresNonNull("type")
     private void addShim(ShimType shimType) {
         for (java.lang.reflect.Method reflectMethod : shimType.shimMethods()) {
             Method method = Method.getMethod(reflectMethod);
@@ -595,7 +588,6 @@ class WeavingClassVisitor extends ClassVisitor {
         }
     }
 
-    @RequiresNonNull("type")
     private void addMixin(ClassNode mixinClassNode) {
         List<FieldNode> fieldNodes = mixinClassNode.fields;
         for (FieldNode fieldNode : fieldNodes) {
@@ -621,7 +613,6 @@ class WeavingClassVisitor extends ClassVisitor {
         }
     }
 
-    @RequiresNonNull("type")
     private void overrideAndWeaveInheritedMethod(AnalyzedMethod inheritedMethod) {
         String superName = analyzedClass.superName();
         // superName is null only for java.lang.Object which doesn't inherit anything
@@ -747,7 +738,6 @@ class WeavingClassVisitor extends ClassVisitor {
         }
     }
 
-    @Value.Immutable
     interface MethodMetaGroup {
         String methodName();
         Type methodReturnType();

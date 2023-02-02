@@ -55,7 +55,7 @@ class Routes {
         return simplifiedRoute;
     }
 
-    private static String nullToEmpty(@Nullable String s) {
+    private static String nullToEmpty(String s) {
         return s == null ? "" : s;
     }
 }

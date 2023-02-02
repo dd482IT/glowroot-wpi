@@ -21,12 +21,11 @@ import com.google.common.collect.ImmutableList;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.immutables.value.Value;
 
-@Value.Immutable
 abstract class AnalyzedClass {
 
     abstract int modifiers();
     abstract String name();
-    abstract @Nullable String superName();
+    abstract String superName();
     abstract ImmutableList<String> interfaceNames();
     abstract ImmutableList<AnalyzedMethod> analyzedMethods();
     // this is only used for the rare case of WeavingClassVisitor.overrideAndWeaveInheritedMethod()

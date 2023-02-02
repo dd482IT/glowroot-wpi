@@ -37,20 +37,16 @@ public class PauseAspect {
     private static final BooleanProperty captureTraceEntryStackTraces =
             configService.getBooleanProperty("captureTraceEntryStackTraces");
 
-    @Pointcut(className = "org.glowroot.agent.tests.app.Pause", methodName = "pause*",
-            methodParameterTypes = {}, timerName = "pause")
     public static class PauseAdvice {
 
         private static final TimerName timerName = Agent.getTimerName(PauseAdvice.class);
 
-        @OnBefore
         public static TraceEntry onBefore(ThreadContext context) {
             return context.startTraceEntry(MessageSupplier.create("Pause.pauseOneMillisecond()"),
                     timerName);
         }
 
-        @OnAfter
-        public static void onAfter(@BindTraveler TraceEntry traceEntry) {
+        public static void onAfter(TraceEntry traceEntry) {
             if (captureTraceEntryStackTraces.value()) {
                 traceEntry.endWithLocationStackTrace(0, NANOSECONDS);
             } else {
@@ -61,7 +57,5 @@ public class PauseAspect {
 
     // this is just to generate an additional $glowroot$ method to test that consecutive
     // $glowroot$ methods in an entry stack trace are stripped out correctly
-    @Pointcut(className = "org.glowroot.agent.tests.app.LogError", methodName = "pause",
-            methodParameterTypes = {"int"}, timerName = "pause 2")
     public static class PauseAdvice2 {}
 }

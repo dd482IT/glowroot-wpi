@@ -42,14 +42,10 @@ import org.glowroot.agent.plugin.httpclient._.Uris;
 
 public class OkHttpClient2xAspect {
 
-    @Pointcut(className = "com.squareup.okhttp.Call", methodName = "execute",
-            methodParameterTypes = {}, nestingGroup = "http-client",
-            timerName = "http client request")
     public static class ExecuteAdvice {
         private static final TimerName timerName = Agent.getTimerName(ExecuteAdvice.class);
-        @OnBefore
-        public static @Nullable TraceEntry onBefore(ThreadContext context,
-                @BindReceiver Object call, @BindClassMeta OkHttpClientCallInvoker callInvoker) {
+        public static TraceEntry onBefore(ThreadContext context,
+                Object call, OkHttpClientCallInvoker callInvoker) {
             Request originalRequest = (Request) callInvoker.getOriginalRequest(call);
             if (originalRequest == null) {
                 return null;
@@ -64,30 +60,24 @@ public class OkHttpClient2xAspect {
             return context.startServiceCallEntry("HTTP", method + Uris.stripQueryString(url),
                     MessageSupplier.create("http client request: {}{}", method, url), timerName);
         }
-        @OnReturn
-        public static void onReturn(@BindTraveler @Nullable TraceEntry traceEntry) {
+        public static void onReturn(TraceEntry traceEntry) {
             if (traceEntry != null) {
                 traceEntry.end();
             }
         }
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler @Nullable TraceEntry traceEntry) {
+        public static void onThrow(Throwable t,
+                TraceEntry traceEntry) {
             if (traceEntry != null) {
                 traceEntry.endWithError(t);
             }
         }
     }
 
-    @Pointcut(className = "com.squareup.okhttp.Call", methodName = "enqueue",
-            methodParameterTypes = {"com.squareup.okhttp.Callback"}, nestingGroup = "http-client",
-            timerName = "http client request")
     public static class EnqueueAdvice {
         private static final TimerName timerName = Agent.getTimerName(EnqueueAdvice.class);
-        @OnBefore
-        public static @Nullable AsyncTraceEntry onBefore(ThreadContext context,
-                @BindReceiver Object call, @BindParameter ParameterHolder<Callback> callback,
-                @BindClassMeta OkHttpClientCallInvoker callInvoker) {
+        public static AsyncTraceEntry onBefore(ThreadContext context,
+                Object call, ParameterHolder<Callback> callback,
+                OkHttpClientCallInvoker callInvoker) {
             Request originalRequest = (Request) callInvoker.getOriginalRequest(call);
             if (originalRequest == null) {
                 return null;
@@ -114,15 +104,13 @@ public class OkHttpClient2xAspect {
             callback.set(createWrapper(context, callback, asyncTraceEntry));
             return asyncTraceEntry;
         }
-        @OnReturn
-        public static void onReturn(@BindTraveler @Nullable AsyncTraceEntry asyncTraceEntry) {
+        public static void onReturn(AsyncTraceEntry asyncTraceEntry) {
             if (asyncTraceEntry != null) {
                 asyncTraceEntry.stopSyncTimer();
             }
         }
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler @Nullable AsyncTraceEntry asyncTraceEntry) {
+        public static void onThrow(Throwable t,
+                AsyncTraceEntry asyncTraceEntry) {
             if (asyncTraceEntry != null) {
                 asyncTraceEntry.stopSyncTimer();
                 asyncTraceEntry.endWithError(t);

@@ -39,7 +39,7 @@ class JStackTool {
                 new Object[] {null}, new String[] {"[Ljava.lang.String;"});
     }
 
-    static String runPriorToJava8(long pid, boolean allowAttachSelf, @Nullable File glowrootJarFile)
+    static String runPriorToJava8(long pid, boolean allowAttachSelf, File glowrootJarFile)
             throws Exception {
         return JvmTool.run(pid, "remoteDataDump", new JStackProcessor(), allowAttachSelf,
                 glowrootJarFile);

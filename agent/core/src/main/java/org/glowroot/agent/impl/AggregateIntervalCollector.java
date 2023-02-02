@@ -122,8 +122,8 @@ public class AggregateIntervalCollector {
         }
     }
 
-    public @Nullable OverviewAggregate getOverviewAggregate(String transactionType,
-            @Nullable String transactionName) {
+    public OverviewAggregate getOverviewAggregate(String transactionType,
+            String transactionName) {
         AggregateCollector aggregateCollector =
                 getAggregateCollector(transactionType, transactionName);
         if (aggregateCollector == null) {
@@ -133,8 +133,8 @@ public class AggregateIntervalCollector {
         return aggregateCollector.getOverviewAggregate(liveCaptureTime);
     }
 
-    public @Nullable PercentileAggregate getPercentileAggregate(String transactionType,
-            @Nullable String transactionName) {
+    public PercentileAggregate getPercentileAggregate(String transactionType,
+            String transactionName) {
         AggregateCollector aggregateCollector =
                 getAggregateCollector(transactionType, transactionName);
         if (aggregateCollector == null) {
@@ -144,8 +144,8 @@ public class AggregateIntervalCollector {
         return aggregateCollector.getPercentileAggregate(liveCaptureTime);
     }
 
-    public @Nullable ThroughputAggregate getThroughputAggregate(String transactionType,
-            @Nullable String transactionName) {
+    public ThroughputAggregate getThroughputAggregate(String transactionType,
+            String transactionName) {
         AggregateCollector aggregateCollector =
                 getAggregateCollector(transactionType, transactionName);
         if (aggregateCollector == null) {
@@ -155,7 +155,7 @@ public class AggregateIntervalCollector {
         return aggregateCollector.getThroughputAggregate(liveCaptureTime);
     }
 
-    public @Nullable String getFullQueryText(String fullQueryTextSha1) {
+    public String getFullQueryText(String fullQueryTextSha1) {
         for (IntervalTypeCollector typeCollector : typeCollectors.values()) {
             String fullQueryText = typeCollector.getFullQueryText(fullQueryTextSha1);
             if (fullQueryText != null) {
@@ -166,7 +166,7 @@ public class AggregateIntervalCollector {
     }
 
     public void mergeQueriesInto(QueryCollector collector, String transactionType,
-            @Nullable String transactionName) {
+            String transactionName) {
         AggregateCollector aggregateCollector =
                 getAggregateCollector(transactionType, transactionName);
         if (aggregateCollector == null) {
@@ -176,7 +176,7 @@ public class AggregateIntervalCollector {
     }
 
     public void mergeServiceCallsInto(ServiceCallCollector collector, String transactionType,
-            @Nullable String transactionName) {
+            String transactionName) {
         AggregateCollector aggregateCollector =
                 getAggregateCollector(transactionType, transactionName);
         if (aggregateCollector == null) {
@@ -186,7 +186,7 @@ public class AggregateIntervalCollector {
     }
 
     public void mergeMainThreadProfilesInto(ProfileCollector collector, String transactionType,
-            @Nullable String transactionName) {
+            String transactionName) {
         AggregateCollector aggregateCollector =
                 getAggregateCollector(transactionType, transactionName);
         if (aggregateCollector == null) {
@@ -196,7 +196,7 @@ public class AggregateIntervalCollector {
     }
 
     public void mergeAuxThreadProfilesInto(ProfileCollector collector, String transactionType,
-            @Nullable String transactionName) {
+            String transactionName) {
         AggregateCollector aggregateCollector =
                 getAggregateCollector(transactionType, transactionName);
         if (aggregateCollector == null) {
@@ -220,8 +220,8 @@ public class AggregateIntervalCollector {
     }
 
     // can be called without lock
-    private @Nullable AggregateCollector getAggregateCollector(String transactionType,
-            @Nullable String transactionName) {
+    private AggregateCollector getAggregateCollector(String transactionType,
+            String transactionName) {
         IntervalTypeCollector intervalTypeCollector = typeCollectors.get(transactionType);
         if (intervalTypeCollector == null) {
             return null;
@@ -277,7 +277,7 @@ public class AggregateIntervalCollector {
             aggregateCollector.mergeDataFrom(transaction);
         }
 
-        private @Nullable String getFullQueryText(String fullQueryTextSha1) {
+        private String getFullQueryText(String fullQueryTextSha1) {
             String fullQueryText = overallAggregateCollector.getFullQueryText(fullQueryTextSha1);
             if (fullQueryText != null) {
                 return fullQueryText;

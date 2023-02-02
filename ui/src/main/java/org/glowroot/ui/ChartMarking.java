@@ -20,14 +20,12 @@ import java.util.Map;
 
 import org.immutables.value.Value;
 
-@Value.Immutable
 interface ChartMarking {
 
     long from();
     long to();
     Map<String, List<ChartMarkingInterval>> intervals();
 
-    @Value.Immutable
     public interface ChartMarkingInterval {
 
         long from();

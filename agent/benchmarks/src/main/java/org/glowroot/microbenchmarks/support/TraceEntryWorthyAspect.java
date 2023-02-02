@@ -29,26 +29,20 @@ import org.glowroot.agent.plugin.api.weaving.Pointcut;
 
 public class TraceEntryWorthyAspect {
 
-    @Pointcut(className = "org.glowroot.microbenchmarks.core.support.TraceEntryWorthy",
-            methodName = "doSomethingTraceEntryWorthy", methodParameterTypes = {},
-            timerName = "trace entry worthy")
     public static class TraceEntryWorthyAdvice {
 
         private static final TimerName timerName = Agent.getTimerName(TraceEntryWorthyAdvice.class);
 
-        @OnBefore
         public static TraceEntry onBefore(ThreadContext context) {
             return context.startTraceEntry(MessageSupplier.create("trace entry worthy"), timerName);
         }
 
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler TraceEntry traceEntry) {
+        public static void onThrow(Throwable t,
+                TraceEntry traceEntry) {
             traceEntry.endWithError(t);
         }
 
-        @OnAfter
-        public static void onReturn(@BindTraveler TraceEntry traceEntry) {
+        public static void onReturn(TraceEntry traceEntry) {
             traceEntry.end();
         }
     }

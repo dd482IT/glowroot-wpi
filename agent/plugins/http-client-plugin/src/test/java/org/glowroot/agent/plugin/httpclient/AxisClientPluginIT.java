@@ -45,22 +45,18 @@ public class AxisClientPluginIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldCaptureAxisCall() throws Exception {
         // when
         Trace trace = container.execute(ExecuteSoapRequest.class);
@@ -115,15 +111,10 @@ public class AxisClientPluginIT {
         }
     }
 
-    @WebService
-    @SOAPBinding(style = SOAPBinding.Style.RPC)
     public interface HelloWorld {
-        @WebMethod
         String hello();
     }
 
-    @WebService(endpointInterface = "org.glowroot.agent.plugin.httpclient.AxisClientPluginIT"
-            + "$HelloWorld")
     public static class HelloWorldImpl implements HelloWorld {
         @Override
         public String hello() {

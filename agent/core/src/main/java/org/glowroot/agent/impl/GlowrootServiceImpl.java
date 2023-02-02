@@ -35,7 +35,7 @@ public class GlowrootServiceImpl {
         this.transactionRegistry = transactionRegistry;
     }
 
-    public void setTransactionType(@Nullable String transactionType) {
+    public void setTransactionType(String transactionType) {
         if (Strings.isNullOrEmpty(transactionType)) {
             return;
         }
@@ -45,7 +45,7 @@ public class GlowrootServiceImpl {
         }
     }
 
-    public void setTransactionName(@Nullable String transactionName) {
+    public void setTransactionName(String transactionName) {
         if (Strings.isNullOrEmpty(transactionName)) {
             return;
         }
@@ -55,7 +55,7 @@ public class GlowrootServiceImpl {
         }
     }
 
-    public void setTransactionUser(@Nullable String user) {
+    public void setTransactionUser(String user) {
         if (Strings.isNullOrEmpty(user)) {
             return;
         }
@@ -65,7 +65,7 @@ public class GlowrootServiceImpl {
         }
     }
 
-    public void addTransactionAttribute(String name, @Nullable String value) {
+    public void addTransactionAttribute(String name, String value) {
         if (name == null) {
             logger.error("addTransactionAttribute(): argument 'name' must be non-null");
             return;

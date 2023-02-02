@@ -32,7 +32,7 @@ public class ErrorIntervalCollector {
     private long currErrorFrom;
     private long currErrorTo;
     private int currErrorCount;
-    private @Nullable String currErrorMessage;
+    private String currErrorMessage;
     private boolean currErrorDoNotMergeToTheLeft;
 
     public void addErrorIntervals(List<ErrorInterval> errorIntervals) {

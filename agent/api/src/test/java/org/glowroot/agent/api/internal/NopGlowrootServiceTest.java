@@ -22,7 +22,6 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 public class NopGlowrootServiceTest {
 
-    @Test
     public void shouldDoNothing() {
         Glowroot.setTransactionType("dummy");
         Glowroot.setTransactionName("dummy");

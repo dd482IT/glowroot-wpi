@@ -25,7 +25,7 @@ public class ClassNames {
 
     private ClassNames() {}
 
-    public static @PolyNull String fromInternalName(@PolyNull String internalName) {
+    public static String fromInternalName(String internalName) {
         if (internalName == null) {
             return null;
         } else {

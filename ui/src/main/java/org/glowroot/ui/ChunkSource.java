@@ -106,7 +106,7 @@ public abstract class ChunkSource {
         private final Iterator<ChunkSource> chunkSources;
         private final Writer writer;
 
-        private volatile @Nullable ChunkCopier currChunkCopier;
+        private volatile ChunkCopier currChunkCopier;
 
         private ConcatChunkCopier(Iterable<ChunkSource> chunkSources, Writer writer) {
             this.chunkSources = chunkSources.iterator();

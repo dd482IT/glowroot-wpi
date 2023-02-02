@@ -31,10 +31,9 @@ import org.glowroot.wire.api.model.CollectorServiceOuterClass.LogMessage.LogEven
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.concurrent.TimeUnit.MINUTES;
 
-@VisibleForTesting
 public class CollectorProxy implements Collector {
 
-    private volatile @MonotonicNonNull Collector instance;
+    private volatile Collector instance;
 
     private final CountDownLatch latch = new CountDownLatch(1);
 
@@ -89,7 +88,6 @@ public class CollectorProxy implements Collector {
         }
     }
 
-    @VisibleForTesting
     public void setInstance(Collector instance) {
         this.instance = instance;
         latch.countDown();

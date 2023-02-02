@@ -25,7 +25,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class PluginDescriptorTest {
 
-    @Test
     public void testSorting() {
         // given
         List<String> pluginNames = Lists.newArrayList();

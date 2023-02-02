@@ -79,7 +79,7 @@ public class HttpClient {
     // AdminJsonService.sentTestHttpProxyRequest() without possibility of throwing
     // org.glowroot.common.repo.util.LazySecretKey.SymmetricEncryptionKeyMissingException
     public String getWithHttpProxyConfigOverride(String url,
-            HttpProxyConfig httpProxyConfig, @Nullable String passwordOverride) throws Exception {
+            HttpProxyConfig httpProxyConfig, String passwordOverride) throws Exception {
         return postOrGet(url, null, null, httpProxyConfig, passwordOverride);
     }
 
@@ -88,8 +88,8 @@ public class HttpClient {
     }
 
     private String postOrGet(String url, byte /*@Nullable*/ [] content,
-            @Nullable String contentType, final HttpProxyConfig httpProxyConfig,
-            final @Nullable String passwordOverride) throws Exception {
+            String contentType, final HttpProxyConfig httpProxyConfig,
+            final String passwordOverride) throws Exception {
         URI uri = new URI(url);
         String scheme = checkNotNull(uri.getScheme());
         final boolean ssl = scheme.equalsIgnoreCase("https");
@@ -167,8 +167,8 @@ public class HttpClient {
         }
     }
 
-    private @Nullable HttpProxyHandler newHttpProxyHandlerIfNeeded(HttpProxyConfig httpProxyConfig,
-            @Nullable String passwordOverride) throws Exception {
+    private HttpProxyHandler newHttpProxyHandlerIfNeeded(HttpProxyConfig httpProxyConfig,
+            String passwordOverride) throws Exception {
         String proxyHost = httpProxyConfig.host();
         if (proxyHost.isEmpty()) {
             return null;
@@ -184,7 +184,7 @@ public class HttpClient {
         }
     }
 
-    private String getPassword(HttpProxyConfig httpProxyConfig, @Nullable String passwordOverride)
+    private String getPassword(HttpProxyConfig httpProxyConfig, String passwordOverride)
             throws Exception {
         if (passwordOverride != null) {
             return passwordOverride;
@@ -198,9 +198,9 @@ public class HttpClient {
 
     private static class HttpClientHandler extends ChannelInboundHandlerAdapter {
 
-        private volatile @MonotonicNonNull HttpResponseStatus responseStatus;
-        private volatile @Nullable String responseContent;
-        private volatile @Nullable Throwable exception;
+        private volatile HttpResponseStatus responseStatus;
+        private volatile String responseContent;
+        private volatile Throwable exception;
 
         @Override
         public void channelRead(ChannelHandlerContext ctx, Object msg) {

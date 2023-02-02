@@ -72,15 +72,14 @@ public class MainEntryPoint {
             Boolean.getBoolean("glowroot.debug.printClassLoading");
 
     // need to wait to init logger until after establishing logDir
-    private static volatile @MonotonicNonNull Logger startupLogger;
+    private static volatile Logger startupLogger;
 
-    @OnlyUsedByTests
-    private static @MonotonicNonNull GlowrootAgentInit glowrootAgentInit;
+    private static GlowrootAgentInit glowrootAgentInit;
 
     private MainEntryPoint() {}
 
     public static void premain(Instrumentation instrumentation, Class<?>[] allPriorLoadedClasses,
-            @Nullable File glowrootJarFile) {
+            File glowrootJarFile) {
         if (startupLogger != null) {
             // glowroot is already running, probably due to multiple glowroot -javaagent JVM args
             return;
@@ -199,9 +198,8 @@ public class MainEntryPoint {
         }
     }
 
-    @EnsuresNonNull("startupLogger")
     public static void initLogging(List<File> confDirs, File logDir,
-            @Nullable File loggingLogstashJarFile, @Nullable Instrumentation instrumentation)
+            File loggingLogstashJarFile, Instrumentation instrumentation)
             throws IOException {
         if (loggingLogstashJarFile != null && instrumentation != null) {
             instrumentation
@@ -231,7 +229,7 @@ public class MainEntryPoint {
             // overriding getResourceAsStream() is needed for JDK 6 since it still manages to
             // fallback and find the resource on the system class path otherwise
             @Override
-            public @Nullable InputStream getResourceAsStream(String name) {
+            public InputStream getResourceAsStream(String name) {
                 if (name.equals("META-INF/services/javax.xml.parsers.SAXParserFactory")) {
                     return new ByteArrayInputStream(new byte[0]);
                 }
@@ -254,10 +252,9 @@ public class MainEntryPoint {
         checkNotNull(startupLogger);
     }
 
-    @RequiresNonNull("startupLogger")
     private static void start(Directories directories, Map<String, String> properties,
-            @Nullable Instrumentation instrumentation,
-            @Nullable PreCheckClassFileTransformer preCheckClassFileTransformer) throws Exception {
+            Instrumentation instrumentation,
+            PreCheckClassFileTransformer preCheckClassFileTransformer) throws Exception {
         String version = Version.getVersion(MainEntryPoint.class);
         startupLogger.info("Glowroot version: {}", version);
         startupLogger.info("Java version: {}", getJavaVersion());
@@ -269,9 +266,8 @@ public class MainEntryPoint {
                 checkNotNull(directories.getAgentDirLockCloseable()));
     }
 
-    @RequiresNonNull("startupLogger")
     private static GlowrootAgentInit createGlowrootAgentInit(Directories directories,
-            Map<String, String> properties, @Nullable Instrumentation instrumentation)
+            Map<String, String> properties, Instrumentation instrumentation)
             throws Exception {
         String collectorAddress = properties.get("glowroot.collector.address");
         Class<? extends Collector> customCollectorClass =
@@ -359,7 +355,6 @@ public class MainEntryPoint {
         return ImmutableMap.copyOf(properties);
     }
 
-    @RequiresNonNull("startupLogger")
     private static void logAgentDirsLockedException(File confDir, File lockFile,
             Map<String, String> properties) {
         // this is common when stopping tomcat since 'catalina.sh stop' launches a java process
@@ -396,7 +391,7 @@ public class MainEntryPoint {
                 "org.apache.catalina.startup.Bootstrap stop");
     }
 
-    private static @Nullable Class<? extends Collector> loadCustomCollectorClass(File glowrootDir)
+    private static Class<? extends Collector> loadCustomCollectorClass(File glowrootDir)
             throws Exception {
         ClassLoader classLoader = MainEntryPoint.class.getClassLoader();
         Class<? extends Collector> collectorClass = loadCollectorClass(classLoader);
@@ -427,8 +422,8 @@ public class MainEntryPoint {
         return loadCollectorClass(servicesClassLoader);
     }
 
-    private static @Nullable Class<? extends Collector> loadCollectorClass(
-            @Nullable ClassLoader classLoader) throws Exception {
+    private static Class<? extends Collector> loadCollectorClass(
+            ClassLoader classLoader) throws Exception {
         InputStream in;
         if (classLoader == null) {
             in = ClassLoader.getSystemResourceAsStream(
@@ -460,7 +455,7 @@ public class MainEntryPoint {
         }
     }
 
-    private static @Nullable String getNormalizedOsName() {
+    private static String getNormalizedOsName() {
         String osName = System.getProperty("os.name");
         if (osName == null) {
             return null;
@@ -514,7 +509,6 @@ public class MainEntryPoint {
         return sb;
     }
 
-    @OnlyUsedByTests
     public static void start(Map<String, String> properties) throws Exception {
         String testDirPath = checkNotNull(properties.get("glowroot.test.dir"));
         File testDir = new File(testDirPath);
@@ -524,8 +518,7 @@ public class MainEntryPoint {
         start(directories, properties, null, null);
     }
 
-    @OnlyUsedByTests
-    public static @Nullable GlowrootAgentInit getGlowrootAgentInit() {
+    public static GlowrootAgentInit getGlowrootAgentInit() {
         return glowrootAgentInit;
     }
 }

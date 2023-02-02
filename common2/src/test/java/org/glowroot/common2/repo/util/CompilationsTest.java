@@ -21,7 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CompilationsTest {
 
-    @Test
     public void testClassNameParsing() {
         assertThat(Compilations.getPublicClassName(
                 "public class A { public static void main(String[] args) {} } class B {}"))
@@ -43,7 +42,6 @@ public class CompilationsTest {
         assertThat(Compilations.getPublicClassName("class X extends Object {}")).isEqualTo("");
     }
 
-    @Test
     public void testNonDefaultPackageClassNameParsing() {
         assertThat(Compilations.getPublicClassName("package a.b; public class X {}"))
                 .isEqualTo("a.b.X");

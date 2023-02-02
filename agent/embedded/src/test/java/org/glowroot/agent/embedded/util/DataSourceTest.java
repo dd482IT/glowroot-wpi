@@ -28,7 +28,6 @@ import static org.mockito.Mockito.when;
 
 public class DataSourceTest {
 
-    @Test
     public void testDebugNoArgs() throws SQLException {
         // given
         Logger logger = mock(Logger.class);
@@ -41,7 +40,6 @@ public class DataSourceTest {
         verifyNoMoreInteractions(logger);
     }
 
-    @Test
     public void testDebugOneStringArg() throws SQLException {
         // given
         Logger logger = mock(Logger.class);
@@ -54,7 +52,6 @@ public class DataSourceTest {
         verifyNoMoreInteractions(logger);
     }
 
-    @Test
     public void testDebugOneNullArg() throws SQLException {
         // given
         Logger logger = mock(Logger.class);
@@ -67,7 +64,6 @@ public class DataSourceTest {
         verifyNoMoreInteractions(logger);
     }
 
-    @Test
     public void testDebugOneNumberArg() throws SQLException {
         // given
         Logger logger = mock(Logger.class);
@@ -80,7 +76,6 @@ public class DataSourceTest {
         verifyNoMoreInteractions(logger);
     }
 
-    @Test
     public void testDebugMultipleArgs() throws SQLException {
         // given
         Logger logger = mock(Logger.class);

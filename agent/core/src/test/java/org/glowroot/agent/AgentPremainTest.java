@@ -27,13 +27,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AgentPremainTest {
 
-    @Test
     public void testNullCodeSource() {
         assertThrows(IOException.class, () ->
                 AgentPremain.getGlowrootJarFile(null));
     }
 
-    @Test
     public void testNullCodeSourceWithDelegateJavaagent() throws Exception {
         System.setProperty("glowroot.test.dir", ".");
         try {
@@ -43,14 +41,12 @@ public class AgentPremainTest {
         }
     }
 
-    @Test
     public void testWithGlowrootJar() throws Exception {
         File glowrootJar = new File("x/glowroot.jar").getAbsoluteFile();
         CodeSource codeSource = new CodeSource(glowrootJar.toURI().toURL(), new Certificate[0]);
         assertThat(AgentPremain.getGlowrootJarFile(codeSource)).isEqualTo(glowrootJar);
     }
 
-    @Test
     public void testWithNotGlowrootJar() {
         assertThrows(IOException.class, () -> {
             File glowrootJar = new File("x/classes");
@@ -59,7 +55,6 @@ public class AgentPremainTest {
         });
     }
 
-    @Test
     public void testWithNotGlowrootJarButWithTestDir() throws Exception {
         System.setProperty("glowroot.test.dir", ".");
         try {

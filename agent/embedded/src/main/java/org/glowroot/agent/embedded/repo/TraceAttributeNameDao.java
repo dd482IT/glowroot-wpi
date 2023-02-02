@@ -132,8 +132,6 @@ class TraceAttributeNameDao implements TraceAttributeNameRepository {
         }
     }
 
-    @Value.Immutable
-    @Styles.AllParameters
     interface TraceAttributeNameKey {
         String transactionType();
         String traceAttributeName();

@@ -22,17 +22,12 @@ import org.immutables.value.Value;
 
 import org.glowroot.common.util.Versions;
 
-@Value.Immutable
 public abstract class HealthchecksIoConfig {
 
-    @Value.Default
-    @JsonInclude(value = Include.NON_EMPTY)
     public String pingUrl() {
         return "";
     }
 
-    @Value.Derived
-    @JsonIgnore
     public String version() {
         return Versions.getJsonVersion(this);
     }

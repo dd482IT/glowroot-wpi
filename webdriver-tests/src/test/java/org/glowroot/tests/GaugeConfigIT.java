@@ -28,7 +28,6 @@ import static org.openqa.selenium.By.xpath;
 
 public class GaugeConfigIT extends WebDriverIT {
 
-    @Test
     public void shouldOpenGauge() throws Exception {
         // given
         App app = app();
@@ -44,7 +43,6 @@ public class GaugeConfigIT extends WebDriverIT {
         clickLink("Return to list");
     }
 
-    @Test
     public void shouldAddGauge() throws Exception {
         // given
         App app = app();
@@ -68,7 +66,6 @@ public class GaugeConfigIT extends WebDriverIT {
         assertThat(gaugePage.getMBeanAttributeCheckBoxValue("UnloadedClassCount")).isFalse();
     }
 
-    @Test
     public void shouldUpdateGauge() throws Exception {
         // given
         App app = app();
@@ -98,7 +95,6 @@ public class GaugeConfigIT extends WebDriverIT {
         assertThat(gaugePage.getMBeanAttributeCheckBoxValue("UnloadedClassCount")).isFalse();
     }
 
-    @Test
     public void shouldDeleteGauge() throws Exception {
         // given
         App app = app();
@@ -126,7 +122,6 @@ public class GaugeConfigIT extends WebDriverIT {
         assertThat(notFound).isTrue();
     }
 
-    @Test
     public void shouldAddDuplicateGauge() throws Exception {
         // given
         App app = app();

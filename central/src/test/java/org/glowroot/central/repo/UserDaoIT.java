@@ -35,7 +35,6 @@ public class UserDaoIT {
     private static ClusterManager clusterManager;
     private static UserDao userDao;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         SharedSetupRunListener.startCassandra();
         cluster = Clusters.newCluster();
@@ -45,7 +44,6 @@ public class UserDaoIT {
         userDao = new UserDao(session, clusterManager);
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         clusterManager.close();
         session.close();
@@ -53,7 +51,6 @@ public class UserDaoIT {
         SharedSetupRunListener.stopCassandra();
     }
 
-    @Test
     public void shouldRead() throws Exception {
         // given
         userDao.insert(ImmutableUserConfig.builder()

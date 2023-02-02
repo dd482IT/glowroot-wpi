@@ -21,7 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class RateLimitedLoggerTest {
 
-    @Test
     public void testEmpty() {
         // given
         // when
@@ -30,7 +29,6 @@ public class RateLimitedLoggerTest {
         assertThat(args).containsExactly(0);
     }
 
-    @Test
     public void testSingle() {
         // given
         // when
@@ -39,7 +37,6 @@ public class RateLimitedLoggerTest {
         assertThat(args).containsExactly(1, 0);
     }
 
-    @Test
     public void testSingleException() {
         // given
         Exception exception = new Exception();
@@ -50,7 +47,6 @@ public class RateLimitedLoggerTest {
         assertThat(args).containsExactly(0, exception);
     }
 
-    @Test
     public void testMultiple() {
         // given
         // when
@@ -59,7 +55,6 @@ public class RateLimitedLoggerTest {
         assertThat(args).containsExactly(1, 2, 0);
     }
 
-    @Test
     public void testMultipleException() {
         // given
         Exception exception = new Exception();

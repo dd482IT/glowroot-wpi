@@ -50,27 +50,23 @@ public interface RepoAdmin {
     List<CassandraWriteTotals> getCassandraWriteTotalsPerTransactionName(String tableName,
             String agentRollupId, String transactionType, int limit);
 
-    @Value.Immutable
     interface H2Table {
         String name();
         long bytes();
         long rows();
     }
 
-    @Value.Immutable
     interface TraceCounts {
         List<TraceOverallCount> overallCounts();
         List<TraceCount> counts();
     }
 
-    @Value.Immutable
     interface TraceOverallCount {
         String transactionType();
         long count();
         long errorCount();
     }
 
-    @Value.Immutable
     interface TraceCount {
         String transactionType();
         String transactionName();
@@ -78,7 +74,6 @@ public interface RepoAdmin {
         long errorCount();
     }
 
-    @Value.Immutable
     interface CassandraWriteTotals {
         String display();
         long rowsWritten();

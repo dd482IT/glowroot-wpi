@@ -304,7 +304,7 @@ public class ActiveAgentDao implements ActiveAgentRepository {
         }
     }
 
-    private static @Nullable AgentRollup getAgentRollup(List<AgentRollup> agentRollups,
+    private static AgentRollup getAgentRollup(List<AgentRollup> agentRollups,
             String topLevelAgentRollupId) {
         for (AgentRollup agentRollup : agentRollups) {
             if (agentRollup.id().equals(topLevelAgentRollupId)) {

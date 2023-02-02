@@ -35,18 +35,13 @@ import org.glowroot.agent.plugin.api.weaving.Pointcut;
 
 public class ProducerAspect {
 
-    @Pointcut(className = "org.apache.kafka.clients.producer.KafkaProducer", methodName = "send",
-            methodParameterTypes = {"org.apache.kafka.clients.producer.ProducerRecord",
-                    "org.apache.kafka.clients.producer.Callback"},
-            nestingGroup = "kafka-send", timerName = "kafka send")
     public static class SendAdvice {
 
         private static final TimerName timerName = Agent.getTimerName(SendAdvice.class);
 
-        @OnBefore
-        public static @Nullable AsyncTraceEntry onBefore(ThreadContext context,
-                @BindParameter @Nullable ProducerRecord<?, ?> record,
-                @BindParameter ParameterHolder<Callback> callbackHolder) {
+        public static AsyncTraceEntry onBefore(ThreadContext context,
+                ProducerRecord<?, ?> record,
+                ParameterHolder<Callback> callbackHolder) {
             if (record == null) {
                 return null;
             }
@@ -66,16 +61,14 @@ public class ProducerAspect {
             return asyncTraceEntry;
         }
 
-        @OnReturn
-        public static void onReturn(@BindTraveler @Nullable AsyncTraceEntry asyncTraceEntry) {
+        public static void onReturn(AsyncTraceEntry asyncTraceEntry) {
             if (asyncTraceEntry != null) {
                 asyncTraceEntry.stopSyncTimer();
             }
         }
 
-        @OnThrow
-        public static void onThrow(@BindThrowable Throwable t,
-                @BindTraveler @Nullable AsyncTraceEntry asyncTraceEntry) {
+        public static void onThrow(Throwable t,
+                AsyncTraceEntry asyncTraceEntry) {
             if (asyncTraceEntry != null) {
                 asyncTraceEntry.stopSyncTimer();
                 asyncTraceEntry.endWithError(t);

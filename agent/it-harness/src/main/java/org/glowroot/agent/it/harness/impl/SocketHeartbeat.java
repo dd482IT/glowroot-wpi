@@ -32,7 +32,7 @@ class SocketHeartbeat implements Runnable {
 
     private final OutputStream socketOut;
 
-    private volatile @Nullable Thread thread;
+    private volatile Thread thread;
     private volatile boolean closed;
 
     SocketHeartbeat(int port) throws Exception {

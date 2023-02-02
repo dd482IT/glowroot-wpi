@@ -192,7 +192,6 @@ public class Schemas {
         return columnMap.isEmpty();
     }
 
-    @VisibleForTesting
     static ImmutableSet<Index> getIndexes(String tableName, Connection connection)
             throws SQLException {
         ListMultimap</*@Untainted*/ String, /*@Untainted*/ String> indexColumns =
@@ -261,7 +260,7 @@ public class Schemas {
     }
 
     private static ResultSet getMetaDataColumns(Connection connection, String tableName,
-            @Nullable String columnName) throws SQLException {
+            String columnName) throws SQLException {
         DatabaseMetaData metaData = connection.getMetaData();
         return metaData.getColumns(null, null, convert(metaData, tableName),
                 convert(metaData, columnName));
@@ -273,7 +272,7 @@ public class Schemas {
         return metaData.getIndexInfo(null, null, convert(metaData, tableName), false, false);
     }
 
-    private static @PolyNull String convert(DatabaseMetaData metaData, @PolyNull String name)
+    private static String convert(DatabaseMetaData metaData, String name)
             throws SQLException {
         if (name == null) {
             return null;
@@ -289,15 +288,11 @@ public class Schemas {
         VARCHAR, BIGINT, BOOLEAN, DOUBLE, VARBINARY, AUTO_IDENTITY;
     }
 
-    @Value.Immutable
-    @Styles.AllParameters
     public interface Column {
         String name();
         ColumnType type();
     }
 
-    @Value.Immutable
-    @Styles.AllParameters
     public interface Index {
         @Untainted
         String name();

@@ -44,22 +44,18 @@ public class MongoDbPluginIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldCaptureInsert() throws Exception {
         // when
         Trace trace = container.execute(ExecuteInsert.class);
@@ -92,7 +88,6 @@ public class MongoDbPluginIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureCount() throws Exception {
         // when
         Trace trace = container.execute(ExecuteCount.class);
@@ -125,7 +120,6 @@ public class MongoDbPluginIT {
         assertThat(j.hasNext()).isFalse();
     }
 
-    @Test
     public void shouldCaptureFind() throws Exception {
         // when
         Trace trace = container.execute(ExecuteFind.class);

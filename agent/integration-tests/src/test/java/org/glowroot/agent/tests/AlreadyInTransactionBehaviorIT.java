@@ -35,22 +35,18 @@ public class AlreadyInTransactionBehaviorIT {
 
     private static Container container;
 
-    @BeforeAll
     public static void setUp() throws Exception {
         container = Containers.create();
     }
 
-    @AfterAll
     public static void tearDown() throws Exception {
         container.close();
     }
 
-    @AfterEach
     public void afterEachTest() throws Exception {
         container.checkAndReset();
     }
 
-    @Test
     public void shouldCaptureTraceEntry() throws Exception {
         // when
         Trace trace = container.execute(ShouldCaptureTraceEntry.class);
@@ -63,7 +59,6 @@ public class AlreadyInTransactionBehaviorIT {
         assertThat(entries).hasSize(1);
     }
 
-    @Test
     public void shouldCaptureNewTransactionPart1() throws Exception {
         // when
         Trace trace = container.execute(ShouldCaptureNewTransaction.class, "Test harness");
@@ -78,7 +73,6 @@ public class AlreadyInTransactionBehaviorIT {
         assertThat(entries).isEmpty();
     }
 
-    @Test
     public void shouldCaptureNewTransactionPart2() throws Exception {
         // when
         Trace trace = container.execute(ShouldCaptureNewTransaction.class, "Test new");

@@ -202,7 +202,7 @@ public class ConfigRepositoryImpl implements ConfigRepository {
 
     // central supports synthetic monitor configs on rollups
     @Override
-    public @Nullable SyntheticMonitorConfig getSyntheticMonitorConfig(String agentRollupId,
+    public SyntheticMonitorConfig getSyntheticMonitorConfig(String agentRollupId,
             String syntheticMonitorId) throws Exception {
         for (SyntheticMonitorConfig config : getSyntheticMonitorConfigs(agentRollupId)) {
             if (config.getId().equals(syntheticMonitorId)) {
@@ -239,7 +239,7 @@ public class ConfigRepositoryImpl implements ConfigRepository {
 
     // central supports alert configs on rollups
     @Override
-    public @Nullable AlertConfig getAlertConfig(String agentRollupId, String configVersion)
+    public AlertConfig getAlertConfig(String agentRollupId, String configVersion)
             throws Exception {
         for (AlertConfig config : getAlertConfigs(agentRollupId)) {
             if (Versions.getVersion(config).equals(configVersion)) {
@@ -328,7 +328,7 @@ public class ConfigRepositoryImpl implements ConfigRepository {
     }
 
     @Override
-    public @Nullable UserConfig getUserConfigCaseInsensitive(String username) throws Exception {
+    public UserConfig getUserConfigCaseInsensitive(String username) throws Exception {
         return userDao.readCaseInsensitive(username);
     }
 
@@ -343,7 +343,7 @@ public class ConfigRepositoryImpl implements ConfigRepository {
     }
 
     @Override
-    public @Nullable RoleConfig getRoleConfig(String name) throws Exception {
+    public RoleConfig getRoleConfig(String name) throws Exception {
         return roleDao.read(name);
     }
 
@@ -944,7 +944,7 @@ public class ConfigRepositoryImpl implements ConfigRepository {
     }
 
     @Override
-    public void updateAllConfig(String agentId, AgentConfig config, @Nullable String priorVersion)
+    public void updateAllConfig(String agentId, AgentConfig config, String priorVersion)
             throws Exception {
         ConfigValidation.validatePartOne(config);
         agentConfigDao.update(agentId, new AgentConfigUpdater() {
@@ -1129,13 +1129,13 @@ public class ConfigRepositoryImpl implements ConfigRepository {
 
     @Override
     public void updateAllEmbeddedAdminConfig(AllEmbeddedAdminConfig config,
-            @Nullable String priorVersion) {
+            String priorVersion) {
         throw new UnsupportedOperationException();
     }
 
     @Override
     public void updateAllCentralAdminConfig(AllCentralAdminConfig config,
-            @Nullable String priorVersion) throws Exception {
+            String priorVersion) throws Exception {
         validatePagerDutyConfig(config.pagerDuty());
         validateSlackConfig(config.slack());
         if (priorVersion == null) {
@@ -1397,7 +1397,7 @@ public class ConfigRepositoryImpl implements ConfigRepository {
 
     public static class LazySecretKeyImpl implements LazySecretKey {
 
-        private final @Nullable SecretKey secretKey;
+        private final SecretKey secretKey;
 
         public LazySecretKeyImpl(String symmetricEncryptionKey) {
             if (symmetricEncryptionKey.isEmpty()) {
@@ -1410,7 +1410,7 @@ public class ConfigRepositoryImpl implements ConfigRepository {
         }
 
         @Override
-        public @Nullable SecretKey getExisting() throws Exception {
+        public SecretKey getExisting() throws Exception {
             return secretKey;
         }
 

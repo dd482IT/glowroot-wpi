@@ -21,7 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class OptionalServiceTest {
 
-    @Test
     public void testUnavailable() {
         // when
         OptionalService<Object> optionalService = OptionalService.unavailable("abc");

@@ -30,7 +30,7 @@ public class MutableQuery {
 
     private final String type;
     private final String truncatedText;
-    private final @Nullable String fullTextSha1;
+    private final String fullTextSha1;
 
     private double totalDurationNanos;
     private long executionCount;
@@ -38,7 +38,7 @@ public class MutableQuery {
     private boolean hasTotalRows;
     private long totalRows;
 
-    MutableQuery(String type, String truncatedText, @Nullable String fullTextSha1) {
+    MutableQuery(String type, String truncatedText, String fullTextSha1) {
         this.type = type;
         this.truncatedText = truncatedText;
         this.fullTextSha1 = fullTextSha1;
@@ -52,7 +52,7 @@ public class MutableQuery {
         return truncatedText;
     }
 
-    public @Nullable String getFullTextSha1() {
+    public String getFullTextSha1() {
         return fullTextSha1;
     }
 

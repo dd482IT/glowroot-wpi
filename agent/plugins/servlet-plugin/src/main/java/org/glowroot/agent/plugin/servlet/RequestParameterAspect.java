@@ -32,12 +32,9 @@ public class RequestParameterAspect {
 
     private static final Logger logger = Logger.getLogger(RequestParameterAspect.class);
 
-    @Pointcut(className = "javax.servlet.ServletRequest", methodName = "getParameter*",
-            methodParameterTypes = {".."}, nestingGroup = "servlet-inner-call")
     public static class GetParameterAdvice {
-        @OnReturn
-        public static void onReturn(ThreadContext context, @BindReceiver Object req,
-                @BindClassMeta RequestClassMeta requestClassMeta) {
+        public static void onReturn(ThreadContext context, Object req,
+                RequestClassMeta requestClassMeta) {
             if (!(req instanceof HttpServletRequest)) {
                 return;
             }

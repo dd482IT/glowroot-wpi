@@ -19,12 +19,12 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class GlowrootServiceHolder {
 
-    private static volatile @Nullable GlowrootServiceImpl service;
-    private static volatile @Nullable Exception retrievedTooEarlyLocation;
+    private static volatile GlowrootServiceImpl service;
+    private static volatile Exception retrievedTooEarlyLocation;
 
     private GlowrootServiceHolder() {}
 
-    public static @Nullable GlowrootServiceImpl get() {
+    public static GlowrootServiceImpl get() {
         if (service == null) {
             retrievedTooEarlyLocation = new Exception();
             return null;
@@ -37,7 +37,7 @@ public class GlowrootServiceHolder {
         GlowrootServiceHolder.service = service;
     }
 
-    public static @Nullable Exception getRetrievedTooEarlyLocation() {
+    public static Exception getRetrievedTooEarlyLocation() {
         return retrievedTooEarlyLocation;
     }
 }
