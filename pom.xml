@@ -850,11 +850,12 @@
             <configuration>
               <source>1.8</source>
               <target>1.8</target>
-              <maxmem>512m</maxmem>
+              <maxmem>8196m</maxmem>
               <annotationProcessors>
+              <!--
                 <annotationProcessor>
                   org.immutables.value.internal.$processor$.$Processor
-                </annotationProcessor>
+                </annotationProcessor> -->
                 <annotationProcessor>
                   org.checkerframework.checker.nullness.NullnessChecker
                 </annotationProcessor>
@@ -868,6 +869,9 @@
                   interpreted from each module directory -->
                 <arg>-Astubs=${checker.stubs.dir}</arg>
                 <arg>-AskipDefs=^org\.glowroot\.agent\.embedded\.repo\.proto\.|^org\.glowroot\.agent\.it\.harness\.grpc\.|^org\.glowroot\.central\.repo\.proto\.</arg>
+                <arg>-Ainfer=ajava</arg>
+                <arg>-Awarns</arg>
+                <arg>-Aajava=/tmp/WPITEMP-glowroot</arg>
               </compilerArgs>
             </configuration>
           </plugin>
