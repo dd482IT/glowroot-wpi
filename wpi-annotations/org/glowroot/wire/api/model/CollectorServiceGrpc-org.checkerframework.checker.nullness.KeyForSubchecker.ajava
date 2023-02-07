@@ -1,0 +1,479 @@
+package org.glowroot.wire.api.model;
+
+import static io.grpc.MethodDescriptor.generateFullMethodName;
+
+/**
+ */
+@org.checkerframework.framework.qual.AnnotatedFor("org.checkerframework.checker.nullness.KeyForSubchecker")
+public final class CollectorServiceGrpc {
+
+    @org.checkerframework.dataflow.qual.SideEffectFree
+    private CollectorServiceGrpc() {
+    }
+
+    public static final  String SERVICE_NAME = "org_glowroot_wire_api_model.CollectorService";
+
+    // Static method descriptors that strictly reflect the proto.
+    private static volatile io.grpc. MethodDescriptor<org.glowroot.wire.api.model.CollectorServiceOuterClass.InitMessage, org.glowroot.wire.api.model.CollectorServiceOuterClass.InitResponse> getCollectInitMethod;
+
+    public static io.grpc. MethodDescriptor<org.glowroot.wire.api.model.CollectorServiceOuterClass.InitMessage, org.glowroot.wire.api.model.CollectorServiceOuterClass.InitResponse> getCollectInitMethod() {
+        io.grpc.MethodDescriptor<org.glowroot.wire.api.model.CollectorServiceOuterClass.InitMessage, org.glowroot.wire.api.model.CollectorServiceOuterClass.InitResponse> getCollectInitMethod;
+        if ((getCollectInitMethod = CollectorServiceGrpc.getCollectInitMethod) == null) {
+            synchronized (CollectorServiceGrpc.class) {
+                if ((getCollectInitMethod = CollectorServiceGrpc.getCollectInitMethod) == null) {
+                    CollectorServiceGrpc.getCollectInitMethod = getCollectInitMethod = io.grpc.MethodDescriptor.<org.glowroot.wire.api.model.CollectorServiceOuterClass.InitMessage, org.glowroot.wire.api.model.CollectorServiceOuterClass.InitResponse>newBuilder().setType(io.grpc.MethodDescriptor.MethodType.UNARY).setFullMethodName(generateFullMethodName(SERVICE_NAME, "collectInit")).setSampledToLocalTracing(true).setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(org.glowroot.wire.api.model.CollectorServiceOuterClass.InitMessage.getDefaultInstance())).setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(org.glowroot.wire.api.model.CollectorServiceOuterClass.InitResponse.getDefaultInstance())).setSchemaDescriptor(new CollectorServiceMethodDescriptorSupplier("collectInit")).build();
+                }
+            }
+        }
+        return getCollectInitMethod;
+    }
+
+    private static volatile io.grpc. MethodDescriptor<org.glowroot.wire.api.model.CollectorServiceOuterClass.OldAggregateMessage, org.glowroot.wire.api.model.CollectorServiceOuterClass.AggregateResponseMessage> getCollectAggregatesMethod;
+
+    public static io.grpc. MethodDescriptor<org.glowroot.wire.api.model.CollectorServiceOuterClass.OldAggregateMessage, org.glowroot.wire.api.model.CollectorServiceOuterClass.AggregateResponseMessage> getCollectAggregatesMethod() {
+        io.grpc.MethodDescriptor<org.glowroot.wire.api.model.CollectorServiceOuterClass.OldAggregateMessage, org.glowroot.wire.api.model.CollectorServiceOuterClass.AggregateResponseMessage> getCollectAggregatesMethod;
+        if ((getCollectAggregatesMethod = CollectorServiceGrpc.getCollectAggregatesMethod) == null) {
+            synchronized (CollectorServiceGrpc.class) {
+                if ((getCollectAggregatesMethod = CollectorServiceGrpc.getCollectAggregatesMethod) == null) {
+                    CollectorServiceGrpc.getCollectAggregatesMethod = getCollectAggregatesMethod = io.grpc.MethodDescriptor.<org.glowroot.wire.api.model.CollectorServiceOuterClass.OldAggregateMessage, org.glowroot.wire.api.model.CollectorServiceOuterClass.AggregateResponseMessage>newBuilder().setType(io.grpc.MethodDescriptor.MethodType.UNARY).setFullMethodName(generateFullMethodName(SERVICE_NAME, "collectAggregates")).setSampledToLocalTracing(true).setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(org.glowroot.wire.api.model.CollectorServiceOuterClass.OldAggregateMessage.getDefaultInstance())).setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(org.glowroot.wire.api.model.CollectorServiceOuterClass.AggregateResponseMessage.getDefaultInstance())).setSchemaDescriptor(new CollectorServiceMethodDescriptorSupplier("collectAggregates")).build();
+                }
+            }
+        }
+        return getCollectAggregatesMethod;
+    }
+
+    private static volatile io.grpc. MethodDescriptor<org.glowroot.wire.api.model.CollectorServiceOuterClass.AggregateStreamMessage, org.glowroot.wire.api.model.CollectorServiceOuterClass.AggregateResponseMessage> getCollectAggregateStreamMethod;
+
+    public static io.grpc. MethodDescriptor<org.glowroot.wire.api.model.CollectorServiceOuterClass.AggregateStreamMessage, org.glowroot.wire.api.model.CollectorServiceOuterClass.AggregateResponseMessage> getCollectAggregateStreamMethod() {
+        io.grpc.MethodDescriptor<org.glowroot.wire.api.model.CollectorServiceOuterClass.AggregateStreamMessage, org.glowroot.wire.api.model.CollectorServiceOuterClass.AggregateResponseMessage> getCollectAggregateStreamMethod;
+        if ((getCollectAggregateStreamMethod = CollectorServiceGrpc.getCollectAggregateStreamMethod) == null) {
+            synchronized (CollectorServiceGrpc.class) {
+                if ((getCollectAggregateStreamMethod = CollectorServiceGrpc.getCollectAggregateStreamMethod) == null) {
+                    CollectorServiceGrpc.getCollectAggregateStreamMethod = getCollectAggregateStreamMethod = io.grpc.MethodDescriptor.<org.glowroot.wire.api.model.CollectorServiceOuterClass.AggregateStreamMessage, org.glowroot.wire.api.model.CollectorServiceOuterClass.AggregateResponseMessage>newBuilder().setType(io.grpc.MethodDescriptor.MethodType.CLIENT_STREAMING).setFullMethodName(generateFullMethodName(SERVICE_NAME, "collectAggregateStream")).setSampledToLocalTracing(true).setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(org.glowroot.wire.api.model.CollectorServiceOuterClass.AggregateStreamMessage.getDefaultInstance())).setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(org.glowroot.wire.api.model.CollectorServiceOuterClass.AggregateResponseMessage.getDefaultInstance())).setSchemaDescriptor(new CollectorServiceMethodDescriptorSupplier("collectAggregateStream")).build();
+                }
+            }
+        }
+        return getCollectAggregateStreamMethod;
+    }
+
+    private static volatile io.grpc. MethodDescriptor<org.glowroot.wire.api.model.CollectorServiceOuterClass.GaugeValueMessage, org.glowroot.wire.api.model.CollectorServiceOuterClass.GaugeValueResponseMessage> getCollectGaugeValuesMethod;
+
+    public static io.grpc. MethodDescriptor<org.glowroot.wire.api.model.CollectorServiceOuterClass.GaugeValueMessage, org.glowroot.wire.api.model.CollectorServiceOuterClass.GaugeValueResponseMessage> getCollectGaugeValuesMethod() {
+        io.grpc.MethodDescriptor<org.glowroot.wire.api.model.CollectorServiceOuterClass.GaugeValueMessage, org.glowroot.wire.api.model.CollectorServiceOuterClass.GaugeValueResponseMessage> getCollectGaugeValuesMethod;
+        if ((getCollectGaugeValuesMethod = CollectorServiceGrpc.getCollectGaugeValuesMethod) == null) {
+            synchronized (CollectorServiceGrpc.class) {
+                if ((getCollectGaugeValuesMethod = CollectorServiceGrpc.getCollectGaugeValuesMethod) == null) {
+                    CollectorServiceGrpc.getCollectGaugeValuesMethod = getCollectGaugeValuesMethod = io.grpc.MethodDescriptor.<org.glowroot.wire.api.model.CollectorServiceOuterClass.GaugeValueMessage, org.glowroot.wire.api.model.CollectorServiceOuterClass.GaugeValueResponseMessage>newBuilder().setType(io.grpc.MethodDescriptor.MethodType.UNARY).setFullMethodName(generateFullMethodName(SERVICE_NAME, "collectGaugeValues")).setSampledToLocalTracing(true).setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(org.glowroot.wire.api.model.CollectorServiceOuterClass.GaugeValueMessage.getDefaultInstance())).setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(org.glowroot.wire.api.model.CollectorServiceOuterClass.GaugeValueResponseMessage.getDefaultInstance())).setSchemaDescriptor(new CollectorServiceMethodDescriptorSupplier("collectGaugeValues")).build();
+                }
+            }
+        }
+        return getCollectGaugeValuesMethod;
+    }
+
+    private static volatile io.grpc. MethodDescriptor<org.glowroot.wire.api.model.CollectorServiceOuterClass.OldTraceMessage, org.glowroot.wire.api.model.CollectorServiceOuterClass.EmptyMessage> getCollectTraceMethod;
+
+    public static io.grpc. MethodDescriptor<org.glowroot.wire.api.model.CollectorServiceOuterClass.OldTraceMessage, org.glowroot.wire.api.model.CollectorServiceOuterClass.EmptyMessage> getCollectTraceMethod() {
+        io.grpc.MethodDescriptor<org.glowroot.wire.api.model.CollectorServiceOuterClass.OldTraceMessage, org.glowroot.wire.api.model.CollectorServiceOuterClass.EmptyMessage> getCollectTraceMethod;
+        if ((getCollectTraceMethod = CollectorServiceGrpc.getCollectTraceMethod) == null) {
+            synchronized (CollectorServiceGrpc.class) {
+                if ((getCollectTraceMethod = CollectorServiceGrpc.getCollectTraceMethod) == null) {
+                    CollectorServiceGrpc.getCollectTraceMethod = getCollectTraceMethod = io.grpc.MethodDescriptor.<org.glowroot.wire.api.model.CollectorServiceOuterClass.OldTraceMessage, org.glowroot.wire.api.model.CollectorServiceOuterClass.EmptyMessage>newBuilder().setType(io.grpc.MethodDescriptor.MethodType.UNARY).setFullMethodName(generateFullMethodName(SERVICE_NAME, "collectTrace")).setSampledToLocalTracing(true).setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(org.glowroot.wire.api.model.CollectorServiceOuterClass.OldTraceMessage.getDefaultInstance())).setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(org.glowroot.wire.api.model.CollectorServiceOuterClass.EmptyMessage.getDefaultInstance())).setSchemaDescriptor(new CollectorServiceMethodDescriptorSupplier("collectTrace")).build();
+                }
+            }
+        }
+        return getCollectTraceMethod;
+    }
+
+    private static volatile io.grpc. MethodDescriptor<org.glowroot.wire.api.model.CollectorServiceOuterClass.TraceStreamMessage, org.glowroot.wire.api.model.CollectorServiceOuterClass.EmptyMessage> getCollectTraceStreamMethod;
+
+    public static io.grpc. MethodDescriptor<org.glowroot.wire.api.model.CollectorServiceOuterClass.TraceStreamMessage, org.glowroot.wire.api.model.CollectorServiceOuterClass.EmptyMessage> getCollectTraceStreamMethod() {
+        io.grpc.MethodDescriptor<org.glowroot.wire.api.model.CollectorServiceOuterClass.TraceStreamMessage, org.glowroot.wire.api.model.CollectorServiceOuterClass.EmptyMessage> getCollectTraceStreamMethod;
+        if ((getCollectTraceStreamMethod = CollectorServiceGrpc.getCollectTraceStreamMethod) == null) {
+            synchronized (CollectorServiceGrpc.class) {
+                if ((getCollectTraceStreamMethod = CollectorServiceGrpc.getCollectTraceStreamMethod) == null) {
+                    CollectorServiceGrpc.getCollectTraceStreamMethod = getCollectTraceStreamMethod = io.grpc.MethodDescriptor.<org.glowroot.wire.api.model.CollectorServiceOuterClass.TraceStreamMessage, org.glowroot.wire.api.model.CollectorServiceOuterClass.EmptyMessage>newBuilder().setType(io.grpc.MethodDescriptor.MethodType.CLIENT_STREAMING).setFullMethodName(generateFullMethodName(SERVICE_NAME, "collectTraceStream")).setSampledToLocalTracing(true).setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(org.glowroot.wire.api.model.CollectorServiceOuterClass.TraceStreamMessage.getDefaultInstance())).setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(org.glowroot.wire.api.model.CollectorServiceOuterClass.EmptyMessage.getDefaultInstance())).setSchemaDescriptor(new CollectorServiceMethodDescriptorSupplier("collectTraceStream")).build();
+                }
+            }
+        }
+        return getCollectTraceStreamMethod;
+    }
+
+    private static volatile io.grpc. MethodDescriptor<org.glowroot.wire.api.model.CollectorServiceOuterClass.LogMessage, org.glowroot.wire.api.model.CollectorServiceOuterClass.EmptyMessage> getLogMethod;
+
+    public static io.grpc. MethodDescriptor<org.glowroot.wire.api.model.CollectorServiceOuterClass.LogMessage, org.glowroot.wire.api.model.CollectorServiceOuterClass.EmptyMessage> getLogMethod() {
+        io.grpc.MethodDescriptor<org.glowroot.wire.api.model.CollectorServiceOuterClass.LogMessage, org.glowroot.wire.api.model.CollectorServiceOuterClass.EmptyMessage> getLogMethod;
+        if ((getLogMethod = CollectorServiceGrpc.getLogMethod) == null) {
+            synchronized (CollectorServiceGrpc.class) {
+                if ((getLogMethod = CollectorServiceGrpc.getLogMethod) == null) {
+                    CollectorServiceGrpc.getLogMethod = getLogMethod = io.grpc.MethodDescriptor.<org.glowroot.wire.api.model.CollectorServiceOuterClass.LogMessage, org.glowroot.wire.api.model.CollectorServiceOuterClass.EmptyMessage>newBuilder().setType(io.grpc.MethodDescriptor.MethodType.UNARY).setFullMethodName(generateFullMethodName(SERVICE_NAME, "log")).setSampledToLocalTracing(true).setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(org.glowroot.wire.api.model.CollectorServiceOuterClass.LogMessage.getDefaultInstance())).setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(org.glowroot.wire.api.model.CollectorServiceOuterClass.EmptyMessage.getDefaultInstance())).setSchemaDescriptor(new CollectorServiceMethodDescriptorSupplier("log")).build();
+                }
+            }
+        }
+        return getLogMethod;
+    }
+
+    /**
+     * Creates a new async stub that supports all call types for the service
+     */
+    public static  CollectorServiceStub newStub(io.grpc.Channel channel) {
+        io.grpc.stub.AbstractStub.StubFactory<CollectorServiceStub> factory = new io.grpc.stub.AbstractStub.StubFactory<CollectorServiceStub>() {
+
+            public  CollectorServiceStub newStub(io.grpc. Channel channel, io.grpc. CallOptions callOptions) {
+                return new CollectorServiceStub(channel, callOptions);
+            }
+        };
+        return CollectorServiceStub.newStub(factory, channel);
+    }
+
+    /**
+     * Creates a new blocking-style stub that supports unary and streaming output calls on the service
+     */
+    public static  CollectorServiceBlockingStub newBlockingStub(io.grpc.Channel channel) {
+        io.grpc.stub.AbstractStub.StubFactory<CollectorServiceBlockingStub> factory = new io.grpc.stub.AbstractStub.StubFactory<CollectorServiceBlockingStub>() {
+
+            public  CollectorServiceBlockingStub newStub(io.grpc. Channel channel, io.grpc. CallOptions callOptions) {
+                return new CollectorServiceBlockingStub(channel, callOptions);
+            }
+        };
+        return CollectorServiceBlockingStub.newStub(factory, channel);
+    }
+
+    /**
+     * Creates a new ListenableFuture-style stub that supports unary calls on the service
+     */
+    public static  CollectorServiceFutureStub newFutureStub(io.grpc.Channel channel) {
+        io.grpc.stub.AbstractStub.StubFactory<CollectorServiceFutureStub> factory = new io.grpc.stub.AbstractStub.StubFactory<CollectorServiceFutureStub>() {
+
+            public  CollectorServiceFutureStub newStub(io.grpc. Channel channel, io.grpc. CallOptions callOptions) {
+                return new CollectorServiceFutureStub(channel, callOptions);
+            }
+        };
+        return CollectorServiceFutureStub.newStub(factory, channel);
+    }
+
+    /**
+     */
+    public static abstract class CollectorServiceImplBase implements io.grpc.BindableService {
+
+        /**
+         */
+        public void collectInit( CollectorServiceImplBase this, org.glowroot.wire.api.model.CollectorServiceOuterClass. InitMessage request, io.grpc.stub. StreamObserver<org.glowroot.wire.api.model.CollectorServiceOuterClass.InitResponse> responseObserver) {
+            io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getCollectInitMethod(), responseObserver);
+        }
+
+        /**
+         * <pre>
+         * deprecated in 0.9.5, replaced by collectAggregateStream
+         * </pre>
+         */
+        public void collectAggregates( CollectorServiceImplBase this, org.glowroot.wire.api.model.CollectorServiceOuterClass. OldAggregateMessage request, io.grpc.stub. StreamObserver<org.glowroot.wire.api.model.CollectorServiceOuterClass.AggregateResponseMessage> responseObserver) {
+            io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getCollectAggregatesMethod(), responseObserver);
+        }
+
+        /**
+         */
+        public io.grpc.stub. StreamObserver<org.glowroot.wire.api.model.CollectorServiceOuterClass.AggregateStreamMessage> collectAggregateStream( CollectorServiceImplBase this, io.grpc.stub. StreamObserver<org.glowroot.wire.api.model.CollectorServiceOuterClass.AggregateResponseMessage> responseObserver) {
+            return io.grpc.stub.ServerCalls.asyncUnimplementedStreamingCall(getCollectAggregateStreamMethod(), responseObserver);
+        }
+
+        /**
+         */
+        public void collectGaugeValues( CollectorServiceImplBase this, org.glowroot.wire.api.model.CollectorServiceOuterClass. GaugeValueMessage request, io.grpc.stub. StreamObserver<org.glowroot.wire.api.model.CollectorServiceOuterClass.GaugeValueResponseMessage> responseObserver) {
+            io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getCollectGaugeValuesMethod(), responseObserver);
+        }
+
+        /**
+         * <pre>
+         * deprecated in 0.9.5, replaced by collectTraceStream
+         * </pre>
+         */
+        public void collectTrace( CollectorServiceImplBase this, org.glowroot.wire.api.model.CollectorServiceOuterClass. OldTraceMessage request, io.grpc.stub. StreamObserver<org.glowroot.wire.api.model.CollectorServiceOuterClass.EmptyMessage> responseObserver) {
+            io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getCollectTraceMethod(), responseObserver);
+        }
+
+        /**
+         */
+        public io.grpc.stub. StreamObserver<org.glowroot.wire.api.model.CollectorServiceOuterClass.TraceStreamMessage> collectTraceStream( CollectorServiceImplBase this, io.grpc.stub. StreamObserver<org.glowroot.wire.api.model.CollectorServiceOuterClass.EmptyMessage> responseObserver) {
+            return io.grpc.stub.ServerCalls.asyncUnimplementedStreamingCall(getCollectTraceStreamMethod(), responseObserver);
+        }
+
+        /**
+         */
+        public void log( CollectorServiceImplBase this, org.glowroot.wire.api.model.CollectorServiceOuterClass. LogMessage request, io.grpc.stub. StreamObserver<org.glowroot.wire.api.model.CollectorServiceOuterClass.EmptyMessage> responseObserver) {
+            io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getLogMethod(), responseObserver);
+        }
+
+        public final io.grpc. ServerServiceDefinition bindService( CollectorServiceImplBase this) {
+            return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor()).addMethod(getCollectInitMethod(), io.grpc.stub.ServerCalls.asyncUnaryCall(new MethodHandlers<org.glowroot.wire.api.model.CollectorServiceOuterClass.InitMessage, org.glowroot.wire.api.model.CollectorServiceOuterClass.InitResponse>(this, METHODID_COLLECT_INIT))).addMethod(getCollectAggregatesMethod(), io.grpc.stub.ServerCalls.asyncUnaryCall(new MethodHandlers<org.glowroot.wire.api.model.CollectorServiceOuterClass.OldAggregateMessage, org.glowroot.wire.api.model.CollectorServiceOuterClass.AggregateResponseMessage>(this, METHODID_COLLECT_AGGREGATES))).addMethod(getCollectAggregateStreamMethod(), io.grpc.stub.ServerCalls.asyncClientStreamingCall(new MethodHandlers<org.glowroot.wire.api.model.CollectorServiceOuterClass.AggregateStreamMessage, org.glowroot.wire.api.model.CollectorServiceOuterClass.AggregateResponseMessage>(this, METHODID_COLLECT_AGGREGATE_STREAM))).addMethod(getCollectGaugeValuesMethod(), io.grpc.stub.ServerCalls.asyncUnaryCall(new MethodHandlers<org.glowroot.wire.api.model.CollectorServiceOuterClass.GaugeValueMessage, org.glowroot.wire.api.model.CollectorServiceOuterClass.GaugeValueResponseMessage>(this, METHODID_COLLECT_GAUGE_VALUES))).addMethod(getCollectTraceMethod(), io.grpc.stub.ServerCalls.asyncUnaryCall(new MethodHandlers<org.glowroot.wire.api.model.CollectorServiceOuterClass.OldTraceMessage, org.glowroot.wire.api.model.CollectorServiceOuterClass.EmptyMessage>(this, METHODID_COLLECT_TRACE))).addMethod(getCollectTraceStreamMethod(), io.grpc.stub.ServerCalls.asyncClientStreamingCall(new MethodHandlers<org.glowroot.wire.api.model.CollectorServiceOuterClass.TraceStreamMessage, org.glowroot.wire.api.model.CollectorServiceOuterClass.EmptyMessage>(this, METHODID_COLLECT_TRACE_STREAM))).addMethod(getLogMethod(), io.grpc.stub.ServerCalls.asyncUnaryCall(new MethodHandlers<org.glowroot.wire.api.model.CollectorServiceOuterClass.LogMessage, org.glowroot.wire.api.model.CollectorServiceOuterClass.EmptyMessage>(this, METHODID_LOG))).build();
+        }
+    }
+
+    /**
+     */
+    public static final class CollectorServiceStub extends io.grpc.stub.AbstractAsyncStub<CollectorServiceStub> {
+
+        private CollectorServiceStub(io.grpc. Channel channel, io.grpc. CallOptions callOptions) {
+            super(channel, callOptions);
+        }
+
+        protected  CollectorServiceStub build( CollectorServiceStub this, io.grpc. Channel channel, io.grpc. CallOptions callOptions) {
+            return new CollectorServiceStub(channel, callOptions);
+        }
+
+        /**
+         */
+        public void collectInit(org.glowroot.wire.api.model.CollectorServiceOuterClass.InitMessage request, io.grpc.stub.StreamObserver<org.glowroot.wire.api.model.CollectorServiceOuterClass.InitResponse> responseObserver) {
+            io.grpc.stub.ClientCalls.asyncUnaryCall(getChannel().newCall(getCollectInitMethod(), getCallOptions()), request, responseObserver);
+        }
+
+        /**
+         * <pre>
+         * deprecated in 0.9.5, replaced by collectAggregateStream
+         * </pre>
+         */
+        public void collectAggregates(org.glowroot.wire.api.model.CollectorServiceOuterClass.OldAggregateMessage request, io.grpc.stub.StreamObserver<org.glowroot.wire.api.model.CollectorServiceOuterClass.AggregateResponseMessage> responseObserver) {
+            io.grpc.stub.ClientCalls.asyncUnaryCall(getChannel().newCall(getCollectAggregatesMethod(), getCallOptions()), request, responseObserver);
+        }
+
+        /**
+         */
+        public io.grpc.stub. StreamObserver<org.glowroot.wire.api.model.CollectorServiceOuterClass.AggregateStreamMessage> collectAggregateStream(io.grpc.stub.StreamObserver<org.glowroot.wire.api.model.CollectorServiceOuterClass.AggregateResponseMessage> responseObserver) {
+            return io.grpc.stub.ClientCalls.asyncClientStreamingCall(getChannel().newCall(getCollectAggregateStreamMethod(), getCallOptions()), responseObserver);
+        }
+
+        /**
+         */
+        public void collectGaugeValues(org.glowroot.wire.api.model.CollectorServiceOuterClass.GaugeValueMessage request, io.grpc.stub.StreamObserver<org.glowroot.wire.api.model.CollectorServiceOuterClass.GaugeValueResponseMessage> responseObserver) {
+            io.grpc.stub.ClientCalls.asyncUnaryCall(getChannel().newCall(getCollectGaugeValuesMethod(), getCallOptions()), request, responseObserver);
+        }
+
+        /**
+         * <pre>
+         * deprecated in 0.9.5, replaced by collectTraceStream
+         * </pre>
+         */
+        public void collectTrace(org.glowroot.wire.api.model.CollectorServiceOuterClass.OldTraceMessage request, io.grpc.stub.StreamObserver<org.glowroot.wire.api.model.CollectorServiceOuterClass.EmptyMessage> responseObserver) {
+            io.grpc.stub.ClientCalls.asyncUnaryCall(getChannel().newCall(getCollectTraceMethod(), getCallOptions()), request, responseObserver);
+        }
+
+        /**
+         */
+        public io.grpc.stub. StreamObserver<org.glowroot.wire.api.model.CollectorServiceOuterClass.TraceStreamMessage> collectTraceStream(io.grpc.stub.StreamObserver<org.glowroot.wire.api.model.CollectorServiceOuterClass.EmptyMessage> responseObserver) {
+            return io.grpc.stub.ClientCalls.asyncClientStreamingCall(getChannel().newCall(getCollectTraceStreamMethod(), getCallOptions()), responseObserver);
+        }
+
+        /**
+         */
+        public void log(org.glowroot.wire.api.model.CollectorServiceOuterClass.LogMessage request, io.grpc.stub.StreamObserver<org.glowroot.wire.api.model.CollectorServiceOuterClass.EmptyMessage> responseObserver) {
+            io.grpc.stub.ClientCalls.asyncUnaryCall(getChannel().newCall(getLogMethod(), getCallOptions()), request, responseObserver);
+        }
+    }
+
+    /**
+     */
+    public static final class CollectorServiceBlockingStub extends io.grpc.stub.AbstractBlockingStub<CollectorServiceBlockingStub> {
+
+        private CollectorServiceBlockingStub(io.grpc. Channel channel, io.grpc. CallOptions callOptions) {
+            super(channel, callOptions);
+        }
+
+        protected  CollectorServiceBlockingStub build( CollectorServiceBlockingStub this, io.grpc. Channel channel, io.grpc. CallOptions callOptions) {
+            return new CollectorServiceBlockingStub(channel, callOptions);
+        }
+
+        /**
+         */
+        public org.glowroot.wire.api.model.CollectorServiceOuterClass. InitResponse collectInit(org.glowroot.wire.api.model.CollectorServiceOuterClass.InitMessage request) {
+            return io.grpc.stub.ClientCalls.blockingUnaryCall(getChannel(), getCollectInitMethod(), getCallOptions(), request);
+        }
+
+        /**
+         * <pre>
+         * deprecated in 0.9.5, replaced by collectAggregateStream
+         * </pre>
+         */
+        public org.glowroot.wire.api.model.CollectorServiceOuterClass. AggregateResponseMessage collectAggregates(org.glowroot.wire.api.model.CollectorServiceOuterClass.OldAggregateMessage request) {
+            return io.grpc.stub.ClientCalls.blockingUnaryCall(getChannel(), getCollectAggregatesMethod(), getCallOptions(), request);
+        }
+
+        /**
+         */
+        public org.glowroot.wire.api.model.CollectorServiceOuterClass. GaugeValueResponseMessage collectGaugeValues(org.glowroot.wire.api.model.CollectorServiceOuterClass.GaugeValueMessage request) {
+            return io.grpc.stub.ClientCalls.blockingUnaryCall(getChannel(), getCollectGaugeValuesMethod(), getCallOptions(), request);
+        }
+
+        /**
+         * <pre>
+         * deprecated in 0.9.5, replaced by collectTraceStream
+         * </pre>
+         */
+        public org.glowroot.wire.api.model.CollectorServiceOuterClass. EmptyMessage collectTrace(org.glowroot.wire.api.model.CollectorServiceOuterClass.OldTraceMessage request) {
+            return io.grpc.stub.ClientCalls.blockingUnaryCall(getChannel(), getCollectTraceMethod(), getCallOptions(), request);
+        }
+
+        /**
+         */
+        public org.glowroot.wire.api.model.CollectorServiceOuterClass. EmptyMessage log(org.glowroot.wire.api.model.CollectorServiceOuterClass.LogMessage request) {
+            return io.grpc.stub.ClientCalls.blockingUnaryCall(getChannel(), getLogMethod(), getCallOptions(), request);
+        }
+    }
+
+    /**
+     */
+    public static final class CollectorServiceFutureStub extends io.grpc.stub.AbstractFutureStub<CollectorServiceFutureStub> {
+
+        private CollectorServiceFutureStub(io.grpc. Channel channel, io.grpc. CallOptions callOptions) {
+            super(channel, callOptions);
+        }
+
+        protected  CollectorServiceFutureStub build( CollectorServiceFutureStub this, io.grpc. Channel channel, io.grpc. CallOptions callOptions) {
+            return new CollectorServiceFutureStub(channel, callOptions);
+        }
+
+        /**
+         */
+        public com.google.common.util.concurrent. ListenableFuture<org.glowroot.wire.api.model.CollectorServiceOuterClass.InitResponse> collectInit(org.glowroot.wire.api.model.CollectorServiceOuterClass.InitMessage request) {
+            return io.grpc.stub.ClientCalls.futureUnaryCall(getChannel().newCall(getCollectInitMethod(), getCallOptions()), request);
+        }
+
+        /**
+         * <pre>
+         * deprecated in 0.9.5, replaced by collectAggregateStream
+         * </pre>
+         */
+        public com.google.common.util.concurrent. ListenableFuture<org.glowroot.wire.api.model.CollectorServiceOuterClass.AggregateResponseMessage> collectAggregates(org.glowroot.wire.api.model.CollectorServiceOuterClass.OldAggregateMessage request) {
+            return io.grpc.stub.ClientCalls.futureUnaryCall(getChannel().newCall(getCollectAggregatesMethod(), getCallOptions()), request);
+        }
+
+        /**
+         */
+        public com.google.common.util.concurrent. ListenableFuture<org.glowroot.wire.api.model.CollectorServiceOuterClass.GaugeValueResponseMessage> collectGaugeValues(org.glowroot.wire.api.model.CollectorServiceOuterClass.GaugeValueMessage request) {
+            return io.grpc.stub.ClientCalls.futureUnaryCall(getChannel().newCall(getCollectGaugeValuesMethod(), getCallOptions()), request);
+        }
+
+        /**
+         * <pre>
+         * deprecated in 0.9.5, replaced by collectTraceStream
+         * </pre>
+         */
+        public com.google.common.util.concurrent. ListenableFuture<org.glowroot.wire.api.model.CollectorServiceOuterClass.EmptyMessage> collectTrace(org.glowroot.wire.api.model.CollectorServiceOuterClass.OldTraceMessage request) {
+            return io.grpc.stub.ClientCalls.futureUnaryCall(getChannel().newCall(getCollectTraceMethod(), getCallOptions()), request);
+        }
+
+        /**
+         */
+        public com.google.common.util.concurrent. ListenableFuture<org.glowroot.wire.api.model.CollectorServiceOuterClass.EmptyMessage> log(org.glowroot.wire.api.model.CollectorServiceOuterClass.LogMessage request) {
+            return io.grpc.stub.ClientCalls.futureUnaryCall(getChannel().newCall(getLogMethod(), getCallOptions()), request);
+        }
+    }
+
+    private static final   int METHODID_COLLECT_INIT = 0;
+
+    private static final   int METHODID_COLLECT_AGGREGATES = 1;
+
+    private static final   int METHODID_COLLECT_GAUGE_VALUES = 2;
+
+    private static final   int METHODID_COLLECT_TRACE = 3;
+
+    private static final   int METHODID_LOG = 4;
+
+    private static final   int METHODID_COLLECT_AGGREGATE_STREAM = 5;
+
+    private static final   int METHODID_COLLECT_TRACE_STREAM = 6;
+
+    private static final class MethodHandlers<Req, Resp> implements io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>, io.grpc.stub.ServerCalls.ServerStreamingMethod<Req, Resp>, io.grpc.stub.ServerCalls.ClientStreamingMethod<Req, Resp>, io.grpc.stub.ServerCalls.BidiStreamingMethod<Req, Resp> {
+
+        private final  CollectorServiceImplBase serviceImpl;
+
+        private final   int methodId;
+
+        MethodHandlers( CollectorServiceImplBase serviceImpl,   int methodId) {
+            this.serviceImpl = serviceImpl;
+            this.methodId = methodId;
+        }
+
+        public void invoke( MethodHandlers<Req, Resp> this, Req request, io.grpc.stub. StreamObserver<Resp> responseObserver) {
+            switch(methodId) {
+                case METHODID_COLLECT_INIT:
+                    serviceImpl.collectInit((org.glowroot.wire.api.model.CollectorServiceOuterClass.InitMessage) request, (io.grpc.stub.StreamObserver<org.glowroot.wire.api.model.CollectorServiceOuterClass.InitResponse>) responseObserver);
+                    break;
+                case METHODID_COLLECT_AGGREGATES:
+                    serviceImpl.collectAggregates((org.glowroot.wire.api.model.CollectorServiceOuterClass.OldAggregateMessage) request, (io.grpc.stub.StreamObserver<org.glowroot.wire.api.model.CollectorServiceOuterClass.AggregateResponseMessage>) responseObserver);
+                    break;
+                case METHODID_COLLECT_GAUGE_VALUES:
+                    serviceImpl.collectGaugeValues((org.glowroot.wire.api.model.CollectorServiceOuterClass.GaugeValueMessage) request, (io.grpc.stub.StreamObserver<org.glowroot.wire.api.model.CollectorServiceOuterClass.GaugeValueResponseMessage>) responseObserver);
+                    break;
+                case METHODID_COLLECT_TRACE:
+                    serviceImpl.collectTrace((org.glowroot.wire.api.model.CollectorServiceOuterClass.OldTraceMessage) request, (io.grpc.stub.StreamObserver<org.glowroot.wire.api.model.CollectorServiceOuterClass.EmptyMessage>) responseObserver);
+                    break;
+                case METHODID_LOG:
+                    serviceImpl.log((org.glowroot.wire.api.model.CollectorServiceOuterClass.LogMessage) request, (io.grpc.stub.StreamObserver<org.glowroot.wire.api.model.CollectorServiceOuterClass.EmptyMessage>) responseObserver);
+                    break;
+                default:
+                    throw new AssertionError();
+            }
+        }
+
+        public io.grpc.stub. StreamObserver<Req> invoke( MethodHandlers<Req, Resp> this, io.grpc.stub. StreamObserver<Resp> responseObserver) {
+            switch(methodId) {
+                case METHODID_COLLECT_AGGREGATE_STREAM:
+                    return (io.grpc.stub.StreamObserver<Req>) serviceImpl.collectAggregateStream((io.grpc.stub.StreamObserver<org.glowroot.wire.api.model.CollectorServiceOuterClass.AggregateResponseMessage>) responseObserver);
+                case METHODID_COLLECT_TRACE_STREAM:
+                    return (io.grpc.stub.StreamObserver<Req>) serviceImpl.collectTraceStream((io.grpc.stub.StreamObserver<org.glowroot.wire.api.model.CollectorServiceOuterClass.EmptyMessage>) responseObserver);
+                default:
+                    throw new AssertionError();
+            }
+        }
+    }
+
+    private static abstract class CollectorServiceBaseDescriptorSupplier implements io.grpc.protobuf.ProtoFileDescriptorSupplier, io.grpc.protobuf.ProtoServiceDescriptorSupplier {
+
+        @org.checkerframework.dataflow.qual.SideEffectFree
+        CollectorServiceBaseDescriptorSupplier() {
+        }
+
+        @org.checkerframework.dataflow.qual.Pure
+        public com.google.protobuf.Descriptors. FileDescriptor getFileDescriptor( CollectorServiceBaseDescriptorSupplier this) {
+            return org.glowroot.wire.api.model.CollectorServiceOuterClass.getDescriptor();
+        }
+
+        public com.google.protobuf.Descriptors. ServiceDescriptor getServiceDescriptor( CollectorServiceBaseDescriptorSupplier this) {
+            return getFileDescriptor().findServiceByName("CollectorService");
+        }
+    }
+
+    private static final class CollectorServiceFileDescriptorSupplier extends CollectorServiceBaseDescriptorSupplier {
+
+        @org.checkerframework.dataflow.qual.SideEffectFree
+        CollectorServiceFileDescriptorSupplier() {
+        }
+    }
+
+    private static final class CollectorServiceMethodDescriptorSupplier extends CollectorServiceBaseDescriptorSupplier implements io.grpc.protobuf.ProtoMethodDescriptorSupplier {
+
+        private final  String methodName;
+
+        CollectorServiceMethodDescriptorSupplier( String methodName) {
+            this.methodName = methodName;
+        }
+
+        public com.google.protobuf.Descriptors. MethodDescriptor getMethodDescriptor( CollectorServiceMethodDescriptorSupplier this) {
+            return getServiceDescriptor().findMethodByName(methodName);
+        }
+    }
+
+    private static volatile io.grpc. ServiceDescriptor serviceDescriptor;
+
+    public static io.grpc. ServiceDescriptor getServiceDescriptor() {
+        io.grpc.ServiceDescriptor result = serviceDescriptor;
+        if (result == null) {
+            synchronized (CollectorServiceGrpc.class) {
+                result = serviceDescriptor;
+                if (result == null) {
+                    serviceDescriptor = result = io.grpc.ServiceDescriptor.newBuilder(SERVICE_NAME).setSchemaDescriptor(new CollectorServiceFileDescriptorSupplier()).addMethod(getCollectInitMethod()).addMethod(getCollectAggregatesMethod()).addMethod(getCollectAggregateStreamMethod()).addMethod(getCollectGaugeValuesMethod()).addMethod(getCollectTraceMethod()).addMethod(getCollectTraceStreamMethod()).addMethod(getLogMethod()).build();
+                }
+            }
+        }
+        return result;
+    }
+}

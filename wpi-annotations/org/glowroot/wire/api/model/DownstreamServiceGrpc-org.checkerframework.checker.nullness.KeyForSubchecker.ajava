@@ -1,0 +1,211 @@
+package org.glowroot.wire.api.model;
+
+import static io.grpc.MethodDescriptor.generateFullMethodName;
+
+/**
+ */
+@org.checkerframework.framework.qual.AnnotatedFor("org.checkerframework.checker.nullness.KeyForSubchecker")
+public final class DownstreamServiceGrpc {
+
+    @org.checkerframework.dataflow.qual.SideEffectFree
+    private DownstreamServiceGrpc() {
+    }
+
+    public static final  String SERVICE_NAME = "org_glowroot_wire_api_model.DownstreamService";
+
+    // Static method descriptors that strictly reflect the proto.
+    private static volatile io.grpc. MethodDescriptor<org.glowroot.wire.api.model.DownstreamServiceOuterClass.AgentResponse, org.glowroot.wire.api.model.DownstreamServiceOuterClass.CentralRequest> getConnectMethod;
+
+    public static io.grpc. MethodDescriptor<org.glowroot.wire.api.model.DownstreamServiceOuterClass.AgentResponse, org.glowroot.wire.api.model.DownstreamServiceOuterClass.CentralRequest> getConnectMethod() {
+        io.grpc.MethodDescriptor<org.glowroot.wire.api.model.DownstreamServiceOuterClass.AgentResponse, org.glowroot.wire.api.model.DownstreamServiceOuterClass.CentralRequest> getConnectMethod;
+        if ((getConnectMethod = DownstreamServiceGrpc.getConnectMethod) == null) {
+            synchronized (DownstreamServiceGrpc.class) {
+                if ((getConnectMethod = DownstreamServiceGrpc.getConnectMethod) == null) {
+                    DownstreamServiceGrpc.getConnectMethod = getConnectMethod = io.grpc.MethodDescriptor.<org.glowroot.wire.api.model.DownstreamServiceOuterClass.AgentResponse, org.glowroot.wire.api.model.DownstreamServiceOuterClass.CentralRequest>newBuilder().setType(io.grpc.MethodDescriptor.MethodType.BIDI_STREAMING).setFullMethodName(generateFullMethodName(SERVICE_NAME, "connect")).setSampledToLocalTracing(true).setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(org.glowroot.wire.api.model.DownstreamServiceOuterClass.AgentResponse.getDefaultInstance())).setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(org.glowroot.wire.api.model.DownstreamServiceOuterClass.CentralRequest.getDefaultInstance())).setSchemaDescriptor(new DownstreamServiceMethodDescriptorSupplier("connect")).build();
+                }
+            }
+        }
+        return getConnectMethod;
+    }
+
+    /**
+     * Creates a new async stub that supports all call types for the service
+     */
+    public static  DownstreamServiceStub newStub(io.grpc.Channel channel) {
+        io.grpc.stub.AbstractStub.StubFactory<DownstreamServiceStub> factory = new io.grpc.stub.AbstractStub.StubFactory<DownstreamServiceStub>() {
+
+            public  DownstreamServiceStub newStub(io.grpc. Channel channel, io.grpc. CallOptions callOptions) {
+                return new DownstreamServiceStub(channel, callOptions);
+            }
+        };
+        return DownstreamServiceStub.newStub(factory, channel);
+    }
+
+    /**
+     * Creates a new blocking-style stub that supports unary and streaming output calls on the service
+     */
+    public static  DownstreamServiceBlockingStub newBlockingStub(io.grpc.Channel channel) {
+        io.grpc.stub.AbstractStub.StubFactory<DownstreamServiceBlockingStub> factory = new io.grpc.stub.AbstractStub.StubFactory<DownstreamServiceBlockingStub>() {
+
+            public  DownstreamServiceBlockingStub newStub(io.grpc. Channel channel, io.grpc. CallOptions callOptions) {
+                return new DownstreamServiceBlockingStub(channel, callOptions);
+            }
+        };
+        return DownstreamServiceBlockingStub.newStub(factory, channel);
+    }
+
+    /**
+     * Creates a new ListenableFuture-style stub that supports unary calls on the service
+     */
+    public static  DownstreamServiceFutureStub newFutureStub(io.grpc.Channel channel) {
+        io.grpc.stub.AbstractStub.StubFactory<DownstreamServiceFutureStub> factory = new io.grpc.stub.AbstractStub.StubFactory<DownstreamServiceFutureStub>() {
+
+            public  DownstreamServiceFutureStub newStub(io.grpc. Channel channel, io.grpc. CallOptions callOptions) {
+                return new DownstreamServiceFutureStub(channel, callOptions);
+            }
+        };
+        return DownstreamServiceFutureStub.newStub(factory, channel);
+    }
+
+    /**
+     */
+    public static abstract class DownstreamServiceImplBase implements io.grpc.BindableService {
+
+        /**
+         */
+        public io.grpc.stub. StreamObserver<org.glowroot.wire.api.model.DownstreamServiceOuterClass.AgentResponse> connect( DownstreamServiceImplBase this, io.grpc.stub. StreamObserver<org.glowroot.wire.api.model.DownstreamServiceOuterClass.CentralRequest> responseObserver) {
+            return io.grpc.stub.ServerCalls.asyncUnimplementedStreamingCall(getConnectMethod(), responseObserver);
+        }
+
+        public final io.grpc. ServerServiceDefinition bindService( DownstreamServiceImplBase this) {
+            return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor()).addMethod(getConnectMethod(), io.grpc.stub.ServerCalls.asyncBidiStreamingCall(new MethodHandlers<org.glowroot.wire.api.model.DownstreamServiceOuterClass.AgentResponse, org.glowroot.wire.api.model.DownstreamServiceOuterClass.CentralRequest>(this, METHODID_CONNECT))).build();
+        }
+    }
+
+    /**
+     */
+    public static final class DownstreamServiceStub extends io.grpc.stub.AbstractAsyncStub<DownstreamServiceStub> {
+
+        private DownstreamServiceStub(io.grpc. Channel channel, io.grpc. CallOptions callOptions) {
+            super(channel, callOptions);
+        }
+
+        protected  DownstreamServiceStub build( DownstreamServiceStub this, io.grpc. Channel channel, io.grpc. CallOptions callOptions) {
+            return new DownstreamServiceStub(channel, callOptions);
+        }
+
+        /**
+         */
+        public io.grpc.stub. StreamObserver<org.glowroot.wire.api.model.DownstreamServiceOuterClass.AgentResponse> connect(io.grpc.stub.StreamObserver<org.glowroot.wire.api.model.DownstreamServiceOuterClass.CentralRequest> responseObserver) {
+            return io.grpc.stub.ClientCalls.asyncBidiStreamingCall(getChannel().newCall(getConnectMethod(), getCallOptions()), responseObserver);
+        }
+    }
+
+    /**
+     */
+    public static final class DownstreamServiceBlockingStub extends io.grpc.stub.AbstractBlockingStub<DownstreamServiceBlockingStub> {
+
+        private DownstreamServiceBlockingStub(io.grpc. Channel channel, io.grpc. CallOptions callOptions) {
+            super(channel, callOptions);
+        }
+
+        protected  DownstreamServiceBlockingStub build( DownstreamServiceBlockingStub this, io.grpc. Channel channel, io.grpc. CallOptions callOptions) {
+            return new DownstreamServiceBlockingStub(channel, callOptions);
+        }
+    }
+
+    /**
+     */
+    public static final class DownstreamServiceFutureStub extends io.grpc.stub.AbstractFutureStub<DownstreamServiceFutureStub> {
+
+        private DownstreamServiceFutureStub(io.grpc. Channel channel, io.grpc. CallOptions callOptions) {
+            super(channel, callOptions);
+        }
+
+        protected  DownstreamServiceFutureStub build( DownstreamServiceFutureStub this, io.grpc. Channel channel, io.grpc. CallOptions callOptions) {
+            return new DownstreamServiceFutureStub(channel, callOptions);
+        }
+    }
+
+    private static final   int METHODID_CONNECT = 0;
+
+    private static final class MethodHandlers<Req, Resp> implements io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>, io.grpc.stub.ServerCalls.ServerStreamingMethod<Req, Resp>, io.grpc.stub.ServerCalls.ClientStreamingMethod<Req, Resp>, io.grpc.stub.ServerCalls.BidiStreamingMethod<Req, Resp> {
+
+        private final  DownstreamServiceImplBase serviceImpl;
+
+        private final   int methodId;
+
+        MethodHandlers( DownstreamServiceImplBase serviceImpl,   int methodId) {
+            this.serviceImpl = serviceImpl;
+            this.methodId = methodId;
+        }
+
+        @org.checkerframework.dataflow.qual.Pure
+        public void invoke( MethodHandlers<Req, Resp> this, Req request, io.grpc.stub. StreamObserver<Resp> responseObserver) {
+            switch(methodId) {
+                default:
+                    throw new AssertionError();
+            }
+        }
+
+        public io.grpc.stub. StreamObserver<Req> invoke( MethodHandlers<Req, Resp> this, io.grpc.stub. StreamObserver<Resp> responseObserver) {
+            switch(methodId) {
+                case METHODID_CONNECT:
+                    return (io.grpc.stub.StreamObserver<Req>) serviceImpl.connect((io.grpc.stub.StreamObserver<org.glowroot.wire.api.model.DownstreamServiceOuterClass.CentralRequest>) responseObserver);
+                default:
+                    throw new AssertionError();
+            }
+        }
+    }
+
+    private static abstract class DownstreamServiceBaseDescriptorSupplier implements io.grpc.protobuf.ProtoFileDescriptorSupplier, io.grpc.protobuf.ProtoServiceDescriptorSupplier {
+
+        @org.checkerframework.dataflow.qual.SideEffectFree
+        DownstreamServiceBaseDescriptorSupplier() {
+        }
+
+        @org.checkerframework.dataflow.qual.Pure
+        public com.google.protobuf.Descriptors. FileDescriptor getFileDescriptor( DownstreamServiceBaseDescriptorSupplier this) {
+            return org.glowroot.wire.api.model.DownstreamServiceOuterClass.getDescriptor();
+        }
+
+        public com.google.protobuf.Descriptors. ServiceDescriptor getServiceDescriptor( DownstreamServiceBaseDescriptorSupplier this) {
+            return getFileDescriptor().findServiceByName("DownstreamService");
+        }
+    }
+
+    private static final class DownstreamServiceFileDescriptorSupplier extends DownstreamServiceBaseDescriptorSupplier {
+
+        @org.checkerframework.dataflow.qual.SideEffectFree
+        DownstreamServiceFileDescriptorSupplier() {
+        }
+    }
+
+    private static final class DownstreamServiceMethodDescriptorSupplier extends DownstreamServiceBaseDescriptorSupplier implements io.grpc.protobuf.ProtoMethodDescriptorSupplier {
+
+        private final  String methodName;
+
+        DownstreamServiceMethodDescriptorSupplier( String methodName) {
+            this.methodName = methodName;
+        }
+
+        public com.google.protobuf.Descriptors. MethodDescriptor getMethodDescriptor( DownstreamServiceMethodDescriptorSupplier this) {
+            return getServiceDescriptor().findMethodByName(methodName);
+        }
+    }
+
+    private static volatile io.grpc. ServiceDescriptor serviceDescriptor;
+
+    public static io.grpc. ServiceDescriptor getServiceDescriptor() {
+        io.grpc.ServiceDescriptor result = serviceDescriptor;
+        if (result == null) {
+            synchronized (DownstreamServiceGrpc.class) {
+                result = serviceDescriptor;
+                if (result == null) {
+                    serviceDescriptor = result = io.grpc.ServiceDescriptor.newBuilder(SERVICE_NAME).setSchemaDescriptor(new DownstreamServiceFileDescriptorSupplier()).addMethod(getConnectMethod()).build();
+                }
+            }
+        }
+        return result;
+    }
+}
