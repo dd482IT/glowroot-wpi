@@ -14,8 +14,7 @@ ${BUILD_CMD} # Compile the program so that WPIOUTDIR is created.
 # Where should the output be placed at the end? This directory is also
 # used to store intermediate WPI results. The directory does not need to
 # exist. If it does exist when this script starts, it will be deleted.
-WPITEMPDIR=/tmp/WPITEMP-glowroot
-
+WPITEMPDIR=/tmp/WPITEMPGlowroot/
 # Where is WPI's output placed by the Checker Framework? This is some
 # directory ending in build/whole-program-inference. For most projects,
 # this directory is just ./build/whole-program-inference .
@@ -58,14 +57,8 @@ while : ; do
 	echo "putting the diff for iteration $count into $(realpath iteration$count.diff)"
 	echo ${DIFF_RESULT} > iteration$count.diff
     fi
-    while [[ "$DIFF_RESULT" != "" ]] || break
-    do 
-        
+    [[ "$DIFF_RESULT" != "" ]] || break
     rm -rf ${WPITEMPDIR}
     mv ${WPIOUTDIR} ${WPITEMPDIR}
     ((count++))
 done
-
-
-# While any diff is not empty 
-# mvn compile 

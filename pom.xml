@@ -871,7 +871,7 @@
                 <arg>-AskipDefs=^org\.glowroot\.agent\.embedded\.repo\.proto\.|^org\.glowroot\.agent\.it\.harness\.grpc\.|^org\.glowroot\.central\.repo\.proto\.</arg>
                 <arg>-Ainfer=ajava</arg>
                 <arg>-Awarns</arg>
-                <arg>-Aajava=/tmp/WPITEMP-glowroot</arg>
+                <arg>-Aajava=/tmp/WPITEMPGlowroot/</arg>
               </compilerArgs>
             </configuration>
           </plugin>
