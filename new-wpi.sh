@@ -10,14 +10,17 @@ rm -rf ${WPITEMPDIR}
 mkdir -p ${WPITEMPDIR}
 
 
+
+
 count=1
 subproject=1
 subprojectTotal=52
-while [[ "$subproject" != 52 ]] 
+while [[ "$subprojectTotal" != 52 ]] 
 do
     if [[ ${DEBUG} == 1 ]]; then
 	echo "entering iteration ${count}"
     fi
+    ${BUILD_CMD}
     ${CLEAN_CMD}
     mkdir -p "${WPITEMPDIR}"
     mkdir -p "${WPIOUTDIR}"
@@ -26,7 +29,7 @@ do
 	echo "putting the diff for iteration $count into $(realpath iteration$count.diff)"
 	echo ${DIFF_RESULT} > iteration$count.diff
     fi
-    while [[ "$DIFF_RESULT" != "" ]] || ((subprojectTotal++))
+    while [[ "$DIFF_RESULT" != "" ]] || ((subproject++))
     do
         rm -rf ${WPITEMPDIR}
         mkdir -p "${WPITEMPDIR}"
@@ -35,7 +38,7 @@ do
         ${CLEAN_CMD}
         SUB_DIFF_RESULT=$(diff -r ${WPITEMPDIR} ${WPIOUTDIR})
         echo ${SUB_DIFF_RESULT} > $SUB_DIFF_RESULT"-iteration-"$count.diff
-        [[ "$SUB_DIFF_RESULT" != "" ]] || ((subprojectTotal++)) & break 1
+        [[ "$SUB_DIFF_RESULT" != "" ]] || ((subproject++)) & break 1
     done
     ((count++))
 done
