@@ -58,8 +58,14 @@ while : ; do
 	echo "putting the diff for iteration $count into $(realpath iteration$count.diff)"
 	echo ${DIFF_RESULT} > iteration$count.diff
     fi
-    [[ "$DIFF_RESULT" != "" ]] || break
+    while [[ "$DIFF_RESULT" != "" ]] || break
+    do 
+        
     rm -rf ${WPITEMPDIR}
     mv ${WPIOUTDIR} ${WPITEMPDIR}
     ((count++))
 done
+
+
+# While any diff is not empty 
+# mvn compile 
