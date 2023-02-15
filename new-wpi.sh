@@ -19,7 +19,6 @@ do
 	echo "entering iteration ${count}"
     fi
     ${CLEAN_CMD}
-    # This mkdir is needed when the project has subprojects.
     mkdir -p "${WPITEMPDIR}"
     mkdir -p "${WPIOUTDIR}"
     DIFF_RESULT=$(diff -r ${WPITEMPDIR} ${WPIOUTDIR})
