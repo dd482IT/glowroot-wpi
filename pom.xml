@@ -102,7 +102,7 @@
     <jmh.version>1.23</jmh.version>
     <junit.version>5.8.1</junit.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.o,mutputEncoding>
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss Z</maven.build.timestamp.format>
     <!-- the sonar.login system property is set here instead of on the command line so it is
       not visible to ps -->
