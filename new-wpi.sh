@@ -1,16 +1,13 @@
 #!/bin/bash
 BUILD_CMD="mvn compile -Pthe-checker-build"
 CLEAN_CMD="mvn clean"
-${BUILD_CMD} > .getSubProjectCount.txt 
+${BUILD_CMD}
 
 WPITEMPDIR=/tmp/WPITEMP-glowroot
 WPIOUTDIR=./build/whole-program-inference 
 
 rm -rf ${WPITEMPDIR}
 mkdir -p ${WPITEMPDIR}
-
-
-
 
 count=1
 subproject=1
