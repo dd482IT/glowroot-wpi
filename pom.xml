@@ -104,7 +104,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss Z</maven.build.timestamp.format>
-    <!-- the sonar.login system property is set here instead of on the command line so it is
+    <!-- the sonar.login system property is set here instead of on the commvmand line so it is
       not visible to ps -->
     <sonar.login>${env.SONAR_LOGIN}</sonar.login>
     <glowroot.build.commit>[none]</glowroot.build.commit>
@@ -804,12 +804,11 @@
         </dependency>
         <!--
         <dependency>
-   
           <groupId>org.checkerframework</groupId>
           <artifactId>jdk8</artifactId>
           <version>${checker.version}</version>
           <optional>true</optional>
-        </dependency> -->
+        </dependency>-->
         <dependency>
           <!-- not all modules have dependency on immutables (e.g. jdbc-plugin) but need it on
             the classpath for the explicit annotation processing setup below -->
